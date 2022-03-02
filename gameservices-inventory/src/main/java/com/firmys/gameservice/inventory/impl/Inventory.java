@@ -1,4 +1,4 @@
-package com.firmys.gameservices.world.impl;
+package com.firmys.gameservice.inventory.impl;
 
 import java.util.Map;
 import java.util.Set;

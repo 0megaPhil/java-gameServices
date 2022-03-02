@@ -1,8 +1,8 @@
-package com.firmys.gameservices.world.impl;
+package com.firmys.gameservice.inventory.impl;
 
 import java.util.UUID;
 
-public class OwnedItem extends ItemAbstract {
+public class OwnedItem extends GameItems {
     private final UUID uuid;
 
     /**
@@ -23,7 +23,9 @@ public class OwnedItem extends ItemAbstract {
     }
 
     public OwnedItem(Item item) {
-        super(item.getDescription(), item.getName(), item.getWeight(), item.getDimensions());
+        super(item.getDescription(),
+                item.getName(), item.getWeight(), new int[]{item.getSizeLength(),
+                item.getSizeWidth(), item.getSizeHeight()});
         uuid = UUID.randomUUID();
     }
 

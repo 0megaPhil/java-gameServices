@@ -1,7 +1,7 @@
 package com.firmys.gameservices.world.location;
 
-import com.firmys.gameservices.world.impl.Inventory;
-import com.firmys.gameservices.world.impl.Item;
+import com.firmys.gameservice.inventory.impl.Inventory;
+import com.firmys.gameservice.inventory.impl.Items;
 
 import java.util.Set;
 import java.util.UUID;
@@ -16,7 +16,7 @@ public interface Location {
     void addCharacter(Character character);
     void removeCharacter(Character character);
     Set<Character> getCharacters();
-    void addItem(Item item, Integer amount);
+    void addItem(Items item, Integer amount);
     void setDescription(String description);
     void setName(String name);
     Inventory getInventory();

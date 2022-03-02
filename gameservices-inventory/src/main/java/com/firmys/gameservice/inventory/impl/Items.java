@@ -1,6 +1,6 @@
-package com.firmys.gameservices.world.impl;
+package com.firmys.gameservice.inventory.impl;
 
-public interface Item {
+public interface Items {
     String getDescription();
     String getName();
     Double getWeight();

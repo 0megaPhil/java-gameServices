@@ -1,4 +1,4 @@
-package com.firmys.gameservices.world.impl;
+package com.firmys.gameservice.inventory.impl;
 
 public class LocationInventory extends InventoryAbstract {
 

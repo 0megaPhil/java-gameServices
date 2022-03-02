@@ -1,16 +1,25 @@
-package com.firmys.gameservices.world.impl;
+package com.firmys.gameservice.inventory.impl;
 
-public abstract class ItemAbstract implements Item {
+public abstract class GameItems implements Items {
+
     private final String description;
     private final String name;
     private final double weight;
     private final int[] dimensions;
 
-    protected ItemAbstract(String description, String name, double weight, int[] dimensions) {
+    protected GameItems(String description, String name, double weight, int[] dimensions) {
         this.description = description;
         this.name = name;
         this.weight = weight;
         this.dimensions = dimensions;
+    }
+
+    protected GameItems(Item item) {
+        this.description = item.getDescription();
+        this.name = item.getName();
+        this.weight = item.getWeight();
+        this.dimensions = new int[]{item.getSizeLength(),
+                item.getSizeWidth(), item.getSizeHeight()};
     }
 
     @Override

@@ -1,8 +1,9 @@
 package com.firmys.gameservices.world.location;
 
-import com.firmys.gameservices.world.impl.Inventory;
-import com.firmys.gameservices.world.impl.Item;
-import com.firmys.gameservices.world.impl.LocationInventory;
+import com.firmys.gameservice.inventory.impl.Inventory;
+import com.firmys.gameservice.inventory.impl.Item;
+import com.firmys.gameservice.inventory.impl.Items;
+import com.firmys.gameservice.inventory.impl.LocationInventory;
 
 import java.util.HashSet;
 import java.util.Set;

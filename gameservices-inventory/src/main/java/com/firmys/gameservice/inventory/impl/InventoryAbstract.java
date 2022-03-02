@@ -1,4 +1,4 @@
-package com.firmys.gameservices.world.impl;
+package com.firmys.gameservice.inventory.impl;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,7 +51,7 @@ public abstract class InventoryAbstract implements Inventory {
     public Double getInventoryWeight() {
         return inventoryItems.keySet().stream().map(
                 k -> new HashSet<>(inventoryItems.get(k)).stream()
-                        .map(ItemAbstract::getWeight)
+                        .map(GameItems::getWeight)
                         .mapToDouble(Double::doubleValue).sum())
                 .mapToDouble(Double::doubleValue).sum();
     }
@@ -64,7 +64,7 @@ public abstract class InventoryAbstract implements Inventory {
 
     @Override
     public Double getOwnedItemWeight(Item item) {
-        return new HashSet<>(inventoryItems.get(item)).stream().map(ItemAbstract::getWeight)
+        return new HashSet<>(inventoryItems.get(item)).stream().map(GameItems::getWeight)
                 .mapToDouble(Double::doubleValue).sum();
     }
 

@@ -1,4 +1,4 @@
-package com.firmys.gameservices.world.impl;
+package com.firmys.gameservice.inventory.impl;
 
 public enum Currency {
     GOLD(1, 10, 100, 1000),
