@@ -6,12 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="gameservices-world" />
         <module name="gameservices-inventory" />
         <module name="gameservices-characters" />
+        <module name="gameservices-world" />
+        <module name="gameservices-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="gameservices-api" target="17" />
       <module name="gameservices-characters" target="17" />
       <module name="gameservices-inventory" target="17" />
       <module name="gameservices-world" target="17" />
@@ -20,6 +22,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="gameservices-api" options="-parameters" />
       <module name="gameservices-characters" options="-parameters" />
       <module name="gameservices-inventory" options="-parameters" />
       <module name="gameservices-world" options="-parameters" />
