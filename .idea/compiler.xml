@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="gameservices-inventory" />
         <module name="gameservices-characters" />
+        <module name="gameservices-common" />
         <module name="gameservices-world" />
         <module name="gameservices-api" />
       </profile>
@@ -15,6 +16,7 @@
     <bytecodeTargetLevel>
       <module name="gameservices-api" target="17" />
       <module name="gameservices-characters" target="17" />
+      <module name="gameservices-common" target="17" />
       <module name="gameservices-inventory" target="17" />
       <module name="gameservices-world" target="17" />
       <module name="java-gameServices" target="17" />
@@ -24,6 +26,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="gameservices-api" options="-parameters" />
       <module name="gameservices-characters" options="-parameters" />
+      <module name="gameservices-common" options="-parameters" />
       <module name="gameservices-inventory" options="-parameters" />
       <module name="gameservices-world" options="-parameters" />
     </option>

@@ -1,11 +1,12 @@
 package com.firmys.gameservice.inventory.impl;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class InventoryAbstract implements Inventory {
+public abstract class InventoryAbstract implements Inventory, Serializable {
     protected final Map<Currency, AtomicReference<Double>> currencyMap = new ConcurrentHashMap<>();
     protected final Map<Item, ConcurrentLinkedDeque<OwnedItem>> inventoryItems = new ConcurrentHashMap<>();
 

@@ -14,18 +14,3 @@ spring:
       path: /h2-console
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
-
-gameservice:
-  services:
-    - name: inventory
-      host: localhost
-      uri: /inventory
-      port: 9000
-    - name: characters
-      host: localhost
-      uri: /characters
-      port: 9001
-    - name: world
-      host: localhost
-      uri: /world
-      port: 9002

@@ -4,30 +4,32 @@ import com.firmys.gameservice.inventory.impl.Inventory;
 import com.firmys.gameservice.inventory.impl.Item;
 import com.firmys.gameservice.inventory.impl.Items;
 import com.firmys.gameservice.inventory.impl.LocationInventory;
+import com.firmys.gameservices.world.impl.Biome;
+import com.firmys.gameservices.world.impl.Coordinate;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class LocationAbstract {
+public abstract class LocationAbstract implements Location {
     private final Inventory inventory;
-    private int[] coordinates;
+    private Coordinate coordinates;
     private String description;
     private String name;
     private final Set<Character> characters = new HashSet<>();
     private final UUID uuid = UUID.randomUUID();
 
-    public LocationAbstract(int[] coordinates, String description) {
+    public LocationAbstract(Coordinate coordinates, String description) {
         this.coordinates = coordinates;
         this.description = description;
         this.inventory = new LocationInventory();
     }
 
-    public int[] getCoordinates() {
+    public Coordinate getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(int[] coordinates) {
+    public void setCoordinates(Coordinate coordinates) {
         this.coordinates = coordinates;
     }
 
@@ -37,6 +39,10 @@ public abstract class LocationAbstract {
 
     public String getName() {
         return name;
+    }
+
+    public void addItem(Items item, Integer amount) {
+
     }
 
     public UUID getUuid() {
@@ -69,5 +75,21 @@ public abstract class LocationAbstract {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public Integer getLatitude() {
+        return coordinates.getLatitude();
+    }
+
+    public Integer getLongitude() {
+        return coordinates.getLongitude();
+    }
+
+    public Integer getElevation() {
+        return coordinates.getElevation();
+    }
+
+    public Biome getBiome() {
+        return coordinates.getBiome();
     }
 }

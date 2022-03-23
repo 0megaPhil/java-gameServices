@@ -20,6 +20,7 @@
         <module>gameservices-characters</module>
         <module>gameservices-inventory</module>
         <module>gameservices-api</module>
+        <module>gameservices-common</module>
     </modules>
 
     <properties>

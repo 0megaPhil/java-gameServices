@@ -18,8 +18,8 @@ public class ItemService {
         return itemRepository.findById(id).get();
     }
 
-    public void saveOrUpdate(Item person) {
-        itemRepository.save(person);
+    public void saveOrUpdate(Item item) {
+        itemRepository.save(item);
     }
 
     public void delete(int id) {

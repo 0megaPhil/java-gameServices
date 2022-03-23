@@ -2,14 +2,17 @@ package com.firmys.gameservices.world.location;
 
 import com.firmys.gameservice.inventory.impl.Inventory;
 import com.firmys.gameservice.inventory.impl.Items;
+import com.firmys.gameservices.world.impl.Biome;
+import com.firmys.gameservices.world.impl.Coordinate;
+import reactor.util.function.Tuple3;
 
 import java.util.Set;
 import java.util.UUID;
 
 public interface Location {
 
-    int[] getCoordinates();
-    void setCoordinates(int[] coordinates);
+    Coordinate getCoordinates();
+    void setCoordinates(Coordinate coordinates);
     String getDescription();
     String getName();
     UUID getUuid();
@@ -20,4 +23,8 @@ public interface Location {
     void setDescription(String description);
     void setName(String name);
     Inventory getInventory();
+    Integer getLatitude();
+    Integer getLongitude();
+    Integer getElevation();
+    Biome getBiome();
 }

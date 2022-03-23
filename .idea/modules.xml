@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/gameservices-api/gameservices-api.iml" filepath="$PROJECT_DIR$/gameservices-api/gameservices-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/gameservices-characters/gameservices-characters.iml" filepath="$PROJECT_DIR$/gameservices-characters/gameservices-characters.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gameservices-common/gameservices-common.iml" filepath="$PROJECT_DIR$/gameservices-common/gameservices-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/gameservices-inventory/gameservices-inventory.iml" filepath="$PROJECT_DIR$/gameservices-inventory/gameservices-inventory.iml" />
       <module fileurl="file://$PROJECT_DIR$/gameservices-world/gameservices-world.iml" filepath="$PROJECT_DIR$/gameservices-world/gameservices-world.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/java-gameServices.iml" filepath="$PROJECT_DIR$/.idea/java-gameServices.iml" />

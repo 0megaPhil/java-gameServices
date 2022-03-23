@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 @Service
 public class InventoryService {
 
+    // TODO - Setup character inventory
+
     @Autowired
     LocationInventory locationInventory;
 
