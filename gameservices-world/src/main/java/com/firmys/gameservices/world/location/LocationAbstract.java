@@ -1,7 +1,7 @@
 package com.firmys.gameservices.world.location;
 
 import com.firmys.gameservice.inventory.impl.Inventory;
-import com.firmys.gameservice.inventory.impl.Item;
+import com.firmys.gameservice.inventory.service.data.Item;
 import com.firmys.gameservice.inventory.impl.Items;
 import com.firmys.gameservice.inventory.impl.LocationInventory;
 import com.firmys.gameservices.world.impl.Biome;

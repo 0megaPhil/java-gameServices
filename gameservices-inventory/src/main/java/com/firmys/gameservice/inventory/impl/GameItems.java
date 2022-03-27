@@ -1,5 +1,7 @@
 package com.firmys.gameservice.inventory.impl;
 
+import com.firmys.gameservice.inventory.service.data.Item;
+
 public abstract class GameItems implements Items {
 
     private final String description;

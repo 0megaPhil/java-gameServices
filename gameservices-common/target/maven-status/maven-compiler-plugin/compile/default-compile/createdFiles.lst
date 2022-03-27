@@ -1,0 +1,11 @@
+com\firmys\gameservice\common\Client.class
+com\firmys\gameservice\common\ControllerAbstract.class
+com\firmys\gameservice\common\ServiceProperties.class
+com\firmys\gameservice\common\Service.class
+com\firmys\gameservice\common\GameServiceProperties.class
+com\firmys\gameservice\common\ServiceAbstract.class
+com\firmys\gameservice\common\Controller.class
+com\firmys\gameservice\common\Properties.class
+com\firmys\gameservice\common\ClientAbstract.class
+com\firmys\gameservice\common\Repository.class
+com\firmys\gameservice\common\Exchange.class

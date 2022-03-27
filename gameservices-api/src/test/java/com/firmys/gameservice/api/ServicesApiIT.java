@@ -2,7 +2,7 @@ package com.firmys.gameservice.api;
 
 import com.firmys.gameservice.api.config.GameServicesConfig;
 import com.firmys.gameservice.api.impl.InventoryClient;
-import com.firmys.gameservice.inventory.impl.Item;
+import com.firmys.gameservice.inventory.service.data.Item;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,0 +1,48 @@
+gameservice:
+  services:
+    - name: inventory
+      host: localhost
+      uri: /inventory
+      port: 9000
+    - name: character
+      host: localhost
+      uri: /character
+      port: 9001
+    - name: world
+      host: localhost
+      uri: /world
+      port: 9002
+
+server:
+  port: 9001
+
+spring:
+  security:
+    user:
+      name: sa
+      password: password
+  datasource:
+    url: jdbc:h2:file:~/data/character
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-character
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+
+
+
+#  CREATE CACHED TABLE "PUBLIC"."CHARACTER"(
+#  "ID" INT DEFAULT NEXT VALUE FOR "PUBLIC"."SYSTEM_SEQUENCE_92178758_8F63_410C_AE53_28BFAE2C36B5" NOT NULL NULL_TO_DEFAULT SEQUENCE "PUBLIC"."SYSTEM_SEQUENCE_92178758_8F63_410C_AE53_28BFAE2C36B5",
+#  "UUID" VARCHAR(40) DEFAULT UUID() NOT NULL,
+#  "NAME" VARCHAR(255),
+#  "DESCRIPTION" VARCHAR(255),
+#  "GENDER" VARCHAR(255),
+#  "AGE" INT,
+#  "HEIGHT" INT,
+#  "WEIGHT" INT,
+#  "INVENTORYID" INT
+#  )```

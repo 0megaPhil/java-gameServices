@@ -1,8 +1,7 @@
 package com.firmys.gameservice.api.impl;
 
 import com.firmys.gameservice.api.GameServiceProperties;
-import com.firmys.gameservice.inventory.impl.Item;
-import org.h2.util.json.JSONArray;
+import com.firmys.gameservice.inventory.service.data.Item;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -10,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 @Lazy

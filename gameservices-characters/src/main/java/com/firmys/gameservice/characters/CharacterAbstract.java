@@ -13,7 +13,6 @@ public class CharacterAbstract {
     private final int weight;
     private final PlayerCharacterInventory inventory;
 
-
     public CharacterAbstract(UUID uuid, String name,
                              String description, Gender gender,
                              int height, int weight,
@@ -26,5 +25,33 @@ public class CharacterAbstract {
         this.height = height;
         this.weight = weight;
         this.inventory = inventory;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public PlayerCharacterInventory getInventory() {
+        return inventory;
     }
 }

@@ -1,9 +1,9 @@
 package com.firmys.gameservice.characters;
 
 public enum Gender {
-    MASCULINE,
-    FEMININE,
-    ANDROGYNOUS,
+    MALE,
+    FEMALE,
     NON_BINARY,
+    OTHER,
     UNKNOWN
 }

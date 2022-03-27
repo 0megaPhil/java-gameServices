@@ -1,0 +1,7 @@
+com\firmys\gameservice\api\impl\Client.class
+com\firmys\gameservice\api\impl\InventoryClient.class
+com\firmys\gameservice\api\config\GameServicesConfig.class
+com\firmys\gameservice\api\GameServices.class
+com\firmys\gameservice\api\GameServiceProperties$Service.class
+com\firmys\gameservice\api\GameServiceProperties.class
+com\firmys\gameservice\api\impl\ServiceClient.class
