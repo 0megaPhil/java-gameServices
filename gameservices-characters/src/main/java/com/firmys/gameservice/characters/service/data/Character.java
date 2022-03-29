@@ -2,9 +2,6 @@ package com.firmys.gameservice.characters.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservice.common.GameData;
-import com.firmys.gameservice.common.UuidGenerator;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -39,11 +36,22 @@ public class Character implements Serializable, GameData {
     private int height;
     @Column
     private int weight;
-    @Column(name = "INVENTORYID")
-    private int inventoryId;
+    @Column(name = "INVENTORYID", unique = true)
+    private UUID inventoryId;
 
     public int getId() {
         return id;
+    }
+
+    @Override
+    public void update(GameData gameData) {
+        Character character = (Character) gameData;
+        this.setDescription(character.getDescription());
+        this.setGender(character.getGender());
+        this.setWeight(character.getWeight());
+        this.setName(character.getName());
+        this.setHeight(character.getHeight());
+        this.setAge(character.getAge());
     }
 
     public void setId(int id) {
@@ -98,11 +106,11 @@ public class Character implements Serializable, GameData {
         this.weight = weight;
     }
 
-    public int getInventoryId() {
+    public UUID getInventoryId() {
         return inventoryId;
     }
 
-    public void setInventoryId(int inventoryId) {
+    public void setInventoryId(UUID inventoryId) {
         this.inventoryId = inventoryId;
     }
 

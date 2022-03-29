@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.firmys.gameservice.common.GameData;
+import com.firmys.gameservice.common.GameServiceError;
 import com.firmys.gameservice.common.JsonUtils;
 import org.hibernate.annotations.Type;
 
@@ -25,13 +26,19 @@ public class Inventory implements Serializable, GameData {
     @Column(name = "uuid", nullable = false, unique = true)
     @Type(type = "uuid-char")
     private UUID uuid = UUID.randomUUID();
-    @Column(name = "OWNEDITEMS", nullable = true)
+    @Column(name = "OWNEDITEMS")
     private String ownedItems;
-    @Column(name = "Currency")
-    private int currency;
+    @Column(name = "OWNEDCURRENCY")
+    private String ownedCurrency;
 
     public int getId() {
         return id;
+    }
+
+    public void update(GameData gameData) {
+        Inventory inventory = (Inventory) gameData;
+        this.setOwnedCurrency(inventory.getOwnedCurrency());
+        this.setOwnedItems(inventory.getOwnedItems());
     }
 
     public void setId(int id) {
@@ -68,20 +75,29 @@ public class Inventory implements Serializable, GameData {
         }
     }
 
+    public OwnedCurrency getOwnedCurrency() {
+        if(ownedCurrency == null) {
+            this.ownedCurrency = JsonUtils.writeObjectAsString(new OwnedCurrency());
+        }
+        JavaType type = JsonUtils.getMapper().getTypeFactory().constructType(OwnedCurrency.class);
+        return JsonUtils.mapJsonToObject(ownedCurrency, type);
+    }
+
+    public void setOwnedCurrency(String ownedCurrency) {
+        this.ownedCurrency = ownedCurrency;
+    }
+
+    public void setOwnedCurrency(OwnedCurrency ownedCurrencies) {
+        this.ownedCurrency = JsonUtils.writeObjectAsString(ownedCurrencies);
+    }
+
     @Override
     public String toString() {
         return "Inventory{" +
                 "id=" + id +
                 ", uuid=" + uuid +
                 ", ownedItems='" + ownedItems + '\'' +
+                ", ownedCurrency='" + ownedCurrency + '\'' +
                 '}';
-    }
-
-    public int getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(int currency) {
-        this.currency = currency;
     }
 }

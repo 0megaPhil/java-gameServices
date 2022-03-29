@@ -23,6 +23,15 @@ public class JsonUtils {
         return mapper;
     }
 
+    public static <O> String writeObjectAsString(O object) {
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     //    public static <T> T constructJavaType() {
 //
 //    }

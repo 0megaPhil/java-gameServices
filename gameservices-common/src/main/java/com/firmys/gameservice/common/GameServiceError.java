@@ -48,14 +48,20 @@ public class GameServiceError implements Serializable, GameData {
         this.throwable = throwable;
     }
 
-    @Override
     public UUID getUuid() {
         return null;
     }
 
-    @Override
     public int getId() {
         return 0;
+    }
+
+    public void update(GameData gameData) {
+        GameServiceError error = (GameServiceError) gameData;
+        this.setDescription(error.getDescription());
+        this.setName(error.getName());
+        this.setRequest(error.getRequest());
+        this.setThrowable(error.getThrowable());
     }
 
     public GameData getRequest() {
@@ -70,7 +76,6 @@ public class GameServiceError implements Serializable, GameData {
         return date;
     }
 
-    @Override
     public String toString() {
         return "GameServiceErrorHandler{" +
                 "name='" + name + '\'' +

@@ -49,9 +49,10 @@ public class GameDataLookup<T extends GameData> {
                 .noneMatch(u -> u.toString().equals(uuidString)) ||
                 uuidObjectMap.keySet().stream()
                         .noneMatch(u -> u.toString().equals(uuidString))) {
-            service.findAll().forEach(d -> {
-                uuidPrimaryKeyMap.putIfAbsent(UUID.fromString(uuidString), d.getId());
-                uuidObjectMap.putIfAbsent(UUID.fromString(uuidString), d);
+            Iterable<GameData> gameData = (Iterable<GameData>) service.findAll();
+            gameData.forEach(d -> {
+                uuidPrimaryKeyMap.putIfAbsent(d.getUuid(), d.getId());
+                uuidObjectMap.putIfAbsent(d.getUuid(), (T) d);
             });
         }
     }

@@ -44,5 +44,5 @@ spring:
 #  "AGE" INT,
 #  "HEIGHT" INT,
 #  "WEIGHT" INT,
-#  "INVENTORYID" INT
+#  "UUID" VARCHAR(40) ,
 #  )```

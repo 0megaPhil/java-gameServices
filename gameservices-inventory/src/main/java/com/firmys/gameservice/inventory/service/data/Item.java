@@ -68,27 +68,14 @@ public class Item implements Serializable, GameData {
         this.uuid = uuid;
     }
 
-    public void update(Item updated) {
-        this.setDescription(updated.getDescription());
-        this.setSizeHeight(updated.getSizeHeight());
-        this.setSizeLength(updated.getSizeLength());
-        this.setSizeWidth(updated.getSizeWidth());
-        this.setWeight(updated.getWeight());
-        this.setName(updated.getName());
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", uuid=" + uuid +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", weight=" + weight +
-                ", sizeLength=" + sizeLength +
-                ", sizeWidth=" + sizeWidth +
-                ", sizeHeight=" + sizeHeight +
-                '}';
+    public void update(GameData updated) {
+        Item item = (Item) updated;
+        this.setDescription(item.getDescription());
+        this.setSizeHeight(item.getSizeHeight());
+        this.setSizeLength(item.getSizeLength());
+        this.setSizeWidth(item.getSizeWidth());
+        this.setWeight(item.getWeight());
+        this.setName(item.getName());
     }
 
     public void setName(String name) {
@@ -113,5 +100,19 @@ public class Item implements Serializable, GameData {
 
     public void setSizeHeight(int sizeHeight) {
         this.sizeHeight = sizeHeight;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", uuid=" + uuid +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", weight=" + weight +
+                ", sizeLength=" + sizeLength +
+                ", sizeWidth=" + sizeWidth +
+                ", sizeHeight=" + sizeHeight +
+                '}';
     }
 }

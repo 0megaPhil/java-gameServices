@@ -4,9 +4,9 @@ import com.firmys.gameservice.common.GameData;
 import com.firmys.gameservice.common.GameServiceError;
 import com.firmys.gameservice.common.GameServiceProperties;
 import com.firmys.gameservice.common.ServiceConstants;
-import com.firmys.gameservice.inventory.service.data.Item;
-import com.firmys.gameservice.inventory.service.item.ItemDataLookup;
-import com.firmys.gameservice.inventory.service.item.ItemService;
+import com.firmys.gameservice.inventory.service.currency.CurrencyDataLookup;
+import com.firmys.gameservice.inventory.service.currency.CurrencyService;
+import com.firmys.gameservice.inventory.service.data.Currency;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +17,17 @@ import java.util.stream.StreamSupport;
 
 @RestController
 @EnableConfigurationProperties(GameServiceProperties.class)
-public class ItemController {
-    public static final String baseDataName = ServiceConstants.ITEM;
-    public static final String basePath = "/" + ServiceConstants.ITEM;
+public class CurrencyController {
+    public static final String baseDataName = ServiceConstants.CURRENCY;
+    public static final String basePath = "/" + ServiceConstants.CURRENCY;
     public static final String uuidPath = "/" + "{" + ServiceConstants.UUID + "}";
 
-    private final ItemService service;
-    private final ItemDataLookup dataLookup;
+    private final CurrencyService service;
+    private final CurrencyDataLookup dataLookup;
 
-    public ItemController(
-            ItemService service,
-            ItemDataLookup dataLookup) {
+    public CurrencyController(
+            CurrencyService service,
+            CurrencyDataLookup dataLookup) {
         this.service = service;
         this.dataLookup = dataLookup;
     }
@@ -39,17 +39,17 @@ public class ItemController {
     }
 
     @PostMapping(basePath)
-    public GameData save(@RequestBody Item entity) {
+    public GameData save(@RequestBody Currency entity) {
         return service.save(entity);
     }
 
     @DeleteMapping(basePath)
-    public void delete(@RequestBody Item entity) {
+    public void delete(@RequestBody Currency entity) {
         service.deleteById(dataLookup.getPrimaryKeyByUuid(entity.getUuid()));
     }
 
     @GetMapping(basePath + uuidPath)
-    public Item findByUuid(@PathVariable(ServiceConstants.UUID) String uuidString) {
+    public Currency findByUuid(@PathVariable(ServiceConstants.UUID) String uuidString) {
         return service.findById(dataLookup.getPrimaryKeyByUuid(uuidString)).orElseThrow(
                 () -> new RuntimeException(
                 new GameServiceError(null, baseDataName + ": " + " not found by uuid",
@@ -62,16 +62,16 @@ public class ItemController {
     }
 
     @PutMapping(basePath)
-    public GameData update(@RequestBody Item entity) {
-        Item existing = findByUuid(entity.getUuid().toString());
+    public GameData update(@RequestBody Currency entity) {
+        Currency existing = findByUuid(entity.getUuid().toString());
         existing.update(entity);
         save(existing);
         return dataLookup.getDataByUuid(entity.getUuid());
     }
 
     @PutMapping(basePath + uuidPath)
-    public GameData updateByUuid(@PathVariable(ServiceConstants.UUID) String uuidString, @RequestBody Item entity) {
-        Item existing = findByUuid(uuidString);
+    public GameData updateByUuid(@PathVariable(ServiceConstants.UUID) String uuidString, @RequestBody Currency entity) {
+        Currency existing = findByUuid(uuidString);
         existing.update(entity);
         save(existing);
         return dataLookup.getDataByUuid(uuidString);
