@@ -1,7 +1,8 @@
-com\firmys\gameservice\api\impl\Client.class
-com\firmys\gameservice\api\impl\InventoryClient.class
-com\firmys\gameservice\api\config\GameServicesConfig.class
-com\firmys\gameservice\api\GameServices.class
-com\firmys\gameservice\api\GameServiceProperties$Service.class
-com\firmys\gameservice\api\GameServiceProperties.class
-com\firmys\gameservice\api\impl\ServiceClient.class
+com\firmys\gameservice\gateway\logging\CombinedGlobalFilter.class
+com\firmys\gameservice\gateway\logging\GlobalPreFilter.class
+com\firmys\gameservice\gateway\GameServicesGateway.class
+com\firmys\gameservice\gateway\impl\GatewayController.class
+com\firmys\gameservice\gateway\logging\GlobalFiltersConfigurations.class
+com\firmys\gameservice\gateway\config\GameServicesConfig.class
+com\firmys\gameservice\gateway\logging\LoggingGatewayFilterFactory$Config.class
+com\firmys\gameservice\gateway\logging\LoggingGatewayFilterFactory.class

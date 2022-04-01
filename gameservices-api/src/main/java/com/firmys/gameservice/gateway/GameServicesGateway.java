@@ -1,4 +1,4 @@
-package com.firmys.gameservice.characters;
+package com.firmys.gameservice.gateway;
 
 import com.firmys.gameservice.common.config.GameServiceCommonConfig;
 import org.springframework.boot.SpringApplication;
@@ -9,8 +9,10 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @EnableWebFlux
 @SpringBootApplication
 @Import(GameServiceCommonConfig.class)
-public class CharacterApp {
+public class GameServicesGateway {
+
     public static void main(String[] args) {
-        SpringApplication.run(CharacterApp.class, args);
+        SpringApplication application = new SpringApplication(GameServicesGateway.class);
+        application.run(args);
     }
 }

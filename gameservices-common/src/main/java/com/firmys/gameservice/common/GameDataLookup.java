@@ -4,57 +4,30 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GameDataLookup<T extends GameData> {
+public class GameDataLookup<T extends GameEntity> {
     private final Map<UUID, Integer> uuidPrimaryKeyMap = new ConcurrentHashMap<>();
-    private final Map<UUID, T> uuidObjectMap = new ConcurrentHashMap<>();
     private final GameService<T> service;
-
 
     public GameDataLookup(GameService<T> service) {
         this.service = service;
     }
 
     public Integer getPrimaryKeyByUuid(UUID uuid) {
-        if (!uuidPrimaryKeyMap.containsKey(uuid)) {
-            return getPrimaryKeyByUuid(uuid.toString());
-        }
-        return uuidPrimaryKeyMap.get(uuid);
+        return getPrimaryKeyByUuid(uuid.toString());
     }
 
     public Integer getPrimaryKeyByUuid(String uuidString) {
-        checkAndRefresh(uuidString);
-        UUID key = uuidPrimaryKeyMap.keySet().stream()
-                .filter(u -> u.toString().equals(uuidString)).findFirst()
-                .orElseThrow(() -> new RuntimeException("No Primary Key found for UUID - " + uuidString));
-        return uuidPrimaryKeyMap.get(key);
-    }
-
-    public T getDataByUuid(UUID uuid) {
-        if (!uuidObjectMap.containsKey(uuid)) {
-            return getDataByUuid(uuid.toString());
+        if(!uuidPrimaryKeyMap.containsKey(UUID.fromString(uuidString))) {
+            service.findAll().forEach(d -> uuidPrimaryKeyMap.putIfAbsent(d.getUuid(), d.getId()));
         }
-        return uuidObjectMap.get(uuid);
+        return uuidPrimaryKeyMap.get(UUID.fromString(uuidString));
     }
 
-    public T getDataByUuid(String uuidString) {
-        checkAndRefresh(uuidString);
-        UUID key = uuidObjectMap.keySet().stream()
-                .filter(u -> u.toString().equals(uuidString)).findFirst()
-                .orElseThrow(() -> new RuntimeException("No Data for UUID - " + uuidString));
-        return uuidObjectMap.get(key);
-    }
-
-    private void checkAndRefresh(String uuidString) {
-        if (uuidPrimaryKeyMap.keySet().stream()
-                .noneMatch(u -> u.toString().equals(uuidString)) ||
-                uuidObjectMap.keySet().stream()
-                        .noneMatch(u -> u.toString().equals(uuidString))) {
-            Iterable<GameData> gameData = (Iterable<GameData>) service.findAll();
-            gameData.forEach(d -> {
-                uuidPrimaryKeyMap.putIfAbsent(d.getUuid(), d.getId());
-                uuidObjectMap.putIfAbsent(d.getUuid(), (T) d);
-            });
+    private int computeUuidIds(String uuidString) {
+        if(!uuidPrimaryKeyMap.containsKey(UUID.fromString(uuidString))) {
+            service.findAll().forEach(d -> uuidPrimaryKeyMap.putIfAbsent(d.getUuid(), d.getId()));
         }
+        return uuidPrimaryKeyMap.get(UUID.fromString(uuidString));
     }
 
 }

@@ -1,9 +1,10 @@
 package com.firmys.gameservice.inventory.service.data;
 
-import java.io.Serializable;
+import com.firmys.gameservice.common.GameData;
+
 import java.util.UUID;
 
-public class OwnedItem implements Serializable {
+public class OwnedItem implements GameData {
 
     private UUID uuid = UUID.randomUUID();
     private Item item;
@@ -31,7 +32,6 @@ public class OwnedItem implements Serializable {
         this.item = item;
     }
 
-    @Override
     public String toString() {
         return "OwnedItem{" +
                 "uuid=" + uuid +

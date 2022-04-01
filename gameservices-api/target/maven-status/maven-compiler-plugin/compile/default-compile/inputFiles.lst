@@ -1,6 +1,7 @@
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\api\GameServices.java
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\api\GameServiceProperties.java
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\api\impl\InventoryClient.java
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\api\impl\Client.java
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\api\config\GameServicesConfig.java
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\api\impl\ServiceClient.java
+C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\gateway\logging\GlobalFiltersConfigurations.java
+C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\gateway\logging\CombinedGlobalFilter.java
+C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\gateway\GameServicesGateway.java
+C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\gateway\logging\LoggingGatewayFilterFactory.java
+C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\gateway\config\GameServicesConfig.java
+C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\gateway\logging\GlobalPreFilter.java
+C:\Users\pahnc\source\repos\java-gameServices\gameservices-api\src\main\java\com\firmys\gameservice\gateway\impl\GatewayController.java

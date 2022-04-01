@@ -32,10 +32,6 @@ public class JsonUtils {
         }
     }
 
-    //    public static <T> T constructJavaType() {
-//
-//    }
-
 
 
 }

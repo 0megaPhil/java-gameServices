@@ -1,7 +1,11 @@
 com\firmys\gameservice\characters\service\CharacterService.class
+com\firmys\gameservice\characters\client\InventoryClient.class
 com\firmys\gameservice\characters\PlayerCharacter.class
 com\firmys\gameservice\characters\service\CharacterController.class
+com\firmys\gameservice\characters\service\CharacterDataLookup.class
 com\firmys\gameservice\characters\CharacterAbstract.class
+com\firmys\gameservice\characters\service\CharacterCacheManager.class
 com\firmys\gameservice\characters\Gender.class
 com\firmys\gameservice\characters\service\data\Character.class
 com\firmys\gameservice\characters\CharacterApp.class
+com\firmys\gameservice\characters\service\CharacterRepository.class

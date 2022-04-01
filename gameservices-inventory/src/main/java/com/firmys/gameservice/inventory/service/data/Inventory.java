@@ -3,21 +3,19 @@ package com.firmys.gameservice.inventory.service.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
+import com.firmys.gameservice.common.AbstractGameEntity;
 import com.firmys.gameservice.common.GameData;
-import com.firmys.gameservice.common.GameServiceError;
 import com.firmys.gameservice.common.JsonUtils;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "INVENTORY")
-public class Inventory implements Serializable, GameData {
+public class Inventory extends AbstractGameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false, unique = true)
@@ -57,9 +55,9 @@ public class Inventory implements Serializable, GameData {
         if(ownedItems != null) {
             JavaType type = JsonUtils.getMapper().getTypeFactory().
                     constructCollectionType(Set.class, OwnedItem.class);
-            return JsonUtils.mapJsonToObject(ownedItems, type);
+            return new HashSet<>(JsonUtils.mapJsonToObject(ownedItems, type));
         }
-        return Collections.emptySet();
+        return new HashSet<>();
     }
 
     public void setOwnedItems(String ownedItems) {

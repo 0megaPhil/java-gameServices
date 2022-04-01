@@ -1,15 +1,12 @@
 package com.firmys.gameservice.inventory.service.data;
 
-import com.firmys.gameservice.common.GameServiceError;
-import com.firmys.gameservice.common.ServiceConstants;
-import com.firmys.gameservice.inventory.service.controllers.CurrencyController;
+import com.firmys.gameservice.common.GameData;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class OwnedCurrency implements Serializable {
+public class OwnedCurrency implements GameData {
 
     private UUID uuid = UUID.randomUUID();
     private final Map<UUID, Integer> currencyOwnedMap = new ConcurrentHashMap<>();
@@ -64,10 +61,9 @@ public class OwnedCurrency implements Serializable {
 
     public Integer debitCurrency(String uuidString, Integer amount) {
        if(getCurrencyAmount(uuidString) < amount) {
-           throw new RuntimeException((new GameServiceError(new Currency(),
-                   ServiceConstants.CURRENCY,
-                   getCurrencyAmount(uuidString) + " not enough to cover transaction " + amount, null)).toString());
+           throw new RuntimeException();
        }
        return currencyOwnedMap.computeIfPresent(UUID.fromString(uuidString), (c, a) -> a - amount);
     }
+
 }

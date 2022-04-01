@@ -1,7 +1,7 @@
 package com.firmys.gameservice.characters.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.firmys.gameservice.common.GameData;
+import com.firmys.gameservice.common.AbstractGameEntity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -10,12 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "CHARACTER")
-public class Character implements Serializable, GameData {
+public class Character extends AbstractGameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false, unique = true)
@@ -41,17 +40,6 @@ public class Character implements Serializable, GameData {
 
     public int getId() {
         return id;
-    }
-
-    @Override
-    public void update(GameData gameData) {
-        Character character = (Character) gameData;
-        this.setDescription(character.getDescription());
-        this.setGender(character.getGender());
-        this.setWeight(character.getWeight());
-        this.setName(character.getName());
-        this.setHeight(character.getHeight());
-        this.setAge(character.getAge());
     }
 
     public void setId(int id) {

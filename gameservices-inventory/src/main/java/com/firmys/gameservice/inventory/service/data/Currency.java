@@ -1,16 +1,16 @@
 package com.firmys.gameservice.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.firmys.gameservice.common.GameData;
+import com.firmys.gameservice.common.AbstractGameEntity;
+import com.firmys.gameservice.common.GameEntity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "CURRENCY")
-public class Currency implements Serializable, GameData {
+public class Currency extends AbstractGameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false, unique = true)
@@ -66,7 +66,7 @@ public class Currency implements Serializable, GameData {
         this.baseValue = baseValue;
     }
 
-    public void update(GameData updated) {
+    public void update(GameEntity updated) {
         Currency currency = (Currency) updated;
         this.setDescription(currency.getDescription());
         this.setName(currency.getName());

@@ -1,9 +1,6 @@
 package com.firmys.gameservice.common;
 
-import java.util.UUID;
+import java.io.Serializable;
 
-public interface GameData {
-    UUID getUuid();
-    int getId();
-    void update(GameData gameData);
+public interface GameData extends Serializable {
 }

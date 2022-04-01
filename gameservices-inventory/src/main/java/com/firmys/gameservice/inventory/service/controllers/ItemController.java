@@ -1,9 +1,6 @@
 package com.firmys.gameservice.inventory.service.controllers;
 
-import com.firmys.gameservice.common.GameData;
-import com.firmys.gameservice.common.GameServiceError;
-import com.firmys.gameservice.common.GameServiceProperties;
-import com.firmys.gameservice.common.ServiceConstants;
+import com.firmys.gameservice.common.*;
 import com.firmys.gameservice.inventory.service.data.Item;
 import com.firmys.gameservice.inventory.service.item.ItemDataLookup;
 import com.firmys.gameservice.inventory.service.item.ItemService;
@@ -11,14 +8,15 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @RestController
 @EnableConfigurationProperties(GameServiceProperties.class)
-public class ItemController {
-    public static final String baseDataName = ServiceConstants.ITEM;
+public class ItemController extends AbstractController<Item> {
     public static final String basePath = "/" + ServiceConstants.ITEM;
     public static final String uuidPath = "/" + "{" + ServiceConstants.UUID + "}";
 
@@ -28,53 +26,47 @@ public class ItemController {
     public ItemController(
             ItemService service,
             ItemDataLookup dataLookup) {
+        super(service, dataLookup, Item.class, Item::new);
         this.service = service;
         this.dataLookup = dataLookup;
     }
 
     @GetMapping(basePath)
-    public Set<GameData> findAll() {
-        return StreamSupport.stream(service.findAll(Sort.unsorted()).spliterator(), false)
-                .collect(Collectors.toSet());
+    public Set<Item> findAll() {
+        return super.findAll();
     }
 
     @PostMapping(basePath)
-    public GameData save(@RequestBody Item entity) {
-        return service.save(entity);
+    public Item save(@RequestBody(required = false) Item entity) {
+        return super.save(entity);
     }
 
     @DeleteMapping(basePath)
-    public void delete(@RequestBody Item entity) {
-        service.deleteById(dataLookup.getPrimaryKeyByUuid(entity.getUuid()));
+    public void delete(
+            @RequestParam(value = "uuid", required = false) String uuidParam,
+            @RequestBody(required = false) Item entityBody) {
+        super.delete(uuidParam, entityBody);
     }
 
     @GetMapping(basePath + uuidPath)
-    public Item findByUuid(@PathVariable(ServiceConstants.UUID) String uuidString) {
-        return service.findById(dataLookup.getPrimaryKeyByUuid(uuidString)).orElseThrow(
-                () -> new RuntimeException(
-                new GameServiceError(null, baseDataName + ": " + " not found by uuid",
-                        "No matching record found", null).toString()));
+    public Item findByUuid(@PathVariable(ServiceConstants.UUID) String pathUuid) {
+        return super.findByUuid(pathUuid);
     }
 
     @DeleteMapping(basePath + uuidPath)
-    public void deleteByUuid(@PathVariable(ServiceConstants.UUID) String uuidString) {
-        service.deleteById(dataLookup.getPrimaryKeyByUuid(uuidString));
+    public void deleteByUuid(@PathVariable(ServiceConstants.UUID) String pathUuid) {
+        super.deleteByUuid(pathUuid);
     }
 
     @PutMapping(basePath)
-    public GameData update(@RequestBody Item entity) {
-        Item existing = findByUuid(entity.getUuid().toString());
-        existing.update(entity);
-        save(existing);
-        return dataLookup.getDataByUuid(entity.getUuid());
+    public Item update(@RequestBody Item entity) {
+        return super.update(entity);
     }
 
     @PutMapping(basePath + uuidPath)
-    public GameData updateByUuid(@PathVariable(ServiceConstants.UUID) String uuidString, @RequestBody Item entity) {
-        Item existing = findByUuid(uuidString);
-        existing.update(entity);
-        save(existing);
-        return dataLookup.getDataByUuid(uuidString);
+    public Item updateByUuid(@PathVariable(ServiceConstants.UUID) String pathUuid,
+                             @RequestBody Item entity) {
+        return super.updateByUuid(pathUuid, entity);
     }
 
 }
