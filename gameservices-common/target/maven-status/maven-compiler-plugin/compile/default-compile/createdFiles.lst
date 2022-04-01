@@ -2,7 +2,7 @@ com\firmys\gameservice\common\error\GameServiceException.class
 com\firmys\gameservice\common\GameData.class
 com\firmys\gameservice\common\ServiceProperties.class
 com\firmys\gameservice\common\JsonUtils.class
-com\firmys\gameservice\common\GameError.class
+com\firmys\gameservice\common\data\DataConsoleConfig.class
 com\firmys\gameservice\common\error\GameDataExceptionController.class
 com\firmys\gameservice\common\GameService.class
 com\firmys\gameservice\common\Repository.class
@@ -19,4 +19,5 @@ com\firmys\gameservice\common\config\GameServiceCommonConfig.class
 com\firmys\gameservice\common\Properties.class
 com\firmys\gameservice\common\error\GameServiceError.class
 com\firmys\gameservice\common\security\SpringSecurityConfiguration.class
+com\firmys\gameservice\common\GameDataUtils.class
 com\firmys\gameservice\common\ServiceConstants.class

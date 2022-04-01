@@ -15,6 +15,7 @@ spring:
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
+
 management:
   endpoints:
     web:
@@ -30,13 +31,13 @@ management:
 server:
   port: 9000
 
-#  CREATE TABLE Inventory (
-#  `id` int NOT NULL AUTO_INCREMENT,
-#  `uuid` VARCHAR(40) DEFAULT UUID() UNIQUE NOT NULL,
-#  `ownedItems` VARCHAR, # Item id plus unique UUID
-#  `ownedCurrency` VARCHAR, # Map of currencies by currency uuid
-#  PRIMARY KEY (`id`)
-#  );
+  #  CREATE TABLE Inventory (
+  #  `id` int NOT NULL AUTO_INCREMENT,
+  #  `uuid` VARCHAR(40) DEFAULT UUID() UNIQUE NOT NULL,
+  #  `ownedItems` VARCHAR, # Item id plus unique UUID
+  #  `ownedCurrency` VARCHAR, # Map of currencies by currency uuid
+  #  PRIMARY KEY (`id`)
+  #  );
 
   #CREATE TABLE Currency (
   #`id` int NOT NULL AUTO_INCREMENT,
@@ -46,3 +47,17 @@ server:
   #`baseValue` int NOT NULL,
   #PRIMARY KEY (id)
   #);
+
+#  CREATE TABLE Item (
+#  `id` int NOT NULL AUTO_INCREMENT,
+#  `uuid` VARCHAR(40) DEFAULT UUID() UNIQUE NOT NULL,
+#  `name` VARCHAR NOT NULL,
+#  `description` VARCHAR,
+#  `height` INT,
+#  `length` INT,
+#  `width` INT,
+#  `weight` FLOAT,
+#  `requirements` VARCHAR,
+#  `baseValue` int,
+#  PRIMARY KEY (id)
+#  );

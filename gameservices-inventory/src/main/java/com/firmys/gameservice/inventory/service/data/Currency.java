@@ -2,10 +2,14 @@ package com.firmys.gameservice.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservice.common.AbstractGameEntity;
-import com.firmys.gameservice.common.GameEntity;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
@@ -19,9 +23,9 @@ public class Currency extends AbstractGameEntity {
     @Column(name = "uuid", nullable = false, unique = true)
     @Type(type = "uuid-char")
     private UUID uuid = UUID.randomUUID();
-    @Column(name = "name")
+    @Column
     private String name;
-    @Column(name = "description")
+    @Column
     private String description;
     @Column(name = "BASEVALUE")
     private int baseValue;
@@ -30,46 +34,47 @@ public class Currency extends AbstractGameEntity {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setBaseValue(int baseValue) {
+        this.baseValue = baseValue;
     }
 
     public int getBaseValue() {
         return baseValue;
     }
 
-    public void setBaseValue(int baseValue) {
-        this.baseValue = baseValue;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void update(GameEntity updated) {
-        Currency currency = (Currency) updated;
-        this.setDescription(currency.getDescription());
-        this.setName(currency.getName());
-        this.setBaseValue(currency.getBaseValue());
+    public String getDescription() {
+        return description;
     }
+
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "id=" + id +
+                ", uuid=" + uuid +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", baseValue=" + baseValue +
+                '}';
+    }
+
 }

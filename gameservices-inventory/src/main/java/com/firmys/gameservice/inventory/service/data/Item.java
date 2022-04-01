@@ -2,10 +2,14 @@ package com.firmys.gameservice.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservice.common.AbstractGameEntity;
-import com.firmys.gameservice.common.GameEntity;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
@@ -26,11 +30,15 @@ public class Item extends AbstractGameEntity {
     @Column
     private double weight;
     @Column
-    private int sizeLength;
+    private int length;
     @Column
-    private int sizeWidth;
+    private int width;
     @Column
-    private int sizeHeight;
+    private int height;
+    @Column
+    private String requirements;
+    @Column(name = "BASEVALUE")
+    private int baseValue;
 
     public int getId() {
         return id;
@@ -49,15 +57,15 @@ public class Item extends AbstractGameEntity {
     }
 
     public int getSizeLength() {
-        return sizeLength;
+        return length;
     }
 
-    public int getSizeWidth() {
-        return sizeWidth;
+    public int getWidth() {
+        return width;
     }
 
-    public int getSizeHeight() {
-        return sizeHeight;
+    public int getHeight() {
+        return height;
     }
 
     public UUID getUuid() {
@@ -66,16 +74,6 @@ public class Item extends AbstractGameEntity {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
-    }
-
-    public void update(GameEntity updated) {
-        Item item = (Item) updated;
-        this.setDescription(item.getDescription());
-        this.setSizeHeight(item.getSizeHeight());
-        this.setSizeLength(item.getSizeLength());
-        this.setSizeWidth(item.getSizeWidth());
-        this.setWeight(item.getWeight());
-        this.setName(item.getName());
     }
 
     public void setName(String name) {
@@ -91,15 +89,15 @@ public class Item extends AbstractGameEntity {
     }
 
     public void setSizeLength(int sizeLength) {
-        this.sizeLength = sizeLength;
+        this.length = sizeLength;
     }
 
-    public void setSizeWidth(int sizeWidth) {
-        this.sizeWidth = sizeWidth;
+    public void setWidth(int width) {
+        this.width = width;
     }
 
-    public void setSizeHeight(int sizeHeight) {
-        this.sizeHeight = sizeHeight;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @Override
@@ -110,9 +108,25 @@ public class Item extends AbstractGameEntity {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", weight=" + weight +
-                ", sizeLength=" + sizeLength +
-                ", sizeWidth=" + sizeWidth +
-                ", sizeHeight=" + sizeHeight +
+                ", sizeLength=" + length +
+                ", sizeWidth=" + width +
+                ", sizeHeight=" + height +
                 '}';
+    }
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
+    }
+
+    public int getBaseValue() {
+        return baseValue;
+    }
+
+    public void setBaseValue(int baseValue) {
+        this.baseValue = baseValue;
     }
 }

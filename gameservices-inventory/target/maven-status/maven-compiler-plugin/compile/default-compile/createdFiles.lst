@@ -8,8 +8,10 @@ com\firmys\gameservice\inventory\service\controllers\ItemController.class
 com\firmys\gameservice\inventory\impl\ItemRepositoryOld.class
 com\firmys\gameservice\inventory\impl\Items.class
 com\firmys\gameservice\inventory\service\item\ItemCacheManager.class
+com\firmys\gameservice\inventory\service\inventory\InventoryUtils.class
 com\firmys\gameservice\inventory\service\item\ItemDataLookup.class
 com\firmys\gameservice\inventory\impl\LocationInventory.class
+com\firmys\gameservice\inventory\service\data\Requirement.class
 com\firmys\gameservice\inventory\service\inventory\InventoryCacheManager.class
 com\firmys\gameservice\inventory\impl\Currency.class
 com\firmys\gameservice\inventory\service\item\ItemRepository.class

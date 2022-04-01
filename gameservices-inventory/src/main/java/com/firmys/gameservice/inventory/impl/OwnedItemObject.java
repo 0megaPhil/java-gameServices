@@ -27,7 +27,7 @@ public class OwnedItemObject extends GameItems {
     public OwnedItemObject(Item item) {
         super(item.getDescription(),
                 item.getName(), item.getWeight(), new int[]{item.getSizeLength(),
-                item.getSizeWidth(), item.getSizeHeight()});
+                item.getWidth(), item.getHeight()});
         uuid = UUID.randomUUID();
     }
 

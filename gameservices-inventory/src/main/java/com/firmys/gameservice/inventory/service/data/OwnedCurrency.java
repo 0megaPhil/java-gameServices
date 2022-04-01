@@ -61,7 +61,8 @@ public class OwnedCurrency implements GameData {
 
     public Integer debitCurrency(String uuidString, Integer amount) {
        if(getCurrencyAmount(uuidString) < amount) {
-           throw new RuntimeException();
+           throw new RuntimeException("For " + uuidString + " available value of " +
+                   getCurrencyAmount(uuidString) + " lower than requested debit amount of " + amount);
        }
        return currencyOwnedMap.computeIfPresent(UUID.fromString(uuidString), (c, a) -> a - amount);
     }

@@ -104,10 +104,13 @@ public class AbstractController<D extends AbstractGameEntity> {
      * @return adjusted entity as recorded
      */
     public D update(D entity) {
+        D adjusted = GameDataUtils.update(gameEntityClass, findByUuid(entity.getUuid().toString()), entity);
+
         return entityCallableHandler(() -> gameService.save(GameDataUtils
                 .update(gameEntityClass,
                         findByUuid(entity.getUuid().toString()),
                         entity)), entity);
+//        return entityCallableHandler(() -> gameService.save(findByUuid(entity.getUuid().toString())), entity);
     }
 
     /**

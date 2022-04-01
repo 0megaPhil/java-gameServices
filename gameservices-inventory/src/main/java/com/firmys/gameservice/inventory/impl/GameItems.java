@@ -21,7 +21,7 @@ public abstract class GameItems implements Items {
         this.name = item.getName();
         this.weight = item.getWeight();
         this.dimensions = new int[]{item.getSizeLength(),
-                item.getSizeWidth(), item.getSizeHeight()};
+                item.getWidth(), item.getHeight()};
     }
 
     @Override

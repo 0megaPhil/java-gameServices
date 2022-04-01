@@ -21,7 +21,7 @@ public class SpringSecurityConfiguration {
                 .cache().disable()
                 .and()
                 .authorizeExchange()
-                .pathMatchers("/**").permitAll()
+                .pathMatchers("/**", "/h2**").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .httpBasic().disable()
