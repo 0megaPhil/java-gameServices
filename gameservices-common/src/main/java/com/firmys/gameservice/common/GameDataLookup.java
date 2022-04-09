@@ -1,6 +1,7 @@
 package com.firmys.gameservice.common;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,14 +21,18 @@ public class GameDataLookup<T extends GameEntity> {
         if(!uuidPrimaryKeyMap.containsKey(UUID.fromString(uuidString))) {
             service.findAll().forEach(d -> uuidPrimaryKeyMap.putIfAbsent(d.getUuid(), d.getId()));
         }
-        return uuidPrimaryKeyMap.get(UUID.fromString(uuidString));
+        return Optional.ofNullable(uuidPrimaryKeyMap.get(UUID.fromString(uuidString)))
+                .orElseThrow(() -> new RuntimeException("UUID not found in GameDataLookup for " +
+                        service.getClass().getSimpleName() + " use a valid existing UUID"));
     }
 
     private int computeUuidIds(String uuidString) {
         if(!uuidPrimaryKeyMap.containsKey(UUID.fromString(uuidString))) {
             service.findAll().forEach(d -> uuidPrimaryKeyMap.putIfAbsent(d.getUuid(), d.getId()));
         }
-        return uuidPrimaryKeyMap.get(UUID.fromString(uuidString));
+        return Optional.ofNullable(uuidPrimaryKeyMap.get(UUID.fromString(uuidString)))
+                .orElseThrow(() -> new RuntimeException("UUID not found in GameDataLookup for " +
+                        service.getClass().getSimpleName() + " use a valid existing UUID"));
     }
 
 }

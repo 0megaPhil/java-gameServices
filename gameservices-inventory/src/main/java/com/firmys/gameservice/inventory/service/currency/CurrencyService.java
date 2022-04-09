@@ -2,9 +2,8 @@ package com.firmys.gameservice.inventory.service.currency;
 
 import com.firmys.gameservice.common.GameService;
 import com.firmys.gameservice.common.GameServiceProperties;
-import com.firmys.gameservice.common.ServiceConstants;
+import com.firmys.gameservice.common.ServicePaths;
 import com.firmys.gameservice.inventory.service.data.Currency;
-import com.firmys.gameservice.inventory.service.inventory.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.CacheEvict;
@@ -20,8 +19,8 @@ import java.util.Optional;
 @Service
 @EnableConfigurationProperties(GameServiceProperties.class)
 public class CurrencyService implements GameService<Currency> {
-    public final String cacheName = ServiceConstants.CURRENCY;
-    public final String cacheManagerName = ServiceConstants.CURRENCY + "CacheManager";
+    public final String cacheName = ServicePaths.CURRENCY;
+    public final String cacheManagerName = ServicePaths.CURRENCY + "CacheManager";
 
     @Autowired
     CurrencyRepository repository;

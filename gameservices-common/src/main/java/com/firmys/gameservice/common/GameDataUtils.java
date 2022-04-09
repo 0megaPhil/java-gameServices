@@ -3,7 +3,10 @@ package com.firmys.gameservice.common;
 import com.fasterxml.jackson.databind.JavaType;
 
 import java.lang.reflect.Field;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class GameDataUtils {
     /**
@@ -16,32 +19,81 @@ public class GameDataUtils {
      * @return original entity with new data from copyable applied
      */
     public static <D extends GameData> D update(Class<D> objectClass, D original, D copyable) {
-        Map<String, Object> originalMap = JsonUtils.mapJsonToObject(
+        AtomicReference<Map<String, Object>> originalMap = new AtomicReference<>(JsonUtils.mapJsonToObject(
                 JsonUtils.writeObjectAsString(original),
-                JsonUtils.getMapper().getTypeFactory().constructType(Map.class));
-        Map<String, Object> copyableMap = JsonUtils.mapJsonToObject(
+                JsonUtils.getMapper().getTypeFactory().constructType(Map.class)));
+        AtomicReference<Map<String, Object>> copyableMap = new AtomicReference<>(JsonUtils.mapJsonToObject(
                 JsonUtils.writeObjectAsString(copyable),
-                JsonUtils.getMapper().getTypeFactory().constructType(Map.class));
+                JsonUtils.getMapper().getTypeFactory().constructType(Map.class)));
         if(original instanceof GameEntity) {
-            originalMap.putIfAbsent("id", ((GameEntity) original).getId());
-            copyableMap.putIfAbsent("id", ((GameEntity) original).getId());
+            originalMap.get().putIfAbsent("id", ((GameEntity) original).getId());
+            copyableMap.get().putIfAbsent("id", ((GameEntity) original).getId());
         }
-        /*
-         * Only in the case of
-         */
-        copyableMap.forEach((k, v) -> {
-            if (v != null && !(k.equals("id") || k.equals("uuid"))) {
-                originalMap.computeIfPresent(k, (originalKey, originalValue) -> v);
-                originalMap.putIfAbsent(k, v);
+        copyableMap.get().forEach((k, v) -> {
+            if(!((v instanceof Integer) && Integer.parseInt(v.toString()) == -1)) {
+                if ((v != null && !(k.equals("id") || k.equals("uuid")))) {
+                    originalMap.get().computeIfPresent(k, (originalKey, originalValue) -> v);
+                    originalMap.get().putIfAbsent(k, v);
+                }
             }
         });
         D adjusted = JsonUtils.mapJsonToObject(
                 JsonUtils.writeObjectAsString(originalMap),
-                JsonUtils.getMapper().getTypeFactory().constructType(objectClass));
+                objectClass);
         if(original instanceof GameEntity) {
             setFieldValue(adjusted, "id", ((GameEntity) original).getId());
         }
         return adjusted;
+    }
+
+    public static <D extends GameData> Set<String> getEntityAttributes(D entity) {
+        AtomicReference<Map<String, Object>> originalMap = new AtomicReference<>(JsonUtils.mapJsonToObject(
+                JsonUtils.writeObjectAsString(entity),
+                JsonUtils.getMapper().getTypeFactory().constructType(Map.class)));
+        return originalMap.get().keySet();
+    }
+
+    public static <D extends GameData> Set<D> matchByAnyAttributes(Map<String, String> attributes,
+                                                                   Set<D> entities,
+                                                                   boolean partial) {
+        if(partial) {
+            return getEntityAttributeMap(entities).entrySet().stream().filter(
+                            entry -> entry.getValue().entrySet().stream()
+                                    .filter(e -> attributes.containsKey(e.getKey().toLowerCase()))
+                                    .anyMatch(e -> e.getValue().toLowerCase().contains(attributes.get(e.getKey()))))
+                    .map(Map.Entry::getKey).collect(Collectors.toSet());
+        }
+        return getEntityAttributeMap(entities).entrySet().stream().filter(
+                        entry -> entry.getValue().entrySet().stream()
+                                .filter(e -> attributes.containsKey(e.getKey().toLowerCase()))
+                                .anyMatch(e -> attributes.get(e.getKey()).equalsIgnoreCase(e.getValue())))
+                .map(Map.Entry::getKey).collect(Collectors.toSet());
+    }
+
+    public static <D extends GameData> Set<D> matchByAllAttributes(Map<String, String> attributes,
+                                                                   Set<D> entities,
+                                                                   boolean partial) {
+        if(partial) {
+            return getEntityAttributeMap(entities).entrySet().stream().filter(
+                            entry -> entry.getValue().entrySet().stream()
+                                    .filter(e -> attributes.containsKey(e.getKey().toLowerCase()))
+                                    .allMatch(e -> e.getValue().toLowerCase().contains(attributes.get(e.getKey()))))
+                    .map(Map.Entry::getKey).collect(Collectors.toSet());
+        }
+        return getEntityAttributeMap(entities).entrySet().stream().filter(
+                entry -> entry.getValue().entrySet().stream()
+                        .filter(e -> attributes.containsKey(e.getKey().toLowerCase()))
+                        .allMatch(e -> attributes.get(e.getKey()).equalsIgnoreCase(e.getValue())))
+                .map(Map.Entry::getKey).collect(Collectors.toSet());
+    }
+
+    public static <D extends GameData> Map<D, Map<String, String>> getEntityAttributeMap(Set<D> entities) {
+        return entities.stream().map(e -> Map.of(e, JsonUtils.mapJsonToMap(
+                        JsonUtils.writeObjectAsString(e),
+                        JsonUtils.getMapper().getTypeFactory().constructMapType(Map.class, String.class, String.class),
+                        String.class, String.class)))
+                .flatMap(m -> m.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static Field setFieldValue(Object object, String fieldName, Object valueTobeSet) {

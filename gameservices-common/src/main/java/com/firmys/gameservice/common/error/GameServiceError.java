@@ -1,29 +1,43 @@
 package com.firmys.gameservice.common.error;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservice.common.GameEntity;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GameServiceError implements Serializable, GameEntity {
 
     private final String name;
     private final String description;
+    private final String message;
     private final Throwable throwable;
+    @JsonIgnore
+    private final Throwable fullThrowable;
     private final GameEntity request;
     private final Date date;
     public static final Builder builder = new Builder();
 
+    // FIXME
     private GameServiceError(Builder builder) {
         this.request = builder.request;
         this.name = builder.name;
         this.description = builder.description;
+        this.fullThrowable = builder.throwable;
         this.throwable = builder.throwable;
+        this.message = Optional.ofNullable(builder.throwable).orElse(new RuntimeException()).getMessage();
+        if(fullThrowable != null) {
+            StackTraceElement[] elements = this.fullThrowable.getStackTrace();
+            this.throwable.setStackTrace(Arrays.stream(elements).limit(2).toArray(StackTraceElement[]::new));
+        }
         this.date = builder.date;
     }
 
@@ -75,6 +89,14 @@ public class GameServiceError implements Serializable, GameEntity {
         return request;
     }
 
+    public Throwable getFullThrowable() {
+        return fullThrowable;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -92,7 +114,9 @@ public class GameServiceError implements Serializable, GameEntity {
         return "GameServiceError{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", message='" + message + '\'' +
                 ", throwable=" + throwable +
+                ", fullThrowable=" + fullThrowable +
                 ", request=" + request +
                 ", date=" + date +
                 '}';

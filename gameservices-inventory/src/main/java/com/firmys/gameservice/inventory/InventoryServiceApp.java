@@ -1,16 +1,18 @@
 package com.firmys.gameservice.inventory;
 
 import com.firmys.gameservice.common.config.GameServiceCommonConfig;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
-// TODO - Get a swagger like solution working against webflux OpenApi?
 @SpringBootApplication
 @Import(GameServiceCommonConfig.class)
-public class InventoryApp {
+@OpenAPIDefinition(info = @Info(title = "InventoryService", version = "0.1.0", description = "Documentation APIs v0.1.0"))
+public class InventoryServiceApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(InventoryApp.class, args);
+        SpringApplication.run(InventoryServiceApp.class, args);
     }
 }

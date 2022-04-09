@@ -2,6 +2,7 @@ package com.firmys.gameservice.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservice.common.AbstractGameEntity;
+import com.firmys.gameservice.common.data.DefaultData;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -28,7 +29,7 @@ public class Currency extends AbstractGameEntity {
     @Column
     private String description;
     @Column(name = "BASEVALUE")
-    private int baseValue;
+    private int baseValue = DefaultData.DEFAULT_INT;;
 
     public int getId() {
         return id;

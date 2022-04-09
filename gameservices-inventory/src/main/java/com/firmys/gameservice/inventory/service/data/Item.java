@@ -2,6 +2,7 @@ package com.firmys.gameservice.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservice.common.AbstractGameEntity;
+import com.firmys.gameservice.common.data.DefaultData;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -30,15 +31,15 @@ public class Item extends AbstractGameEntity {
     @Column
     private double weight;
     @Column
-    private int length;
+    private int length = DefaultData.DEFAULT_INT;;
     @Column
-    private int width;
+    private int width = DefaultData.DEFAULT_INT;;
     @Column
-    private int height;
+    private int height = DefaultData.DEFAULT_INT;;
     @Column
     private String requirements;
     @Column(name = "BASEVALUE")
-    private int baseValue;
+    private int baseValue = DefaultData.DEFAULT_INT;;
 
     public int getId() {
         return id;

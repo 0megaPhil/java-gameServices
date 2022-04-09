@@ -8,6 +8,7 @@ C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\AbstractController.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\GameEntity.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\GameServiceProperties.java
+C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\ServicePaths.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\security\SpringSecurityConfiguration.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\ServiceProperties.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\error\GameDataExceptionController.java
@@ -17,5 +18,4 @@ C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\GameDataUtils.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\JsonUtils.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\GameService.java
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\ServiceConstants.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-common\src\main\java\com\firmys\gameservice\common\data\DataConsoleConfig.java

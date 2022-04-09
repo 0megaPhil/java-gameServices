@@ -1,6 +1,6 @@
 package com.firmys.gameservice.inventory.service.inventory;
 
-import com.firmys.gameservice.common.ServiceConstants;
+import com.firmys.gameservice.common.ServicePaths;
 import com.firmys.gameservice.common.GameService;
 import com.firmys.gameservice.common.GameServiceProperties;
 import com.firmys.gameservice.inventory.service.data.Inventory;
@@ -19,8 +19,8 @@ import java.util.Optional;
 @Service
 @EnableConfigurationProperties(GameServiceProperties.class)
 public class InventoryService implements GameService<Inventory> {
-    public final String cacheName = ServiceConstants.INVENTORY;
-    public final String cacheManagerName = ServiceConstants.INVENTORY + "CacheManager";
+    public final String cacheName = ServicePaths.INVENTORY;
+    public final String cacheManagerName = ServicePaths.INVENTORY + "CacheManager";
 
     @Autowired
     InventoryRepository repository;

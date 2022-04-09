@@ -49,7 +49,7 @@ org.h2.message.DbException: Wrong user name or password [28000-200]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1301)
-	at com.firmys.gameservice.inventory.InventoryApp.main(Inventory.java:10)
+	at com.firmys.gameservice.inventory.InventoryServiceApp.main(Inventory.java:10)
 Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name or password [28000-200]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:461)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
@@ -105,7 +105,7 @@ org.h2.message.DbException: Wrong user name or password [28000-200]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1301)
-	at com.firmys.gameservice.inventory.InventoryApp.main(Inventory.java:10)
+	at com.firmys.gameservice.inventory.InventoryServiceApp.main(Inventory.java:10)
 Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name or password [28000-200]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:461)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
@@ -168,7 +168,7 @@ org.h2.message.DbException: Wrong user name or password [28000-200]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1301)
-	at com.firmys.gameservice.inventory.InventoryApp.main(Inventory.java:10)
+	at com.firmys.gameservice.inventory.InventoryServiceApp.main(Inventory.java:10)
 Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name or password [28000-200]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:461)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
@@ -232,7 +232,7 @@ org.h2.message.DbException: Wrong user name or password [28000-200]
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:303)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1301)
-	at com.firmys.gameservice.inventory.InventoryApp.main(Inventory.java:10)
+	at com.firmys.gameservice.inventory.InventoryServiceApp.main(Inventory.java:10)
 Caused by: org.h2.jdbc.JdbcSQLInvalidAuthorizationSpecException: Wrong user name or password [28000-200]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:461)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)

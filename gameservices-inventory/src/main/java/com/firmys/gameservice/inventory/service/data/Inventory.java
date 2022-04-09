@@ -53,8 +53,8 @@ public class Inventory extends AbstractGameEntity {
 
     public Set<OwnedItem> getOwnedItems() {
         if(ownedItems != null) {
-            JavaType type = JsonUtils.getMapper().getTypeFactory().
-                    constructCollectionType(Set.class, OwnedItem.class);
+            JavaType type = JsonUtils.getMapper().getTypeFactory()
+                    .constructCollectionType(Set.class, OwnedItem.class);
             return new HashSet<>(JsonUtils.mapJsonToObject(ownedItems, type));
         }
         return new HashSet<>();

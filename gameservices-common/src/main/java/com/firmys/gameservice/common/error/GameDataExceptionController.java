@@ -15,7 +15,7 @@ public class GameDataExceptionController {
     }
 
     /**
-     * Failover exception handler for controllers
+     * Fail-over exception handler for controllers
      * @param exception general exception
      * @return response which includes GameServiceException
      */

@@ -2,6 +2,7 @@ package com.firmys.gameservice.characters.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservice.common.AbstractGameEntity;
+import com.firmys.gameservice.common.data.DefaultData;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -30,11 +31,11 @@ public class Character extends AbstractGameEntity {
     @Column
     private String gender;
     @Column
-    private int age;
+    private int age = DefaultData.DEFAULT_INT;
     @Column
-    private int height;
+    private int height = DefaultData.DEFAULT_INT;
     @Column
-    private int weight;
+    private int weight = DefaultData.DEFAULT_INT;
     @Column(name = "INVENTORYID", unique = true)
     private UUID inventoryId;
 

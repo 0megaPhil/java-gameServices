@@ -5,6 +5,6 @@ com\firmys\gameservice\characters\CharacterAbstract.class
 com\firmys\gameservice\characters\service\CharacterCacheManager.class
 com\firmys\gameservice\characters\Gender.class
 com\firmys\gameservice\characters\service\data\Character.class
+com\firmys\gameservice\characters\CharacterServiceApp.class
 com\firmys\gameservice\characters\controllers\CharacterController.class
-com\firmys\gameservice\characters\CharacterApp.class
 com\firmys\gameservice\characters\service\CharacterRepository.class

@@ -1,7 +1,7 @@
 package com.firmys.gameservice.characters.service;
 
 import com.firmys.gameservice.characters.service.data.Character;
-import com.firmys.gameservice.common.ServiceConstants;
+import com.firmys.gameservice.common.ServicePaths;
 import com.firmys.gameservice.common.GameService;
 import com.firmys.gameservice.common.GameServiceProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ import java.util.Optional;
 @Service
 @EnableConfigurationProperties(GameServiceProperties.class)
 public class CharacterService implements GameService<Character> {
-    public final String cacheName = ServiceConstants.CHARACTER;
-    public final String cacheManagerName = ServiceConstants.CHARACTER + ServiceConstants.CACHE_MANAGER_SUFFIX;
+    public final String cacheName = ServicePaths.CHARACTER;
+    public final String cacheManagerName = ServicePaths.CHARACTER + ServicePaths.CACHE_MANAGER_SUFFIX;
 
     @Autowired
     CharacterRepository repository;

@@ -31,22 +31,24 @@ management:
 server:
   port: 9000
 
-  #  CREATE TABLE Inventory (
-  #  `id` int NOT NULL AUTO_INCREMENT,
-  #  `uuid` VARCHAR(40) DEFAULT UUID() UNIQUE NOT NULL,
-  #  `ownedItems` VARCHAR, # Item id plus unique UUID
-  #  `ownedCurrency` VARCHAR, # Map of currencies by currency uuid
-  #  PRIMARY KEY (`id`)
-  #  );
 
-  #CREATE TABLE Currency (
-  #`id` int NOT NULL AUTO_INCREMENT,
-  #`uuid` VARCHAR(40) DEFAULT UUID() UNIQUE NOT NULL,
-  #`name` VARCHAR NOT NULL,
-  #`description` VARCHAR,
-  #`baseValue` int NOT NULL,
-  #PRIMARY KEY (id)
-  #);
+
+#  CREATE TABLE Inventory (
+#  `id` int NOT NULL AUTO_INCREMENT,
+#  `uuid` VARCHAR(40) DEFAULT UUID() UNIQUE NOT NULL,
+#  `ownedItems` VARCHAR, # Item id plus unique UUID
+#  `ownedCurrency` VARCHAR, # Map of currencies by currency uuid
+#  PRIMARY KEY (`id`)
+#  );
+
+#CREATE TABLE Currency (
+#`id` int NOT NULL AUTO_INCREMENT,
+#`uuid` VARCHAR(40) DEFAULT UUID() UNIQUE NOT NULL,
+#`name` VARCHAR NOT NULL,
+#`description` VARCHAR,
+#`baseValue` int NOT NULL,
+#PRIMARY KEY (id)
+#);
 
 #  CREATE TABLE Item (
 #  `id` int NOT NULL AUTO_INCREMENT,
