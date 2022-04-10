@@ -5,6 +5,8 @@ import com.firmys.gameservice.inventory.service.currency.CurrencyDataLookup;
 import com.firmys.gameservice.inventory.service.currency.CurrencyService;
 import com.firmys.gameservice.inventory.service.data.Currency;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -24,85 +26,77 @@ public class CurrencyController extends AbstractController<Currency> {
     /**
      * {@link ServicePaths#CURRENCIES_PATH}
      * Multiple methods do not support UUID as path variable
-     *
-     * Some methods, such as findMultiple, can collect UUIDs across parameters and body array
+     * <p>
+     * Some methods, such as findMultiple, can collect UUIDs across parameters
      */
     @GetMapping(ServicePaths.CURRENCIES_PATH)
-    public Set<Currency> findAll() {
+    public Set<Currency> find(
+            @RequestParam(value = ServicePaths.UUID, required = false) Set<String> uuidParams) {
+        if (uuidParams != null) {
+            return super.findByUuids(uuidParams.stream().map(UUID::fromString).collect(Collectors.toSet()));
+        }
         return super.findAll();
     }
 
-    @GetMapping(ServicePaths.CURRENCIES_PATH)
-    public Set<Currency> findMultiple(
-            @RequestParam(value = ServicePaths.UUID, required = false) Set<String> uuidParams,
-            @RequestBody(required = false) Set<Currency> entities) {
-        return super.findByUuids(gatherUuids(uuidParams, entities));
+    @PostMapping(value = ServicePaths.CURRENCIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Set<Currency> add(@RequestBody(required = false) Set<Currency> entity) {
+        return super.save(entity);
     }
 
-    @PostMapping(ServicePaths.CURRENCIES_PATH)
-    public Set<Currency> addMultiple(@RequestBody(required = false) Set<Currency> entity) {
-        return entity.stream().map(super::save).collect(Collectors.toSet());
-    }
-
-    @DeleteMapping(ServicePaths.CURRENCIES_PATH)
-    public void deleteMultiple(
+    @DeleteMapping(value = ServicePaths.CURRENCIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void delete(
             @RequestParam(value = ServicePaths.UUID, required = false) Set<String> uuidParams,
             @RequestBody(required = false) Set<Currency> entities) {
         super.deleteByUuids(gatherUuids(uuidParams, entities));
     }
 
-    @PutMapping(ServicePaths.CURRENCIES_PATH)
-    public Set<Currency> updateMultiple(
+    @PutMapping(value = ServicePaths.CURRENCIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Set<Currency> update(
             @RequestBody Set<Currency> entities) {
-        return entities.stream().map(e -> super.updateByUuid(e.getUuid(), e)).collect(Collectors.toSet());
+        return super.update(entities);
     }
 
     /**
-     * {@link ServicePaths#ITEM_PATH}
+     * {@link ServicePaths#CURRENCY_PATH}
      * Singular methods support UUID as part of path
      */
-    @GetMapping(ServicePaths.CURRENCY_PATH)
-    public Currency findOne(
-            @RequestParam(value = ServicePaths.UUID, required = false) String uuidParam,
-            @RequestBody(required = false) Currency entity) {
-        return super.findByUuid(getUuidFromBodyOrParam(entity, uuidParam));
+    @GetMapping(value = ServicePaths.CURRENCY_PATH)
+    public Currency findByUuidParam(
+            @RequestParam(value = ServicePaths.UUID) String uuidParam) {
+        return super.findByUuid(UUID.fromString(uuidParam));
     }
 
-    @GetMapping(ServicePaths.CURRENCY_PATH + ServicePaths.UUID_PATH_VARIABLE)
-    public Currency findOneByPath(@PathVariable(ServicePaths.UUID) String pathUuid) {
+    @GetMapping(value = ServicePaths.CURRENCY_PATH + ServicePaths.UUID_PATH_VARIABLE)
+    public Currency findByUuidPath(
+            @PathVariable(ServicePaths.UUID) String pathUuid) {
         return super.findByUuid(UUID.fromString(pathUuid));
     }
 
-    @PostMapping(ServicePaths.CURRENCY_PATH)
-    public Currency addOne(@RequestBody(required = false) Currency entity) {
+    @PostMapping(value = ServicePaths.CURRENCY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Currency add(@RequestBody(required = false) Currency entity) {
         return super.save(entity);
     }
 
-    @DeleteMapping(ServicePaths.CURRENCY_PATH)
-    public void deleteOne(
+    @DeleteMapping(value = ServicePaths.CURRENCY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void delete(
             @RequestParam(value = ServicePaths.UUID, required = false) String uuidParam,
-            @RequestBody(required = false) Currency entity) {
+            @RequestBody(required = false) @Nullable Currency entity) {
         super.delete(UUID.fromString(uuidParam), entity);
     }
 
-    @GetMapping(ServicePaths.CURRENCY_PATH + ServicePaths.UUID_PATH_VARIABLE)
-    public Currency findOneByUuid(@PathVariable(ServicePaths.UUID) String pathUuid) {
-        return super.findByUuid(UUID.fromString(pathUuid));
-    }
-
-    @DeleteMapping(ServicePaths.CURRENCY_PATH + ServicePaths.UUID_PATH_VARIABLE)
-    public void deleteOneByUuid(@PathVariable(ServicePaths.UUID) String pathUuid) {
+    @DeleteMapping(value = ServicePaths.CURRENCY_PATH + ServicePaths.UUID_PATH_VARIABLE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteByUuid(@PathVariable(ServicePaths.UUID) String pathUuid) {
         super.deleteByUuid(UUID.fromString(pathUuid));
     }
 
-    @PutMapping(ServicePaths.CURRENCY_PATH)
+    @PutMapping(value = ServicePaths.CURRENCY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Currency update(@RequestBody Currency entity) {
         return super.update(entity);
     }
 
-    @PutMapping(ServicePaths.CURRENCY_PATH + ServicePaths.UUID_PATH_VARIABLE)
-    public Currency updateForUuid(@PathVariable(ServicePaths.UUID) String pathUuid,
-                              @RequestBody Currency entity) {
+    @PutMapping(value = ServicePaths.CURRENCY_PATH + ServicePaths.UUID_PATH_VARIABLE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Currency updateByUuid(@PathVariable(ServicePaths.UUID) String pathUuid,
+                                 @RequestBody Currency entity) {
         return super.updateByUuid(UUID.fromString(pathUuid), entity);
     }
 

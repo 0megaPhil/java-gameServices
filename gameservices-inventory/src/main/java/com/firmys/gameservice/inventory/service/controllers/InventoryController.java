@@ -11,6 +11,8 @@ import com.firmys.gameservice.inventory.service.inventory.InventoryDataLookup;
 import com.firmys.gameservice.inventory.service.inventory.InventoryService;
 import com.firmys.gameservice.inventory.service.inventory.InventoryUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -39,85 +41,77 @@ public class InventoryController extends AbstractController<Inventory> {
     /**
      * {@link ServicePaths#INVENTORIES_PATH}
      * Multiple methods do not support UUID as path variable
-     *
-     * Some methods, such as findMultiple, can collect UUIDs across parameters and body array
+     * <p>
+     * Some methods, such as findMultiple, can collect UUIDs across parameters
      */
     @GetMapping(ServicePaths.INVENTORIES_PATH)
-    public Set<Inventory> findAll() {
+    public Set<Inventory> find(
+            @RequestParam(value = ServicePaths.UUID, required = false) Set<String> uuidParams) {
+        if (uuidParams != null) {
+            return super.findByUuids(uuidParams.stream().map(UUID::fromString).collect(Collectors.toSet()));
+        }
         return super.findAll();
     }
 
-    @GetMapping(ServicePaths.INVENTORIES_PATH)
-    public Set<Inventory> findMultiple(
-            @RequestParam(value = ServicePaths.UUID, required = false) Set<String> uuidParams,
-            @RequestBody(required = false) Set<Inventory> entities) {
-        return super.findByUuids(gatherUuids(uuidParams, entities));
+    @PostMapping(value = ServicePaths.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Set<Inventory> add(@RequestBody(required = false) Set<Inventory> entity) {
+        return super.save(entity);
     }
 
-    @PostMapping(ServicePaths.INVENTORIES_PATH)
-    public Set<Inventory> addMultiple(@RequestBody(required = false) Set<Inventory> entity) {
-        return entity.stream().map(super::save).collect(Collectors.toSet());
-    }
-
-    @DeleteMapping(ServicePaths.INVENTORIES_PATH)
-    public void deleteMultiple(
+    @DeleteMapping(value = ServicePaths.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void delete(
             @RequestParam(value = ServicePaths.UUID, required = false) Set<String> uuidParams,
             @RequestBody(required = false) Set<Inventory> entities) {
         super.deleteByUuids(gatherUuids(uuidParams, entities));
     }
 
-    @PutMapping(ServicePaths.INVENTORIES_PATH)
-    public Set<Inventory> updateMultiple(
+    @PutMapping(value = ServicePaths.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Set<Inventory> update(
             @RequestBody Set<Inventory> entities) {
-        return entities.stream().map(e -> super.updateByUuid(e.getUuid(), e)).collect(Collectors.toSet());
+        return super.update(entities);
     }
 
     /**
      * {@link ServicePaths#INVENTORY_PATH}
      * Singular methods support UUID as part of path
      */
-    @GetMapping(ServicePaths.INVENTORY_PATH)
-    public Inventory findOne(
-            @RequestParam(value = ServicePaths.UUID, required = false) String uuidParam,
-            @RequestBody(required = false) Inventory entity) {
-        return super.findByUuid(getUuidFromBodyOrParam(entity, uuidParam));
+    @GetMapping(value = ServicePaths.INVENTORY_PATH)
+    public Inventory findByUuidParam(
+            @RequestParam(value = ServicePaths.UUID) String uuidParam) {
+        return super.findByUuid(UUID.fromString(uuidParam));
     }
 
-    @GetMapping(ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE)
-    public Inventory findOneByPath(@PathVariable(ServicePaths.UUID) String pathUuid) {
+    @GetMapping(value = ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE)
+    public Inventory findByUuidPath(
+            @PathVariable(ServicePaths.UUID) String pathUuid) {
         return super.findByUuid(UUID.fromString(pathUuid));
     }
 
-    @PostMapping(ServicePaths.INVENTORY_PATH)
-    public Inventory addOne(@RequestBody(required = false) Inventory entity) {
+    @PostMapping(value = ServicePaths.INVENTORY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Inventory add(@RequestBody(required = false) Inventory entity) {
         return super.save(entity);
     }
 
-    @DeleteMapping(ServicePaths.INVENTORY_PATH)
-    public void deleteOne(
+    @DeleteMapping(value = ServicePaths.INVENTORY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void delete(
             @RequestParam(value = ServicePaths.UUID, required = false) String uuidParam,
-            @RequestBody(required = false) Inventory entity) {
+            @RequestBody(required = false) @Nullable Inventory entity) {
         super.delete(UUID.fromString(uuidParam), entity);
     }
 
-    @GetMapping(ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE)
-    public Inventory findOneByUuid(@PathVariable(ServicePaths.UUID) String pathUuid) {
-        return super.findByUuid(UUID.fromString(pathUuid));
-    }
-
-    @DeleteMapping(ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE)
-    public void deleteOneByUuid(@PathVariable(ServicePaths.UUID) String pathUuid) {
+    @DeleteMapping(value = ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteByUuid(@PathVariable(ServicePaths.UUID) String pathUuid) {
         super.deleteByUuid(UUID.fromString(pathUuid));
     }
 
-    @PutMapping(ServicePaths.INVENTORY_PATH)
-    public Inventory updateOne(@RequestBody Inventory entity) {
+    @PutMapping(value = ServicePaths.INVENTORY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Inventory update(@RequestBody Inventory entity) {
         return super.update(entity);
     }
 
-    @PutMapping(ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE)
-    public Inventory updateForUuid(@PathVariable(ServicePaths.UUID) String pathUuid,
-                                   @RequestBody Inventory entity) {
+    @PutMapping(value = ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Inventory updateByUuid(@PathVariable(ServicePaths.UUID) String pathUuid,
+                                  @RequestBody Inventory entity) {
         return super.updateByUuid(UUID.fromString(pathUuid), entity);
     }
 

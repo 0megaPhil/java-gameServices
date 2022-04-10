@@ -11,8 +11,8 @@ public class DataConsoleConfig {
     @EventListener(org.springframework.context.event.ContextRefreshedEvent.class)
     public void start() throws java.sql.SQLException {
         // TODO - will need different ports for different services
-        this.webServer = org.h2.tools.Server.createWebServer("-webPort", "8000", "-tcpAllowOthers").start();
-        this.tcpServer = org.h2.tools.Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers").start();
+        this.webServer = org.h2.tools.Server.createWebServer("-webPort", "8001", "-tcpAllowOthers").start();
+        this.tcpServer = org.h2.tools.Server.createTcpServer("-tcpPort", "9093", "-tcpAllowOthers").start();
     }
 
     @EventListener(org.springframework.context.event.ContextClosedEvent.class)
