@@ -1,5 +1,7 @@
 package com.firmys.gameservice.inventory.impl;
 
+import com.firmys.gameservice.inventory.service.data.Item;
+
 public abstract class GameItems implements Items {
 
     private final String description;
@@ -18,8 +20,8 @@ public abstract class GameItems implements Items {
         this.description = item.getDescription();
         this.name = item.getName();
         this.weight = item.getWeight();
-        this.dimensions = new int[]{item.getSizeLength(),
-                item.getSizeWidth(), item.getSizeHeight()};
+        this.dimensions = new int[]{item.getLength(),
+                item.getWidth(), item.getHeight()};
     }
 
     @Override

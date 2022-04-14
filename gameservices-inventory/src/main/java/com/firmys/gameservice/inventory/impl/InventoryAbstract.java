@@ -1,13 +1,16 @@
 package com.firmys.gameservice.inventory.impl;
 
+import com.firmys.gameservice.inventory.service.data.Item;
+
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class InventoryAbstract implements Inventory {
+public abstract class InventoryAbstract implements Inventory, Serializable {
     protected final Map<Currency, AtomicReference<Double>> currencyMap = new ConcurrentHashMap<>();
-    protected final Map<Item, ConcurrentLinkedDeque<OwnedItem>> inventoryItems = new ConcurrentHashMap<>();
+    protected final Map<Item, ConcurrentLinkedDeque<OwnedItemObject>> inventoryItems = new ConcurrentHashMap<>();
 
     public InventoryAbstract(Map<Currency, Double> startingCurrencies) {
         startingCurrencies.forEach((k, v) -> this.currencyMap.put(k, new AtomicReference<>(v)));
@@ -43,7 +46,7 @@ public abstract class InventoryAbstract implements Inventory {
     }
 
     @Override
-    public Map<Item, ConcurrentLinkedDeque<OwnedItem>> getInventoryItems() {
+    public Map<Item, ConcurrentLinkedDeque<OwnedItemObject>> getInventoryItems() {
         return inventoryItems;
     }
 
@@ -57,7 +60,7 @@ public abstract class InventoryAbstract implements Inventory {
     }
 
     @Override
-    public OwnedItem getOwnedItem(Item item) {
+    public OwnedItemObject getOwnedItem(Item item) {
         return Optional.ofNullable(inventoryItems.get(item).peekLast())
                 .orElseThrow(() -> new RuntimeException("Item " + item.getName() + " not in inventory"));
     }
@@ -73,9 +76,9 @@ public abstract class InventoryAbstract implements Inventory {
         inventoryItems.putIfAbsent(item, new ConcurrentLinkedDeque<>());
         Set<UUID> uuids = new HashSet<>();
         while(amount > 0) {
-            OwnedItem ownedItem = new OwnedItem(item);
-            uuids.add(ownedItem.getUuid());
-            inventoryItems.get(item).add(ownedItem);
+            OwnedItemObject ownedItemObject = new OwnedItemObject(item);
+            uuids.add(ownedItemObject.getUuid());
+            inventoryItems.get(item).add(ownedItemObject);
             amount--;
         }
         return uuids;
@@ -87,13 +90,13 @@ public abstract class InventoryAbstract implements Inventory {
     }
 
     @Override
-    public OwnedItem consumeOwnedItem(Item item) {
+    public OwnedItemObject consumeOwnedItem(Item item) {
         return Optional.ofNullable(inventoryItems.get(item).pollLast())
                 .orElseThrow(() -> new RuntimeException("Item " + item.getName() + " not in inventory"));
     }
 
     @Override
-    public OwnedItem getOwnedItem(UUID uuid) {
+    public OwnedItemObject getOwnedItem(UUID uuid) {
         Item iKey = inventoryItems.keySet().stream().filter(k -> inventoryItems.get(k).stream()
                 .anyMatch(i -> i.getUuid().equals(uuid))).findAny().orElseThrow();
         return inventoryItems.get(iKey).stream().filter(
@@ -101,12 +104,12 @@ public abstract class InventoryAbstract implements Inventory {
     }
 
     @Override
-    public OwnedItem consumeOwnedItem(UUID uuid) {
+    public OwnedItemObject consumeOwnedItem(UUID uuid) {
         Item iKey = inventoryItems.keySet().stream().filter(k -> inventoryItems.get(k).stream()
                 .anyMatch(i -> i.getUuid().equals(uuid))).findAny().orElseThrow();
-        OwnedItem ownedItem = inventoryItems.get(iKey).stream().filter(v -> v.getUuid().equals(uuid)).findFirst().orElseThrow();
-        inventoryItems.get(iKey).remove(ownedItem);
-        return ownedItem;
+        OwnedItemObject ownedItemObject = inventoryItems.get(iKey).stream().filter(v -> v.getUuid().equals(uuid)).findFirst().orElseThrow();
+        inventoryItems.get(iKey).remove(ownedItemObject);
+        return ownedItemObject;
     }
 
 }

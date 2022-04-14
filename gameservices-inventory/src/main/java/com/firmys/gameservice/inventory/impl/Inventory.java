@@ -1,5 +1,7 @@
 package com.firmys.gameservice.inventory.impl;
 
+import com.firmys.gameservice.inventory.service.data.Item;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -10,14 +12,14 @@ public interface Inventory {
     Integer getCurrencyAmount(Currency currency);
     Integer creditCurrency(Currency currency, Double amount);
     Integer debitCurrency(Currency currency, Double amount);
-    Map<Item, ConcurrentLinkedDeque<OwnedItem>> getInventoryItems();
+    Map<Item, ConcurrentLinkedDeque<OwnedItemObject>> getInventoryItems();
     Double getInventoryWeight();
     Double getOwnedItemWeight(Item item);
-    OwnedItem getOwnedItem(Item item);
-    OwnedItem consumeOwnedItem(Item item);
+    OwnedItemObject getOwnedItem(Item item);
+    OwnedItemObject consumeOwnedItem(Item item);
     Set<UUID> addOwnedItems(Item item, Integer amount);
     UUID addOwnedItem(Item item);
-    OwnedItem getOwnedItem(UUID uuid);
-    OwnedItem consumeOwnedItem(UUID uuid);
+    OwnedItemObject getOwnedItem(UUID uuid);
+    OwnedItemObject consumeOwnedItem(UUID uuid);
 
 }

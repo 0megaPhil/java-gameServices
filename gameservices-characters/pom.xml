@@ -10,10 +10,94 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gameservices-characters</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.firmys</groupId>
+            <artifactId>gameservices-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <cloud.vm.user>ec2-user</cloud.vm.user>
+        <cloud.vm.host>52.53.61.114</cloud.vm.host>
+        <cloud.service-script.name>gameservice_start.sh</cloud.service-script.name>
+        <cloud.private-key>${private.key.path}</cloud.private-key>
+        <cloud.service-script.path>${project.basedir}/src/main/resources/${cloud.service-script.name}</cloud.service-script.path>
+        <jar.file-name>${project.artifactId}.jar</jar.file-name>
     </properties>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>com.firmys.gameservice.characters.CharacterServiceApp</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>server-copy</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <echo message="Cleaning up previous deploy..." />
+                                <sshexec host="${cloud.vm.host}" username="${cloud.vm.user}" trust="true"
+                                         keyfile="${cloud.private-key}" failonerror="false"
+                                         command="rm ~/*"
+                                />
+                                <scp trust="yes"
+                                     file="${project.build.directory}/${jar.file-name}"
+                                     keyfile="${cloud.private-key}"
+                                     todir="${cloud.vm.user}@${cloud.vm.host}:~"
+                                />
+                                <scp trust="yes"
+                                     file="${cloud.service-script.path}"
+                                     keyfile="${cloud.private-key}"
+                                     todir="${cloud.vm.user}@${cloud.vm.host}:~"
+                                />
+                                <sshexec host="${cloud.vm.host}" username="${cloud.vm.user}" trust="true"
+                                         keyfile="${cloud.private-key}" failonerror="true"
+                                         command="bash ${cloud.service-script.name}"
+                                />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant-jsch</artifactId>
+                        <version>1.8.4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.jcraft</groupId>
+                        <artifactId>jsch</artifactId>
+                        <version>0.1.53</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
