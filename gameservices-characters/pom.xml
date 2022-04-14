@@ -26,7 +26,7 @@
         <cloud.vm.user>ec2-user</cloud.vm.user>
         <cloud.vm.host>52.53.61.114</cloud.vm.host>
         <cloud.service-script.name>gameservice_start.sh</cloud.service-script.name>
-        <cloud.private-key>${project.basedir}/src/main/resources/gameservices.pem</cloud.private-key>
+        <cloud.private-key>${private.key.path}</cloud.private-key>
         <cloud.service-script.path>${project.basedir}/src/main/resources/${cloud.service-script.name}</cloud.service-script.path>
         <jar.file-name>${project.artifactId}.jar</jar.file-name>
     </properties>

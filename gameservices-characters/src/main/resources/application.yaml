@@ -1,12 +1,6 @@
 spring:
-  security:
-    user:
-      name: sa
-      password: password
   datasource:
     url: jdbc:mysql://java-gameservices.covj7lnh9ex6.us-west-1.rds.amazonaws.com:3306/sys
-    username: firmys
-    password: Ch4in.Rat
   jpa:
     hibernate:
       # Set to create if need to recreate table
@@ -16,12 +10,6 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
 
   security:
     enabled: false
@@ -42,12 +30,7 @@ cloud:
     region:
       static: us-west-1
     credentials:
-      accessKey: AKIA5B6LRKJW2ITMK5NN
-      secretKey: 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
       instanceProfile: true
       useDefaultAwsCredentialsChain: true
-    rds:
-      java-gameservice:
-        password: Ch4in.Rat
 server:
   port: 9001
