@@ -1,48 +1,53 @@
-gameservice:
-  services:
-    - name: inventory
-      host: localhost
-      uri: /inventory
-      port: 9000
-    - name: character
-      host: localhost
-      uri: /character
-      port: 9001
-    - name: world
-      host: localhost
-      uri: /world
-      port: 9002
-
-server:
-  port: 9001
-
 spring:
   security:
     user:
       name: sa
       password: password
   datasource:
-    url: jdbc:h2:file:~/data/character
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
-  h2:
-    console:
-      enabled: true
-      path: /h2-character
+    url: jdbc:mysql://java-gameservices.covj7lnh9ex6.us-west-1.rds.amazonaws.com:3306/sys
+    username: firmys
+    password: Ch4in.Rat
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      # Set to create if need to recreate table
+      ddl-auto: create
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
+  security:
+    enabled: false
 
-#  CREATE CACHED TABLE "PUBLIC"."CHARACTER"(
-#  "ID" INT DEFAULT NEXT VALUE FOR "PUBLIC"."SYSTEM_SEQUENCE_92178758_8F63_410C_AE53_28BFAE2C36B5" NOT NULL NULL_TO_DEFAULT SEQUENCE "PUBLIC"."SYSTEM_SEQUENCE_92178758_8F63_410C_AE53_28BFAE2C36B5",
-#  "UUID" VARCHAR(40) DEFAULT UUID() NOT NULL,
-#  "NAME" VARCHAR(255),
-#  "DESCRIPTION" VARCHAR(255),
-#  "GENDER" VARCHAR(255),
-#  "AGE" INT,
-#  "HEIGHT" INT,
-#  "WEIGHT" INT,
-#  "UUID" VARCHAR(40) ,
-#  )```
+  health:
+    defaults:
+      enabled: true
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: us-west-1
+    credentials:
+      accessKey: AKIA5B6LRKJW2ITMK5NN
+      secretKey: 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
+      instanceProfile: true
+      useDefaultAwsCredentialsChain: true
+    rds:
+      java-gameservice:
+        password: Ch4in.Rat
+server:
+  port: 9001

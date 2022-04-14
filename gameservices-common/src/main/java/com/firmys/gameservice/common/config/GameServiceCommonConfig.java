@@ -1,6 +1,6 @@
 package com.firmys.gameservice.common.config;
 
-import com.firmys.gameservice.common.data.DataConsoleConfig;
+//import com.firmys.gameservice.common.data.DataConsoleConfig;
 import com.firmys.gameservice.common.error.GameDataExceptionController;
 import com.firmys.gameservice.common.security.SpringSecurityConfiguration;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
@@ -17,8 +17,7 @@ import java.time.Duration;
 @Configuration
 @Import({
         SpringSecurityConfiguration.class,
-        GameDataExceptionController.class,
-        DataConsoleConfig.class
+        GameDataExceptionController.class
 })
 public class GameServiceCommonConfig {
     @Bean

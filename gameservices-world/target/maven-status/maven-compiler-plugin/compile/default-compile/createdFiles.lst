@@ -1,8 +1,2 @@
-com\firmys\gameservices\world\impl\GameWorld.class
-com\firmys\gameservices\world\location\Location.class
-com\firmys\gameservices\world\location\LocationAbstract.class
 com\firmys\gameservices\world\impl\Biome.class
-com\firmys\gameservices\world\impl\Coordinate.class
-com\firmys\gameservices\world\location\WorldLocation.class
-com\firmys\gameservices\world\impl\Cell.class
 com\firmys\gameservices\world\World.class

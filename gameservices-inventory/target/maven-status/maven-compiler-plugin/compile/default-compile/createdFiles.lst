@@ -1,7 +1,6 @@
 com\firmys\gameservice\inventory\service\controllers\InventoryController.class
 com\firmys\gameservice\inventory\service\currency\CurrencyDataLookup.class
 com\firmys\gameservice\inventory\service\currency\CurrencyRepository.class
-com\firmys\gameservice\inventory\service\data\OwnershipManager.class
 com\firmys\gameservice\inventory\service\controllers\CurrencyController.class
 com\firmys\gameservice\inventory\service\data\OwnedItem.class
 com\firmys\gameservice\inventory\impl\Inventory.class
@@ -13,7 +12,6 @@ com\firmys\gameservice\inventory\service\item\ItemCacheManager.class
 com\firmys\gameservice\inventory\service\inventory\InventoryUtils.class
 com\firmys\gameservice\inventory\service\item\ItemDataLookup.class
 com\firmys\gameservice\inventory\impl\LocationInventory.class
-com\firmys\gameservice\inventory\service\data\Requirement.class
 com\firmys\gameservice\inventory\service\inventory\InventoryCacheManager.class
 com\firmys\gameservice\inventory\impl\Currency.class
 com\firmys\gameservice\inventory\service\item\ItemRepository.class

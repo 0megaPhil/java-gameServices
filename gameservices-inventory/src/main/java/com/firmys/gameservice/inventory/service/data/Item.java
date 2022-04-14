@@ -24,7 +24,7 @@ public class Item extends AbstractGameEntity {
     @Column(name = "uuid", nullable = false, unique = true)
     @Type(type = "uuid-char")
     private UUID uuid = UUID.randomUUID();
-    @Column
+    @Column(unique = true)
     private String name;
     @Column
     private String description;
@@ -57,7 +57,7 @@ public class Item extends AbstractGameEntity {
         return weight;
     }
 
-    public int getSizeLength() {
+    public int getLength() {
         return length;
     }
 
@@ -89,7 +89,7 @@ public class Item extends AbstractGameEntity {
         this.weight = weight;
     }
 
-    public void setSizeLength(int sizeLength) {
+    public void setLength(int sizeLength) {
         this.length = sizeLength;
     }
 

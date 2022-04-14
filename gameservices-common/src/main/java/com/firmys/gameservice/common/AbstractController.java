@@ -264,15 +264,13 @@ public class AbstractController<D extends AbstractGameEntity> {
     }
 
     protected Set<UUID> gatherUuids(Set<String> uuidParams, Set<D> entities) {
+        Set<UUID> uuids = new HashSet<>();
         if (entities != null) {
-            return Stream.of(uuidParams, entities.stream()
-                            .map(e -> e.getUuid().toString()).collect(Collectors.toSet()))
-                    .flatMap(Collection::stream).map(UUID::fromString).collect(Collectors.toSet());
+            uuids.addAll(entities.stream().map(GameEntity::getUuid).collect(Collectors.toSet()));
         } else if (uuidParams != null) {
-            return uuidParams.stream().map(UUID::fromString).collect(Collectors.toSet());
-        } else {
-            return new HashSet<>();
+            uuids.addAll(uuidParams.stream().map(UUID::fromString).collect(Collectors.toSet()));
         }
+        return uuids;
     }
 
     public void voidCallableHandler(Callable<Void> callable,

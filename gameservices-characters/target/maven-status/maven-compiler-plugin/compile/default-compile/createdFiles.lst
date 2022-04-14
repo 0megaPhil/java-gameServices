@@ -1,7 +1,5 @@
 com\firmys\gameservice\characters\service\CharacterService.class
-com\firmys\gameservice\characters\PlayerCharacter.class
 com\firmys\gameservice\characters\service\CharacterDataLookup.class
-com\firmys\gameservice\characters\CharacterAbstract.class
 com\firmys\gameservice\characters\service\CharacterCacheManager.class
 com\firmys\gameservice\characters\Gender.class
 com\firmys\gameservice\characters\service\data\Character.class

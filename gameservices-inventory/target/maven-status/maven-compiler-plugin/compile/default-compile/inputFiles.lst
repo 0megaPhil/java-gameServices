@@ -6,7 +6,6 @@ C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\ja
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\impl\GameItems.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\controllers\CurrencyController.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\inventory\InventoryUtils.java
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\data\OwnershipManager.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\data\Inventory.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\data\OwnedCurrency.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\controllers\ItemController.java
@@ -21,7 +20,6 @@ C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\ja
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\item\ItemDataLookup.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\inventory\InventoryCacheManager.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\impl\InventoryAbstract.java
-C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\data\Requirement.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\inventory\InventoryDataLookup.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\service\data\Currency.java
 C:\Users\pahnc\source\repos\java-gameServices\gameservices-inventory\src\main\java\com\firmys\gameservice\inventory\impl\PlayerCharacterInventory.java

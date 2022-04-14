@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.reactive.config.EnableWebFlux;
 
-@EnableWebFlux
 @SpringBootApplication
 @Import(GameServiceCommonConfig.class)
 @OpenAPIDefinition(info = @Info(title = "CharacterService", version = "0.1.0", description = "Documentation APIs v0.1.0"))
