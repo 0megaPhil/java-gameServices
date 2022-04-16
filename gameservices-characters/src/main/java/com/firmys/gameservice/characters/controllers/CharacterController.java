@@ -4,10 +4,8 @@ import com.firmys.gameservice.characters.service.CharacterDataLookup;
 import com.firmys.gameservice.characters.service.CharacterService;
 import com.firmys.gameservice.characters.service.data.Character;
 import com.firmys.gameservice.common.AbstractController;
-import com.firmys.gameservice.common.GameServiceProperties;
 import com.firmys.gameservice.common.MatchStrategy;
 import com.firmys.gameservice.common.ServicePaths;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +23,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@EnableConfigurationProperties(GameServiceProperties.class)
 public class CharacterController extends AbstractController<Character> {
 
     public CharacterController(

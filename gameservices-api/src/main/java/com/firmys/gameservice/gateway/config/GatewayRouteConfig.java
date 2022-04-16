@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import(SpringSecurityConfiguration.class)
-public class GameServicesConfig {
+public class GatewayRouteConfig {
 
     @Value("${spring.cloud.gateway.routes[0].uri}")
     private String inventoryHost;

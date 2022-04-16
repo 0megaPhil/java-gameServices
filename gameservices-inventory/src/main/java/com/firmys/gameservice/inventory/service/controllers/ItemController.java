@@ -14,7 +14,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@EnableConfigurationProperties(GameServiceProperties.class)
 public class ItemController extends AbstractController<Item> {
 
     public ItemController(

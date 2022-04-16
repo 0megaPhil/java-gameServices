@@ -3,8 +3,8 @@ package com.firmys.gameservice.common;
 import com.fasterxml.jackson.databind.JavaType;
 
 import java.lang.reflect.Field;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 

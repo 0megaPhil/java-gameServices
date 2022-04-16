@@ -1,4 +1,4 @@
-package com.firmys.gameservice.gateway.impl;
+package com.firmys.gameservice.gateway.controllers;
 
 import com.firmys.gameservice.common.GameEntity;
 import com.firmys.gameservice.common.error.GameServiceError;

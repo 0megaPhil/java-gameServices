@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class World {
+public class WorldServiceApp {
     public static void main(String[] args) {
-        SpringApplication.run(World.class, args);
+        SpringApplication.run(WorldServiceApp.class, args);
     }
 }

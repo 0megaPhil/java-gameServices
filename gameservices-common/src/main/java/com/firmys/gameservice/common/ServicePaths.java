@@ -24,7 +24,9 @@ public class ServicePaths {
     public static final String CURRENCIES_PATH = "/" + CURRENCIES;
 
     public static final String WORLD = "world";
+    public static final String WORLDS = "worlds";
     public static final String WORLD_PATH = "/" + WORLD;
+    public static final String WORLDS_PATH = "/" + WORLDS;
 
     public final static String UUID = "uuid";
     public final static String UUID_PATH_VARIABLE = "/" + "{" + ServicePaths.UUID + "}";

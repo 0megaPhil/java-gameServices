@@ -1,7 +1,6 @@
 package com.firmys.gameservice.inventory.service.controllers;
 
 import com.firmys.gameservice.common.AbstractController;
-import com.firmys.gameservice.common.GameServiceProperties;
 import com.firmys.gameservice.common.ServicePaths;
 import com.firmys.gameservice.inventory.service.data.Currency;
 import com.firmys.gameservice.inventory.service.data.Inventory;
@@ -10,7 +9,6 @@ import com.firmys.gameservice.inventory.service.data.OwnedItem;
 import com.firmys.gameservice.inventory.service.inventory.InventoryDataLookup;
 import com.firmys.gameservice.inventory.service.inventory.InventoryService;
 import com.firmys.gameservice.inventory.service.inventory.InventoryUtils;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@EnableConfigurationProperties(GameServiceProperties.class)
 public class InventoryController extends AbstractController<Inventory> {
     private final ItemController itemController;
     private final CurrencyController currencyController;

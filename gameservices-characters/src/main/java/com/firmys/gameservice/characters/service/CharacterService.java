@@ -3,9 +3,7 @@ package com.firmys.gameservice.characters.service;
 import com.firmys.gameservice.characters.service.data.Character;
 import com.firmys.gameservice.common.ServicePaths;
 import com.firmys.gameservice.common.GameService;
-import com.firmys.gameservice.common.GameServiceProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@EnableConfigurationProperties(GameServiceProperties.class)
 public class CharacterService implements GameService<Character> {
     public final String cacheName = ServicePaths.CHARACTER;
     public final String cacheManagerName = ServicePaths.CHARACTER + ServicePaths.CACHE_MANAGER_SUFFIX;

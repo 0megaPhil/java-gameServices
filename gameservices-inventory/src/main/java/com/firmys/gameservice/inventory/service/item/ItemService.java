@@ -2,10 +2,8 @@ package com.firmys.gameservice.inventory.service.item;
 
 import com.firmys.gameservice.common.ServicePaths;
 import com.firmys.gameservice.common.GameService;
-import com.firmys.gameservice.common.GameServiceProperties;
 import com.firmys.gameservice.inventory.service.data.Item;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@EnableConfigurationProperties(GameServiceProperties.class)
 public class ItemService implements GameService<Item> {
     public final String cacheName = ServicePaths.ITEM;
     public final String cacheManagerName = ServicePaths.ITEM + "CacheManager";
