@@ -1,0 +1,53 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:17.0
+    environment:
+      PRIVATE_KEY: "id_rsa_32c94f125733ade3ed51c91845886fa6"
+      SSH_OPTIONS: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
+      - run:
+          name: Build
+          command: mvn -B -DskipTests clean verify
+      - run:
+          name: Prepare VM Environments
+          command: |
+            echo "export SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" > sshenv
+            echo "export SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME" >> sshenv
+            echo "export SPRING_DATASOURCE_SECRET=$SPRING_DATASOURCE_SECRET" >> sshenv
+            echo "export SERVICE_PORT=8080" >> sshenv
+            echo "export VM_HOST_INVENTORY=$VM_HOST_INVENTORY" >> sshenv
+            echo "export VM_HOST_CHARACTER=$VM_HOST_CHARACTER" >> sshenv
+            
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS sshenv ec2-user@$VM_HOST_CHARACTER:~/sshenv
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS sshenv ec2-user@$VM_HOST_INVENTORY:~/sshenv
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS sshenv ec2-user@$VM_HOST_GATEWAY:~/sshenv
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_CHARACTER:~
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_INVENTORY:~
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_GATEWAY:~
+      - run:
+          name: Deploy Character Service
+          command: |
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-characters/target/gameservices-characters.jar ec2-user@$VM_HOST_CHARACTER:~ 
+            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_CHARACTER 'bash ./gameservice_start.sh'
+      - run:
+          name: Deploy Inventory Service
+          command: |
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-inventory/target/gameservices-inventory.jar ec2-user@$VM_HOST_INVENTORY:~ 
+            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_INVENTORY 'bash ./gameservice_start.sh'
+      - run:
+          name: Deploy Service Gateway
+          command: |
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-api/target/gameservices-api.jar ec2-user@$VM_HOST_GATEWAY:~ 
+            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_GATEWAY 'bash ./gameservice_start.sh'
+
+workflows:
+  gameservices:
+    jobs:
+      - build:
+          context: Firmys

@@ -1,0 +1,40 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: inventoryService
+          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          predicates:
+            - Path="/inventory/**"
+        - id: characterService
+          uri: http://${VM_HOST_CHARACTER}:${SERVICE_PORT}
+          predicates:
+            - Path=/character/**
+        - id: inventoriesService
+          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          predicates:
+            - Path="/inventories/**"
+        - id: charactersService
+          uri: http://${VM_HOST_CHARACTER}:${SERVICE_PORT}
+          predicates:
+            - Path=/characters/**
+
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: us-west-1
+    credentials:
+      instanceProfile: true
+      useDefaultAwsCredentialsChain: true
