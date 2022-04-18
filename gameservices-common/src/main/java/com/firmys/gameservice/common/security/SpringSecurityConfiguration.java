@@ -21,7 +21,25 @@ public class SpringSecurityConfiguration {
                 .cache().disable()
                 .and()
                 .authorizeExchange()
-                .pathMatchers("/inventor**", "/character**", "/world**").permitAll()
+                .pathMatchers(
+                        /*
+                         * API
+                         */
+                        "/inventor**", "/character**", "/world**",
+                        /*
+                         * Swagger UI V3 OpenApi
+                         */
+                        "/v2/api-docs",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**",
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yml/**",
+                        "/v3/api-docs.yaml/**",
+                        "/swagger-ui/**").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .httpBasic().disable()
