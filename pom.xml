@@ -21,6 +21,7 @@
         <module>gameservices-inventory</module>
         <module>gameservices-gateway</module>
         <module>gameservices-common</module>
+        <module>gameservices-sdk</module>
     </modules>
 
     <properties>
