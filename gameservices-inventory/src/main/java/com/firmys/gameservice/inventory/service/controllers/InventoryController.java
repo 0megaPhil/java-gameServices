@@ -118,9 +118,9 @@ public class InventoryController extends AbstractController<Inventory> {
      */
     @PutMapping(ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE + ServicePaths.CURRENCY_PATH)
     public Inventory creditCurrencyByUuid(
+            @PathVariable(value = ServicePaths.UUID, required = true) String uuid,
             @RequestParam(value = ServicePaths.UUID, required = false) String currencyUuid,
             @RequestParam(value = ServicePaths.AMOUNT) Integer amountParam,
-            @PathVariable(ServicePaths.UUID) String uuid,
             @RequestBody(required = false) Currency requestBody) {
         return super.save(InventoryUtils.creditCurrency(
                 currencyController.findByUuid(
@@ -130,9 +130,9 @@ public class InventoryController extends AbstractController<Inventory> {
 
     @DeleteMapping(ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE + ServicePaths.CURRENCY_PATH)
     public Inventory debitCurrencyByUuid(
+            @PathVariable(value = ServicePaths.UUID, required = true) String uuid,
             @RequestParam(value = ServicePaths.UUID, required = false) String currencyUuid,
             @RequestParam(value = ServicePaths.AMOUNT) Integer amountParam,
-            @PathVariable(ServicePaths.UUID) String uuid,
             @RequestBody(required = false) Currency requestBody) {
         return super.save(InventoryUtils.debitCurrency(
                 currencyController.findByUuid(
