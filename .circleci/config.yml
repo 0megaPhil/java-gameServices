@@ -43,7 +43,7 @@ jobs:
       - run:
           name: Deploy Service Gateway
           command: |
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-api/target/gameservices-api.jar ec2-user@$VM_HOST_GATEWAY:~ 
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-gateway/target/gameservices-gateway.jar ec2-user@$VM_HOST_GATEWAY:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_GATEWAY 'bash ./gameservice_start.sh'
 
 workflows:

@@ -19,7 +19,7 @@
         <module>gameservices-world</module>
         <module>gameservices-characters</module>
         <module>gameservices-inventory</module>
-        <module>gameservices-api</module>
+        <module>gameservices-gateway</module>
         <module>gameservices-common</module>
     </modules>
 
@@ -54,7 +54,7 @@
             </dependency>
             <dependency>
                 <groupId>com.firmys</groupId>
-                <artifactId>gameservices-api</artifactId>
+                <artifactId>gameservices-gateway</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
