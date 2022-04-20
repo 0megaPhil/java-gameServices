@@ -10,12 +10,64 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gameservices-sdk</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+        </dependency>
+        <!--SpringDoc dependencies -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springdoc</groupId>
+                    <artifactId>*webmvc*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- @Nullable annotation -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.2</version>
+        </dependency>
+        <!-- Bean Validation API support -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <gameservices.inventory.host>54.153.32.101</gameservices.inventory.host>
-        <gameservices.inventory.port>8080</gameservices.inventory.port>
+        <gameservices.character.host>54.219.210.5</gameservices.character.host>
+        <gameservices.services.port>8080</gameservices.services.port>
+        <springdoc.version>1.6.4</springdoc.version>
     </properties>
 
     <profiles>
@@ -24,6 +76,23 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>${project.build.directory}/generated-sources/openapi</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.openapitools</groupId>
                         <artifactId>openapi-generator-maven-plugin</artifactId>
                         <!-- RELEASE_VERSION -->
@@ -31,14 +100,45 @@
                         <!-- /RELEASE_VERSION -->
                         <executions>
                             <execution>
+                                <id>Inventory</id>
                                 <goals>
                                     <goal>generate</goal>
                                 </goals>
                                 <configuration>
-                                    <inputSpec>http://${gameservices.inventory.host}:${gameservices.inventory.port}/v3/api-docs</inputSpec>
-                                    <generatorName>java</generatorName>
+                                    <inputSpec>http://${gameservices.inventory.host}:${gameservices.services.port}/v3/api-docs</inputSpec>
+                                    <generatorName>spring</generatorName>
+                                    <library>spring-boot</library>
+
                                     <configOptions>
-                                        <sourceFolder>src/gen/java/main</sourceFolder>
+                                        <controllerPackage>${project.groupId}.controller</controllerPackage>
+                                        <sourceFolder>src/main/java</sourceFolder>
+                                        <apiPackage>${project.groupId}.api</apiPackage>
+                                        <modelPackage>${project.groupId}.models</modelPackage>
+                                        <packageName>${project.groupId}</packageName>
+                                        <invokerPackage>${project.groupId}.client</invokerPackage>
+                                        <reactive>true</reactive>
+                                        <interfaceOnly>true</interfaceOnly>
+                                    </configOptions>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>Character</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <inputSpec>http://${gameservices.character.host}:${gameservices.services.port}/v3/api-docs</inputSpec>
+                                    <generatorName>spring</generatorName>
+                                    <library>spring-boot</library>
+                                    <configOptions>
+                                        <controllerPackage>${project.groupId}.controller</controllerPackage>
+                                        <sourceFolder>src/main/java</sourceFolder>
+                                        <apiPackage>${project.groupId}.api</apiPackage>
+                                        <modelPackage>${project.groupId}.models</modelPackage>
+                                        <packageName>${project.groupId}</packageName>
+                                        <invokerPackage>${project.groupId}.client</invokerPackage>
+                                        <reactive>true</reactive>
+                                        <interfaceOnly>true</interfaceOnly>
                                     </configOptions>
                                 </configuration>
                             </execution>
