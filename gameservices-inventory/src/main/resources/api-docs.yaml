@@ -4,14 +4,14 @@ info:
   description: Documentation APIs v0.1.0
   version: 0.1.0
 servers:
-- url: http://54.153.32.101:8080
+- url: http://localhost:8080
   description: Generated server url
 paths:
   /items:
     get:
       tags:
       - item-controller
-      operationId: find
+      operationId: findMultiple
       parameters:
       - name: uuid
         in: query
@@ -34,7 +34,7 @@ paths:
     put:
       tags:
       - item-controller
-      operationId: update
+      operationId: updateMultiple
       requestBody:
         content:
           application/json:
@@ -57,7 +57,7 @@ paths:
     post:
       tags:
       - item-controller
-      operationId: add
+      operationId: addMultiple
       requestBody:
         content:
           application/json:
@@ -79,7 +79,7 @@ paths:
     delete:
       tags:
       - item-controller
-      operationId: delete
+      operationId: deleteMultiple
       parameters:
       - name: uuid
         in: query
@@ -175,7 +175,7 @@ paths:
     put:
       tags:
       - item-controller
-      operationId: update_1
+      operationId: update
       requestBody:
         content:
           application/json:
@@ -192,7 +192,7 @@ paths:
     post:
       tags:
       - item-controller
-      operationId: add_1
+      operationId: add
       requestBody:
         content:
           application/json:
@@ -208,7 +208,7 @@ paths:
     delete:
       tags:
       - item-controller
-      operationId: delete_1
+      operationId: delete
       parameters:
       - name: uuid
         in: query
@@ -498,7 +498,7 @@ paths:
     put:
       tags:
       - inventory-controller
-      operationId: update_2
+      operationId: update_1
       requestBody:
         content:
           application/json:
@@ -515,7 +515,7 @@ paths:
     post:
       tags:
       - inventory-controller
-      operationId: add_2
+      operationId: add_1
       requestBody:
         content:
           application/json:
@@ -531,7 +531,7 @@ paths:
     delete:
       tags:
       - inventory-controller
-      operationId: delete_2
+      operationId: delete_1
       parameters:
       - name: uuid
         in: query
@@ -550,7 +550,7 @@ paths:
     get:
       tags:
       - inventory-controller
-      operationId: find_1
+      operationId: findMultiple_1
       parameters:
       - name: uuid
         in: query
@@ -573,7 +573,7 @@ paths:
     put:
       tags:
       - inventory-controller
-      operationId: update_3
+      operationId: updateMultiple_1
       requestBody:
         content:
           application/json:
@@ -596,7 +596,7 @@ paths:
     post:
       tags:
       - inventory-controller
-      operationId: add_3
+      operationId: addMultiple_1
       requestBody:
         content:
           application/json:
@@ -618,7 +618,7 @@ paths:
     delete:
       tags:
       - inventory-controller
-      operationId: delete_3
+      operationId: deleteMultiple_1
       parameters:
       - name: uuid
         in: query
@@ -714,7 +714,7 @@ paths:
     put:
       tags:
       - currency-controller
-      operationId: update_4
+      operationId: update_2
       requestBody:
         content:
           application/json:
@@ -731,7 +731,7 @@ paths:
     post:
       tags:
       - currency-controller
-      operationId: add_4
+      operationId: add_2
       requestBody:
         content:
           application/json:
@@ -747,7 +747,7 @@ paths:
     delete:
       tags:
       - currency-controller
-      operationId: delete_4
+      operationId: delete_2
       parameters:
       - name: uuid
         in: query
@@ -766,7 +766,7 @@ paths:
     get:
       tags:
       - currency-controller
-      operationId: find_2
+      operationId: findMultiple_2
       parameters:
       - name: uuid
         in: query
@@ -789,7 +789,7 @@ paths:
     put:
       tags:
       - currency-controller
-      operationId: update_5
+      operationId: updateMultiple_2
       requestBody:
         content:
           application/json:
@@ -812,7 +812,7 @@ paths:
     post:
       tags:
       - currency-controller
-      operationId: add_5
+      operationId: addMultiple_2
       requestBody:
         content:
           application/json:
@@ -834,7 +834,7 @@ paths:
     delete:
       tags:
       - currency-controller
-      operationId: delete_5
+      operationId: deleteMultiple_2
       parameters:
       - name: uuid
         in: query

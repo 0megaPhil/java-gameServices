@@ -9,6 +9,7 @@ import com.firmys.gameservices.inventory.service.data.OwnedItem;
 import com.firmys.gameservices.inventory.service.inventory.InventoryDataLookup;
 import com.firmys.gameservices.inventory.service.inventory.InventoryService;
 import com.firmys.gameservices.inventory.service.inventory.InventoryUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
