@@ -12,6 +12,11 @@
     <artifactId>gameservices-sdk</artifactId>
     <dependencies>
         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webflux-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
@@ -27,7 +32,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.springdoc</groupId>
-                    <artifactId>*webmvc*</artifactId>
+                    <artifactId>springdoc-openapi-webmvc-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -59,6 +64,15 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.firmys</groupId>
+            <artifactId>gameservices-common</artifactId>
+        </dependency>
     </dependencies>
 
     <properties>
@@ -67,7 +81,8 @@
         <gameservices.inventory.host>54.153.32.101</gameservices.inventory.host>
         <gameservices.character.host>54.219.210.5</gameservices.character.host>
         <gameservices.services.port>8080</gameservices.services.port>
-        <springdoc.version>1.6.4</springdoc.version>
+        <springdoc.version>1.6.6</springdoc.version>
+        <sdk.api.base-package>${project.groupId}.gameservices</sdk.api.base-package>
     </properties>
 
     <profiles>
@@ -108,16 +123,19 @@
                                     <inputSpec>http://${gameservices.inventory.host}:${gameservices.services.port}/v3/api-docs</inputSpec>
                                     <generatorName>spring</generatorName>
                                     <library>spring-boot</library>
-
+                                    <templateDirectory>${project.basedir}/src/main/resources/template</templateDirectory>
+                                    <generateSupportingFiles>false</generateSupportingFiles>
                                     <configOptions>
-                                        <controllerPackage>${project.groupId}.controller</controllerPackage>
+                                        <controllerPackage>${sdk.api.base-package}.controller</controllerPackage>
                                         <sourceFolder>src/main/java</sourceFolder>
-                                        <apiPackage>${project.groupId}.api</apiPackage>
-                                        <modelPackage>${project.groupId}.models</modelPackage>
-                                        <packageName>${project.groupId}</packageName>
-                                        <invokerPackage>${project.groupId}.client</invokerPackage>
-                                        <reactive>true</reactive>
+                                        <apiPackage>${sdk.api.base-package}.api</apiPackage>
+                                        <modelPackage>${sdk.api.base-package}.models</modelPackage>
+                                        <packageName>${sdk.api.base-package}</packageName>
+                                        <invokerPackage>${sdk.api.base-package}.client</invokerPackage>
+                                        <reactive>false</reactive>
                                         <interfaceOnly>true</interfaceOnly>
+                                        <delegatePattern>false</delegatePattern>
+                                        <skipDefaultInterface>true</skipDefaultInterface>
                                     </configOptions>
                                 </configuration>
                             </execution>
@@ -130,15 +148,19 @@
                                     <inputSpec>http://${gameservices.character.host}:${gameservices.services.port}/v3/api-docs</inputSpec>
                                     <generatorName>spring</generatorName>
                                     <library>spring-boot</library>
+                                    <templateDirectory>${project.basedir}/src/main/resources/template</templateDirectory>
+                                    <generateSupportingFiles>false</generateSupportingFiles>
                                     <configOptions>
-                                        <controllerPackage>${project.groupId}.controller</controllerPackage>
+                                        <controllerPackage>${sdk.api.base-package}.controller</controllerPackage>
                                         <sourceFolder>src/main/java</sourceFolder>
-                                        <apiPackage>${project.groupId}.api</apiPackage>
-                                        <modelPackage>${project.groupId}.models</modelPackage>
-                                        <packageName>${project.groupId}</packageName>
-                                        <invokerPackage>${project.groupId}.client</invokerPackage>
-                                        <reactive>true</reactive>
+                                        <apiPackage>${sdk.api.base-package}.api</apiPackage>
+                                        <modelPackage>${sdk.api.base-package}.models</modelPackage>
+                                        <packageName>${sdk.api.base-package}</packageName>
+                                        <invokerPackage>${sdk.api.base-package}.client</invokerPackage>
+                                        <reactive>false</reactive>
                                         <interfaceOnly>true</interfaceOnly>
+                                        <delegatePattern>false</delegatePattern>
+                                        <skipDefaultInterface>true</skipDefaultInterface>
                                     </configOptions>
                                 </configuration>
                             </execution>

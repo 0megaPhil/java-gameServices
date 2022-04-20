@@ -1,8 +1,8 @@
 package com.firmys.gameservices.webui.views;
 
-import com.firmys.gameservices.models.Inventory;
-import com.firmys.gameservices.webui.sdk.InventoriesSdk;
-import com.firmys.gameservices.webui.sdk.InventorySdk;
+//import com.firmys.gameservices.models.Inventory;
+//import com.firmys.gameservices.sdk.controllers.InventoriesSdk;
+//import com.firmys.gameservices.sdk.controllers.InventorySdk;
 import com.firmys.gameservices.webui.views.about.AboutView;
 import com.firmys.gameservices.webui.views.helloworld.HelloWorldView;
 import com.vaadin.flow.component.Component;
@@ -28,13 +28,12 @@ import java.util.Set;
  */
 public class MainLayout extends AppLayout {
 
-    private final InventorySdk inventory;
-    private final InventoriesSdk inventories;
+//    private final InventorySdk inventory;
+//    private final InventoriesSdk inventories;
 
-    public MainLayout(InventorySdk inventory,
-                      InventoriesSdk inventories) {
-        this.inventory = inventory;
-        this.inventories = inventories;
+    public MainLayout() {
+//        this.inventory = inventory;
+//        this.inventories = inventories;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerContent());
@@ -112,8 +111,8 @@ public class MainLayout extends AppLayout {
     }
 
     public void checkInventory() {
-        Set<Inventory> inventorySet = inventories.find(null);
-        inventorySet.forEach(System.out::println);
+//        Set<Inventory> inventorySet = inventories.find(null);
+//        inventorySet.forEach(System.out::println);
     }
 
     private Nav createNavigation() {

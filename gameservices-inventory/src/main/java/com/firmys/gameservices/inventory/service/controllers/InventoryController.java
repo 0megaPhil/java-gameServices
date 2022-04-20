@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RestController
 public class InventoryController extends AbstractController<Inventory> {
@@ -51,9 +52,15 @@ public class InventoryController extends AbstractController<Inventory> {
         return super.findAll();
     }
 
+    /**
+     * A bit of a special case, as Inventory have no identitifying attributes, and so creating bulk is handled differently
+     * @param amount number of {@link Inventory} to create
+     * @return set of newly generated Inventory objects
+     */
     @PostMapping(value = ServicePaths.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Inventory> addMultiple(@RequestBody(required = false) Set<Inventory> entity) {
-        return super.save(entity);
+    public Set<Inventory> addMultiple(
+            @RequestParam(value = ServicePaths.AMOUNT) int amount) {
+        return IntStream.range(0, amount).mapToObj(i -> super.save(new Inventory())).collect(Collectors.toSet());
     }
 
     @DeleteMapping(value = ServicePaths.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
