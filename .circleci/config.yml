@@ -2,10 +2,6 @@ version: 2.1
 
 jobs:
   build:
-    filters:
-      branches:
-        only:
-          - main
     docker:
       - image: cimg/openjdk:17.0
     environment:
