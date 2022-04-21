@@ -40,12 +40,12 @@ jobs:
           name: Deploy Inventory Service
           command: |
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-inventory/target/gameservices-inventory.jar ec2-user@$VM_HOST_INVENTORY:~ 
-            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_INVENTORY 'bash ./gameservice_start.sh & bash ./gameservice_start.sh'
+            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_INVENTORY 'bash ./gameservice_start.sh'
       - run:
           name: Deploy Service Gateway
           command: |
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-gateway/target/gameservices-gateway.jar ec2-user@$VM_HOST_GATEWAY:~ 
-            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_GATEWAY 'bash ./gameservice_start.sh & bash ./gameservice_start.sh'
+            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_GATEWAY 'bash ./gameservice_start.sh'
 
 workflows:
   gameservices:
