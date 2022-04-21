@@ -25,7 +25,7 @@ public class SpringSecurityConfiguration {
                         /*
                          * API
                          */
-                        "/inventor**", "/character**", "/world**",
+                        "/inventor*/**", "/character*/**", "/world**", "/item*/**", "/currenc*/**",
                         /*
                          * Swagger UI V3 OpenApi
                          */

@@ -136,6 +136,7 @@
                                         <interfaceOnly>true</interfaceOnly>
                                         <delegatePattern>false</delegatePattern>
                                         <skipDefaultInterface>true</skipDefaultInterface>
+                                        <serializableModel>true</serializableModel>
                                     </configOptions>
                                 </configuration>
                             </execution>
@@ -161,6 +162,7 @@
                                         <interfaceOnly>true</interfaceOnly>
                                         <delegatePattern>false</delegatePattern>
                                         <skipDefaultInterface>true</skipDefaultInterface>
+                                        <serializableModel>true</serializableModel>
                                     </configOptions>
                                 </configuration>
                             </execution>

@@ -2,24 +2,55 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.firmys.gameservices.common.GameData;
 
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class OwnedItems implements GameData {
-    private Set<OwnedItem> ownedItemsSet = ConcurrentHashMap.newKeySet();
+    private UUID uuid = UUID.randomUUID();
+    private Map<UUID, OwnedItem> ownedItemMap = new ConcurrentHashMap<>();
 
-    public OwnedItems withOwnedItemSet (Set<OwnedItem> ownedItemsSet) {
-        this.ownedItemsSet = ownedItemsSet;
+    public Map<UUID, OwnedItem> getOwnedItemMap() {
+        return ownedItemMap;
+    }
+
+    public void setOwnedItemMap(Map<UUID, OwnedItem> ownedItemMap) {
+        this.ownedItemMap = ownedItemMap;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public OwnedItems addItem(Item item, int amount) {
+        OwnedItem ownedItem = ownedItemMap.computeIfAbsent(item.getUuid(), v -> new OwnedItem(item));
+        ownedItem.add(amount);
+        clearEmpty();
         return this;
     }
 
-    public OwnedItems withOwnedItem (OwnedItem ownedItem) {
-        this.ownedItemsSet.add(ownedItem);
+    public OwnedItems consumeItem(Item item, int amount) {
+        OwnedItem ownedItem = ownedItemMap.computeIfAbsent(item.getUuid(), v -> new OwnedItem(item));
+        ownedItem.consume(amount);
+        clearEmpty();
         return this;
     }
 
-    public Set<OwnedItem> getOwnedItemsSet() {
-        return ownedItemsSet;
+    private void clearEmpty() {
+        this.setOwnedItemMap(this.getOwnedItemMap()
+                .entrySet().stream().filter(e -> e.getValue().getCount() > 0)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
+    public OwnedItem getOwnedItemByItem(Item item) {
+        return Optional.ofNullable(this.getOwnedItemMap().get(item.getUuid())).orElse(new OwnedItem(item));
+    }
 }

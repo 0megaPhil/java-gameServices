@@ -2,10 +2,7 @@ package com.firmys.gameservices.inventory.service.controllers;
 
 import com.firmys.gameservices.common.AbstractController;
 import com.firmys.gameservices.common.ServicePaths;
-import com.firmys.gameservices.inventory.service.data.Currency;
-import com.firmys.gameservices.inventory.service.data.Inventory;
-import com.firmys.gameservices.inventory.service.data.Item;
-import com.firmys.gameservices.inventory.service.data.OwnedItem;
+import com.firmys.gameservices.inventory.service.data.*;
 import com.firmys.gameservices.inventory.service.inventory.InventoryDataLookup;
 import com.firmys.gameservices.inventory.service.inventory.InventoryService;
 import com.firmys.gameservices.inventory.service.inventory.InventoryUtils;
@@ -67,6 +64,7 @@ public class InventoryController extends AbstractController<Inventory> {
     public void deleteMultiple(
             @RequestParam(value = ServicePaths.UUID, required = false) Set<String> uuidParams,
             @RequestBody(required = false) Set<Inventory> entities) {
+        System.out.println("ENTITIES: " + entities);
         super.deleteByUuids(gatherUuids(uuidParams, entities));
     }
 
@@ -232,7 +230,7 @@ public class InventoryController extends AbstractController<Inventory> {
     }
 
     @GetMapping(ServicePaths.INVENTORY_PATH + ServicePaths.UUID_PATH_VARIABLE + ServicePaths.ITEM_PATH)
-    public Set<OwnedItem> getOwnedItemsByInventoryUuid(
+    public OwnedItems getOwnedItemsByInventoryUuid(
             @PathVariable(value = ServicePaths.UUID, required = false) String uuid,
             @RequestParam(value = ServicePaths.UUID, required = false) String uuidParam,
             @RequestBody(required = false) Inventory requestBody) {
