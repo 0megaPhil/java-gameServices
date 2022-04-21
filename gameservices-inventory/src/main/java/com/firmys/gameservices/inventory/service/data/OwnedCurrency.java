@@ -52,8 +52,8 @@ public class OwnedCurrency implements GameData {
         return this;
     }
 
-    public void setItemUuid(UUID itemUuid) {
-        this.currencyUuid = itemUuid;
+    public void setCurrencyUuid(UUID currencyUuid) {
+        this.currencyUuid = currencyUuid;
     }
 
     public Set<UUID> getUUIDs() {

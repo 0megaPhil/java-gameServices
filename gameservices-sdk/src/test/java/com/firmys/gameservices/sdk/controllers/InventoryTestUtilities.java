@@ -48,7 +48,8 @@
 //
 //    public static OwnedCurrency generateOwnedCurrency(Set<Currency> currencySet) {
 //        OwnedCurrency ownedCurrency = new OwnedCurrency();
-//        ownedCurrency.setUuid(uuid.get());
+//
+//        ownedCurrency.setUuid();
 //
 //        Map<String, Currency> currencyMap = currencySet.stream()
 //                .map(o -> Map.entry(o.getUuid().toString(), o))

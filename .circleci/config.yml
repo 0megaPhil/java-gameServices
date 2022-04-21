@@ -35,7 +35,7 @@ jobs:
           name: Deploy Character Service
           command: |
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-characters/target/gameservices-characters.jar ec2-user@$VM_HOST_CHARACTER:~ 
-            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_CHARACTER 'bash ./gameservice_start.sh & bash ./gameservice_start.sh'
+            sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_CHARACTER 'bash ./gameservice_start.sh'
       - run:
           name: Deploy Inventory Service
           command: |
