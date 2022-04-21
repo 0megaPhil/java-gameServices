@@ -2,69 +2,62 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.firmys.gameservices.common.GameData;
 
-import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 public class OwnedCurrency implements GameData {
+    private UUID currencyUuid;
+    private final AtomicReference<SortedSet<UUID>> UUIDs = new AtomicReference<>(new TreeSet<>());
+    private int count = UUIDs.get().size();
 
-    private UUID uuid = UUID.randomUUID();
-    private final Map<UUID, Integer> currencyOwnedMap = new ConcurrentHashMap<>();
-
-    public OwnedCurrency() {
+    public OwnedCurrency(Currency currency) {
+        this.currencyUuid = currency.getUuid();
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public int getCount() {
+        return count;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public OwnedCurrency credit() {
+        return credit(1);
     }
 
-    public Map<UUID, Integer> getCurrencyOwnedMap() {
-        return currencyOwnedMap;
+    public OwnedCurrency credit(int amount) {
+        UUIDs.getAndUpdate(u -> {
+            IntStream.range(0, amount)
+                    .forEach(i -> u.add(UUID.randomUUID()));
+            return u;
+        });
+        return this;
     }
 
-    public Integer getCurrencyAmount(Currency currency) {
-        return getCurrencyAmount(currency.getUuid().toString());
+    public OwnedCurrency debit() {
+        return debit(1);
     }
 
-    public Integer getCurrencyAmount(UUID uuid) {
-        return getCurrencyAmount(uuid.toString());
+    public OwnedCurrency debit(int amount) {
+        if(getCount() < amount) {
+            throw new RuntimeException("Insufficient currency count of " +
+                    getCount() + " for consumption of " + amount + " Currency " + currencyUuid.toString());
+        }
+        UUIDs.getAndUpdate(u -> {
+            IntStream.range(0, amount)
+                    .forEach(i -> u.remove(UUIDs.get().last()));
+            return u;
+        });
+        return this;
     }
 
-    public Integer getCurrencyAmount(String uuidString) {
-        return currencyOwnedMap.putIfAbsent(UUID.fromString(uuidString), 0);
+    public void setItemUuid(UUID itemUuid) {
+        this.currencyUuid = itemUuid;
     }
 
-    public Integer creditCurrency(Currency currency, Integer amount) {
-        return creditCurrency(currency.getUuid().toString(), amount);
-    }
-
-    public Integer debitCurrency(Currency currency, Integer amount) {
-        return debitCurrency(currency.getUuid().toString(), amount);
-    }
-
-    public Integer creditCurrency(UUID uuid, Integer amount) {
-        return creditCurrency(uuid.toString(), amount);
-    }
-
-    public Integer debitCurrency(UUID uuid, Integer amount) {
-        return debitCurrency(uuid.toString(), amount);
-    }
-
-    public Integer creditCurrency(String currencyUuidString, Integer amount) {
-        getCurrencyAmount(currencyUuidString);
-        return currencyOwnedMap.computeIfPresent(UUID.fromString(currencyUuidString), (c, a) -> a + amount);
-    }
-
-    public Integer debitCurrency(String uuidString, Integer amount) {
-       if(getCurrencyAmount(uuidString) < amount) {
-           throw new RuntimeException("For " + uuidString + " available value of " +
-                   getCurrencyAmount(uuidString) + " lower than requested debit amount of " + amount);
-       }
-       return currencyOwnedMap.computeIfPresent(UUID.fromString(uuidString), (c, a) -> a - amount);
+    public Set<UUID> getUUIDs() {
+        return UUIDs.get();
     }
 
 }

@@ -1,7 +1,6 @@
 package com.firmys.gameservices.inventory.service.data;
 
 import com.firmys.gameservices.common.GameData;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.SortedSet;

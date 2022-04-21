@@ -1,0 +1,19 @@
+gameservices:
+  inventory:
+    host: 54.153.32.101
+    port: 8080
+  character:
+    host: 54.219.210.5
+    port: 8080
+  gateway:
+    host: 52.52.163.33
+    port: 8080
+
+cloud:
+  aws:
+    credentials:
+      use-default-aws-credentials-chain: true
+logging:
+  level:
+    com.amazonaws.util.EC2MetadataUtils: error
+    com.amazonaws.internal.InstanceMetadataServiceResourceFetcher: error

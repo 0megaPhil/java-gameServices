@@ -35,12 +35,6 @@ public class InventoryUtils {
 
     public static Inventory addOwnedItemByItemUuid(Item item, Inventory inventory, int amount) {
         try {
-//            Set<OwnedItem> ownedItemSet = inventory.getOwnedItems();
-//            OwnedItem ownedItem = ownedItemSet.stream()
-//                    .filter(o -> o.getItemUuid().equals(item.getUuid())).findFirst().orElse(new OwnedItem(item));
-//            ownedItem.add(amount);
-//            ownedItemSet.add(ownedItem);
-//            inventory.setOwnedItems(ownedItemSet);
             inventory.setOwnedItems(inventory.getOwnedItems().addItem(item, amount));
             return inventory;
         } catch (Exception e) {
@@ -50,7 +44,6 @@ public class InventoryUtils {
         }
     }
 
-    // FIXME - update
     public static Set<Inventory> getInventoriesWithItem(Set<Inventory> inventories, Item item) {
         try {
             return inventories.stream()
@@ -65,9 +58,7 @@ public class InventoryUtils {
 
     public static Inventory creditCurrency(Currency currency, Inventory inventory, int amount) {
         try {
-            OwnedCurrency ownedCurrency = inventory.getOwnedCurrency();
-            ownedCurrency.creditCurrency(currency, amount);
-            inventory.setOwnedCurrency(ownedCurrency);
+            inventory.setOwnedCurrencies(inventory.getOwnedCurrencies().creditCurrency(currency, amount));
             return inventory;
         } catch (Exception e) {
             throw exceptionBuilder.withGameServiceError(
@@ -78,9 +69,7 @@ public class InventoryUtils {
 
     public static Inventory debitCurrency(Currency currency, Inventory inventory, int amount) {
         try {
-            OwnedCurrency ownedCurrency = inventory.getOwnedCurrency();
-            ownedCurrency.debitCurrency(currency, amount);
-            inventory.setOwnedCurrency(ownedCurrency);
+            inventory.setOwnedCurrencies(inventory.getOwnedCurrencies().debitCurrency(currency, amount));
             return inventory;
         } catch (Exception e) {
             throw exceptionBuilder.withGameServiceError(
