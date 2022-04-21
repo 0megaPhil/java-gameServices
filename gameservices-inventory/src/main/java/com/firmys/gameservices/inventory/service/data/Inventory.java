@@ -28,7 +28,7 @@ public class Inventory extends AbstractGameEntity {
     private UUID uuid = UUID.randomUUID();
     @Column(name = "OWNEDITEMS", length = 100000)
     private OwnedItems ownedItems;
-    @Column(name = "OWNEDCURRENCY", length = 10000)
+    @Column(name = "OWNEDCURRENCIES", length = 10000)
     private OwnedCurrencies ownedCurrencies;
 
     public int getId() {

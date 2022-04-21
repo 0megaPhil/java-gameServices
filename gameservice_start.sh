@@ -1,7 +1,7 @@
 #!/bin/bash
 # Expects environment to be added
 # TODO - Setup proper logging via logback
-pkill -ef 'java -jar'
+pkill -ef 'java -jar' & pkill -ef 'java -jar' & pkill -ef 'java -jar'
 sleep 15 # FIXME with proper checking that old process is dead and port is clear
 source sshenv
 export SERVICE_COMMAND="java -jar ~/$(ls *gameservices*.jar) --server.port=8080 \

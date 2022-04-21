@@ -25,8 +25,8 @@ public class InventoriesSdkIT {
 
         addedSet.forEach(i -> {
             Assertions.assertThat(i.getUuid()).isNotNull();
-            Assertions.assertThat(i.getOwnedCurrency()).isNotNull();
-            Assertions.assertThat(i.getOwnedCurrency().getCurrencyOwnedMap()).isNotNull();
+            Assertions.assertThat(i.getOwnedCurrencies()).isNotNull();
+            Assertions.assertThat(i.getOwnedCurrencies().getOwnedCurrencyMap()).isNotNull();
             Assertions.assertThat(i.getOwnedItems()).isNotNull();
             Assertions.assertThat(i.getOwnedItems().getOwnedItemMap()).isNotNull();
         });
