@@ -9,9 +9,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class GatewayClient {
@@ -20,9 +22,9 @@ public class GatewayClient {
     public GatewayClient(@Value("${gameservices.gateway.host}") String host,
                          @Value("${gameservices.gateway.port}") String port) {
         this.client = WebClient.builder()
-                .baseUrl("http://" + "localhost" + ":" + "8080")
+                .baseUrl("http://" + host + ":" + port)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultUriVariables(Collections.singletonMap("url", "http://" + "localhost" + ":" + "8080"))
+                .defaultUriVariables(Collections.singletonMap("url", "http://" + host + ":" + port))
                 .build();
     }
 
@@ -33,7 +35,7 @@ public class GatewayClient {
     public Function<Set<String>, LinkedMultiValueMap<String, String>> paramsFunction(String paramName) {
         LinkedMultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
         return params -> {
-            paramsMap.put(paramName, params.stream().toList());
+            paramsMap.put(paramName, Optional.ofNullable(params).orElse(new HashSet<>()).stream().toList());
             return paramsMap;
         };
     }

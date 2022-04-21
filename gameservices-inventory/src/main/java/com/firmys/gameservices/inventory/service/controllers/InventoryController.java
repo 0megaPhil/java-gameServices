@@ -64,7 +64,6 @@ public class InventoryController extends AbstractController<Inventory> {
     public void deleteMultiple(
             @RequestParam(value = ServicePaths.UUID, required = false) Set<String> uuidParams,
             @RequestBody(required = false) Set<Inventory> entities) {
-        System.out.println("ENTITIES: " + entities);
         super.deleteByUuids(gatherUuids(uuidParams, entities));
     }
 
