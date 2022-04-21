@@ -19,8 +19,19 @@ public class ItemSdkIT {
 
     @Test
     public void create() {
-       Item item = sdk.addItem(InventoryTestUtilities.generateItem()).block();
-       System.out.println(item);
+        Item generatedItem = InventoryTestUtilities.generateItem();
+        Item createdItem = sdk.addItem(generatedItem).block();
+        Assertions.assertThat(generatedItem.getName()).isEqualTo(createdItem.getName());
+        Assertions.assertThat(generatedItem.getBaseValue()).isEqualTo(createdItem.getBaseValue());
+        Assertions.assertThat(generatedItem.getDescription()).isEqualTo(createdItem.getDescription());
+        Assertions.assertThat(generatedItem.getHeight()).isEqualTo(createdItem.getHeight());
+        Assertions.assertThat(generatedItem.getLength()).isEqualTo(createdItem.getLength());
+        Assertions.assertThat(generatedItem.getWidth()).isEqualTo(createdItem.getWidth());
+        Assertions.assertThat(generatedItem.getWeight()).isEqualTo(createdItem.getWeight());
+        Assertions.assertThat(generatedItem.getRequirements()).isEqualTo(createdItem.getRequirements());
+
+        System.out.println("GENERATED: " + generatedItem);
+        System.out.println("CREATED: " + createdItem);
     }
 
 }

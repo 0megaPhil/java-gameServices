@@ -24,9 +24,9 @@ public class Currency extends AbstractGameEntity {
     @Column(name = "uuid", nullable = false, unique = true)
     @Type(type = "uuid-char")
     private UUID uuid = UUID.randomUUID();
-    @Column(unique = true, length = 1000)
+    @Column(unique = true, length = 512)
     private String name;
-    @Column(length = 10000)
+    @Column(length = 512)
     private String description;
     @Column(name = "BASEVALUE")
     private int baseValue = DefaultData.DEFAULT_INT;;

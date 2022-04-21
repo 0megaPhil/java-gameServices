@@ -56,12 +56,12 @@ public class SdkTestUtilities {
 
         public static String getAlphaNumeric() {
             Random random = new Random();
-            return new RandomString(random.nextInt(1, 300), random, alphaNum).nextString();
+            return new RandomString(random.nextInt(1, 255), random, alphaNum).nextString();
         }
 
         public static String getAlpha() {
             Random random = new Random();
-            return new RandomString(random.nextInt(1, 300), random, alpha).nextString();
+            return new RandomString(random.nextInt(1, 255), random, alpha).nextString();
         }
 
         public static int getNumeric() {
@@ -70,7 +70,7 @@ public class SdkTestUtilities {
         }
 
         public static double getDouble() {
-            return 1 + new Random().nextDouble() * (-100);
+            return 1 + new Random().nextDouble() * (10);
         }
 
         /**
