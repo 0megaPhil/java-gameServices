@@ -12,8 +12,8 @@ import java.util.stream.IntStream;
 public class OwnedItem implements GameData {
 
     private UUID itemUuid;
-    private final AtomicReference<SortedSet<UUID>> UUIDs = new AtomicReference<>(new TreeSet<>());
-    private int count = UUIDs.get().size();
+    private final AtomicReference<SortedSet<UUID>> ownedItemUuids = new AtomicReference<>(new TreeSet<>());
+    private int count = ownedItemUuids.get().size();
 
     public OwnedItem(Item item) {
         this.itemUuid = item.getUuid();
@@ -23,7 +23,7 @@ public class OwnedItem implements GameData {
     }
 
     public int getCount() {
-        this.count = UUIDs.get().size();
+        this.count = ownedItemUuids.get().size();
         return count;
     }
 
@@ -36,7 +36,7 @@ public class OwnedItem implements GameData {
     }
 
     public OwnedItem add(int amount) {
-        UUIDs.getAndUpdate(u -> {
+        ownedItemUuids.getAndUpdate(u -> {
             IntStream.range(0, amount)
                     .forEach(i -> u.add(UUID.randomUUID()));
             return u;
@@ -53,9 +53,9 @@ public class OwnedItem implements GameData {
             throw new RuntimeException("Insufficient inventory count of " +
                     getCount() + " for consumption of " + amount + " Item " + itemUuid.toString());
         }
-        UUIDs.getAndUpdate(u -> {
+        ownedItemUuids.getAndUpdate(u -> {
             IntStream.range(0, amount)
-                    .forEach(i -> u.remove(UUIDs.get().last()));
+                    .forEach(i -> u.remove(ownedItemUuids.get().last()));
             return u;
         });
         return this;
@@ -65,8 +65,8 @@ public class OwnedItem implements GameData {
         this.itemUuid = itemUuid;
     }
 
-    public Set<UUID> getUUIDs() {
-        return UUIDs.get();
+    public Set<UUID> getOwnedItemUuids() {
+        return ownedItemUuids.get();
     }
 
 }

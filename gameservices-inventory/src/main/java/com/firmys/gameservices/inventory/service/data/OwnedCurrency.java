@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class OwnedCurrency implements GameData {
     private UUID currencyUuid;
     private AtomicInteger totalCurrency = new AtomicInteger(0);
-    private final AtomicReference<SortedSet<UUID>> UUIDs = new AtomicReference<>(new TreeSet<>());
+    private final AtomicReference<SortedSet<UUID>> transactionUuids = new AtomicReference<>(new TreeSet<>());
 
     public OwnedCurrency(Currency currency) {
         this.currencyUuid = currency.getUuid();
@@ -32,8 +32,8 @@ public class OwnedCurrency implements GameData {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
         LocalDate localDate = LocalDate.now();
         totalCurrency.getAndUpdate(a -> a + amount);
-        UUIDs.getAndUpdate(u -> {
-            u.add(UUID.fromString("CREDIT: " + amount + " - " + dtf.format(localDate)));
+        transactionUuids.getAndUpdate(u -> {
+            u.add(UUID.nameUUIDFromBytes(("CREDIT: " + amount + " - " + dtf.format(localDate)).getBytes()));
             return u;
         });
         return this;
@@ -51,8 +51,8 @@ public class OwnedCurrency implements GameData {
                     getCount() + " for consumption of " + amount + " Currency " + currencyUuid.toString());
         }
         totalCurrency.getAndUpdate(a -> a - amount);
-        UUIDs.getAndUpdate(u -> {
-            u.add(UUID.fromString("DEBIT: " + amount + " - " + dtf.format(localDate)));
+        transactionUuids.getAndUpdate(u -> {
+            u.add(UUID.nameUUIDFromBytes(("DEBIT: " + amount + " - " + dtf.format(localDate)).getBytes()));
             return u;
         });
         return this;
@@ -62,8 +62,8 @@ public class OwnedCurrency implements GameData {
         this.currencyUuid = currencyUuid;
     }
 
-    public Set<UUID> getUUIDs() {
-        return UUIDs.get();
+    public Set<UUID> getTransactionUuids() {
+        return transactionUuids.get();
     }
 
 }
