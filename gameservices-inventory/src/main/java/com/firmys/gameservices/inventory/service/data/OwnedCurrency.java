@@ -15,14 +15,13 @@ public class OwnedCurrency implements GameData {
     private UUID currencyUuid;
     private AtomicInteger totalCurrency = new AtomicInteger(0);
     private final AtomicReference<SortedSet<UUID>> UUIDs = new AtomicReference<>(new TreeSet<>());
-    private int count = UUIDs.get().size();
 
     public OwnedCurrency(Currency currency) {
         this.currencyUuid = currency.getUuid();
     }
 
     public int getCount() {
-        return count;
+        return totalCurrency.get();
     }
 
     public OwnedCurrency credit() {
