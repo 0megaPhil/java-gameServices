@@ -19,9 +19,6 @@ import java.util.Set;
 class InventoriesSdkTest {
 
     @MockBean
-    GatewayClient gatewayClient;
-
-    @MockBean
     InventoriesSdk inventoriesSdk;
 
     @BeforeAll

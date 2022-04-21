@@ -19,6 +19,24 @@ public class GatewayRouteConfig {
     @Value("${spring.cloud.gateway.routes[1].uri}")
     private String characterHost;
 
+    @Value("${spring.cloud.gateway.routes[2].uri}")
+    private String inventoriesHost;
+
+    @Value("${spring.cloud.gateway.routes[3].uri}")
+    private String charactersHost;
+
+    @Value("${spring.cloud.gateway.routes[4].uri}")
+    private String itemHost;
+
+    @Value("${spring.cloud.gateway.routes[5].uri}")
+    private String currencyHost;
+
+    @Value("${spring.cloud.gateway.routes[6].uri}")
+    private String itemsHost;
+
+    @Value("${spring.cloud.gateway.routes[7].uri}")
+    private String currenciesHost;
+
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
@@ -35,13 +53,33 @@ public class GatewayRouteConfig {
                 .route(ServicePaths.INVENTORIES + "service", r -> r
                         .path("/" + ServicePaths.INVENTORIES + "/**")
                         .filters(f -> f.circuitBreaker(c -> c.setName(ServicePaths.INVENTORIES + "CircuitBreaker")
-                                .setFallbackUri(inventoryHost + "/error")))
-                        .uri(inventoryHost))
+                                .setFallbackUri(inventoriesHost + "/error")))
+                        .uri(inventoriesHost))
                 .route(ServicePaths.CHARACTERS + "service", r -> r
                         .path("/" + ServicePaths.CHARACTERS + "/**")
                         .filters(f -> f.circuitBreaker(c -> c.setName(ServicePaths.CHARACTERS + "CircuitBreaker")
-                                .setFallbackUri(characterHost + "/error")))
-                        .uri(characterHost))
+                                .setFallbackUri(charactersHost + "/error")))
+                        .uri(charactersHost))
+                .route(ServicePaths.ITEM + "service", r -> r
+                        .path("/" + ServicePaths.ITEM + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServicePaths.ITEM + "CircuitBreaker")
+                                .setFallbackUri(itemHost + "/error")))
+                        .uri(itemHost))
+                .route(ServicePaths.CURRENCY + "service", r -> r
+                        .path("/" + ServicePaths.CURRENCY + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServicePaths.CURRENCY + "CircuitBreaker")
+                                .setFallbackUri(currencyHost + "/error")))
+                        .uri(currencyHost))
+                .route(ServicePaths.ITEMS + "service", r -> r
+                        .path("/" + ServicePaths.ITEMS + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServicePaths.ITEMS + "CircuitBreaker")
+                                .setFallbackUri(itemsHost + "/error")))
+                        .uri(itemsHost))
+                .route(ServicePaths.CURRENCIES + "service", r -> r
+                        .path("/" + ServicePaths.CURRENCIES + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServicePaths.CURRENCIES + "CircuitBreaker")
+                                .setFallbackUri(currenciesHost + "/error")))
+                        .uri(currenciesHost))
                 .build();
     }
 

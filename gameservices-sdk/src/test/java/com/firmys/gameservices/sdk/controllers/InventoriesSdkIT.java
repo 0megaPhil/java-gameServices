@@ -1,6 +1,7 @@
 package com.firmys.gameservices.sdk.controllers;
 
 import com.firmys.gameservices.models.Inventory;
+import com.firmys.gameservices.models.Item;
 import com.firmys.gameservices.sdk.client.GatewayClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ public class InventoriesSdkIT {
 
         Assertions.assertThat(addedSet).isNotNull();
         Assertions.assertThat(addedSet.size()).isEqualTo(2);
-
+        Inventory inventory = addedSet.iterator().next();
         addedSet.forEach(i -> {
             Assertions.assertThat(i.getUuid()).isNotNull();
             Assertions.assertThat(i.getOwnedCurrencies()).isNotNull();
@@ -35,5 +36,11 @@ public class InventoriesSdkIT {
 
         Set<Inventory> foundSet = inventoriesSdk.findMultipleInventory(null).block();
         Assertions.assertThat(foundSet).doesNotContain(addedSet.toArray(new Inventory[]{}));
+    }
+
+    @Test
+    public void createInventoriesAddItems() {
+        Set<Inventory> addedSet = inventoriesSdk.addMultipleInventory(2).block();
+        Set<Item> itemSet = Set.of(InventoryTestUtilities.generateItem(), InventoryTestUtilities.generateItem());
     }
 }

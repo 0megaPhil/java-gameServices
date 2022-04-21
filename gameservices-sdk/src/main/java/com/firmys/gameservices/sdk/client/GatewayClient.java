@@ -1,12 +1,15 @@
 package com.firmys.gameservices.sdk.client;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.Collections;
@@ -43,4 +46,33 @@ public class GatewayClient {
     public WebClient getClient() {
         return client;
     }
+
+    public <R> Mono<R> get(String uriPath, LinkedMultiValueMap<String, String> params, ParameterizedTypeReference<R> typeReference) {
+        return getClient().get().uri(
+                uriBuilder -> uriBuilderFunction(uriPath, params).apply(uriBuilder)).retrieve().bodyToMono(typeReference);
+    }
+
+    public <R> Mono<R> post(String uriPath, LinkedMultiValueMap<String, String> params, ParameterizedTypeReference<R> typeReference) {
+        return getClient().post().uri(
+                uriBuilder -> uriBuilderFunction(uriPath, params)
+                        .apply(uriBuilder)).retrieve().bodyToMono(typeReference);
+    }
+
+    public <S, R> Mono<R> post(String uriPath, LinkedMultiValueMap<String, String> params, ParameterizedTypeReference<R> typeReference, S body) {
+        return getClient().post().uri(
+                uriBuilder -> uriBuilderFunction(uriPath, params)
+                        .apply(uriBuilder)).body(BodyInserters.fromValue(body)).retrieve().bodyToMono(typeReference);
+    }
+
+    public <R> Mono<R> put(String uriPath, LinkedMultiValueMap<String, String> params, ParameterizedTypeReference<R> typeReference) {
+        return getClient().put().uri(
+                uriBuilder -> uriBuilderFunction(uriPath, params)
+                        .apply(uriBuilder)).retrieve().bodyToMono(typeReference);
+    }
+
+    public <R> Mono<R> delete(String uriPath, LinkedMultiValueMap<String, String> params, ParameterizedTypeReference<R> typeReference) {
+        return getClient().get().uri(
+                uriBuilder -> uriBuilderFunction(uriPath, params).apply(uriBuilder)).retrieve().bodyToMono(typeReference);
+    }
+
 }

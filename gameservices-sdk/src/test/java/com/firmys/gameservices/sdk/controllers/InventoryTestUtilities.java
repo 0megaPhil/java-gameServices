@@ -52,9 +52,9 @@ public class InventoryTestUtilities {
     public static OwnedItem generateOwnedItem(Item item) {
         OwnedItem ownedItem = new OwnedItem();
         ownedItem.setItemUuid(item.getUuid());
-        ownedItem.setUuids(IntStream.range(0, new Random().nextInt(1, 10))
+        ownedItem.setOwnedItemUuids(IntStream.range(0, new Random().nextInt(1, 10))
                 .mapToObj(i -> UUID.nameUUIDFromBytes((item.getName() + i).getBytes())).collect(Collectors.toSet()));
-        ownedItem.setCount(ownedItem.getUuids().size());
+        ownedItem.setCount(ownedItem.getOwnedItemUuids().size());
         return ownedItem;
     }
 
@@ -74,7 +74,7 @@ public class InventoryTestUtilities {
         OwnedCurrency ownedCurrency = new OwnedCurrency();
         ownedCurrency.setCurrencyUuid(currency.getUuid());
         ownedCurrency.setCount(new Random().nextInt(1, Integer.MAX_VALUE));
-        ownedCurrency.setUuids(IntStream.range(0,
+        ownedCurrency.setTransactionUuids(IntStream.range(0,
                 new Random().nextInt(1, 10)).mapToObj(i -> UUID.randomUUID()).collect(Collectors.toSet()));
         return ownedCurrency;
     }
