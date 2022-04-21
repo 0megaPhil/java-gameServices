@@ -24,9 +24,9 @@ public class Item extends AbstractGameEntity {
     @Column(name = "uuid", nullable = false, unique = true)
     @Type(type = "uuid-char")
     private UUID uuid = UUID.randomUUID();
-    @Column(unique = true)
+    @Column(unique = true, length = 1000)
     private String name;
-    @Column
+    @Column(length = 10000)
     private String description;
     @Column
     private double weight;
@@ -36,7 +36,7 @@ public class Item extends AbstractGameEntity {
     private int width = DefaultData.DEFAULT_INT;;
     @Column
     private int height = DefaultData.DEFAULT_INT;;
-    @Column
+    @Column(length = 10000)
     private String requirements;
     @Column(name = "BASEVALUE")
     private int baseValue = DefaultData.DEFAULT_INT;;
