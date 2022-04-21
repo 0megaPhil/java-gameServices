@@ -2,15 +2,18 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.firmys.gameservices.common.GameData;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.IntStream;
 
 public class OwnedCurrency implements GameData {
     private UUID currencyUuid;
+    private AtomicInteger totalCurrency = new AtomicInteger(0);
     private final AtomicReference<SortedSet<UUID>> UUIDs = new AtomicReference<>(new TreeSet<>());
     private int count = UUIDs.get().size();
 
@@ -27,9 +30,11 @@ public class OwnedCurrency implements GameData {
     }
 
     public OwnedCurrency credit(int amount) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
+        LocalDate localDate = LocalDate.now();
+        totalCurrency.getAndUpdate(a -> a + amount);
         UUIDs.getAndUpdate(u -> {
-            IntStream.range(0, amount)
-                    .forEach(i -> u.add(UUID.randomUUID()));
+            u.add(UUID.fromString("CREDIT: " + amount + " - " + dtf.format(localDate)));
             return u;
         });
         return this;
@@ -40,13 +45,15 @@ public class OwnedCurrency implements GameData {
     }
 
     public OwnedCurrency debit(int amount) {
-        if(getCount() < amount) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
+        LocalDate localDate = LocalDate.now();
+        if(totalCurrency.get() < amount) {
             throw new RuntimeException("Insufficient currency count of " +
                     getCount() + " for consumption of " + amount + " Currency " + currencyUuid.toString());
         }
+        totalCurrency.getAndUpdate(a -> a - amount);
         UUIDs.getAndUpdate(u -> {
-            IntStream.range(0, amount)
-                    .forEach(i -> u.remove(UUIDs.get().last()));
+            u.add(UUID.fromString("DEBIT: " + amount + " - " + dtf.format(localDate)));
             return u;
         });
         return this;
