@@ -2,15 +2,12 @@ package com.firmys.gameservices.sdk.controllers;
 
 import com.firmys.gameservices.api.ItemApi;
 import com.firmys.gameservices.common.ServicePaths;
-import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.models.Item;
 import com.firmys.gameservices.sdk.client.GatewayClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Component
 public class ItemSdk extends AbstractSdk implements ItemApi {

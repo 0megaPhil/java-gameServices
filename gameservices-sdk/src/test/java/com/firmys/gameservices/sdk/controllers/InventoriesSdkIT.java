@@ -42,5 +42,6 @@ public class InventoriesSdkIT {
     public void createInventoriesAddItems() {
         Set<Inventory> addedSet = inventoriesSdk.addMultipleInventory(2).block();
         Set<Item> itemSet = Set.of(InventoryTestUtilities.generateItem(), InventoryTestUtilities.generateItem());
+
     }
 }

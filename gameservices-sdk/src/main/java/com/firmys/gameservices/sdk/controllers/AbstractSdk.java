@@ -1,9 +1,6 @@
 package com.firmys.gameservices.sdk.controllers;
 
 import com.firmys.gameservices.sdk.client.GatewayClient;
-import org.springframework.core.ParameterizedTypeReference;
-
-import java.util.Set;
 
 public abstract class AbstractSdk {
     private final GatewayClient client;
