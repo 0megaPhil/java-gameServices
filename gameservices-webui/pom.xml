@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>java-gameServices</artifactId>
         <groupId>com.firmys</groupId>
+        <artifactId>java-gameServices</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gameservices-webui</artifactId>
+    <packaging>jar</packaging>
+
     <properties>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.source>17</maven.compiler.source>
+        <java.version>11</java.version>
         <vaadin.version>23.0.6</vaadin.version>
     </properties>
 
@@ -73,10 +73,16 @@
     </dependencyManagement>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.firmys</groupId>-->
-<!--            <artifactId>gameservices-sdk</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.firmys</groupId>
+            <artifactId>gameservices-sdk</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-security</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <!-- Replace artifactId with vaadin-core to use only free components -->
@@ -85,12 +91,6 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-webmvc</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -129,10 +129,6 @@
             <version>5.0.3</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.firmys</groupId>-->
-<!--            <artifactId>gameservices-sdk</artifactId>-->
-<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -152,7 +148,7 @@
             <!--
                 Take care of synchronizing java dependencies and imports in
                 package.json and main.js files.
-                It also creates webpack.sdk.js if not exists yet.
+                It also creates webpack.config.js if not exists yet.
             -->
             <plugin>
                 <groupId>com.vaadin</groupId>

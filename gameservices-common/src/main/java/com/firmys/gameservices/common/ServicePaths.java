@@ -41,4 +41,10 @@ public class ServicePaths {
     public final static String SEARCH_PATH = "/search";
     public final static String MATCH_PATH_VARIABLE = "/" + "{" + ServicePaths.MATCH + "}";
 
+    public final static String OWNED_ITEMS = "OwnedItems";
+    public final static String OWNED_CURRENCIES = "OwnedCurrencies";
+
+    public final static String OWNED_ITEM = "OwnedItem";
+    public final static String OWNED_CURRENCY = "OwnedCurrency";
+
 }

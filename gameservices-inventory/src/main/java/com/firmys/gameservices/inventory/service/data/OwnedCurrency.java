@@ -3,6 +3,7 @@ package com.firmys.gameservices.inventory.service.data;
 import com.firmys.gameservices.common.GameData;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import java.util.SortedSet;
@@ -11,6 +12,11 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+/*
+ * FIXME - Rolling integer, causing record deletion
+ * FIXME - TRANSACTION UUIDs
+ * FIXME - Currency UUID not showing up in OwnedCurrency
+ */
 public class OwnedCurrency implements GameData {
     private UUID currencyUuid;
     private AtomicInteger totalCurrency = new AtomicInteger(0);
@@ -30,10 +36,10 @@ public class OwnedCurrency implements GameData {
 
     public OwnedCurrency credit(int amount) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
-        LocalDate localDate = LocalDate.now();
+        LocalDateTime localDateTime = LocalDateTime.now();
         totalCurrency.getAndUpdate(a -> a + amount);
         transactionUuids.getAndUpdate(u -> {
-            u.add(UUID.nameUUIDFromBytes(("CREDIT: " + amount + " - " + dtf.format(localDate)).getBytes()));
+            u.add(UUID.nameUUIDFromBytes(("CREDIT: " + amount + " - " + dtf.format(localDateTime)).getBytes()));
             return u;
         });
         return this;

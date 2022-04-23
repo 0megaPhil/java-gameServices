@@ -23,6 +23,7 @@
         <module>gameservices-gateway</module>
         <module>gameservices-common</module>
         <module>gameservices-sdk</module>
+        <module>gameservices-webui</module>
     </modules>
 
     <distributionManagement>
@@ -80,6 +81,11 @@
             <dependency>
                 <groupId>com.firmys</groupId>
                 <artifactId>gameservices-sdk</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.firmys</groupId>
+                <artifactId>gameservices-webui</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

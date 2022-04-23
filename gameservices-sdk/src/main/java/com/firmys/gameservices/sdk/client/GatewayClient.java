@@ -21,6 +21,7 @@ import java.util.function.Function;
 @Component
 public class GatewayClient {
     private final WebClient client;
+    private String baseUri;
 
     public GatewayClient(@Value("${gameservices.gateway.host}") String host,
                          @Value("${gameservices.gateway.port}") String port) {
@@ -29,6 +30,12 @@ public class GatewayClient {
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultUriVariables(Collections.singletonMap("url", "http://" + host + ":" + port))
                 .build();
+    }
+
+    // TODO - consider structure of this class
+    public GatewayClient withBaseUri(String baseUri) {
+        this.baseUri = baseUri;
+        return this;
     }
 
     public Function<UriBuilder, URI> uriBuilderFunction(String uriPath, LinkedMultiValueMap<String, String> params) {
@@ -52,6 +59,11 @@ public class GatewayClient {
                 uriBuilder -> uriBuilderFunction(uriPath, params).apply(uriBuilder)).retrieve().bodyToMono(typeReference);
     }
 
+    public <R> Mono<R> post(String uriPath, ParameterizedTypeReference<R> typeReference) {
+        return getClient().post().uri(
+                uriBuilder -> uriBuilder.path(uriPath).build()).retrieve().bodyToMono(typeReference);
+    }
+
     public <R> Mono<R> post(String uriPath, LinkedMultiValueMap<String, String> params, ParameterizedTypeReference<R> typeReference) {
         return getClient().post().uri(
                 uriBuilder -> uriBuilderFunction(uriPath, params)
@@ -70,9 +82,18 @@ public class GatewayClient {
                         .apply(uriBuilder)).retrieve().bodyToMono(typeReference);
     }
 
+    public <R> Mono<R> delete(String uriPath, ParameterizedTypeReference<R> typeReference) {
+        return getClient().delete().uri(
+                uriBuilder -> uriBuilder.path(uriPath).build()).retrieve().bodyToMono(typeReference);
+    }
+
     public <R> Mono<R> delete(String uriPath, LinkedMultiValueMap<String, String> params, ParameterizedTypeReference<R> typeReference) {
-        return getClient().get().uri(
+        return getClient().delete().uri(
                 uriBuilder -> uriBuilderFunction(uriPath, params).apply(uriBuilder)).retrieve().bodyToMono(typeReference);
+    }
+
+    public Function<String, String> applyPathVar(String pathVar) {
+        return path -> path + "/" + pathVar;
     }
 
 }
