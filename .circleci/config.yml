@@ -14,7 +14,7 @@ jobs:
             - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
       - run:
           name: Build
-          command: mvn -B -DskipTests -pl -gameservices-sdk clean install
+          command: mvn -B -DskipTests -pl -gameservices-sdk,-gameservices-webui clean install
       - run:
           name: Prepare VM Environments
           command: | # It is necessary to pass environment variables to remote environments
