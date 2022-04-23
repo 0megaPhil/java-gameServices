@@ -2,13 +2,13 @@
 
 #=-= START OF CUSTOM SERVICE CONFIGURATION =-#
 # Where micro service war/jar file sits?
-MS_HOME=/home/ec2-user # <--- EDIT THIS LINE
+MS_HOME=/home/ec2-user
 
 # Actual file name of Micro Service (jar or war),
 # ms-service.war or something-0.0.1-SNAPSHOT.jar, etc.
 MS_JAR=$(ls *gameservice*.jar) # <--- EDIT THIS LINE
 # ^^^ that should relative to MS_HOME directory.
-
+echo "Application jar file ${MS_JAR} found"
 # Which username we should run as.
 RUNASUSER=ec2-user; # <-- EDIT THIS LINE,
 # if port number for spring boot is < 1024 it needs root perm.
@@ -34,6 +34,7 @@ OPTIONS="
 # Try to get PID of spring jar/war
 MS_PID=`ps fax|grep java|grep "${MS_JAR}"|awk '{print $1}'`
 export MS_PID;
+echo "PID of ${MS_PID} found for existing running jar"
 
 # Function: run_as
 run_as() {
