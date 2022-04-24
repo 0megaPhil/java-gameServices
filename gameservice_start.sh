@@ -54,18 +54,10 @@ run_as() {
 
 # Function: start
 start() {
-  pid=${MS_PID}
-  if [ -n "${pid}" ]; then {
-    echo "Micro service is already running (pid: ${pid})";
-  }
-  else {
-    # Start screener ms
-    echo "Starting micro service";
-    cd $MS_HOME
-    run_as ${RUNASUSER} java -jar ${OPTIONS} ./${MS_JAR} > gameservices.log 2>&1 & exit;
-    # java -jar ${OPTIONS} ./${MS_JAR}
-  } fi;
-  # return 0;
+  # Start screener ms
+  echo "Starting micro service";
+  cd $MS_HOME
+  run_as ${RUNASUSER} java -jar ${OPTIONS} ./${MS_JAR} > gameservices.log 2>&1 & exit;
 }
 
 # Function: stop
@@ -127,6 +119,7 @@ case $1 in
     stop;
     sleep 1;
     start;
+    status;
     ;;
   status)
     pid=$MS_PID
