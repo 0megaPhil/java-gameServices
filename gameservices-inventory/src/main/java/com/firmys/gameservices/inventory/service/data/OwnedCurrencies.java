@@ -2,6 +2,7 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.firmys.gameservices.common.GameData;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
@@ -34,25 +35,22 @@ public class OwnedCurrencies implements GameData {
     }
 
     public OwnedCurrencies creditCurrency(Currency currency, int amount) {
-        OwnedCurrency ownedCurrency = ownedCurrencyMap.computeIfAbsent(currency.getUuid(), v -> new OwnedCurrency(currency));
+        OwnedCurrency ownedCurrency = ownedCurrencyMap
+                .computeIfAbsent(currency.getUuid(), v -> new OwnedCurrency(currency));
         ownedCurrency.credit(amount);
         return this;
     }
 
     public OwnedCurrencies debitCurrency(Currency currency, int amount) {
-        OwnedCurrency ownedCurrency = ownedCurrencyMap.computeIfAbsent(currency.getUuid(), v -> new OwnedCurrency(currency));
+        OwnedCurrency ownedCurrency = ownedCurrencyMap
+                .computeIfAbsent(currency.getUuid(), v -> new OwnedCurrency(currency));
         ownedCurrency.debit(amount);
         return this;
     }
 
-    private void clearOld() {
-        this.setOwnedCurrencyMap(this.getOwnedCurrencyMap()
-                .entrySet().stream().filter(e -> e.getValue().getCount() > 0)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
-    }
-
     public OwnedCurrency getOwnedCurrencyByCurrency(Currency currency) {
-        return Optional.ofNullable(this.getOwnedCurrencyMap().get(currency.getUuid())).orElse(new OwnedCurrency(currency));
+        return Optional.ofNullable(this.getOwnedCurrencyMap()
+                .get(currency.getUuid())).orElse(new OwnedCurrency(currency));
     }
 
 }
