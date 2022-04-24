@@ -20,10 +20,10 @@ jobs:
           name: Prepare Workspace
           command: |
             sudo mkdir -p /home/circleci/working/project
-            cp gameservices-characters/target/gameservices-characters.jar /home/circleci/working/project/
-            cp gameservices-inventory/target/gameservices-inventory.jar /home/circleci/working/project/
-            cp gameservices-gateway/target/gameservices-gateway.jar /home/circleci/working/project/
-            cp gameservice_start.sh /home/circleci/working/project/
+            sudo cp gameservices-characters/target/gameservices-characters.jar /home/circleci/working/project/
+            sudo cp gameservices-inventory/target/gameservices-inventory.jar /home/circleci/working/project/
+            sudo cp gameservices-gateway/target/gameservices-gateway.jar /home/circleci/working/project/
+            sudo cp gameservice_start.sh /home/circleci/working/project/
       - run:
           name: Prepare Environment File
           command: | # It is necessary to pass environment variables to remote environments
@@ -33,7 +33,7 @@ jobs:
             echo "export SERVICE_PORT=8080" >> sshenv
             echo "export VM_HOST_INVENTORY=$VM_HOST_INVENTORY" >> sshenv
             echo "export VM_HOST_CHARACTER=$VM_HOST_CHARACTER" >> sshenv
-            cp sshenv /home/circleci/working/project/
+            sudo cp sshenv /home/circleci/working/project/
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
