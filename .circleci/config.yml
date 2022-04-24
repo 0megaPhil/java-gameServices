@@ -37,7 +37,7 @@ jobs:
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
-          root: /home/circleci/working/project
+          root: project
           # Must be relative path from root
           paths:
             - gameservices-characters.jar
@@ -62,6 +62,7 @@ jobs:
           name: Deploy Character Service
           command: |
             ls -lah
+            ls -lah /home/circleci/working/project
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS $WORKING_DIR/sshenv ec2-user@$VM_HOST_CHARACTER:~/sshenv
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS $WORKING_DIR/gameservice_start.sh ec2-user@$VM_HOST_CHARACTER:~
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS $WORKING_DIR/gameservices-characters.jar ec2-user@$VM_HOST_CHARACTER:~ 
