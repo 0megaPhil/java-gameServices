@@ -43,6 +43,8 @@ jobs:
             - gameservices-characters.jar
             - gameservices-inventory.jar
             - gameservices-gateway.jar
+            - gameservice_start.sh
+            - sshenv
   deploy:
     parallelism: 3
     docker:
