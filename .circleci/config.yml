@@ -16,6 +16,23 @@ jobs:
           name: Build
           command: mvn -B -DskipTests -pl -gameservices-sdk,-gameservices-webui clean install
       - run:
+          name: Prepare Environment
+          command: | # It is necessary to pass environment variables to remote environments
+            echo "export SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" > sshenv
+            echo "export SPRING_DATASOURCE_USERNAME=$SPRING_DATASOURCE_USERNAME" >> sshenv
+            echo "export SPRING_DATASOURCE_SECRET=$SPRING_DATASOURCE_SECRET" >> sshenv
+            echo "export SERVICE_PORT=8080" >> sshenv
+            echo "export VM_HOST_INVENTORY=$VM_HOST_INVENTORY" >> sshenv
+            echo "export VM_HOST_CHARACTER=$VM_HOST_CHARACTER" >> sshenv
+      - save_cache:
+          key: build-cache
+          paths:
+            - sshenv
+            - gameservice_start.sh
+            - gameservices-characters/target/
+            - gameservices-inventory/target/
+            - gameservices-gateway/target/
+      - run:
           name: Prepare VM Environments
           command: | # It is necessary to pass environment variables to remote environments
             echo "export SPRING_DATASOURCE_URL=$SPRING_DATASOURCE_URL" > sshenv
@@ -31,19 +48,29 @@ jobs:
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_CHARACTER:~
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_INVENTORY:~
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_GATEWAY:~
+  deploy:
+    parallelism: 3
+    docker:
+      - image: cimg/openjdk:17.0
+    steps:
+      - restore_cache:
+          - build-cache
       - run:
           name: Deploy Character Service
           command: |
+            ls -lah
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-characters/target/gameservices-characters.jar ec2-user@$VM_HOST_CHARACTER:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_CHARACTER 'bash ./gameservice_start.sh restart'
       - run:
           name: Deploy Inventory Service
           command: |
+            ls -lah
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-inventory/target/gameservices-inventory.jar ec2-user@$VM_HOST_INVENTORY:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_INVENTORY 'bash ./gameservice_start.sh restart'
       - run:
           name: Deploy Service Gateway
           command: |
+            ls -lah
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservices-gateway/target/gameservices-gateway.jar ec2-user@$VM_HOST_GATEWAY:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_GATEWAY 'bash ./gameservice_start.sh restart'
 
@@ -51,4 +78,6 @@ workflows:
   gameservices:
     jobs:
       - build:
+          context: Firmys
+      - deploy:
           context: Firmys
