@@ -34,17 +34,6 @@ jobs:
             echo "export VM_HOST_INVENTORY=$VM_HOST_INVENTORY" >> sshenv
             echo "export VM_HOST_CHARACTER=$VM_HOST_CHARACTER" >> sshenv
             cp sshenv project/
-      - run:
-          name: Prepare VM Environments
-          command: | # It is necessary to pass environment variables to remote environments
-#            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS sshenv ec2-user@$VM_HOST_CHARACTER:~/sshenv
-#            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_CHARACTER:~
-            
-#            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS sshenv ec2-user@$VM_HOST_INVENTORY:~/sshenv
-#            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_INVENTORY:~
-            
-#            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS sshenv ec2-user@$VM_HOST_GATEWAY:~/sshenv
-#            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS gameservice_start.sh ec2-user@$VM_HOST_GATEWAY:~
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
