@@ -45,8 +45,7 @@ jobs:
             - gameservices-gateway.jar
             - gameservice_start.sh
             - sshenv
-  deploy:
-    parallelism: 3
+  deploy-characters:
     docker:
       - image: cimg/openjdk:17.0
     environment:
@@ -69,6 +68,20 @@ jobs:
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS $WORKING_DIR/gameservice_start.sh ec2-user@$VM_HOST_CHARACTER:~
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS $WORKING_DIR/gameservices-characters.jar ec2-user@$VM_HOST_CHARACTER:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_CHARACTER 'bash ./gameservice_start.sh restart'
+  deploy-inventory:
+    docker:
+      - image: cimg/openjdk:17.0
+    environment:
+      PRIVATE_KEY: "id_rsa_32c94f125733ade3ed51c91845886fa6" # We have to use the specific key with the correct fingerprint
+      SSH_OPTIONS: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" # Ignore errors due to known hosts
+      WORKING_DIR: /home/circleci/working/project
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /home/circleci/working/project
       - run:
           name: Deploy Inventory Service
           command: |
@@ -77,6 +90,20 @@ jobs:
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS $WORKING_DIR/gameservice_start.sh ec2-user@$VM_HOST_INVENTORY:~
             sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS $WORKING_DIR/gameservices-inventory.jar ec2-user@$VM_HOST_INVENTORY:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_INVENTORY 'bash ./gameservice_start.sh restart'
+  deploy-gateway:
+    docker:
+      - image: cimg/openjdk:17.0
+    environment:
+      PRIVATE_KEY: "id_rsa_32c94f125733ade3ed51c91845886fa6" # We have to use the specific key with the correct fingerprint
+      SSH_OPTIONS: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" # Ignore errors due to known hosts
+      WORKING_DIR: /home/circleci/working/project
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /home/circleci/working/project
       - run:
           name: Deploy Service Gateway
           command: |
@@ -91,7 +118,15 @@ workflows:
     jobs:
       - build:
           context: Firmys
-      - deploy:
+      - deploy-characters:
+          requires:
+            - build
+          context: Firmys
+      - deploy-inventory:
+          requires:
+            - build
+          context: Firmys
+      - deploy-gateway:
           requires:
             - build
           context: Firmys
