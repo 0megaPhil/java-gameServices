@@ -57,7 +57,7 @@ jobs:
             - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /working/project
+          at: $WORKING_DIR
       - run:
           name: Deploy Character Service
           command: |
