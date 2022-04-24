@@ -24,14 +24,6 @@ jobs:
             echo "export SERVICE_PORT=8080" >> sshenv
             echo "export VM_HOST_INVENTORY=$VM_HOST_INVENTORY" >> sshenv
             echo "export VM_HOST_CHARACTER=$VM_HOST_CHARACTER" >> sshenv
-      - save_cache:
-          key: build-cache
-          paths:
-            - sshenv
-            - gameservice_start.sh
-            - gameservices-characters/target/
-            - gameservices-inventory/target/
-            - gameservices-gateway/target/
       - run:
           name: Prepare VM Environments
           command: | # It is necessary to pass environment variables to remote environments
@@ -53,8 +45,6 @@ jobs:
     docker:
       - image: cimg/openjdk:17.0
     steps:
-      - restore_cache:
-          - build-cache
       - run:
           name: Deploy Character Service
           command: |
@@ -80,4 +70,6 @@ workflows:
       - build:
           context: Firmys
       - deploy:
+          requires:
+            - build
           context: Firmys
