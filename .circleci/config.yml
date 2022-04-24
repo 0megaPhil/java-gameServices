@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: /tmp
+    working_directory: /working
     docker:
       - image: cimg/openjdk:17.0
     environment:
@@ -56,30 +56,30 @@ jobs:
             - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /tmp/project
+          at: /working/project
       - run:
           name: Deploy Character Service
           command: |
             ls -lah
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/sshenv ec2-user@$VM_HOST_CHARACTER:~/sshenv
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/gameservice_start.sh ec2-user@$VM_HOST_CHARACTER:~
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/gameservices-characters.jar ec2-user@$VM_HOST_CHARACTER:~ 
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/sshenv ec2-user@$VM_HOST_CHARACTER:~/sshenv
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/gameservice_start.sh ec2-user@$VM_HOST_CHARACTER:~
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/gameservices-characters.jar ec2-user@$VM_HOST_CHARACTER:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_CHARACTER 'bash ./gameservice_start.sh restart'
       - run:
           name: Deploy Inventory Service
           command: |
             ls -lah
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/sshenv ec2-user@$VM_HOST_INVENTORY:~/sshenv
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/gameservice_start.sh ec2-user@$VM_HOST_INVENTORY:~
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/gameservices-inventory.jar ec2-user@$VM_HOST_INVENTORY:~ 
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/sshenv ec2-user@$VM_HOST_INVENTORY:~/sshenv
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/gameservice_start.sh ec2-user@$VM_HOST_INVENTORY:~
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/gameservices-inventory.jar ec2-user@$VM_HOST_INVENTORY:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_INVENTORY 'bash ./gameservice_start.sh restart'
       - run:
           name: Deploy Service Gateway
           command: |
             ls -lah
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/sshenv ec2-user@$VM_HOST_GATEWAY:~/sshenv
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/gameservice_start.sh ec2-user@$VM_HOST_GATEWAY:~
-            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /tmp/project/gameservices-gateway.jar ec2-user@$VM_HOST_GATEWAY:~ 
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/sshenv ec2-user@$VM_HOST_GATEWAY:~/sshenv
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/gameservice_start.sh ec2-user@$VM_HOST_GATEWAY:~
+            sudo scp -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS /working/project/gameservices-gateway.jar ec2-user@$VM_HOST_GATEWAY:~ 
             sudo ssh -i ~/.ssh/$PRIVATE_KEY $SSH_OPTIONS ec2-user@$VM_HOST_GATEWAY 'bash ./gameservice_start.sh restart'
 
 workflows:
