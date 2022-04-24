@@ -1,32 +1,35 @@
 package com.firmys.gameservices.inventory.service.data;
 
+import com.firmys.gameservices.common.Formatters;
 import com.firmys.gameservices.common.GameData;
+import com.firmys.gameservices.common.data.Transactions;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /*
  * FIXME - Rolling integer, causing record deletion
  * FIXME - TRANSACTION UUIDs
  * FIXME - Currency UUID not showing up in OwnedCurrency
+ * TODO - Add rollover and backup of old transactions
  */
 public class OwnedCurrency implements GameData {
+
     private UUID currencyUuid;
-    private AtomicInteger totalCurrency = new AtomicInteger(0);
-    private final AtomicReference<SortedSet<UUID>> transactionUuids = new AtomicReference<>(new TreeSet<>());
+    private AtomicLong totalCurrency = new AtomicLong(0);
+    private final AtomicReference<SortedSet<Transaction>> transactions = new AtomicReference<>(new TreeSet<>());
 
     public OwnedCurrency(Currency currency) {
         this.currencyUuid = currency.getUuid();
     }
 
-    public int getCount() {
+    public long getCount() {
         return totalCurrency.get();
     }
 
@@ -34,13 +37,18 @@ public class OwnedCurrency implements GameData {
         return credit(1);
     }
 
-    public OwnedCurrency credit(int amount) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
-        LocalDateTime localDateTime = LocalDateTime.now();
-        totalCurrency.getAndUpdate(a -> a + amount);
-        transactionUuids.getAndUpdate(u -> {
-            u.add(UUID.nameUUIDFromBytes(("CREDIT: " + amount + " - " + dtf.format(localDateTime)).getBytes()));
-            return u;
+    public OwnedCurrency credit(long amount) {
+        this.transactions.getAndUpdate(tSet -> {
+            if(totalCurrency.get() + amount >= Long.MAX_VALUE) {
+                throw new RuntimeException("Currency count " +
+                        getCount() + " plus " + amount + " for Currency " + currencyUuid.toString() +
+                        " would exceed cap of " + Long.MAX_VALUE);
+            }
+
+            long start = this.totalCurrency.getAndUpdate(a -> a + amount);
+            long end = this.totalCurrency.get();
+            tSet.add(new Transaction(Transactions.CREDIT, this.currencyUuid, amount, start, end));
+            return tSet;
         });
         return this;
     }
@@ -49,27 +57,31 @@ public class OwnedCurrency implements GameData {
         return debit(1);
     }
 
-    public OwnedCurrency debit(int amount) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
-        LocalDate localDate = LocalDate.now();
-        if(totalCurrency.get() < amount) {
-            throw new RuntimeException("Insufficient currency count of " +
-                    getCount() + " for consumption of " + amount + " Currency " + currencyUuid.toString());
-        }
-        totalCurrency.getAndUpdate(a -> a - amount);
-        transactionUuids.getAndUpdate(u -> {
-            u.add(UUID.nameUUIDFromBytes(("DEBIT: " + amount + " - " + dtf.format(localDate)).getBytes()));
-            return u;
+    public OwnedCurrency debit(long amount) {
+        this.transactions.getAndUpdate(tSet -> {
+            if(totalCurrency.get() < amount) {
+                throw new RuntimeException("Insufficient currency count of " +
+                        getCount() + " for consumption of " + amount + " Currency " + currencyUuid.toString());
+            }
+            long start = this.totalCurrency.getAndUpdate(a -> a - amount);
+            long end = this.totalCurrency.get();
+            tSet.add(new Transaction(Transactions.DEBIT, this.currencyUuid, amount, start, end));
+            return tSet;
         });
         return this;
     }
 
-    public void setCurrencyUuid(UUID currencyUuid) {
-        this.currencyUuid = currencyUuid;
+    public Set<Transaction> getTransactions() {
+        return transactions.get();
     }
 
-    public Set<UUID> getTransactionUuids() {
-        return transactionUuids.get();
+    public Set<Transaction> getTransactionsByDate(LocalDate localDate) {
+        return this.transactions.get().stream()
+                .filter(t -> t.getDate()
+                        .contains(Formatters.dateFormatter.format(localDate))).collect(Collectors.toSet());
     }
 
+    public UUID getCurrencyUuid() {
+        return currencyUuid;
+    }
 }

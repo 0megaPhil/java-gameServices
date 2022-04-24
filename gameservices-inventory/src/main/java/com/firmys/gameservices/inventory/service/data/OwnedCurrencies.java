@@ -2,6 +2,7 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.firmys.gameservices.common.GameData;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,18 +36,16 @@ public class OwnedCurrencies implements GameData {
     public OwnedCurrencies creditCurrency(Currency currency, int amount) {
         OwnedCurrency ownedCurrency = ownedCurrencyMap.computeIfAbsent(currency.getUuid(), v -> new OwnedCurrency(currency));
         ownedCurrency.credit(amount);
-        clearEmpty();
         return this;
     }
 
     public OwnedCurrencies debitCurrency(Currency currency, int amount) {
         OwnedCurrency ownedCurrency = ownedCurrencyMap.computeIfAbsent(currency.getUuid(), v -> new OwnedCurrency(currency));
         ownedCurrency.debit(amount);
-        clearEmpty();
         return this;
     }
 
-    private void clearEmpty() {
+    private void clearOld() {
         this.setOwnedCurrencyMap(this.getOwnedCurrencyMap()
                 .entrySet().stream().filter(e -> e.getValue().getCount() > 0)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
