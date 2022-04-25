@@ -1,6 +1,6 @@
 package com.firmys.gameservices.webui.views;
 
-import com.firmys.gameservices.common.ServicePaths;
+import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.sdk.services.InventoriesSdk;
 import com.firmys.gameservices.sdk.services.InventorySdk;
@@ -11,7 +11,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.selection.MultiSelect;
 import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -19,10 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
-@Route(ServicePaths.INVENTORY)
+@Route(ServiceStrings.INVENTORY)
 @UIScope
 public class InventoryView extends VerticalLayout {
-    private static final H1 heading = new H1(ServicePaths.INVENTORY.toUpperCase());
+    private static final H1 heading = new H1(ServiceStrings.INVENTORY.toUpperCase());
     private final InventoriesSdk inventoriesSdk;
     private final InventorySdk inventorySdk;
     private final ItemSdk itemSdk;
@@ -58,9 +57,9 @@ public class InventoryView extends VerticalLayout {
 
     public Grid<Inventory> fetchInventoriesGrid() {
         Grid<Inventory> inventoriesGrid = new Grid<>();
-        inventoriesGrid.addColumn(Inventory::getUuid).setHeader(ServicePaths.UUID);
-        inventoriesGrid.addColumn(i -> i.getOwnedItems().getOwnedItemMap()).setHeader(ServicePaths.OWNED_ITEMS);
-        inventoriesGrid.addColumn(i -> i.getOwnedCurrencies().getOwnedCurrencyMap()).setHeader(ServicePaths.OWNED_CURRENCIES);
+        inventoriesGrid.addColumn(Inventory::getUuid).setHeader(ServiceStrings.UUID);
+        inventoriesGrid.addColumn(i -> i.getOwnedItems().getOwnedItemMap()).setHeader(ServiceStrings.OWNED_ITEMS);
+        inventoriesGrid.addColumn(i -> i.getOwnedCurrencies().getOwnedCurrencyMap()).setHeader(ServiceStrings.OWNED_CURRENCIES);
         inventoriesGrid.getColumns().forEach(col -> col.setAutoWidth(true));
         inventoriesGrid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
         return inventoriesGrid;

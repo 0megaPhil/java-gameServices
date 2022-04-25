@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "ITEM")
+// TODO - Add delete all OwnedItems from all Inventories when Item is deleted
 public class Item extends AbstractGameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,7 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.models.Inventory;
-import com.firmys.gameservices.models.Item;
-import com.firmys.gameservices.sdk.client.GatewayClient;
+import com.firmys.gameservices.sdk.config.SdkConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@SpringBootTest(classes = {InventoriesSdk.class, GatewayClient.class})
+@SpringBootTest(classes = {SdkConfig.class})
 public class InventoriesSdkIT {
 
     @Autowired
@@ -41,10 +40,4 @@ public class InventoriesSdkIT {
                 .map(i -> i .getUuid().toString()).collect(Collectors.toSet()));
     }
 
-    @Test
-    public void createInventoriesAddItems() {
-        Set<Inventory> addedSet = inventoriesSdk.addMultipleInventory(2).block();
-        Set<Item> itemSet = Set.of(InventoryTestUtilities.generateItem(), InventoryTestUtilities.generateItem());
-
-    }
 }

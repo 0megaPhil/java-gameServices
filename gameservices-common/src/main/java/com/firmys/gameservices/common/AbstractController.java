@@ -241,6 +241,13 @@ public class AbstractController<D extends AbstractGameEntity> {
         try {
             return callable.call();
         } catch (Exception e) {
+//            D entity = entitySupplier.get();
+//            entity.setError(GameServiceError.builder.withThrowable(e)
+//                    .withName(gameEntityClass.getSimpleName())
+//                    .withDescription(e.getMessage() + " - " + String.join("", details))
+//                    .withRequest(requestBody)
+//                    .build());
+//            return entity;
             throw GameServiceException.builder.withGameServiceError(
                     GameServiceError.builder.withThrowable(e)
                             .withName(gameEntityClass.getSimpleName())

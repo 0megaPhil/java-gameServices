@@ -1,6 +1,6 @@
 package com.firmys.gameservices.inventory.service.inventory;
 
-import com.firmys.gameservices.common.ServicePaths;
+import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
 import com.firmys.gameservices.inventory.service.data.*;
@@ -12,7 +12,7 @@ public class InventoryUtils {
     private static final GameServiceException.Builder exceptionBuilder = GameServiceException.builder
             .withGameDataType(Inventory.class);
     private static final GameServiceError.Builder errorBuilder = GameServiceError.builder
-            .withName(ServicePaths.INVENTORY);
+            .withName(ServiceStrings.INVENTORY);
 
     public static Inventory consumeOwnedItemByItemUuid(Item item, Inventory inventory) {
         return consumeOwnedItemByItemUuid(item, inventory, 1);

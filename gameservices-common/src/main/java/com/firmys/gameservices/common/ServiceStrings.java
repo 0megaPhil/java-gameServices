@@ -1,6 +1,6 @@
 package com.firmys.gameservices.common;
 
-public class ServicePaths {
+public class ServiceStrings {
 
     public static final String CACHE_MANAGER_SUFFIX = "CacheManager";
     public static final String ITEM = "item";
@@ -29,7 +29,7 @@ public class ServicePaths {
     public static final String WORLDS_PATH = "/" + WORLDS;
 
     public final static String UUID = "uuid";
-    public final static String UUID_PATH_VARIABLE = "/" + "{" + ServicePaths.UUID + "}";
+    public final static String UUID_PATH_VARIABLE = "/" + "{" + ServiceStrings.UUID + "}";
 
     public final static String AMOUNT = "amount";
     public final static String ATTRIBUTE = "attribute";
@@ -39,12 +39,15 @@ public class ServicePaths {
     public final static String PARTIAL_PATH = "/" + PARTIAL;
     public final static String SEARCH = "search";
     public final static String SEARCH_PATH = "/search";
-    public final static String MATCH_PATH_VARIABLE = "/" + "{" + ServicePaths.MATCH + "}";
+    public final static String MATCH_PATH_VARIABLE = "/" + "{" + ServiceStrings.MATCH + "}";
 
     public final static String OWNED_ITEMS = "OwnedItems";
     public final static String OWNED_CURRENCIES = "OwnedCurrencies";
 
     public final static String OWNED_ITEM = "OwnedItem";
     public final static String OWNED_CURRENCY = "OwnedCurrency";
+
+    public final static String URL = "url";
+    public final static String URI = "uri";
 
 }

@@ -1,12 +1,12 @@
 package com.firmys.gameservices.characters.service;
 
-import com.firmys.gameservices.common.ServicePaths;
+import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.common.GameDataCacheManager;
 import org.springframework.stereotype.Component;
 
-@Component(ServicePaths.CHARACTER + ServicePaths.CACHE_MANAGER_SUFFIX)
+@Component(ServiceStrings.CHARACTER + ServiceStrings.CACHE_MANAGER_SUFFIX)
 public class CharacterCacheManager extends GameDataCacheManager {
-    private final static String cacheName = ServicePaths.CHARACTER;
+    private final static String cacheName = ServiceStrings.CHARACTER;
 
     public CharacterCacheManager() {
         super(cacheName);

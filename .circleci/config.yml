@@ -8,7 +8,7 @@ jobs:
     environment:
       PRIVATE_KEY: "id_rsa_32c94f125733ade3ed51c91845886fa6" # We have to use the specific key with the correct fingerprint
       SSH_OPTIONS: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" # Ignore errors due to known hosts
-    steps: # TODO - Parallelize deploy
+    steps:
       - checkout
       - add_ssh_keys:
           fingerprints:
@@ -35,10 +35,7 @@ jobs:
             echo "export VM_HOST_CHARACTER=$VM_HOST_CHARACTER" >> sshenv
             sudo cp sshenv /home/circleci/working/project/
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
           root: project
-          # Must be relative path from root
           paths:
             - gameservices-characters.jar
             - gameservices-inventory.jar
@@ -57,7 +54,6 @@ jobs:
           fingerprints:
             - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: /home/circleci/working/project
       - run:
           name: Deploy Character Service
@@ -80,7 +76,6 @@ jobs:
           fingerprints:
             - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: /home/circleci/working/project
       - run:
           name: Deploy Inventory Service
@@ -102,7 +97,6 @@ jobs:
           fingerprints:
             - 32:c9:4f:12:57:33:ad:e3:ed:51:c9:18:45:88:6f:a6
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: /home/circleci/working/project
       - run:
           name: Deploy Service Gateway

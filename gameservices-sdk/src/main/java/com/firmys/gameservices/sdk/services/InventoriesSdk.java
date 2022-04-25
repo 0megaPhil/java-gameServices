@@ -1,10 +1,11 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.api.InventoriesApi;
-import com.firmys.gameservices.common.ServicePaths;
+import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.models.Inventory;
-import com.firmys.gameservices.sdk.client.GatewayClient;
 
+import com.firmys.gameservices.sdk.Parameters;
+import com.firmys.gameservices.sdk.gateway.GatewayDetails;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -15,20 +16,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class InventoriesSdk extends AbstractSdk implements InventoriesApi {
+public class InventoriesSdk extends AbstractSdk<Set<Inventory>> implements InventoriesApi {
 
-    private final ParameterizedTypeReference<Set<Inventory>> setTypeReference = new ParameterizedTypeReference<>() {};
-    private final ParameterizedTypeReference<Inventory> typeReference = new ParameterizedTypeReference<>() {};
-    private final ParameterizedTypeReference<Void> voidTypeReference = new ParameterizedTypeReference<>() {};
-
-    public InventoriesSdk(GatewayClient client) {
-        super(client, ServicePaths.INVENTORIES_PATH);
+    public InventoriesSdk(GatewayDetails gatewayDetails) {
+        super(gatewayDetails, ServiceStrings.INVENTORIES_PATH, new ParameterizedTypeReference<>() {});
     }
 
     @Override
     public Mono<Set<Inventory>> addMultipleInventory(Integer amount) {
-        return getClient().post(getBasePath(),
-                getClient().paramsFunction(ServicePaths.AMOUNT).apply(Set.of(amount.toString())), setTypeReference);
+        return getClient().post(
+                Parameters.builder().withParam(ServiceStrings.AMOUNT, amount.toString()).build());
     }
 
     @Override
@@ -36,14 +33,14 @@ public class InventoriesSdk extends AbstractSdk implements InventoriesApi {
         Set<String> combinedUuids = Optional.ofNullable(uuids).orElse(new HashSet<>());
         combinedUuids.addAll(Optional.ofNullable(inventories).orElse(new HashSet<>()).stream()
                 .map(i -> i.getUuid().toString()).collect(Collectors.toSet()));
-        return getClient().delete(getBasePath(), getClient().paramsFunction(ServicePaths.UUID).apply(combinedUuids), voidTypeReference);
+        return getClient().delete(
+                Parameters.builder().withParam(ServiceStrings.UUID, combinedUuids).build());
     }
 
     @Override
     public Mono<Set<Inventory>> findMultipleInventory(Set<String> uuids) {
-        return getClient().get(getBasePath(),
-                getClient().paramsFunction(ServicePaths.UUID).apply(uuids),
-                setTypeReference);
+        return getClient().get(
+                Parameters.builder().withParam(ServiceStrings.UUID, uuids).build());
     }
 
     @Override

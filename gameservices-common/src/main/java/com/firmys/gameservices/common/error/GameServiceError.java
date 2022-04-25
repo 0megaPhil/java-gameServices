@@ -109,6 +109,15 @@ public class GameServiceError implements Serializable, GameEntity {
     }
 
     @Override
+    public void setError(GameServiceError error) {
+    }
+
+    @Override
+    public GameServiceError getError() {
+        return this;
+    }
+
+    @Override
     public String toString() {
         return "GameServiceError{" +
                 "name='" + name + '\'' +

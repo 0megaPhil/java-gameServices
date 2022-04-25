@@ -1,8 +1,12 @@
 package com.firmys.gameservices.sdk.services;
 
+import com.firmys.gameservices.common.Formatters;
+import com.firmys.gameservices.common.data.Transactions;
 import com.firmys.gameservices.models.*;
 import com.firmys.gameservices.models.Currency;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -73,10 +77,26 @@ public class InventoryTestUtilities {
     public static OwnedCurrency generateOwnedCurrency(Currency currency) {
         OwnedCurrency ownedCurrency = new OwnedCurrency();
         ownedCurrency.setCurrencyUuid(currency.getUuid());
-        ownedCurrency.setCount(new Random().nextInt(1, Integer.MAX_VALUE));
-        ownedCurrency.setTransactionUuids(IntStream.range(0,
-                new Random().nextInt(1, 10)).mapToObj(i -> UUID.randomUUID()).collect(Collectors.toSet()));
+        ownedCurrency.setCount(new Random().nextLong(1, Long.MAX_VALUE));
+        ownedCurrency.setTransactions(IntStream
+                .range(0, new Random().nextInt(1, 10)).mapToObj(i -> generateTransaction()).collect(Collectors.toSet()));
         return ownedCurrency;
+    }
+
+    public static Transaction generateTransaction() {
+        Transaction transaction = new Transaction();
+        long entryNum = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli() % Transaction.TransactionTypeEnum.values().length;
+        Transaction.TransactionTypeEnum typeEnum = Transaction.TransactionTypeEnum.values()[(int) entryNum];
+        transaction.setTransactionType(typeEnum);
+        long amount = numericSup.get().longValue();
+        transaction.setStart(numericSup.get().longValue());
+        transaction.setAmount(amount);
+        transaction.setEnd(amount + transaction.getStart());
+        transaction.setLocalDateTime(LocalDateTime.now().atOffset(ZoneOffset.UTC));
+        transaction.setDateTime(Formatters.dateTimeFormatter.format(transaction.getLocalDateTime()));
+        transaction.setDate(Formatters.dateFormatter.format(transaction.getLocalDateTime()));
+        transaction.setCurrencyUuid(UUID.randomUUID());
+        return transaction;
     }
 
     public static Currency generateCurrency() {

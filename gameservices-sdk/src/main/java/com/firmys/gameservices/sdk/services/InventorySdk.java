@@ -1,45 +1,59 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.api.InventoryApi;
-import com.firmys.gameservices.common.ServicePaths;
+import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.models.Currency;
 import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.models.Item;
+import com.firmys.gameservices.models.OwnedItem;
 import com.firmys.gameservices.models.OwnedItems;
-import com.firmys.gameservices.sdk.client.GatewayClient;
+import com.firmys.gameservices.sdk.Parameters;
+import com.firmys.gameservices.sdk.gateway.GatewayDetails;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.util.LinkedMultiValueMap;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class InventorySdk extends AbstractSdk implements InventoryApi {
+public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi {
 
-    private final ParameterizedTypeReference<Inventory> typeReference = new ParameterizedTypeReference<>() {};
-    private final ParameterizedTypeReference<Void> voidTypeReference = new ParameterizedTypeReference<>() {};
-
-    public InventorySdk(GatewayClient client) {
-        super(client, ServicePaths.INVENTORY_PATH);
+    public InventorySdk(GatewayDetails gatewayDetails) {
+        super(gatewayDetails, ServiceStrings.INVENTORY_PATH, new ParameterizedTypeReference<>() {});
     }
-
 
     public Mono<Inventory> addInventory() {
-        return addInventory(null);
+        return getClient().post(Parameters.builder().build());
     }
+
     @Override
     public Mono<Inventory> addInventory(Inventory inventory) {
-        return getClient().post(getBasePath(), typeReference);
+        return getClient().post(Parameters.builder().build(),
+                Optional.ofNullable(inventory).orElse(new Inventory()));
     }
 
+    /**
+     * Add OwnedItem of type Item to an Inventory
+     * @param uuid  (required) uuid of {@link Inventory}
+     * @param amount  (optional) amount of {@link OwnedItem} to be added for {@link Item}
+     * @param item  (optional)
+     * @return Inventory after with modifications
+     */
     @Override
     public Mono<Inventory> addOwnedItemInventory(String uuid, Integer amount, Item item) {
-        return null;
+        return getClient().withPath(uuid).withPath(ServiceStrings.ITEM_PATH)
+                .put(Parameters.builder().withParam(ServiceStrings.UUID, item.getUuid().toString())
+                .withParam(ServiceStrings.AMOUNT, amount.toString()).build(), item);
     }
 
     @Override
-    public Mono<Inventory> addOwnedItemsInventory(String uuid, Integer amount, List<Item> item) {
-        return null;
+    public Mono<Inventory> addOwnedItemsInventory(String uuid, Integer amount, List<Item> items) {
+       return getClient().withPath(uuid).withPath(ServiceStrings.ITEMS_PATH)
+                .put(Parameters.builder().withParam(ServiceStrings.UUID, items.stream()
+                                .map(i -> i.getUuid().toString()).collect(Collectors.toSet()))
+                        .withParam(ServiceStrings.AMOUNT, amount.toString()).build(), null);
     }
 
     @Override
@@ -70,13 +84,12 @@ public class InventorySdk extends AbstractSdk implements InventoryApi {
     @Override
     public Mono<Void> deleteInventory(String uuid, Inventory inventory) {
         String foundUuid = Optional.ofNullable(uuid).orElse(inventory.getUuid().toString());
-        return getClient().delete(getClient().applyPathVar(foundUuid).apply(getBasePath()), getClient().paramsFunction(ServicePaths.UUID)
-                .apply(Set.of(foundUuid)), voidTypeReference);
+        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, foundUuid).build());
     }
 
     @Override
     public Mono<Inventory> findByUuidParamInventory(String uuid) {
-        return null;
+        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override

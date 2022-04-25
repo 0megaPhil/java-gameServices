@@ -2,10 +2,18 @@ package com.firmys.gameservices.common.error;
 
 import com.firmys.gameservices.common.GameData;
 
+// FIXME, make me useful for returning exceptions
 public class GameServiceException extends RuntimeException {
-    private final GameServiceError gameServiceError;
-    private final String gameDataType;
+    private GameServiceError gameServiceError;
+    private String gameDataType;
     public static final Builder builder = new Builder();
+
+    public GameServiceException(){}
+
+    public GameServiceException(GameServiceError gameServiceError, String gameDataType) {
+        this.gameServiceError = gameServiceError;
+        this.gameDataType = gameDataType;
+    }
 
     private GameServiceException(GameServiceException.Builder builder) {
         this.gameServiceError = builder.gameServiceError;

@@ -1,13 +1,13 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.models.Item;
-import com.firmys.gameservices.sdk.client.GatewayClient;
+import com.firmys.gameservices.sdk.config.SdkConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {ItemSdk.class, GatewayClient.class})
+@SpringBootTest(classes = {SdkConfig.class, ItemSdk.class})
 public class ItemSdkIT {
 
     @Autowired
@@ -28,6 +28,10 @@ public class ItemSdkIT {
 
         System.out.println("GENERATED: " + generatedItem);
         System.out.println("CREATED: " + createdItem);
+
+        sdk.deleteItem(null, createdItem).block();
+        Item find = sdk.findByUuidParamItem(createdItem.getUuid().toString()).block();
+        Assertions.assertThat(find.getUuid()).isNull();
     }
 
 }

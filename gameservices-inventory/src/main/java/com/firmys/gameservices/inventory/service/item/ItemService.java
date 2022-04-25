@@ -1,6 +1,6 @@
 package com.firmys.gameservices.inventory.service.item;
 
-import com.firmys.gameservices.common.ServicePaths;
+import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.common.GameService;
 import com.firmys.gameservices.inventory.service.data.Item;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,8 @@ import java.util.Optional;
 
 @Service
 public class ItemService implements GameService<Item> {
-    public final String cacheName = ServicePaths.ITEM;
-    public final String cacheManagerName = ServicePaths.ITEM + "CacheManager";
+    public final String cacheName = ServiceStrings.ITEM;
+    public final String cacheManagerName = ServiceStrings.ITEM + "CacheManager";
 
     @Autowired
     ItemRepository repository;

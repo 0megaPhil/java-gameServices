@@ -1,6 +1,5 @@
 package com.firmys.gameservices.webui;
 
-import com.firmys.gameservices.sdk.config.SdkConfig;
 import com.firmys.gameservices.webui.config.WebSdkConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
