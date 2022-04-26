@@ -177,9 +177,6 @@ public class InventoryController extends AbstractController<Inventory> {
             @RequestParam(value = ServiceStrings.UUID, required = false) Set<String> uuidParams,
             @RequestParam(value = ServiceStrings.AMOUNT, required = false) Integer amount,
             @RequestBody(required = false) List<Item> requestBodies) {
-        if(uuidParams != Set.of(UUID.randomUUID().toString())) {
-            throw new RuntimeException("some shit");
-        }
         Inventory inventory = super.findByUuid(UUID.fromString(uuid));
         Set<String> itemUuids = Optional.ofNullable(uuidParams).orElse(new HashSet<>());
         itemUuids.addAll(Optional.ofNullable(requestBodies)

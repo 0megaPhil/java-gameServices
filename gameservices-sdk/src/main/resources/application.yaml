@@ -5,9 +5,9 @@ gameservices:
   character:
     host: 54.219.210.5
     port: 8080
-#  gateway:
-#    host: 52.52.163.33
-#    port: 8080
   gateway:
-    host: localhost
+    host: 52.52.163.33
     port: 8080
+#  gateway:
+#    host: localhost
+#    port: 8080

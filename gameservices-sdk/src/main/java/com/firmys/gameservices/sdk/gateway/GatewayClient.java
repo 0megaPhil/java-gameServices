@@ -102,23 +102,25 @@ public class GatewayClient<R> {
     public Mono<R> put(Parameters parameters) {
         return getClient().put().uri(
                 uriBuilder -> uriBuilderFunction(baseUrl, parameters.get())
-                        .apply(uriBuilder)).retrieve().onStatus(HttpStatus::isError, response -> {
-
-//                            Mono<ResponseEntity<GameServiceError>> responseEntityMono = response.toEntity(GameServiceError.class);
-//                            GameServiceError error = responseEntityMono.block().getBody();
-//            Mono<String> exceptionMono = response.bodyToMono(GameServiceException.class);
-//            String monoString = exceptionMono.block();
-//            consumeError(exceptionMono);
-            Mono<GameServiceException> mono = response.bodyToMono(GameServiceException.class).subscribeOn(Schedulers.parallel());
-            mono.map(m -> {
-                System.out.println(m.getGameServiceError());
-                return m;
-            });
-            return mono.map(m -> {
-                System.out.println(m.getGameServiceError());
-                return m;
-            });
-        }).bodyToMono(typeReference);
+                        .apply(uriBuilder)).retrieve()
+//                .onStatus(HttpStatus::isError, response -> {
+//
+////                            Mono<ResponseEntity<GameServiceError>> responseEntityMono = response.toEntity(GameServiceError.class);
+////                            GameServiceError error = responseEntityMono.block().getBody();
+////            Mono<String> exceptionMono = response.bodyToMono(GameServiceException.class);
+////            String monoString = exceptionMono.block();
+////            consumeError(exceptionMono);
+//            Mono<com.firmys.gameservices.models.GameServiceError> mono = response.bodyToMono(com.firmys.gameservices.models.GameServiceError.class).subscribeOn(Schedulers.parallel());
+//            mono.map(m -> {
+//                System.out.println(m.getError());
+//                return m;
+//            });
+//            return mono;
+//        })
+            .bodyToMono(typeReference).onErrorMap(mono -> {
+            mono.printStackTrace();
+            return mono;
+        });
     }
 
     ExecutorService executor = Executors.newFixedThreadPool(10);
