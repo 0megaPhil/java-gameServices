@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestControllerAdvice
-public class GameServiceError implements Serializable, GameEntity {
+public class GameServiceError implements Serializable {
 
     private final String name;
     private final String description;
@@ -106,15 +106,6 @@ public class GameServiceError implements Serializable, GameEntity {
 
     public int getId() {
         return 0;
-    }
-
-    @Override
-    public void setError(GameServiceError error) {
-    }
-
-    @Override
-    public GameServiceError getError() {
-        return this;
     }
 
     @Override

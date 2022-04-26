@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @SpringBootTest(classes = {SdkConfig.class})
 public class InventorySdkIT {
@@ -46,7 +47,7 @@ public class InventorySdkIT {
         Item generatedItemTwo = InventoryTestUtilities.generateItem();
         Item itemTwo = itemSdk.addItem(generatedItemTwo).block();
 
-        inventory = sdk.addOwnedItemsInventory(Objects.requireNonNull(inventory).getUuid().toString(),
+        inventory = sdk.addOwnedItemsInventory(UUID.randomUUID().toString(),
                 1, List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
 
         System.out.println("With OwnedItem: " + inventory);
