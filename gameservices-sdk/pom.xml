@@ -146,7 +146,6 @@
                                         <delegatePattern>false</delegatePattern>
                                         <skipDefaultInterface>true</skipDefaultInterface>
                                         <serializableModel>true</serializableModel>
-                                        <vendorExtensions.x-implements>com.firmys.gameservices.common.GameEntity</vendorExtensions.x-implements>
                                     </configOptions>
                                 </configuration>
                             </execution>

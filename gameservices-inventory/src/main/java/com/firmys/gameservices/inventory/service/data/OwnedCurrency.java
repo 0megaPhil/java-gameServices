@@ -1,5 +1,6 @@
 package com.firmys.gameservices.inventory.service.data;
 
+import com.firmys.gameservices.common.AbstractGameData;
 import com.firmys.gameservices.common.Formatters;
 import com.firmys.gameservices.common.GameData;
 import com.firmys.gameservices.common.data.Transactions;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  * FIXME - Currency UUID not showing up in OwnedCurrency
  * TODO - Add rollover and backup of old transactions
  */
-public class OwnedCurrency implements GameData {
+public class OwnedCurrency extends AbstractGameData {
 
     private UUID currencyUuid;
     private AtomicLong totalCurrency = new AtomicLong(0);

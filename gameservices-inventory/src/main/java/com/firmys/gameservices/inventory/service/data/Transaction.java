@@ -1,5 +1,6 @@
 package com.firmys.gameservices.inventory.service.data;
 
+import com.firmys.gameservices.common.AbstractGameData;
 import com.firmys.gameservices.common.Formatters;
 import com.firmys.gameservices.common.GameData;
 import com.firmys.gameservices.common.data.Transactions;
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-public class Transaction implements GameData, Comparable<Long> {
+public class Transaction extends AbstractGameData implements Comparable<Long> {
 
     private final UUID uuid = UUID.randomUUID();
     private final UUID currencyUuid;

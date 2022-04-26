@@ -1,7 +1,5 @@
 package com.firmys.gameservices.sdk.gateway;
 
-import com.firmys.gameservices.common.AbstractGameEntity;
-import com.firmys.gameservices.common.GameEntity;
 import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
@@ -27,9 +25,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
-public class GatewayClient<R extends GameEntity> {
+public class GatewayClient<R> {
     private static final Map<String, WebClient> webClientMap = new ConcurrentHashMap<>();
     private final ParameterizedTypeReference<R> typeReference;
     private final ParameterizedTypeReference<Void> voidTypeReference;
@@ -105,20 +102,23 @@ public class GatewayClient<R extends GameEntity> {
     public Mono<R> put(Parameters parameters) {
         return getClient().put().uri(
                 uriBuilder -> uriBuilderFunction(baseUrl, parameters.get())
-                        .apply(uriBuilder)).retrieve()
-//                .onStatus(HttpStatus::isError, response -> {
-//                    HttpStatus errorCode = response.statusCode();
-//                    return response.bodyToMono(typeReference)
-//                            .onErrorMap(error -> new Exception("Throw your generic exception over here if there is any error in deserialization"))
-//                            .flatMap(error -> Mono.error(GameServiceException.builder.withGameServiceError()));
-//            return mono.map(m -> {
-//                System.out.println(m.getGameServiceError());
-//                m.printStackTrace();
-//                return m;
-//            });
-//        })
-                .bodyToMono(typeReference)
-                .onErrorMap(Predicate.not(GameServiceException.class::isInstance), throwable -> new GameServiceException());
+                        .apply(uriBuilder)).retrieve().onStatus(HttpStatus::isError, response -> {
+
+//                            Mono<ResponseEntity<GameServiceError>> responseEntityMono = response.toEntity(GameServiceError.class);
+//                            GameServiceError error = responseEntityMono.block().getBody();
+//            Mono<String> exceptionMono = response.bodyToMono(GameServiceException.class);
+//            String monoString = exceptionMono.block();
+//            consumeError(exceptionMono);
+            Mono<GameServiceException> mono = response.bodyToMono(GameServiceException.class).subscribeOn(Schedulers.parallel());
+            mono.map(m -> {
+                System.out.println(m.getGameServiceError());
+                return m;
+            });
+            return mono.map(m -> {
+                System.out.println(m.getGameServiceError());
+                return m;
+            });
+        }).bodyToMono(typeReference);
     }
 
     ExecutorService executor = Executors.newFixedThreadPool(10);
