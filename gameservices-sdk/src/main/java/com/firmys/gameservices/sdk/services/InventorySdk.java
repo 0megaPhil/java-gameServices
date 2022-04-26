@@ -10,7 +10,6 @@ import com.firmys.gameservices.models.OwnedItems;
 import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.util.LinkedMultiValueMap;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -109,12 +108,15 @@ public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi
 
     @Override
     public Mono<Set<Inventory>> findInventoriesWithItemByUuidParamInventory(String uuid) {
-        return null;
+        ParameterizedTypeReference<Set<Inventory>> typeReference = new ParameterizedTypeReference<>() {};
+        return getClient(typeReference).withPath(ServiceStrings.ITEM)
+                .get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override
     public Mono<Set<Inventory>> findInventoriesWithItemByUuidPathInventory(String uuid) {
-        return null;
+        ParameterizedTypeReference<Set<Inventory>> typeReference = new ParameterizedTypeReference<>() {};
+        return getClient(typeReference).withPath(ServiceStrings.ITEM).withPath(uuid).get();
     }
 
     @Override

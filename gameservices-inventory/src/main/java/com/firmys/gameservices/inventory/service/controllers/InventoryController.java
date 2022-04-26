@@ -70,6 +70,23 @@ public class InventoryController extends AbstractController<Inventory> {
         return super.update(entities);
     }
 
+
+    @GetMapping(ServiceStrings.INVENTORIES_PATH + ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE)
+    public Set<Inventory> findInventoriesWithItemByUuidPath(
+            @PathVariable(value = ServiceStrings.UUID, required = false) String uuid) {
+        return InventoryUtils
+                .getInventoriesWithItem(super.findAll(), itemController
+                        .findByUuid(UUID.fromString(uuid)));
+    }
+
+    @GetMapping(ServiceStrings.INVENTORIES_PATH + ServiceStrings.ITEM_PATH)
+    public Set<Inventory> findInventoriesWithItemByUuidParam(
+            @RequestParam(value = ServiceStrings.UUID, required = false) String itemUuid) {
+        return InventoryUtils
+                .getInventoriesWithItem(super.findAll(), itemController
+                        .findByUuid(UUID.fromString(itemUuid)));
+    }
+
     /**
      * {@link ServiceStrings#INVENTORY_PATH}
      * Singular methods support UUID as part of path
@@ -146,23 +163,6 @@ public class InventoryController extends AbstractController<Inventory> {
                 super.findByUuid(UUID.fromString(uuid)),
                 amountParam));
     }
-
-    @GetMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE)
-    public Set<Inventory> findInventoriesWithItemByUuidPath(
-            @PathVariable(value = ServiceStrings.UUID, required = false) String uuid) {
-        return InventoryUtils
-                .getInventoriesWithItem(super.findAll(), itemController
-                        .findByUuid(UUID.fromString(uuid)));
-    }
-
-    @GetMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.ITEM_PATH)
-    public Set<Inventory> findInventoriesWithItemByUuidParam(
-            @RequestParam(value = ServiceStrings.UUID, required = false) String itemUuid) {
-        return InventoryUtils
-                .getInventoriesWithItem(super.findAll(), itemController
-                        .findByUuid(UUID.fromString(itemUuid)));
-    }
-
 
     @PutMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
             ServiceStrings.ITEM_PATH + ServiceStrings.ADD_PATH)

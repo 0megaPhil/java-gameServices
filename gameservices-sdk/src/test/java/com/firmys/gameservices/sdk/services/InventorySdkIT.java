@@ -33,17 +33,19 @@ public class InventorySdkIT {
 
 
     @Test
-    void addAndDeleteInventory() {
-        Inventory inventory = sdk.addInventory().block();
-        Assertions.assertThat(inventory).isNotNull();
-        sdk.deleteInventory(null, Objects.requireNonNull(inventory)).block();
-        try {
-            sdk.findByUuidPathInventory(inventory.getUuid().toString()).block();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void create() {
+        Inventory created = sdk.addInventory().block();
+        Assertions.assertThat(created).isNotNull();
+        Assertions.assertThat(created.getUuid()).isNotNull();
+
+        System.out.println("CREATED: " + created);
+
+        sdk.deleteInventory(null, created).block();
+        Inventory find = sdk.findByUuidPathInventory(created.getUuid().toString()).block();
+        Assertions.assertThat(find.getUuid()).isNull();
     }
 
+    // TODO - Add assertions for OwnedItems and OwnedCurrencies
     @Test
     public void addAndConsumeOwnedItems() {
         Inventory inventory = sdk.addInventory().block();
