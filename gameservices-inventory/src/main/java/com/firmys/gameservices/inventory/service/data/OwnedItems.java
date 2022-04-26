@@ -1,8 +1,6 @@
 package com.firmys.gameservices.inventory.service.data;
 
-import com.firmys.gameservices.common.AbstractGameData;
 import com.firmys.gameservices.common.GameData;
-import com.firmys.gameservices.common.error.GameServiceError;
 
 import java.util.Map;
 import java.util.Optional;
@@ -10,7 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class OwnedItems extends AbstractGameData {
+public class OwnedItems implements GameData {
     private UUID uuid = UUID.randomUUID();
     private Map<UUID, OwnedItem> ownedItemMap = new ConcurrentHashMap<>();
 
@@ -54,13 +52,4 @@ public class OwnedItems extends AbstractGameData {
         return Optional.ofNullable(this.getOwnedItemMap().get(item.getUuid())).orElse(new OwnedItem(item));
     }
 
-    @Override
-    public void setError(GameServiceError error) {
-
-    }
-
-    @Override
-    public GameServiceError getError() {
-        return null;
-    }
 }

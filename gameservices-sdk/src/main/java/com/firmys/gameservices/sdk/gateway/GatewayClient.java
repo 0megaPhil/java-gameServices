@@ -4,12 +4,8 @@ import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
 import com.firmys.gameservices.sdk.Parameters;
-import org.slf4j.Logger;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -23,7 +19,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Function;
 
 public class GatewayClient<R> {
@@ -103,24 +98,18 @@ public class GatewayClient<R> {
         return getClient().put().uri(
                 uriBuilder -> uriBuilderFunction(baseUrl, parameters.get())
                         .apply(uriBuilder)).retrieve()
-//                .onStatus(HttpStatus::isError, response -> {
-//
-////                            Mono<ResponseEntity<GameServiceError>> responseEntityMono = response.toEntity(GameServiceError.class);
-////                            GameServiceError error = responseEntityMono.block().getBody();
-////            Mono<String> exceptionMono = response.bodyToMono(GameServiceException.class);
-////            String monoString = exceptionMono.block();
-////            consumeError(exceptionMono);
-//            Mono<com.firmys.gameservices.models.GameServiceError> mono = response.bodyToMono(com.firmys.gameservices.models.GameServiceError.class).subscribeOn(Schedulers.parallel());
-//            mono.map(m -> {
-//                System.out.println(m.getError());
-//                return m;
-//            });
-//            return mono;
+                .onStatus(HttpStatus::isError, response ->
+                        response.toEntity(GameServiceException.class).map(HttpEntity::getBody))
+            .bodyToMono(typeReference)
+//                .onErrorMap(t -> {
+//                if(t instanceof GameServiceException) {
+//                    GameServiceError error = ((GameServiceException) t).getGameServiceError();
+//                    return (((GameServiceException) t));
+//                }
+////            mono.printStackTrace();
+//            return t;
 //        })
-            .bodyToMono(typeReference).onErrorMap(mono -> {
-            mono.printStackTrace();
-            return mono;
-        });
+                ;
     }
 
     ExecutorService executor = Executors.newFixedThreadPool(10);

@@ -47,7 +47,7 @@ public class InventorySdkIT {
         Item generatedItemTwo = InventoryTestUtilities.generateItem();
         Item itemTwo = itemSdk.addItem(generatedItemTwo).block();
 
-        inventory = sdk.addOwnedItemsInventory(UUID.randomUUID().toString(),
+        inventory = sdk.addOwnedItemsInventory("eafcb0cd-ee55-44d4-ba51-a4dfb895fb4a",
                 1, List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
 
         System.out.println("With OwnedItem: " + inventory);

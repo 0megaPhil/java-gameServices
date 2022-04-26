@@ -1,6 +1,5 @@
 package com.firmys.gameservices.inventory.service.data;
 
-import com.firmys.gameservices.common.AbstractGameData;
 import com.firmys.gameservices.common.GameData;
 
 import java.util.Set;
@@ -10,7 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
-public class OwnedItem extends AbstractGameData {
+public class OwnedItem implements GameData {
 
     private UUID itemUuid;
     private final AtomicReference<SortedSet<UUID>> ownedItemUuids = new AtomicReference<>(new TreeSet<>());

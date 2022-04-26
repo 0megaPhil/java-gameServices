@@ -25,37 +25,37 @@ public class GameDataExceptionController {
         }
     }
 
-//    @ExceptionHandler(GameServiceException.class)
-//    public ResponseEntity<? extends GameServiceException> gameException(GameServiceException gameServiceException) {
-//        return new ResponseEntity<>(gameServiceException, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
     @ExceptionHandler(GameServiceException.class)
-    public ResponseEntity<? extends GameEntity> gameException(GameServiceException gameServiceException) {
-        ErrorEntity error = new ErrorEntity();
-        error.setError(gameServiceException.getGameServiceError());
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<? extends GameServiceException> gameException(GameServiceException gameServiceException) {
+        return new ResponseEntity<>(gameServiceException, HttpStatus.BAD_REQUEST);
     }
 
-
-//    /**
-//     * Fail-over exception handler for services
-//     * @param exception general exception
-//     * @return response which includes GameServiceException
-//     */
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<? extends GameServiceException> generalException(Exception exception) {
-//        exception.printStackTrace();
-//        return new ResponseEntity<>(GameServiceException.builder.withGameServiceError(
-//                GameServiceError.builder.withName(exception.getClass().getSimpleName())
-//                        .withDescription(exception.getMessage()).build()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
+//    @ExceptionHandler(GameServiceException.class)
+//    public ResponseEntity<? extends GameEntity> gameException(GameServiceException gameServiceException) {
+//        ErrorEntity error = new ErrorEntity();
+//        error.setError(gameServiceException.getGameServiceError());
+//        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 //    }
 
+
+    /**
+     * Fail-over exception handler for services
+     * @param exception general exception
+     * @return response which includes GameServiceException
+     */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<? extends GameEntity> generalException(Exception exception) {
-        ErrorEntity error = new ErrorEntity();
-        error.setError(GameServiceError.builder.withName(exception.getClass().getSimpleName())
-                .withDescription(exception.getMessage()).build());
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<? extends GameServiceException> generalException(Exception exception) {
+        exception.printStackTrace();
+        return new ResponseEntity<>(GameServiceException.builder.withGameServiceError(
+                GameServiceError.builder.withName(exception.getClass().getSimpleName())
+                        .withDescription(exception.getMessage()).withThrowable(exception).build()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<? extends GameEntity> generalException(Exception exception) {
+//        ErrorEntity error = new ErrorEntity();
+//        error.setError(GameServiceError.builder.withName(exception.getClass().getSimpleName())
+//                .withDescription(exception.getMessage()).build());
+//        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }

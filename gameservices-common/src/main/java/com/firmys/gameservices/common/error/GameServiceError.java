@@ -15,15 +15,46 @@ import java.util.UUID;
 @RestControllerAdvice
 public class GameServiceError implements Serializable {
 
-    private final String name;
-    private final String description;
-    private final String message;
-    private final Throwable throwable;
+    private String name;
+    private String description;
+    private String message;
+    private Throwable throwable;
     @JsonIgnore
-    private final Throwable fullThrowable;
-    private final GameEntity request;
-    private final Date date;
+    private Throwable fullThrowable;
+    private GameEntity request;
+    private Date date;
     public static final Builder builder = new Builder();
+
+    public GameServiceError() {
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setThrowable(Throwable throwable) {
+        this.throwable = throwable;
+    }
+
+    public void setFullThrowable(Throwable fullThrowable) {
+        this.fullThrowable = fullThrowable;
+    }
+
+    public void setRequest(GameEntity request) {
+        this.request = request;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     // FIXME
     private GameServiceError(Builder builder) {
@@ -57,13 +88,13 @@ public class GameServiceError implements Serializable {
             return this;
         }
 
-        public Builder withThrowable(Throwable throwable) {
-            this.throwable = throwable;
+        public Builder withRequest(GameEntity request) {
+            this.request = request;
             return this;
         }
 
-        public Builder withRequest(GameEntity request) {
-            this.request = request;
+        public Builder withThrowable(Throwable throwable) {
+            this.throwable = throwable;
             return this;
         }
 

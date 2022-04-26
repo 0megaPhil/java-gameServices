@@ -1,9 +1,12 @@
 package com.firmys.gameservices.common.error;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.GameData;
 
+import java.io.Serializable;
+
 // FIXME, make me useful for returning exceptions
-public class GameServiceException extends RuntimeException {
+public class GameServiceException extends RuntimeException implements Serializable {
     private GameServiceError gameServiceError;
     private String gameDataType;
     public static final Builder builder = new Builder();
@@ -26,6 +29,35 @@ public class GameServiceException extends RuntimeException {
 
     public String getGameDataType() {
         return gameDataType;
+    }
+
+    public void setGameDataType(String gameDataType) {
+        this.gameDataType = gameDataType;
+    }
+
+    public void setGameServiceError(GameServiceError gameServiceError) {
+        this.gameServiceError = gameServiceError;
+    }
+
+    @Override
+    public void setStackTrace(StackTraceElement[] stackTrace) {
+        super.setStackTrace(stackTrace);
+    }
+
+    @Override
+    public synchronized Throwable getCause() {
+        return gameServiceError.getThrowable();
+    }
+
+    @Override
+    public String getMessage() {
+        return gameServiceError.getMessage();
+    }
+
+    @Override
+    @JsonIgnore
+    public StackTraceElement[] getStackTrace() {
+        return gameServiceError.getThrowable().getStackTrace();
     }
 
     public static class Builder {

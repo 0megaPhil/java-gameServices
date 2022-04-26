@@ -114,13 +114,16 @@ public class AbstractController<D extends AbstractGameEntity> {
         return this.entityCallableHandlerSet(() ->
                 StreamSupport.stream(
                                 gameService.findAll(Sort.unsorted()).spliterator(), false)
-                        .collect(Collectors.toSet()), null);
+                        .collect(Collectors.toSet()), null,
+                "Unable to find any entities for type " + gameEntityClass.getSimpleName());
     }
 
     // TODO - Put in checks for ensuring not overlap in records
     public D save(@Nullable D entity) {
+        D findOrGenerate = Optional.ofNullable(entity).orElse(entitySupplier.get());
         return entityCallableHandler(() -> gameService.save(
-                Optional.ofNullable(entity).orElse(entitySupplier.get())), entity);
+                findOrGenerate), findOrGenerate,
+                "Unable to either create or update entity of type " + gameEntityClass.getSimpleName());
     }
 
     public Set<D> save(Set<D> entities) {
@@ -134,7 +137,8 @@ public class AbstractController<D extends AbstractGameEntity> {
             gameService.deleteById(
                     gameDataLookup.getPrimaryKeyByUuid(parseUuid(uuid, entityBody)));
             return null;
-        }, entityBody, uuid.toString());
+        }, entityBody, uuid.toString() +
+                " not found for entity type " + gameEntityClass.getSimpleName());
     }
 
     public D findByUuid(UUID uuid) {
@@ -142,7 +146,8 @@ public class AbstractController<D extends AbstractGameEntity> {
                 () -> generateGameServiceException(
                         getErrorBuilder()
                                 .withDescription(ErrorMessages.notFoundByUuid(uuid)
-                                        .apply(gameEntityClass)).build())), null, uuid.toString());
+                                        .apply(gameEntityClass)).build())), null, uuid.toString() +
+                " not found for entity type " + gameEntityClass.getSimpleName());
     }
 
     public Set<D> findByUuids(Set<UUID> uuids) {
@@ -153,7 +158,8 @@ public class AbstractController<D extends AbstractGameEntity> {
         voidCallableHandler(() -> {
             gameService.deleteById(gameDataLookup.getPrimaryKeyByUuid(uuid));
             return null;
-        }, null, uuid.toString());
+        }, null, uuid.toString() +
+                " not found for entity type " + gameEntityClass.getSimpleName());
     }
 
     public void deleteByUuids(Set<UUID> uuids) {
@@ -170,7 +176,8 @@ public class AbstractController<D extends AbstractGameEntity> {
         return entityCallableHandler(() -> gameService.save(GameDataUtils
                 .update(gameEntityClass,
                         findByUuid(entity.getUuid()),
-                        entity)), entity);
+                        entity)), entity, "Unable to update entity " + entity.getUuid() +
+                " of type " + gameEntityClass.getSimpleName() + " with details " + entity);
     }
 
     public Set<D> update(Set<D> entities) {
@@ -188,7 +195,8 @@ public class AbstractController<D extends AbstractGameEntity> {
         return entityCallableHandler(() -> gameService.save(GameDataUtils
                 .update(gameEntityClass,
                         findByUuid(entity.getUuid()),
-                        entity)), entity, uuid.toString());
+                        entity)), entity, "Unable to update " + uuid.toString()
+                + " of type " + gameEntityClass.getSimpleName() + " with details " + entity);
     }
 
     /**
@@ -222,14 +230,20 @@ public class AbstractController<D extends AbstractGameEntity> {
     public Set<D> matchByAllAttributes(Map<String, String> attributeMap, boolean partial) {
         return entityCallableHandlerSet(
                 () -> GameDataUtils.matchByAllAttributes(attributeMap, findAll(), partial),
-                null);
+                null, "Cannot match ALL attributes of " +
+                        attributeMap.entrySet().stream().map(e -> e.getKey() + "=" +
+                                e.getValue()).collect(Collectors.joining(", \n")) + " for type " +
+                        gameEntityClass.getSimpleName());
     }
 
     public Set<D> matchByAnyAttributes(Map<String, String> attributeMap, boolean partial) {
 
         return entityCallableHandlerSet(
                 () -> GameDataUtils.matchByAnyAttributes(attributeMap, findAll(), partial),
-                null);
+                null, "Cannot match ANY attributes of " +
+                        attributeMap.entrySet().stream().map(e -> e.getKey() + "=" +
+                                e.getValue()).collect(Collectors.joining(", \n")) + " for type " +
+                        gameEntityClass.getSimpleName());
     }
 
     /*
@@ -241,13 +255,6 @@ public class AbstractController<D extends AbstractGameEntity> {
         try {
             return callable.call();
         } catch (Exception e) {
-//            D entity = entitySupplier.get();
-//            entity.setError(GameServiceError.builder.withThrowable(e)
-//                    .withName(gameEntityClass.getSimpleName())
-//                    .withDescription(e.getMessage() + " - " + String.join("", details))
-//                    .withRequest(requestBody)
-//                    .build());
-//            return entity;
             throw GameServiceException.builder.withGameServiceError(
                     GameServiceError.builder.withThrowable(e)
                             .withName(gameEntityClass.getSimpleName())
