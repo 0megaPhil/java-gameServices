@@ -92,9 +92,9 @@ public class InventoryTestUtilities {
         transaction.setStart(numericSup.get().longValue());
         transaction.setAmount(amount);
         transaction.setEnd(amount + transaction.getStart());
-        transaction.setLocalDateTime(LocalDateTime.now().atOffset(ZoneOffset.UTC));
-        transaction.setDateTime(Formatters.dateTimeFormatter.format(transaction.getLocalDateTime()));
-        transaction.setDate(Formatters.dateFormatter.format(transaction.getLocalDateTime()));
+        LocalDateTime localDateTime = LocalDateTime.now();
+        transaction.setDateTime(Formatters.dateTimeFormatter.format(localDateTime.atOffset(ZoneOffset.UTC)));
+        transaction.setDate(Formatters.dateFormatter.format(localDateTime.atOffset(ZoneOffset.UTC)));
         transaction.setCurrencyUuid(UUID.randomUUID());
         return transaction;
     }

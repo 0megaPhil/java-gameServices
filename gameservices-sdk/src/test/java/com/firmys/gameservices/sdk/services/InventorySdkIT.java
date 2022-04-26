@@ -9,11 +9,17 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+import reactor.util.function.Tuples;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.time.Duration;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @SpringBootTest(classes = {SdkConfig.class})
 public class InventorySdkIT {
@@ -25,23 +31,21 @@ public class InventorySdkIT {
     @Autowired
     CurrencySdk currencySdk;
 
+
     @Test
-    public void addOwnedItem() {
+    void addAndDeleteInventory() {
         Inventory inventory = sdk.addInventory().block();
-        System.out.println("Before OwnedItem: " + inventory);
-
-        Item generatedItem = InventoryTestUtilities.generateItem();
-        Item createdItem = itemSdk.addItem(generatedItem).block();
-
-        inventory = sdk.addOwnedItemInventory(Objects.requireNonNull(inventory).getUuid().toString(),
-                1, createdItem).block();
-
-        System.out.println("With OwnedItem: " + inventory);
-
+        Assertions.assertThat(inventory).isNotNull();
+        sdk.deleteInventory(null, Objects.requireNonNull(inventory)).block();
+        try {
+            sdk.findByUuidPathInventory(inventory.getUuid().toString()).block();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void addOwnedItems() {
+    public void addAndConsumeOwnedItems() {
         Inventory inventory = sdk.addInventory().block();
         System.out.println("Before OwnedItem: " + inventory);
 
@@ -50,32 +54,38 @@ public class InventorySdkIT {
         Item generatedItemTwo = InventoryTestUtilities.generateItem();
         Item itemTwo = itemSdk.addItem(generatedItemTwo).block();
 
-        Currency generatedCurrency = InventoryTestUtilities.generateCurrency();
-        Currency currencyOne = currencySdk.addCurrency(generatedCurrency).block();
-
-        inventory = sdk.addOwnedItemsInventory(inventory.getUuid().toString(),
+        inventory = sdk.addOwnedItemsInventory(Objects.requireNonNull(inventory).getUuid().toString(),
                 1, List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
 
         System.out.println("Add OwnedItem: " + inventory);
 
-        inventory = sdk.consumeOwnedItemsInventory(inventory.getUuid().toString(), 1,
+        inventory = sdk.consumeOwnedItemsInventory(Objects.requireNonNull(inventory).getUuid().toString(), 1,
                 List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
 
         System.out.println("Consume OwnedItem: " + inventory);
 
-        inventory = sdk.creditCurrencyByUuidInventory(inventory.getUuid().toString(),
-                10, currencyOne).block();
+        sdk.deleteByUuidInventory(Objects.requireNonNull(inventory).getUuid().toString()).block();
+    }
 
-        System.out.println("Add OwnedCurrency: " + inventory);
+    @Test
+    void creditAndDebitCurrency() {
+        Inventory inventory = sdk.addInventory().filter(Objects::nonNull).block();
+        System.out.println("Before OwnedItem: " + inventory);
 
-        inventory = sdk.debitCurrencyByUuidInventory(inventory.getUuid().toString(),
-                10, currencyOne).block();
+        Currency generatedCurrency = InventoryTestUtilities.generateCurrency();
+        Currency currencyOne = currencySdk.addCurrency(generatedCurrency).filter(Objects::nonNull).block();
 
-        System.out.println("Consume OwnedCurrency: " + inventory);
+        inventory = sdk.creditCurrencyByUuidInventory(Objects.requireNonNull(inventory).getUuid().toString(),
+                10, Objects.requireNonNull(currencyOne)).block();
 
-        sdk.deleteByUuidInventory(inventory.getUuid().toString()).block();
+        System.out.println("Credit OwnedCurrency: " + inventory);
 
-//        Inventory notExist = sdk.findByUuidPathInventory(inventory.getUuid().toString()).block();
+        inventory = sdk.debitCurrencyByUuidInventory(Objects.requireNonNull(inventory).getUuid().toString(),
+                10, Objects.requireNonNull(currencyOne)).block();
+
+        System.out.println("Debit OwnedCurrency: " + inventory);
+
+        sdk.deleteByUuidInventory(Objects.requireNonNull(inventory).getUuid().toString()).block();
 
     }
 
