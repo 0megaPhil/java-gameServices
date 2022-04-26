@@ -47,7 +47,8 @@ public class OwnedCurrency implements GameData {
 
             long start = this.totalCurrency.getAndUpdate(a -> a + amount);
             long end = this.totalCurrency.get();
-            tSet.add(new Transaction(Transactions.CREDIT, this.currencyUuid, amount, start, end));
+            Transaction transaction = new Transaction(Transactions.CREDIT, this.currencyUuid, amount, start, end);
+            tSet.add(transaction);
             return tSet;
         });
         return this;

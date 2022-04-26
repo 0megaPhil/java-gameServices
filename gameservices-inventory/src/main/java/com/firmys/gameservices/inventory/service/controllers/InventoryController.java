@@ -47,6 +47,7 @@ public class InventoryController extends AbstractController<Inventory> {
 
     /**
      * A bit of a special case, as Inventory have no identitifying attributes, and so creating bulk is handled differently
+     *
      * @param amount number of {@link Inventory} to create
      * @return set of newly generated Inventory objects
      */
@@ -117,7 +118,9 @@ public class InventoryController extends AbstractController<Inventory> {
      * Complex control methods
      * Singular Inventory
      */
-    @PutMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE + ServiceStrings.CURRENCY_PATH)
+    @PutMapping(
+            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
+                    ServiceStrings.CURRENCY_PATH + ServiceStrings.CREDIT_PATH)
     public Inventory creditCurrencyByUuid(
             @PathVariable(value = ServiceStrings.UUID, required = true) String uuid,
             @RequestParam(value = ServiceStrings.UUID, required = false) String currencyUuid,
@@ -129,9 +132,11 @@ public class InventoryController extends AbstractController<Inventory> {
                 super.findByUuid(UUID.fromString(uuid)), amountParam));
     }
 
-    @DeleteMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE + ServiceStrings.CURRENCY_PATH)
+    @PutMapping(
+            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
+                    ServiceStrings.CURRENCY_PATH + ServiceStrings.DEBIT_PATH)
     public Inventory debitCurrencyByUuid(
-            @PathVariable(value = ServiceStrings.UUID, required = true) String uuid,
+            @PathVariable(value = ServiceStrings.UUID) String uuid,
             @RequestParam(value = ServiceStrings.UUID, required = false) String currencyUuid,
             @RequestParam(value = ServiceStrings.AMOUNT) Integer amountParam,
             @RequestBody(required = false) Currency requestBody) {
@@ -159,7 +164,8 @@ public class InventoryController extends AbstractController<Inventory> {
     }
 
 
-    @PutMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE + ServiceStrings.ITEM_PATH)
+    @PutMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
+            ServiceStrings.ITEM_PATH + ServiceStrings.ADD_PATH)
     public Inventory addOwnedItem(
             @PathVariable(ServiceStrings.UUID) String uuid,
             @RequestParam(value = ServiceStrings.UUID, required = false) String uuidParam,
@@ -170,8 +176,9 @@ public class InventoryController extends AbstractController<Inventory> {
                 super.findByUuid(UUID.fromString(uuid)), Optional.ofNullable(amount).orElse(1)));
     }
 
-    // FIXME issues when
-    @PutMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE + ServiceStrings.ITEMS_PATH)
+    @PutMapping(
+            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
+                    ServiceStrings.ITEMS_PATH + ServiceStrings.ADD_PATH)
     public Inventory addOwnedItems(
             @PathVariable(ServiceStrings.UUID) String uuid,
             @RequestParam(value = ServiceStrings.UUID, required = false) Set<String> uuidParams,
@@ -181,7 +188,7 @@ public class InventoryController extends AbstractController<Inventory> {
         Set<String> itemUuids = Optional.ofNullable(uuidParams).orElse(new HashSet<>());
         itemUuids.addAll(Optional.ofNullable(requestBodies)
                 .orElse(new ArrayList<>()).stream().map(i -> i.getUuid().toString()).collect(Collectors.toSet()));
-        for(String itemUuid: itemUuids) {
+        for (String itemUuid : itemUuids) {
             InventoryUtils.addOwnedItemByItemUuid(itemController
                             .findByUuid(UUID.fromString(itemUuid)), inventory,
                     Optional.ofNullable(amount).orElse(1));
@@ -189,7 +196,9 @@ public class InventoryController extends AbstractController<Inventory> {
         return super.save(inventory);
     }
 
-    @DeleteMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE + ServiceStrings.ITEM_PATH)
+    @PutMapping(
+            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
+                    ServiceStrings.ITEM_PATH + ServiceStrings.CONSUME_PATH)
     public Inventory consumeOwnedItem(
             @PathVariable(ServiceStrings.UUID) String uuid,
             @RequestParam(value = ServiceStrings.UUID, required = false) String uuidParam,
@@ -201,22 +210,20 @@ public class InventoryController extends AbstractController<Inventory> {
                 Optional.ofNullable(amount).orElse(1)));
     }
 
-    @DeleteMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE + ServiceStrings.ITEMS_PATH)
+    @PutMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
+            ServiceStrings.ITEMS_PATH + ServiceStrings.CONSUME_PATH)
     public Inventory consumeOwnedItems(
             @PathVariable(ServiceStrings.UUID) String uuid,
-            @RequestParam(value = ServiceStrings.UUID, required = false) String uuidParam,
+            @RequestParam(value = ServiceStrings.UUID, required = false) Set<String> uuidParams,
             @RequestParam(value = ServiceStrings.AMOUNT, required = false) Integer amount,
             @RequestBody(required = false) List<Item> requestBodies) {
-        Inventory inventory = super.findByUuid(UUID.fromString(Optional.ofNullable(uuid).orElse(uuidParam)));
-        List<Item> items = Optional.ofNullable(requestBodies).orElse(new ArrayList<>());
-        if(uuidParam != null) {
-            Item paramItem = new Item();
-            paramItem.setUuid(UUID.fromString(uuidParam));
-            items.add(paramItem);
-        }
-        for(Item item: items) {
+        Inventory inventory = super.findByUuid(UUID.fromString(uuid));
+        Set<UUID> itemUuids = Optional.ofNullable(requestBodies).orElse(
+                new ArrayList<>()).stream().map(i -> UUID.fromString(i.getUuid().toString())).collect(Collectors.toSet());
+        itemUuids.addAll(uuidParams.stream().map(UUID::fromString).collect(Collectors.toSet()));
+        for (UUID itemUuid : itemUuids) {
             InventoryUtils.consumeOwnedItemByItemUuid(itemController
-                            .findByUuid(item.getUuid()), inventory,
+                            .findByUuid(itemUuid), inventory,
                     Optional.ofNullable(amount).orElse(1));
         }
         return super.save(inventory);

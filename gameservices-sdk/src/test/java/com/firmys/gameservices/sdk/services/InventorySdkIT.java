@@ -1,5 +1,6 @@
 package com.firmys.gameservices.sdk.services;
 
+import com.firmys.gameservices.models.Currency;
 import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.models.Item;
 import com.firmys.gameservices.models.OwnedItem;
@@ -21,6 +22,8 @@ public class InventorySdkIT {
     InventorySdk sdk;
     @Autowired
     ItemSdk itemSdk;
+    @Autowired
+    CurrencySdk currencySdk;
 
     @Test
     public void addOwnedItem() {
@@ -47,14 +50,32 @@ public class InventorySdkIT {
         Item generatedItemTwo = InventoryTestUtilities.generateItem();
         Item itemTwo = itemSdk.addItem(generatedItemTwo).block();
 
+        Currency generatedCurrency = InventoryTestUtilities.generateCurrency();
+        Currency currencyOne = currencySdk.addCurrency(generatedCurrency).block();
+
         inventory = sdk.addOwnedItemsInventory(inventory.getUuid().toString(),
                 1, List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
 
-        System.out.println("With OwnedItem: " + inventory);
+        System.out.println("Add OwnedItem: " + inventory);
+
+        inventory = sdk.consumeOwnedItemsInventory(inventory.getUuid().toString(), 1,
+                List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
+
+        System.out.println("Consume OwnedItem: " + inventory);
+
+        inventory = sdk.creditCurrencyByUuidInventory(inventory.getUuid().toString(),
+                10, currencyOne).block();
+
+        System.out.println("Add OwnedCurrency: " + inventory);
+
+        inventory = sdk.debitCurrencyByUuidInventory(inventory.getUuid().toString(),
+                10, currencyOne).block();
+
+        System.out.println("Consume OwnedCurrency: " + inventory);
 
         sdk.deleteByUuidInventory(inventory.getUuid().toString()).block();
 
-        Inventory notExist = sdk.findByUuidPathInventory(inventory.getUuid().toString()).block();
+//        Inventory notExist = sdk.findByUuidPathInventory(inventory.getUuid().toString()).block();
 
     }
 

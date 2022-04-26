@@ -1,6 +1,7 @@
 package com.firmys.gameservices.sdk.config;
 
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
+import com.firmys.gameservices.sdk.services.CurrencySdk;
 import com.firmys.gameservices.sdk.services.InventoriesSdk;
 import com.firmys.gameservices.sdk.services.InventorySdk;
 import com.firmys.gameservices.sdk.services.ItemSdk;
@@ -25,6 +26,11 @@ public class SdkConfig {
     @Bean
     public ItemSdk itemSdk(GatewayDetails gatewayDetails) {
         return new ItemSdk(gatewayDetails);
+    }
+
+    @Bean
+    public CurrencySdk currencySdk(GatewayDetails gatewayDetails) {
+        return new CurrencySdk(gatewayDetails);
     }
 
 }

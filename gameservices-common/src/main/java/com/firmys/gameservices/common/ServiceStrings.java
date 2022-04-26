@@ -50,4 +50,14 @@ public class ServiceStrings {
     public final static String URL = "url";
     public final static String URI = "uri";
 
+    public final static String CREDIT = "credit";
+    public final static String DEBIT = "debit";
+    public final static String CREDIT_PATH = "/" + CREDIT;
+    public final static String DEBIT_PATH = "/" + DEBIT;
+
+    public final static String ADD = "add";
+    public final static String CONSUME = "consume";
+    public final static String ADD_PATH = "/" + ADD;
+    public final static String CONSUME_PATH = "/" + CONSUME;
+
 }

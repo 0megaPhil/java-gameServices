@@ -58,7 +58,7 @@ public class GameServiceException extends RuntimeException implements Serializab
     @Override
     @JsonIgnore
     public StackTraceElement[] getStackTrace() {
-        if(gameServiceError.getThrowable() != null) {
+        if(gameServiceError != null && gameServiceError.getThrowable() != null) {
             return gameServiceError.getThrowable().getStackTrace();
         }
         return new StackTraceElement[]{};

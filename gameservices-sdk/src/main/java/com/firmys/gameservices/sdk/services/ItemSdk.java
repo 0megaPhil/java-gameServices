@@ -7,17 +7,16 @@ import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Component
 public class ItemSdk extends AbstractSdk<Item> implements ItemApi {
 
     public ItemSdk(GatewayDetails gatewayDetails) {
-        super(gatewayDetails, ServiceStrings.ITEM_PATH, new ParameterizedTypeReference<>() {});
+        super(gatewayDetails, ServiceStrings.ITEM_PATH, new ParameterizedTypeReference<>() {
+        });
     }
 
     @Override
@@ -27,14 +26,13 @@ public class ItemSdk extends AbstractSdk<Item> implements ItemApi {
 
     @Override
     public Mono<Void> deleteByUuidItem(String uuid) {
-        return null;
+        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override
     public Mono<Void> deleteItem(String uuid, Item item) {
         String foundUuid = Optional.ofNullable(uuid).orElse(item.getUuid().toString());
-        return getClient().delete(
-                Parameters.builder().withParam(ServiceStrings.UUID, foundUuid).build());
+        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, foundUuid).build());
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-public class Transaction implements Comparable<Long>, GameData {
+public class Transaction implements Comparable<Transaction>, GameData {
 
     private final UUID uuid = UUID.randomUUID();
     private final UUID currencyUuid;
@@ -16,7 +16,6 @@ public class Transaction implements Comparable<Long>, GameData {
     private final long start;
     private final long amount;
     private final long end;
-    private final LocalDateTime localDateTime;
     private final Long epochMillis;
     private final String dateTime;
     private final String date;
@@ -27,8 +26,8 @@ public class Transaction implements Comparable<Long>, GameData {
         this.start = start;
         this.amount = amount;
         this.end = end;
-        this.localDateTime = LocalDateTime.now();
-        this.epochMillis = this.localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        this.epochMillis = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
 
         this.dateTime = Formatters.dateTimeFormatter.format(localDateTime);
         this.date = Formatters.dateFormatter.format(localDateTime);
@@ -62,13 +61,9 @@ public class Transaction implements Comparable<Long>, GameData {
         return uuid;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
-    }
-
     @Override
-    public int compareTo(Long epochMillis) {
-        return this.epochMillis.compareTo(epochMillis);
+    public int compareTo(Transaction transaction) {
+        return this.epochMillis.compareTo(transaction.epochMillis);
     }
 
     @Override

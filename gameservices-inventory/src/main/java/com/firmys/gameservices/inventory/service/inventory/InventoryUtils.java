@@ -63,6 +63,7 @@ public class InventoryUtils {
         } catch (Exception e) {
             throw exceptionBuilder.withGameServiceError(
                     errorBuilder.withThrowable(e)
+                            .withRequest(currency)
                             .withDescription(e.getMessage()).build()).build();
         }
     }
@@ -74,6 +75,7 @@ public class InventoryUtils {
         } catch (Exception e) {
             throw exceptionBuilder.withGameServiceError(
                     errorBuilder.withThrowable(e)
+                            .withRequest(currency)
                             .withDescription(e.getMessage()).build()).build();
         }
     }
