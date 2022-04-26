@@ -47,10 +47,14 @@ public class InventorySdkIT {
         Item generatedItemTwo = InventoryTestUtilities.generateItem();
         Item itemTwo = itemSdk.addItem(generatedItemTwo).block();
 
-        inventory = sdk.addOwnedItemsInventory("eafcb0cd-ee55-44d4-ba51-a4dfb895fb4a",
+        inventory = sdk.addOwnedItemsInventory(inventory.getUuid().toString(),
                 1, List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
 
         System.out.println("With OwnedItem: " + inventory);
+
+        sdk.deleteByUuidInventory(inventory.getUuid().toString()).block();
+
+        Inventory notExist = sdk.findByUuidPathInventory(inventory.getUuid().toString()).block();
 
     }
 

@@ -78,7 +78,7 @@ public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi
 
     @Override
     public Mono<Void> deleteByUuidInventory(String uuid) {
-        return null;
+        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override
@@ -94,7 +94,7 @@ public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi
 
     @Override
     public Mono<Inventory> findByUuidPathInventory(String uuid) {
-        return null;
+        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override

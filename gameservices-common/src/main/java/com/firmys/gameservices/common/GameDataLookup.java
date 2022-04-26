@@ -19,7 +19,7 @@ public class GameDataLookup<T extends GameEntity> {
 
     public Integer getPrimaryKeyByUuid(String uuidString) {
         if(!uuidPrimaryKeyMap.containsKey(UUID.fromString(uuidString))) {
-            service.findAll().forEach(d -> uuidPrimaryKeyMap.putIfAbsent(d.getUuid(), d.getId()));
+            service.findAll().forEach(d -> uuidPrimaryKeyMap.computeIfAbsent(d.getUuid(), v -> d.getId()));
         }
         return Optional.ofNullable(uuidPrimaryKeyMap.get(UUID.fromString(uuidString)))
                 .orElseThrow(() -> new RuntimeException("UUID not found in GameDataLookup for " +

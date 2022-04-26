@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.GameData;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 // FIXME, make me useful for returning exceptions
 public class GameServiceException extends RuntimeException implements Serializable {
@@ -46,7 +47,7 @@ public class GameServiceException extends RuntimeException implements Serializab
 
     @Override
     public synchronized Throwable getCause() {
-        return gameServiceError.getThrowable();
+        return Optional.ofNullable(gameServiceError.getThrowable()).orElse(super.getCause());
     }
 
     @Override
@@ -57,7 +58,10 @@ public class GameServiceException extends RuntimeException implements Serializab
     @Override
     @JsonIgnore
     public StackTraceElement[] getStackTrace() {
-        return gameServiceError.getThrowable().getStackTrace();
+        if(gameServiceError.getThrowable() != null) {
+            return gameServiceError.getThrowable().getStackTrace();
+        }
+        return new StackTraceElement[]{};
     }
 
     public static class Builder {

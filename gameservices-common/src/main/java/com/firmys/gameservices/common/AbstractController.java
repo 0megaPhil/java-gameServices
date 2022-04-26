@@ -112,9 +112,9 @@ public class AbstractController<D extends AbstractGameEntity> {
      */
     public Set<D> findAll() {
         return this.entityCallableHandlerSet(() ->
-                StreamSupport.stream(
-                                gameService.findAll(Sort.unsorted()).spliterator(), false)
-                        .collect(Collectors.toSet()), null,
+                        StreamSupport.stream(
+                                        gameService.findAll(Sort.unsorted()).spliterator(), false)
+                                .collect(Collectors.toSet()), null,
                 "Unable to find any entities for type " + gameEntityClass.getSimpleName());
     }
 
@@ -122,7 +122,7 @@ public class AbstractController<D extends AbstractGameEntity> {
     public D save(@Nullable D entity) {
         D findOrGenerate = Optional.ofNullable(entity).orElse(entitySupplier.get());
         return entityCallableHandler(() -> gameService.save(
-                findOrGenerate), findOrGenerate,
+                        findOrGenerate), findOrGenerate,
                 "Unable to either create or update entity of type " + gameEntityClass.getSimpleName());
     }
 
@@ -142,12 +142,11 @@ public class AbstractController<D extends AbstractGameEntity> {
     }
 
     public D findByUuid(UUID uuid) {
-        return entityCallableHandler(() -> gameService.findById(gameDataLookup.getPrimaryKeyByUuid(uuid)).orElseThrow(
-                () -> generateGameServiceException(
-                        getErrorBuilder()
-                                .withDescription(ErrorMessages.notFoundByUuid(uuid)
-                                        .apply(gameEntityClass)).build())), null, uuid.toString() +
-                " not found for entity type " + gameEntityClass.getSimpleName());
+        return entityCallableHandler(() -> gameService.findById(gameDataLookup.getPrimaryKeyByUuid(uuid))
+                        .orElseThrow(() -> new RuntimeException(uuid +
+                                " not found for entity type " + gameEntityClass.getSimpleName())),
+                null, uuid.toString() +
+                        " not found for entity type " + gameEntityClass.getSimpleName());
     }
 
     public Set<D> findByUuids(Set<UUID> uuids) {
@@ -221,7 +220,7 @@ public class AbstractController<D extends AbstractGameEntity> {
                 .filter(s -> availableAttributes.contains(s.split(":")[0])).map(s ->
                         Map.of(s.split(":")[0], s.split(":")[1]))
                 .flatMap(m -> m.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        if(strategy == MatchStrategy.ANY) {
+        if (strategy == MatchStrategy.ANY) {
             return matchByAnyAttributes(attributeMap, partial);
         }
         return matchByAllAttributes(attributeMap, partial);
