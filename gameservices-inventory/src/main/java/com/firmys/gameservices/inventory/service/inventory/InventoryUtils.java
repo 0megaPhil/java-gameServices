@@ -14,11 +14,11 @@ public class InventoryUtils {
     private static final GameServiceError.Builder errorBuilder = GameServiceError.builder
             .withName(ServiceStrings.INVENTORY);
 
-    public static Inventory consumeOwnedItemByItemUuid(Item item, Inventory inventory) {
-        return consumeOwnedItemByItemUuid(item, inventory, 1);
+    public static Inventory consumeOwnedItemByItem(Item item, Inventory inventory) {
+        return consumeOwnedItemByItem(item, inventory, 1);
     }
 
-    public static Inventory consumeOwnedItemByItemUuid(Item item, Inventory inventory, int amount) {
+    public static Inventory consumeOwnedItemByItem(Item item, Inventory inventory, int amount) {
         try {
             inventory.setOwnedItems(inventory.getOwnedItems().consumeItem(item, amount));
             return inventory;
@@ -27,10 +27,6 @@ public class InventoryUtils {
                     errorBuilder.withThrowable(e)
                             .withDescription(e.getMessage()).build()).build();
         }
-    }
-
-    public static Inventory addOwnedItemByItemUuid(Item item, Inventory inventory) {
-        return addOwnedItemByItemUuid(item, inventory, 1);
     }
 
     public static Inventory addOwnedItemByItemUuid(Item item, Inventory inventory, int amount) {

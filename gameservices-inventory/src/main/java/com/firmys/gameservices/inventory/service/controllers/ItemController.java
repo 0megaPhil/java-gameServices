@@ -3,12 +3,20 @@ package com.firmys.gameservices.inventory.service.controllers;
 import com.firmys.gameservices.common.AbstractController;
 import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.inventory.service.data.Item;
+import com.firmys.gameservices.inventory.service.data.QItem;
 import com.firmys.gameservices.inventory.service.item.ItemDataLookup;
 import com.firmys.gameservices.inventory.service.item.ItemService;
 import org.springframework.http.MediaType;
-import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityManager;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -18,85 +26,63 @@ public class ItemController extends AbstractController<Item> {
 
     public ItemController(
             ItemService service,
-            ItemDataLookup dataLookup) {
-        super(service, dataLookup, Item.class, Item::new);
+            ItemDataLookup dataLookup,
+            EntityManager entityManager) {
+        super(service, dataLookup, Item.class, Item::new, QItem.item, entityManager);
     }
 
     /**
      * {@link ServiceStrings#ITEMS_PATH}
-     * Multiple methods do not support UUID as path variable
-     * <p>
-     * Some methods, such as findMultiple, can collect UUIDs across parameters
      */
-    @GetMapping(ServiceStrings.ITEMS_PATH)
-    public Set<Item> findMultiple(
-            @RequestParam(value = ServiceStrings.UUID, required = false) Set<String> uuidParams) {
-        if (uuidParams != null) {
-            return super.findByUuids(uuidParams.stream().map(UUID::fromString).collect(Collectors.toSet()));
-        }
-        return super.findAll();
+    @GetMapping(ServiceStrings.ITEMS_PATH) // TODO - Use proper queries
+    public Set<Item> find(
+            @RequestParam(value = ServiceStrings.UUID, required = false) Set<UUID> uuidParams) {
+        return uuidParams == null ? super.findAll() : super.find(uuidParams);
     }
 
     @PostMapping(value = ServiceStrings.ITEMS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Item> addMultiple(@RequestBody(required = false) Set<Item> entity) {
-        return super.save(entity);
+    public Set<Item> create(
+            @RequestBody Set<Item> currencies) {
+        return currencies.stream().map(super::save).collect(Collectors.toSet());
     }
 
     @DeleteMapping(value = ServiceStrings.ITEMS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteMultiple(
-            @RequestParam(value = ServiceStrings.UUID, required = false) Set<String> uuidParams,
-            @RequestBody(required = false) Set<Item> entities) {
-        super.deleteByUuids(gatherUuids(uuidParams, entities));
+    public void delete(
+            @RequestParam(value = ServiceStrings.UUID) Set<UUID> uuidParams) {
+        super.delete(uuidParams);
     }
 
     @PutMapping(value = ServiceStrings.ITEMS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Item> updateMultiple(
+    public Set<Item> update(
             @RequestBody Set<Item> entities) {
         return super.update(entities);
     }
 
     /**
      * {@link ServiceStrings#ITEM_PATH}
-     * Singular methods support UUID as part of path
      */
-    @GetMapping(value = ServiceStrings.ITEM_PATH)
-    public Item findByUuidParam(
-            @RequestParam(value = ServiceStrings.UUID) String uuidParam) {
-        return super.findByUuid(UUID.fromString(uuidParam));
-    }
-
     @GetMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE)
-    public Item findByUuidPath(
-            @PathVariable(ServiceStrings.UUID) String pathUuid) {
-        return super.findByUuid(UUID.fromString(pathUuid));
+    public Item find(
+            @PathVariable(ServiceStrings.UUID) UUID uuidPathVar) {
+        return super.find(uuidPathVar);
     }
 
     @PostMapping(value = ServiceStrings.ITEM_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Item add(@RequestBody(required = false) Item entity) {
+    public Item create(@RequestBody(required = false) Item entity) {
         return super.save(entity);
     }
 
-    @DeleteMapping(value = ServiceStrings.ITEM_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(
-            @RequestParam(value = ServiceStrings.UUID, required = false) String uuidParam,
-            @RequestBody(required = false) @Nullable Item entity) {
-        super.delete(UUID.fromString(uuidParam), entity);
+    @DeleteMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void delete(@PathVariable(ServiceStrings.UUID) UUID uuidPathVar) {
+        super.delete(uuidPathVar);
     }
 
-    @DeleteMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteByUuid(@PathVariable(ServiceStrings.UUID) String pathUuid) {
-        super.deleteByUuid(UUID.fromString(pathUuid));
-    }
-
-    @PutMapping(value = ServiceStrings.ITEM_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Item update(@RequestBody Item entity) {
-        return super.update(entity);
-    }
-
-    @PutMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Item updateByUuid(@PathVariable(ServiceStrings.UUID) String pathUuid,
-                                  @RequestBody Item entity) {
-        return super.updateByUuid(UUID.fromString(pathUuid), entity);
+    @PutMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Item update(@PathVariable(ServiceStrings.UUID) UUID uuidPathVar,
+                           @RequestBody Item entity) {
+        return super.update(uuidPathVar, entity);
     }
 
 }

@@ -55,8 +55,8 @@ public class GameDataUtils {
 
     public static <D extends GameData> Set<D> matchByAnyAttributes(Map<String, String> attributes,
                                                                    Set<D> entities,
-                                                                   boolean partial) {
-        if(partial) {
+                                                                   Boolean exactMatch) {
+        if(!exactMatch) {
             return getEntityAttributeMap(entities).entrySet().stream().filter(
                             entry -> entry.getValue().entrySet().stream()
                                     .filter(e -> attributes.containsKey(e.getKey().toLowerCase()))
@@ -72,8 +72,8 @@ public class GameDataUtils {
 
     public static <D extends GameData> Set<D> matchByAllAttributes(Map<String, String> attributes,
                                                                    Set<D> entities,
-                                                                   boolean partial) {
-        if(partial) {
+                                                                   Boolean exactMatch) {
+        if(!exactMatch) {
             return getEntityAttributeMap(entities).entrySet().stream().filter(
                             entry -> entry.getValue().entrySet().stream()
                                     .filter(e -> attributes.containsKey(e.getKey().toLowerCase()))

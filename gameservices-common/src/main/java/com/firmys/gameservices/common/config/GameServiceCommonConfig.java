@@ -1,5 +1,6 @@
 package com.firmys.gameservices.common.config;
 
+import com.firmys.gameservices.common.converters.MatchStrategyConverter;
 import com.firmys.gameservices.common.error.GameDataExceptionController;
 import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
@@ -43,4 +44,8 @@ public class GameServiceCommonConfig {
                 });
     }
 
+    @Bean
+    MatchStrategyConverter matchStrategyConverter() {
+        return new MatchStrategyConverter();
+    }
 }

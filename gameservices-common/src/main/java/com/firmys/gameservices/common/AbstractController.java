@@ -2,9 +2,15 @@ package com.firmys.gameservices.common;
 
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.EntityPathBase;
+import com.querydsl.jpa.impl.JPAQuery;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.lang.Nullable;
 
+import javax.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,18 +29,26 @@ public class AbstractController<D extends AbstractGameEntity> {
     private final GameDataLookup<D> gameDataLookup;
     private final Supplier<D> entitySupplier;
     private final Class<D> gameEntityClass;
+    private final EntityPathBase<D> queryClass;
+    private final EntityManager entityManager;
+    private final Supplier<JPAQuery<D>> querySupplier;
 
     public AbstractController(
             GameService<D> gameService,
             GameDataLookup<D> gameDataLookup,
             Class<D> gameEntityClass,
-            Supplier<D> entitySupplier) {
+            Supplier<D> entitySupplier,
+            EntityPathBase<D> queryClass,
+            EntityManager entityManager) {
         this.gameEntityClass = gameEntityClass;
         this.gameService = gameService;
         this.gameDataLookup = gameDataLookup;
         this.exceptionBuilder = GameServiceException.builder.withGameDataType(gameEntityClass);
         this.errorBuilder = GameServiceError.builder.withName(gameEntityClass.getSimpleName());
         this.entitySupplier = entitySupplier;
+        this.queryClass = queryClass;
+        this.entityManager = entityManager;
+        this.querySupplier = () -> new JPAQuery<D>(entityManager).from(queryClass);
     }
 
     public GameService<D> getGameService() {
@@ -111,15 +125,30 @@ public class AbstractController<D extends AbstractGameEntity> {
      * @return set of {@link GameEntity} objects
      */
     public Set<D> findAll() {
+        return findAll(Sort.unsorted());
+    }
+
+    public Set<D> findAll(Sort sort) {
         return this.entityCallableHandlerSet(() ->
                         StreamSupport.stream(
-                                        gameService.findAll(Sort.unsorted()).spliterator(), false)
+                                        gameService.findAll(sort).spliterator(), false)
                                 .collect(Collectors.toSet()), null,
                 "Unable to find any entities for type " + gameEntityClass.getSimpleName());
     }
 
-    // TODO - Put in checks for ensuring not overlap in records
-    public D save(@Nullable D entity) {
+    public Set<D> findAll(Pageable pageable) {
+        return this.entityCallableHandlerSet(() ->
+                        StreamSupport.stream(
+                                        gameService.findAll(pageable).spliterator(), false)
+                                .collect(Collectors.toSet()), null,
+                "Unable to find any entities for type " + gameEntityClass.getSimpleName());
+    }
+
+    public D save() {
+        return save(entitySupplier.get());
+    }
+
+    public D save(D entity) {
         D findOrGenerate = Optional.ofNullable(entity).orElse(entitySupplier.get());
         return entityCallableHandler(() -> gameService.save(
                         findOrGenerate), findOrGenerate,
@@ -130,18 +159,7 @@ public class AbstractController<D extends AbstractGameEntity> {
         return entities.stream().map(this::save).collect(Collectors.toSet());
     }
 
-    public void delete(
-            UUID uuid,
-            D entityBody) {
-        voidCallableHandler(() -> {
-            gameService.deleteById(
-                    gameDataLookup.getPrimaryKeyByUuid(parseUuid(uuid, entityBody)));
-            return null;
-        }, entityBody, uuid.toString() +
-                " not found for entity type " + gameEntityClass.getSimpleName());
-    }
-
-    public D findByUuid(UUID uuid) {
+    public D find(UUID uuid) {
         return entityCallableHandler(() -> gameService.findById(gameDataLookup.getPrimaryKeyByUuid(uuid))
                         .orElseThrow(() -> new RuntimeException(uuid +
                                 " not found for entity type " + gameEntityClass.getSimpleName())),
@@ -149,11 +167,11 @@ public class AbstractController<D extends AbstractGameEntity> {
                         " not found for entity type " + gameEntityClass.getSimpleName());
     }
 
-    public Set<D> findByUuids(Set<UUID> uuids) {
-        return uuids.stream().map(this::findByUuid).collect(Collectors.toSet());
+    public Set<D> find(Set<UUID> uuids) {
+        return uuids.stream().map(this::find).collect(Collectors.toSet());
     }
 
-    public void deleteByUuid(UUID uuid) {
+    public void delete(UUID uuid) {
         voidCallableHandler(() -> {
             gameService.deleteById(gameDataLookup.getPrimaryKeyByUuid(uuid));
             return null;
@@ -161,8 +179,8 @@ public class AbstractController<D extends AbstractGameEntity> {
                 " not found for entity type " + gameEntityClass.getSimpleName());
     }
 
-    public void deleteByUuids(Set<UUID> uuids) {
-        uuids.forEach(this::deleteByUuid);
+    public void delete(Set<UUID> uuids) {
+        uuids.forEach(this::delete);
     }
 
     /**
@@ -174,7 +192,7 @@ public class AbstractController<D extends AbstractGameEntity> {
     public D update(D entity) {
         return entityCallableHandler(() -> gameService.save(GameDataUtils
                 .update(gameEntityClass,
-                        findByUuid(entity.getUuid()),
+                        find(entity.getUuid()),
                         entity)), entity, "Unable to update entity " + entity.getUuid() +
                 " of type " + gameEntityClass.getSimpleName() + " with details " + entity);
     }
@@ -190,10 +208,10 @@ public class AbstractController<D extends AbstractGameEntity> {
      * @param entity the information to be updated
      * @return adjusted entity as recorded
      */
-    public D updateByUuid(UUID uuid, D entity) {
+    public D update(UUID uuid, D entity) {
         return entityCallableHandler(() -> gameService.save(GameDataUtils
                 .update(gameEntityClass,
-                        findByUuid(entity.getUuid()),
+                        find(entity.getUuid()),
                         entity)), entity, "Unable to update " + uuid.toString()
                 + " of type " + gameEntityClass.getSimpleName() + " with details " + entity);
     }
@@ -207,38 +225,38 @@ public class AbstractController<D extends AbstractGameEntity> {
      * @return set of adjusted entities
      */
     public Set<D> updateForUuids(Set<UUID> uuids, D entity) {
-        return uuids.stream().map(u -> updateByUuid(u, entity)).collect(Collectors.toSet());
+        return uuids.stream().map(u -> update(u, entity)).collect(Collectors.toSet());
     }
 
     public Set<String> getEntityAttributes() {
         return GameDataUtils.getEntityAttributes(entitySupplier.get());
     }
 
-    public Set<D> matchByAttributes(MatchStrategy strategy, Set<String> attributes, boolean partial) {
+    public Set<D> matchByAttributes(MatchStrategy strategy, Set<String> attributes, Boolean exactMatch) {
         Set<String> availableAttributes = getEntityAttributes();
         Map<String, String> attributeMap = attributes.stream()
                 .filter(s -> availableAttributes.contains(s.split(":")[0])).map(s ->
                         Map.of(s.split(":")[0], s.split(":")[1]))
                 .flatMap(m -> m.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         if (strategy == MatchStrategy.ANY) {
-            return matchByAnyAttributes(attributeMap, partial);
+            return matchByAnyAttributes(attributeMap, exactMatch);
         }
-        return matchByAllAttributes(attributeMap, partial);
+        return matchByAllAttributes(attributeMap, exactMatch);
     }
 
-    public Set<D> matchByAllAttributes(Map<String, String> attributeMap, boolean partial) {
+    public Set<D> matchByAllAttributes(Map<String, String> attributeMap, Boolean exactMatch) {
         return entityCallableHandlerSet(
-                () -> GameDataUtils.matchByAllAttributes(attributeMap, findAll(), partial),
+                () -> GameDataUtils.matchByAllAttributes(attributeMap, findAll(), exactMatch),
                 null, "Cannot match ALL attributes of " +
                         attributeMap.entrySet().stream().map(e -> e.getKey() + "=" +
                                 e.getValue()).collect(Collectors.joining(", \n")) + " for type " +
                         gameEntityClass.getSimpleName());
     }
 
-    public Set<D> matchByAnyAttributes(Map<String, String> attributeMap, boolean partial) {
+    public Set<D> matchByAnyAttributes(Map<String, String> attributeMap, Boolean exactMatch) {
 
         return entityCallableHandlerSet(
-                () -> GameDataUtils.matchByAnyAttributes(attributeMap, findAll(), partial),
+                () -> GameDataUtils.matchByAnyAttributes(attributeMap, findAll(), exactMatch),
                 null, "Cannot match ANY attributes of " +
                         attributeMap.entrySet().stream().map(e -> e.getKey() + "=" +
                                 e.getValue()).collect(Collectors.joining(", \n")) + " for type " +
@@ -310,4 +328,15 @@ public class AbstractController<D extends AbstractGameEntity> {
         return Optional.ofNullable(uuid).orElse(Optional.ofNullable(entityBody).orElse(entitySupplier.get()).getUuid());
     }
 
+    public EntityPathBase<D> getQueryClass() {
+        return queryClass;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public Supplier<JPAQuery<D>> getQuerySupplier() {
+        return querySupplier;
+    }
 }

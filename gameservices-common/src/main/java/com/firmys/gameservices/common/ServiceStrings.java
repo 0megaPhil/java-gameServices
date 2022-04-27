@@ -36,6 +36,8 @@ public class ServiceStrings {
     public final static String ATTRIBUTES = "attributes";
     public final static String MATCH = "match";
     public final static String PARTIAL = "partial";
+    public final static String EXACT = "exact";
+    public final static String STRATEGY = "strategy";
     public final static String PARTIAL_PATH = "/" + PARTIAL;
     public final static String SEARCH = "search";
     public final static String SEARCH_PATH = "/search";
