@@ -29,7 +29,8 @@ public class ServiceStrings {
     public static final String WORLDS_PATH = "/" + WORLDS;
 
     public final static String UUID = "uuid";
-    public final static String UUID_PATH_VARIABLE = "/" + "{" + ServiceStrings.UUID + "}";
+    public final static String PATH_UUID = "pathUuid";
+    public final static String UUID_PATH_VARIABLE = "/" + "{" + ServiceStrings.PATH_UUID + "}";
 
     public final static String AMOUNT = "amount";
     public final static String ATTRIBUTE = "attribute";

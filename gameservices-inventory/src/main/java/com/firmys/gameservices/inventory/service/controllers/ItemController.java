@@ -63,7 +63,7 @@ public class ItemController extends AbstractController<Item> {
      */
     @GetMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE)
     public Item find(
-            @PathVariable(ServiceStrings.UUID) UUID uuidPathVar) {
+            @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar) {
         return super.find(uuidPathVar);
     }
 
@@ -74,13 +74,13 @@ public class ItemController extends AbstractController<Item> {
 
     @DeleteMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(@PathVariable(ServiceStrings.UUID) UUID uuidPathVar) {
+    public void delete(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar) {
         super.delete(uuidPathVar);
     }
 
     @PutMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Item update(@PathVariable(ServiceStrings.UUID) UUID uuidPathVar,
+    public Item update(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
                            @RequestBody Item entity) {
         return super.update(uuidPathVar, entity);
     }

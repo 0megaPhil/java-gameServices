@@ -62,7 +62,7 @@ public class CurrencyController extends AbstractController<Currency> {
      */
     @GetMapping(value = ServiceStrings.CURRENCY_PATH + ServiceStrings.UUID_PATH_VARIABLE)
     public Currency find(
-            @PathVariable(ServiceStrings.UUID) UUID uuidPathVar) {
+            @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar) {
         return super.find(uuidPathVar);
     }
 
@@ -73,13 +73,13 @@ public class CurrencyController extends AbstractController<Currency> {
 
     @DeleteMapping(value = ServiceStrings.CURRENCY_PATH + ServiceStrings.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(@PathVariable(ServiceStrings.UUID) UUID uuidPathVar) {
+    public void delete(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar) {
         super.delete(uuidPathVar);
     }
 
     @PutMapping(value = ServiceStrings.CURRENCY_PATH + ServiceStrings.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Currency update(@PathVariable(ServiceStrings.UUID) UUID uuidPathVar,
+    public Currency update(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
                             @RequestBody Currency entity) {
         return super.update(uuidPathVar, entity);
     }

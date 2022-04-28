@@ -23,13 +23,14 @@ public class Parameters {
         public Builder() {
         }
 
-        public Builder withParam(String paramKey, String... paramValues) {
-            applyParameter(paramKey).accept(paramValues);
+        public <V> Builder withParam(String paramKey, V paramValue) {
+            applyParameter(paramKey).accept(Set.of(String.valueOf(paramValue)).toArray(new String[]{}));
             return this;
         }
 
-        public Builder withParam(String paramKey, Set<String> paramValues) {
-            applyParameter(paramKey).accept(paramValues.toArray(new String[]{}));
+        public <V> Builder withParam(String paramKey, Set<V> paramValueSet) {
+            applyParameter(paramKey).accept(paramValueSet.stream()
+                    .map(String::valueOf).collect(Collectors.toSet()).toArray(new String[]{}));
             return this;
         }
 

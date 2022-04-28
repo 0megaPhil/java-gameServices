@@ -10,10 +10,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Component
 public class InventoriesSdk extends AbstractSdk<Set<Inventory>> implements InventoriesApi {
@@ -23,28 +21,26 @@ public class InventoriesSdk extends AbstractSdk<Set<Inventory>> implements Inven
     }
 
     @Override
-    public Mono<Set<Inventory>> addMultipleInventory(Integer amount) {
+    public Mono<Set<Inventory>> createSetInventory(Integer amount) {
         return getClient().post(
-                Parameters.builder().withParam(ServiceStrings.AMOUNT, amount.toString()).build());
+                Parameters.builder().withParam(ServiceStrings.AMOUNT, amount).build());
     }
 
     @Override
-    public Mono<Void> deleteMultipleInventory(Set<String> uuids, Set<Inventory> inventories) {
-        Set<String> combinedUuids = Optional.ofNullable(uuids).orElse(new HashSet<>());
-        combinedUuids.addAll(Optional.ofNullable(inventories).orElse(new HashSet<>()).stream()
-                .map(i -> i.getUuid().toString()).collect(Collectors.toSet()));
+    public Mono<Void> deleteSetInventory(Set<UUID> uuid) {
         return getClient().delete(
-                Parameters.builder().withParam(ServiceStrings.UUID, combinedUuids).build());
+                Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override
-    public Mono<Set<Inventory>> findMultipleInventory(Set<String> uuids) {
+    public Mono<Set<Inventory>> findSetInventory(Set<UUID> uuid) {
         return getClient().get(
-                Parameters.builder().withParam(ServiceStrings.UUID, uuids).build());
+                Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+
     }
 
     @Override
-    public Mono<Set<Inventory>> updateMultipleInventory(Set<Inventory> inventory) {
+    public Mono<Set<Inventory>> updateSetInventory(Set<Inventory> inventory) {
         return Mono.error(new RuntimeException("NOT IMPLEMENTED"));
     }
 }

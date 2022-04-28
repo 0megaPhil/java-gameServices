@@ -91,7 +91,7 @@ public class CharacterController extends AbstractController<Character> {
      */
     @GetMapping(value = ServiceStrings.CHARACTER_PATH + ServiceStrings.UUID_PATH_VARIABLE)
     public Character find(
-            @PathVariable(ServiceStrings.UUID) UUID uuidPathVar) {
+            @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar) {
         return super.find(uuidPathVar);
     }
 
@@ -102,13 +102,13 @@ public class CharacterController extends AbstractController<Character> {
 
     @DeleteMapping(value = ServiceStrings.CHARACTER_PATH + ServiceStrings.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(@PathVariable(ServiceStrings.UUID) UUID uuidPathVar) {
+    public void delete(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar) {
         super.delete(uuidPathVar);
     }
 
     @PutMapping(value = ServiceStrings.CHARACTER_PATH + ServiceStrings.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Character update(@PathVariable(ServiceStrings.UUID) UUID uuidPathVar,
+    public Character update(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
                        @RequestBody Character entity) {
         return super.update(uuidPathVar, entity);
     }

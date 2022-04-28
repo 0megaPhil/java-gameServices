@@ -9,7 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class ItemSdk extends AbstractSdk<Item> implements ItemApi {
@@ -20,38 +20,22 @@ public class ItemSdk extends AbstractSdk<Item> implements ItemApi {
     }
 
     @Override
-    public Mono<Item> addItem(Item item) {
+    public Mono<Item> createItem(Item item) {
         return getClient().post(Parameters.builder().build(), item);
     }
 
     @Override
-    public Mono<Void> deleteByUuidItem(String uuid) {
+    public Mono<Void> deleteItem(UUID uuid) {
         return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override
-    public Mono<Void> deleteItem(String uuid, Item item) {
-        String foundUuid = Optional.ofNullable(uuid).orElse(item.getUuid().toString());
-        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, foundUuid).build());
-    }
-
-    @Override
-    public Mono<Item> findByUuidParamItem(String uuid) {
+    public Mono<Item> findItem(UUID uuid) {
         return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override
-    public Mono<Item> findByUuidPathItem(String uuid) {
-        return null;
-    }
-
-    @Override
-    public Mono<Item> updateByUuidItem(String uuid, Item item) {
-        return null;
-    }
-
-    @Override
-    public Mono<Item> updateItem(Item item) {
-        return null;
+    public Mono<Item> updateItem(UUID uuid, Item item) {
+        return getClient().put(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build(), item);
     }
 }
