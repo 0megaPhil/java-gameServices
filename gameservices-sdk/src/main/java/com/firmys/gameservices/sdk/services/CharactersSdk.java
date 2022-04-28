@@ -9,6 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,13 +32,15 @@ public class CharactersSdk extends AbstractSdk<Set<Character>> implements Charac
     }
 
     @Override
-    public Mono<Set<Character>> findSetCharacter(Set<UUID> uuid) {
-        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    public Mono<Set<Character>> findAllCharacter(Map<String, String> queryMap) {
+        Parameters.Builder builder = new Parameters.Builder();
+        queryMap.forEach(builder::withParam);
+        return getClient().get(builder.build());
     }
 
     @Override
-    public Mono<Set<Character>> searchByAttributesCharacter(Set<String> attribute) {
-        return Mono.error(new RuntimeException("NOT IMPLEMENTED"));
+    public Mono<Set<Character>> findSetCharacter(Set<UUID> uuid) {
+        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,6 +34,13 @@ public class CurrenciesSdk extends AbstractSdk<Set<Currency>> implements Currenc
     @Override
     public Mono<Set<Currency>> findSetCurrency(Set<UUID> uuid) {
         return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    }
+
+    @Override
+    public Mono<Set<Currency>> findAllCurrency(Map<String, String> queryMap) {
+        Parameters.Builder builder = new Parameters.Builder();
+        queryMap.forEach(builder::withParam);
+        return getClient().get(builder.build());
     }
 
     @Override

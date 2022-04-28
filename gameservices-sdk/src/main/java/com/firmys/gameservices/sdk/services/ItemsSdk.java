@@ -9,6 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,6 +29,13 @@ public class ItemsSdk extends AbstractSdk<Set<Item>> implements ItemsApi {
     @Override
     public Mono<Void> deleteSetItem(Set<UUID> uuid) {
         return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    }
+
+    @Override
+    public Mono<Set<Item>> findAllItem(Map<String, String> queryMap) {
+        Parameters.Builder builder = new Parameters.Builder();
+        queryMap.forEach(builder::withParam);
+        return getClient().withPath(ServiceStrings.QUERY_PATH).get(builder.build());
     }
 
     @Override

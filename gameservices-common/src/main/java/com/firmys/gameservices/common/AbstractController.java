@@ -2,6 +2,10 @@ package com.firmys.gameservices.common;
 
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Ops;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EntityPathBase;
@@ -146,11 +150,21 @@ public class AbstractController<D extends AbstractGameEntity> {
         return uuids.stream().map(this::find).collect(Collectors.toSet());
     }
 
+    /*
+     * TODO - Consider completely revamping this
+     */
     public Set<D> findAll(Map<String, String> queryMap) {
-        return new HashSet<>(getQuerySupplier().get().where(queryMap.entrySet().stream()
-                .map(entry -> Expressions.stringPath(getQueryClass(),
-                        entry.getKey().toLowerCase()).like(entry.getValue().toLowerCase()))
-                .toArray(BooleanExpression[]::new)).fetch());
+        if(queryMap.containsKey(ServiceStrings.UUID) && queryMap.size() < 2) {
+            return Set.of(find(UUID.fromString(queryMap.get(ServiceStrings.UUID))));
+        } else {
+            queryMap.remove(ServiceStrings.UUID);
+        }
+        JPAQuery<D> query = getQuerySupplier().get();
+        BooleanBuilder combined = new BooleanBuilder();
+        Set<BooleanExpression> expressions = getExpressionsForQuery(queryMap);
+        expressions.forEach(combined::and);
+        Predicate predicate = combined.getValue();
+        return new HashSet<>(query.where(predicate).fetch());
     }
 
     public Set<D> findAll(Predicate predicate) {
@@ -248,6 +262,60 @@ public class AbstractController<D extends AbstractGameEntity> {
                         attributeMap.entrySet().stream().map(e -> e.getKey() + "=" +
                                 e.getValue()).collect(Collectors.joining(", \n")) + " for type " +
                         gameEntityClass.getSimpleName());
+    }
+
+    private Class<?> getQueryFieldTypeByKey(String key) {
+        try {
+            return getQueryClass().getClass().getDeclaredField(key).getType();
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("key of " + key + " not available in " + getQueryClass().getClass().getSimpleName());
+        }
+    }
+
+    /*
+     * FIXME - This is going to turn into tech debt, I should redo this once I know more about QueryDsl
+     *  I want to be able to handle different path types dynamically, but maybe I should just rely on building
+     *  a Predicate and using that
+     */
+    public Set<BooleanExpression> getExpressionsForQuery(Map<String, String> queryMap) {
+        Map<String, Class<?>> queryValueClasses = queryMap
+                .keySet().stream().map(s -> {
+                    try {
+                        return Map.entry(s, entitySupplier.get().getClass().getDeclaredField(s).getType());
+                    } catch (NoSuchFieldException ex) {
+                        return Map.entry(s, Void.TYPE);
+                    }
+                }).filter(e -> !e.getValue().equals(Void.TYPE))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return queryValueClasses.entrySet().stream().filter(c -> !c.getValue().equals(UUID.class)).map(c -> {
+            if (c.getValue().equals(String.class)) {
+                return Expressions.stringPath(getQueryClass(),
+                                c.getKey().toLowerCase())
+                        .like(queryMap.get(c.getKey()));
+            } else {
+                if (c.getValue().equals(int.class) || c.getValue().equals(Integer.class)) {
+                    return Expressions.numberPath(Integer.class,
+                                    c.getKey())
+                            .like(queryMap.get(c.getKey()));
+                } else if (c.getValue().equals(double.class) || c.getValue().equals(Double.class)) {
+                    return Expressions.numberPath(Double.class,
+                                    c.getKey())
+                            .like(queryMap.get(c.getKey()));
+                } else if (c.getValue().equals(long.class) || c.getValue().equals(Long.class)) {
+                    return Expressions.numberPath(Long.class,
+                                    c.getKey())
+                            .like(queryMap.get(c.getKey()));
+                } else if (c.getValue().equals(float.class) || c.getValue().equals(Float.class)) {
+                    return Expressions.numberPath(Float.class,
+                                    c.getKey())
+                            .like(queryMap.get(c.getKey()));
+                } else {
+                    return Expressions.stringPath(getQueryClass(),
+                                    c.getKey().toLowerCase())
+                            .like(queryMap.get(c.getKey()));
+                }
+            }
+        }).collect(Collectors.toSet());
     }
 
     /*

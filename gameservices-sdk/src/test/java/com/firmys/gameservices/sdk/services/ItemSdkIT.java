@@ -9,9 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
-@SpringBootTest(classes = {SdkConfig.class, ItemSdk.class})
+@SpringBootTest(classes = {SdkConfig.class})
 public class ItemSdkIT {
 
     @Autowired
@@ -21,8 +22,9 @@ public class ItemSdkIT {
     public void create() {
         Item generatedItem = InventoryTestUtilities.generateItem();
         Mono<Item> createdItem = sdk.createItem(generatedItem);
-        AtomicBoolean complete = new AtomicBoolean(false);
+        AtomicReference<UUID> itemUuid = new AtomicReference<>();
         createdItem.map(m -> {
+                    itemUuid.set(m.getUuid());
                     System.out.println("GENERATED: " + generatedItem);
                     System.out.println("CREATED: " + createdItem);
                     Assertions.assertThat(generatedItem.getName()).isEqualTo(m.getName());
@@ -38,13 +40,9 @@ public class ItemSdkIT {
                 .then()
                 .block();
 
-//
-//        System.out.println("GENERATED: " + generatedItem);
-//        System.out.println("CREATED: " + createdItem);
-//
-//        sdk.deleteItem(null, createdItem).block();
-//        Item find = sdk.findByUuidParamItem(createdItem.getUuid().toString()).block();
-//        Assertions.assertThat(find.getUuid()).isNull();
+        sdk.deleteItem(itemUuid.get())
+                .then()
+                .block();
     }
 
 }

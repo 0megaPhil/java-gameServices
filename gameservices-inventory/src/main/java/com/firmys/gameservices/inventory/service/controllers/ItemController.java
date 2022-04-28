@@ -1,11 +1,17 @@
 package com.firmys.gameservices.inventory.service.controllers;
 
 import com.firmys.gameservices.common.AbstractController;
+import com.firmys.gameservices.common.GameEntity;
 import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.inventory.service.data.Item;
 import com.firmys.gameservices.inventory.service.data.QItem;
 import com.firmys.gameservices.inventory.service.item.ItemDataLookup;
 import com.firmys.gameservices.inventory.service.item.ItemService;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -82,12 +89,13 @@ public class ItemController extends AbstractController<Item> {
     @PutMapping(value = ServiceStrings.ITEM_PATH + ServiceStrings.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public Item update(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-                           @RequestBody Item entity) {
+                       @RequestBody Item entity) {
         return super.update(uuidPathVar, entity);
     }
 
     /**
      * {@link ServiceStrings#ITEMS_PATH}/{@link ServiceStrings#QUERY_PATH}
+     *
      * @param queryMap key value style attributes such as http://url:port/path?key0=val0&key1=val1
      * @return set of entities which match attribute key and value restrictions
      */
