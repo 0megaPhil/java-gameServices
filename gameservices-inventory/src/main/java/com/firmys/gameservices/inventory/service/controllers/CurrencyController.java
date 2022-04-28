@@ -33,25 +33,25 @@ public class CurrencyController extends AbstractController<Currency> {
      *
      */
     @GetMapping(ServiceStrings.CURRENCIES_PATH)
-    public Set<Currency> find(
+    public Set<Currency> findSet(
             @RequestParam(value = ServiceStrings.UUID, required = false) Set<UUID> uuidParams) {
         return uuidParams == null ? super.findAll() : super.find(uuidParams);
     }
 
     @PostMapping(value = ServiceStrings.CURRENCIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Currency> create(
+    public Set<Currency> createSet(
             @RequestBody Set<Currency> currencies) {
         return currencies.stream().map(super::save).collect(Collectors.toSet());
     }
 
     @DeleteMapping(value = ServiceStrings.CURRENCIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(
+    public void deleteSet(
             @RequestParam(value = ServiceStrings.UUID) Set<UUID> uuidParams) {
         super.delete(uuidParams);
     }
 
     @PutMapping(value = ServiceStrings.CURRENCIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Currency> update(
+    public Set<Currency> updateSet(
             @RequestBody Set<Currency> entities) {
         return super.update(entities);
     }

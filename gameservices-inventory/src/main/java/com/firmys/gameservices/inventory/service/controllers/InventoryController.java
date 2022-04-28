@@ -35,7 +35,7 @@ public class InventoryController extends AbstractController<Inventory> {
      * {@link ServiceStrings#INVENTORIES_PATH}
      */
     @GetMapping(ServiceStrings.INVENTORIES_PATH)
-    public Set<Inventory> find(
+    public Set<Inventory> findSet(
             @RequestParam(value = ServiceStrings.UUID, required = false) Set<UUID> uuidParams) {
         return uuidParams == null ? super.findAll() : super.find(uuidParams);
     }
@@ -47,19 +47,19 @@ public class InventoryController extends AbstractController<Inventory> {
      * @return set of newly generated Inventory objects
      */
     @PostMapping(value = ServiceStrings.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Inventory> create(
+    public Set<Inventory> createSet(
             @RequestParam(value = ServiceStrings.AMOUNT) int amount) {
         return IntStream.range(0, amount).mapToObj(i -> super.save(new Inventory())).collect(Collectors.toSet());
     }
 
     @DeleteMapping(value = ServiceStrings.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(
+    public void deleteSet(
             @RequestParam(value = ServiceStrings.UUID) Set<UUID> uuidParams) {
         super.delete(uuidParams);
     }
 
     @PutMapping(value = ServiceStrings.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Inventory> update(
+    public Set<Inventory> updateSet(
             @RequestBody Set<Inventory> entities) {
         return super.update(entities);
     }

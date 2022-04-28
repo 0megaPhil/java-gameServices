@@ -49,25 +49,25 @@ public class CharacterController extends AbstractController<Character> {
      * {@link ServiceStrings#CHARACTERS_PATH}
      */
     @GetMapping(ServiceStrings.CHARACTERS_PATH)
-    public Set<Character> find(
+    public Set<Character> findSet(
             @RequestParam(value = ServiceStrings.UUID, required = false) Set<UUID> uuidParams) {
         return uuidParams == null ? super.findAll() : super.find(uuidParams);
     }
 
     @PostMapping(value = ServiceStrings.CHARACTERS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Character> create(
+    public Set<Character> createSet(
             @RequestBody Set<Character> currencies) {
         return currencies.stream().map(super::save).collect(Collectors.toSet());
     }
 
     @DeleteMapping(value = ServiceStrings.CHARACTERS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(
+    public void deleteSet(
             @RequestParam(value = ServiceStrings.UUID) Set<UUID> uuidParams) {
         super.delete(uuidParams);
     }
 
     @PutMapping(value = ServiceStrings.CHARACTERS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Character> update(
+    public Set<Character> updateSet(
             @RequestBody Set<Character> entities) {
         return super.update(entities);
     }

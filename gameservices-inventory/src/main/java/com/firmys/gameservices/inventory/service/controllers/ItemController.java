@@ -35,25 +35,25 @@ public class ItemController extends AbstractController<Item> {
      * {@link ServiceStrings#ITEMS_PATH}
      */
     @GetMapping(ServiceStrings.ITEMS_PATH) // TODO - Use proper queries
-    public Set<Item> find(
+    public Set<Item> findSet(
             @RequestParam(value = ServiceStrings.UUID, required = false) Set<UUID> uuidParams) {
         return uuidParams == null ? super.findAll() : super.find(uuidParams);
     }
 
     @PostMapping(value = ServiceStrings.ITEMS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Item> create(
+    public Set<Item> createSet(
             @RequestBody Set<Item> currencies) {
         return currencies.stream().map(super::save).collect(Collectors.toSet());
     }
 
     @DeleteMapping(value = ServiceStrings.ITEMS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(
+    public void deleteSet(
             @RequestParam(value = ServiceStrings.UUID) Set<UUID> uuidParams) {
         super.delete(uuidParams);
     }
 
     @PutMapping(value = ServiceStrings.ITEMS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Item> update(
+    public Set<Item> updateSet(
             @RequestBody Set<Item> entities) {
         return super.update(entities);
     }
