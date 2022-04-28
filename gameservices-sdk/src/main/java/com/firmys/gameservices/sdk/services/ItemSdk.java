@@ -25,17 +25,17 @@ public class ItemSdk extends AbstractSdk<Item> implements ItemApi {
     }
 
     @Override
-    public Mono<Void> deleteItem(UUID uuid) {
-        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    public Mono<Void> deleteItem(UUID pathUuid) {
+        return getClient().withPath(pathUuid).delete(Parameters.builder().build());
     }
 
     @Override
-    public Mono<Item> findItem(UUID uuid) {
-        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    public Mono<Item> findItem(UUID pathUuid) {
+        return getClient().withPath(pathUuid).get(Parameters.builder().build());
     }
 
     @Override
-    public Mono<Item> updateItem(UUID uuid, Item item) {
-        return getClient().put(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build(), item);
+    public Mono<Item> updateItem(UUID pathUuid, Item item) {
+        return getClient().withPath(pathUuid).put(Parameters.builder().build(), item);
     }
 }

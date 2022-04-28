@@ -2,22 +2,16 @@ package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.api.InventoryApi;
 import com.firmys.gameservices.common.ServiceStrings;
-import com.firmys.gameservices.models.Currency;
 import com.firmys.gameservices.models.Inventory;
-import com.firmys.gameservices.models.Item;
-import com.firmys.gameservices.models.OwnedItem;
-import com.firmys.gameservices.models.OwnedItems;
 import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
 import org.springframework.core.ParameterizedTypeReference;
 
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi {
 
@@ -25,149 +19,75 @@ public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi
         super(gatewayDetails, ServiceStrings.INVENTORY_PATH, new ParameterizedTypeReference<>() {});
     }
 
-    public Mono<Inventory> addInventory() {
-        return getClient().post(Parameters.builder().build());
+    @Override
+    public Mono<Inventory> addOwnedItemInventory(UUID pathUuid, UUID item, Integer amount) {
+        return getClient().withPath(pathUuid).withPath(ServiceStrings.ITEM).withPath(ServiceStrings.ADD)
+                .put(Parameters.builder().withParam(ServiceStrings.UUID, item)
+                        .withParam(ServiceStrings.AMOUNT, amount).build(), item);
+
     }
 
     @Override
-    public Mono<Inventory> addInventory(Inventory inventory) {
-        return getClient().post(Parameters.builder().build(),
-                Optional.ofNullable(inventory).orElse(new Inventory()));
-    }
+    public Mono<Inventory> addOwnedItemsInventory(UUID pathUuid, Set<UUID> item, Integer amount) {
+        return getClient().withPath(pathUuid).withPath(ServiceStrings.ITEMS).withPath(ServiceStrings.ADD)
+                .put(Parameters.builder().withParam(ServiceStrings.UUID, item)
+                        .withParam(ServiceStrings.AMOUNT, amount).build(), item);
 
-    /**
-     * Add OwnedItem of type Item to an Inventory
-     * @param uuid  (required) uuid of {@link Inventory}
-     * @param amount  (optional) amount of {@link OwnedItem} to be added for {@link Item}
-     * @param item  (optional)
-     * @return Inventory after with modifications
-     */
-    @Override
-    public Mono<Inventory> addOwnedItemInventory(String uuid, Integer amount, Item item) {
-        return getClient().withPath(uuid).withPath(ServiceStrings.ITEM).withPath(ServiceStrings.ADD)
-                .put(Parameters.builder().withParam(ServiceStrings.UUID, item.getUuid().toString())
-                .withParam(ServiceStrings.AMOUNT, amount.toString()).build(), item);
     }
 
     @Override
-    public Mono<Inventory> addOwnedItemsInventory(String uuid, Integer amount, List<Item> items) {
-       return getClient().withPath(uuid).withPath(ServiceStrings.ITEMS).withPath(ServiceStrings.ADD)
-                .put(Parameters.builder().withParam(ServiceStrings.UUID, items.stream()
-                                .map(i -> i.getUuid().toString()).collect(Collectors.toSet()))
-                        .withParam(ServiceStrings.AMOUNT, amount.toString()).build(), null);
+    public Mono<Inventory> consumeOwnedItemInventory(UUID pathUuid, UUID item, Integer amount) {
+        return getClient().withPath(pathUuid).withPath(ServiceStrings.ITEM).withPath(ServiceStrings.CONSUME)
+                .put(Parameters.builder().withParam(ServiceStrings.UUID, item)
+                        .withParam(ServiceStrings.AMOUNT, amount).build(), item);
+
     }
 
     @Override
-    public Mono<Inventory> consumeOwnedItemInventory(String uuid, Integer amount, Item item) {
-        return getClient().withPath(uuid).withPath(ServiceStrings.ITEM).withPath(ServiceStrings.CONSUME)
-                .put(Parameters.builder().withParam(ServiceStrings.UUID, item.getUuid().toString())
-                        .withParam(ServiceStrings.AMOUNT, amount.toString()).build(), item);
+    public Mono<Inventory> consumeOwnedItemsInventory(UUID pathUuid, Set<UUID> item, Integer amount) {
+        return getClient().withPath(pathUuid).withPath(ServiceStrings.ITEMS).withPath(ServiceStrings.CONSUME)
+                .put(Parameters.builder().withParam(ServiceStrings.UUID, item)
+                        .withParam(ServiceStrings.AMOUNT, amount).build(), item);
+
     }
 
-    @Override
-    public Mono<Inventory> consumeOwnedItemsInventory(String uuid, Integer amount, List<Item> items) {
-        return getClient().withPath(uuid).withPath(ServiceStrings.ITEMS).withPath(ServiceStrings.CONSUME)
-                .put(Parameters.builder().withParam(ServiceStrings.UUID, items.stream()
-                                .map(i -> i.getUuid().toString()).collect(Collectors.toSet()))
-                        .withParam(ServiceStrings.AMOUNT, amount.toString()).build(), null);
-    }
-
-    @Override
-    public Mono<Inventory> creditCurrencyByUuidInventory(String uuid, Integer amount, Currency currency) {
-        return getClient().withPath(uuid).withPath(ServiceStrings.CURRENCY).withPath(ServiceStrings.CREDIT)
-                .put(Parameters.builder()
-                        .withParam(ServiceStrings.UUID, currency.getUuid().toString())
-                        .withParam(ServiceStrings.AMOUNT, amount.toString()).build());
-    }
-
-    @Override
-    public Mono<Inventory> debitCurrencyByUuidInventory(String uuid, Integer amount, Currency currency) {
-        return getClient().withPath(uuid).withPath(ServiceStrings.CURRENCY).withPath(ServiceStrings.DEBIT)
-                .put(Parameters.builder().withParam(ServiceStrings.UUID, currency.getUuid().toString())
-                        .withParam(ServiceStrings.AMOUNT, amount.toString()).build(), currency);
-    }
-
-    @Override
-    public Mono<Void> deleteByUuidInventory(String uuid) {
-        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
-    }
-
-    @Override
-    public Mono<Void> deleteInventory(String uuid, Inventory inventory) {
-        String foundUuid = Optional.ofNullable(uuid).orElse(inventory.getUuid().toString());
-        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, foundUuid).build());
-    }
-
-    @Override
-    public Mono<Inventory> findByUuidParamInventory(String uuid) {
-        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
-    }
-
-    @Override
-    public Mono<Inventory> findByUuidPathInventory(String uuid) {
-        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
-    }
-
-    @Override
-    public Mono<Set<Inventory>> findInventoriesWithItemByUuidParamInventory(String uuid) {
-        ParameterizedTypeReference<Set<Inventory>> typeReference = new ParameterizedTypeReference<>() {};
-        return getClient(typeReference).withPath(ServiceStrings.ITEM)
-                .get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
-    }
-
-    @Override
-    public Mono<Set<Inventory>> findInventoriesWithItemByUuidPathInventory(String uuid) {
-        ParameterizedTypeReference<Set<Inventory>> typeReference = new ParameterizedTypeReference<>() {};
-        return getClient(typeReference).withPath(ServiceStrings.ITEM).withPath(uuid).get();
-    }
-
-    @Override
-    public Mono<Inventory> addOwnedItemInventory(UUID pathUuid, UUID uuid, Integer amount) {
-        return null;
-    }
-
-    @Override
-    public Mono<Inventory> addOwnedItemsInventory(UUID pathUuid, Set<UUID> uuid, Integer amount) {
-        return null;
-    }
-
-    @Override
-    public Mono<Inventory> consumeOwnedItemInventory(UUID pathUuid, UUID uuid, Integer amount) {
-        return null;
-    }
-
-    @Override
-    public Mono<Inventory> consumeOwnedItemsInventory(UUID pathUuid, Set<UUID> uuid, Integer amount) {
-        return null;
+    public Mono<Inventory> createInventory() {
+        return createInventory(null);
     }
 
     @Override
     public Mono<Inventory> createInventory(Inventory inventory) {
-        return null;
+        return getClient().post(Parameters.builder().build());
     }
 
     @Override
-    public Mono<Inventory> creditCurrencyInventory(UUID pathUuid, UUID uuid, Integer amount) {
-        return null;
+    public Mono<Inventory> creditCurrencyInventory(UUID pathUuid, UUID currency, Integer amount) {
+        return getClient().withPath(pathUuid).withPath(ServiceStrings.ITEM).withPath(ServiceStrings.CREDIT)
+                .put(Parameters.builder().withParam(ServiceStrings.UUID, currency)
+                        .withParam(ServiceStrings.AMOUNT, amount).build(), currency);
+
     }
 
     @Override
-    public Mono<Inventory> debitCurrencyInventory(UUID pathUuid, UUID uuid, Integer amount) {
-        return null;
+    public Mono<Inventory> debitCurrencyInventory(UUID pathUuid, UUID currency, Integer amount) {
+        return getClient().withPath(pathUuid).withPath(ServiceStrings.ITEM).withPath(ServiceStrings.DEBIT)
+                .put(Parameters.builder().withParam(ServiceStrings.UUID, currency)
+                        .withParam(ServiceStrings.AMOUNT, amount).build(), currency);
+
     }
 
     @Override
     public Mono<Void> deleteInventory(UUID pathUuid) {
-        return null;
+        return getClient().withPath(pathUuid).delete(Parameters.builder().build());
     }
 
     @Override
     public Mono<Inventory> findInventory(UUID pathUuid) {
-        return null;
+        return getClient().withPath(pathUuid).get(Parameters.builder().build());
     }
 
     @Override
     public Mono<Inventory> updateInventory(UUID pathUuid, Inventory inventory) {
-        return null;
+        return getClient().withPath(pathUuid).put(Parameters.builder().build(), inventory);
     }
 }

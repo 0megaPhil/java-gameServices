@@ -6,10 +6,13 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import reactor.core.Disposable;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @SpringBootTest(classes = {SdkConfig.class})
@@ -20,24 +23,25 @@ public class InventoriesSdkIT {
 
     @Test
     public void createAndDeleteInventories() {
-        Set<Inventory> addedSet = inventoriesSdk.addMultipleInventory(2).block();
+        Mono<Set<Inventory>> addedSet = inventoriesSdk.createSetInventory(5);
+        AtomicReference<Set<Inventory>> invSet = new AtomicReference<>(new HashSet<>());
+        addedSet.map(set -> {
+            Assertions.assertThat(set).isNotNull();
+            Assertions.assertThat(set.size()).isEqualTo(5);
+            set.forEach(inventory -> {
+                Assertions.assertThat(inventory.getUuid()).isNotNull();
+                Assertions.assertThat(inventory.getOwnedCurrencies()).isNotNull();
+                Assertions.assertThat(inventory.getOwnedCurrencies().getOwnedCurrencyMap()).isNotNull();
+                Assertions.assertThat(inventory.getOwnedItems()).isNotNull();
+                Assertions.assertThat(inventory.getOwnedItems().getOwnedItemMap()).isNotNull();
+                invSet.get().add(inventory);
+            });
+            return set;
+        }).subscribeOn(Schedulers.parallel()).then().block();
 
-        Assertions.assertThat(addedSet).isNotNull();
-        Assertions.assertThat(addedSet.size()).isEqualTo(2);
-        addedSet.forEach(i -> {
-            Assertions.assertThat(i.getUuid()).isNotNull();
-            Assertions.assertThat(i.getOwnedCurrencies()).isNotNull();
-            Assertions.assertThat(i.getOwnedCurrencies().getOwnedCurrencyMap()).isNotNull();
-            Assertions.assertThat(i.getOwnedItems()).isNotNull();
-            Assertions.assertThat(i.getOwnedItems().getOwnedItemMap()).isNotNull();
-        });
-
-        inventoriesSdk.deleteMultipleInventory(new HashSet<>(), addedSet).block();
-
-        Set<Inventory> foundSet = inventoriesSdk.findMultipleInventory(null).block();
-        Assertions.assertThat(Objects.requireNonNull(foundSet).stream()
-                .map(i -> i.getUuid().toString()).collect(Collectors.toSet())).doesNotContainAnyElementsOf(addedSet.stream()
-                .map(i -> i .getUuid().toString()).collect(Collectors.toSet()));
+        inventoriesSdk.deleteSetInventory(invSet.get()
+                .stream().map(Inventory::getUuid).collect(Collectors.toSet()))
+                .then().block();
     }
 
 }

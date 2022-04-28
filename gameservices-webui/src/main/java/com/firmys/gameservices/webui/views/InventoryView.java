@@ -77,7 +77,7 @@ public class InventoryView extends VerticalLayout {
         return new Button("Delete Inventory", e -> {
             Inventory inventory = this.inventorySelect.getOptionalValue().orElse(new Inventory());
             uuidText.setText("DELETE -> " + inventory.getUuid().toString());
-            inventorySdk.deleteInventory( null, inventory).block();
+//            inventorySdk.deleteInventory( null, inventory).block();
             grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
         });
     }

@@ -1,42 +1,43 @@
-//package com.firmys.gameservices.sdk.services;
-//
-//import com.firmys.gameservices.api.ItemsApi;
-//import com.firmys.gameservices.common.ServicePaths;
-//import com.firmys.gameservices.models.Item;
-//import com.firmys.gameservices.sdk.gateway.GatewayClient;
-//import org.springframework.core.ParameterizedTypeReference;
-//import org.springframework.stereotype.Component;
-//import reactor.core.publisher.Mono;
-//
-//import java.util.Set;
-//
-//@Component
-//public class ItemsSdk extends AbstractSdk implements ItemsApi {
-//    private final ParameterizedTypeReference<Item> typeReference = new ParameterizedTypeReference<>() {};
-//    private final ParameterizedTypeReference<Void> voidTypeReference = new ParameterizedTypeReference<>() {};
-//
-//    public ItemsSdk(GatewayClient client) {
-//        super(client, ServicePaths.ITEMS_PATH);
-//    }
-//
-//
-//    @Override
-//    public Mono<Set<Item>> addMultipleItem(Set<Item> item) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Void> deleteMultipleItem(Set<String> uuid, Set<Item> item) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Set<Item>> findMultipleItem(Set<String> uuid) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Set<Item>> updateMultipleItem(Set<Item> item) {
-//        return null;
-//    }
-//}
+package com.firmys.gameservices.sdk.services;
+
+import com.firmys.gameservices.api.ItemsApi;
+import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.models.Item;
+import com.firmys.gameservices.sdk.Parameters;
+import com.firmys.gameservices.sdk.gateway.GatewayDetails;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+import java.util.Set;
+import java.util.UUID;
+
+@Component
+public class ItemsSdk extends AbstractSdk<Set<Item>> implements ItemsApi {
+
+    public ItemsSdk(GatewayDetails gatewayDetails) {
+        super(gatewayDetails, ServiceStrings.ITEMS_PATH, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @Override
+    public Mono<Set<Item>> createSetItem(Set<Item> item) {
+        return getClient().post(Parameters.builder().build(), item);
+    }
+
+    @Override
+    public Mono<Void> deleteSetItem(Set<UUID> uuid) {
+        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    }
+
+    @Override
+    public Mono<Set<Item>> findSetItem(Set<UUID> uuid) {
+        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    }
+
+    @Override
+    public Mono<Set<Item>> updateSetItem(Set<Item> item) {
+        return getClient().put(Parameters.builder().build(), item);
+    }
+
+}

@@ -74,6 +74,10 @@ public class GatewayClient<R> {
         return new GatewayClient<>(this, baseUrl + pathString);
     }
 
+    public GatewayClient<R> withPath(UUID pathUuid) {
+        return new GatewayClient<>(this, baseUrl + "/" + pathUuid.toString());
+    }
+
 
     public GatewayDetails getGatewayDetails() {
         return gatewayDetails;

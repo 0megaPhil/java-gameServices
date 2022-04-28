@@ -1,25 +1,14 @@
 package com.firmys.gameservices.sdk.services;
 
-import com.firmys.gameservices.models.Currency;
 import com.firmys.gameservices.models.Inventory;
-import com.firmys.gameservices.models.Item;
-import com.firmys.gameservices.models.OwnedItem;
 import com.firmys.gameservices.sdk.config.SdkConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import reactor.core.Disposable;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-import reactor.util.function.Tuples;
 
-import java.time.Duration;
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.concurrent.atomic.AtomicReference;
 
 @SpringBootTest(classes = {SdkConfig.class})
 public class InventorySdkIT {
@@ -31,63 +20,29 @@ public class InventorySdkIT {
     @Autowired
     CurrencySdk currencySdk;
 
-
     @Test
     public void create() {
-        Inventory created = sdk.addInventory().block();
-        Assertions.assertThat(created).isNotNull();
-        Assertions.assertThat(created.getUuid()).isNotNull();
-
-        System.out.println("CREATED: " + created);
-
-        sdk.deleteInventory(null, created).block();
-        Inventory find = sdk.findByUuidPathInventory(created.getUuid().toString()).block();
-        Assertions.assertThat(find.getUuid()).isNull();
+        Mono<Inventory> mono = sdk.createInventory();
+        AtomicReference<Inventory> inventory = new AtomicReference<>();
+        mono.map(i -> {
+            Assertions.assertThat(i).isNotNull();
+            Assertions.assertThat(i.getUuid()).isNotNull();
+            Assertions.assertThat(i.getOwnedCurrencies()).isNotNull();
+            Assertions.assertThat(i.getOwnedItems()).isNotNull();
+            inventory.set(i);
+            return i;
+        }).then().block();
+        sdk.deleteInventory(inventory.get().getUuid()).then().block();
     }
 
     // TODO - Add assertions for OwnedItems and OwnedCurrencies
     @Test
     public void addAndConsumeOwnedItems() {
-        Inventory inventory = sdk.addInventory().block();
-        System.out.println("Before OwnedItem: " + inventory);
 
-        Item generatedItemOne = InventoryTestUtilities.generateItem();
-        Item itemOne = itemSdk.addItem(generatedItemOne).block();
-        Item generatedItemTwo = InventoryTestUtilities.generateItem();
-        Item itemTwo = itemSdk.addItem(generatedItemTwo).block();
-
-        inventory = sdk.addOwnedItemsInventory(Objects.requireNonNull(inventory).getUuid().toString(),
-                1, List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
-
-        System.out.println("Add OwnedItem: " + inventory);
-
-        inventory = sdk.consumeOwnedItemsInventory(Objects.requireNonNull(inventory).getUuid().toString(), 1,
-                List.of(Objects.requireNonNull(itemOne), Objects.requireNonNull(itemTwo))).block();
-
-        System.out.println("Consume OwnedItem: " + inventory);
-
-        sdk.deleteByUuidInventory(Objects.requireNonNull(inventory).getUuid().toString()).block();
     }
 
     @Test
     void creditAndDebitCurrency() {
-        Inventory inventory = sdk.addInventory().filter(Objects::nonNull).block();
-        System.out.println("Before OwnedItem: " + inventory);
-
-        Currency generatedCurrency = InventoryTestUtilities.generateCurrency();
-        Currency currencyOne = currencySdk.addCurrency(generatedCurrency).filter(Objects::nonNull).block();
-
-        inventory = sdk.creditCurrencyByUuidInventory(Objects.requireNonNull(inventory).getUuid().toString(),
-                10, Objects.requireNonNull(currencyOne)).block();
-
-        System.out.println("Credit OwnedCurrency: " + inventory);
-
-        inventory = sdk.debitCurrencyByUuidInventory(Objects.requireNonNull(inventory).getUuid().toString(),
-                10, Objects.requireNonNull(currencyOne)).block();
-
-        System.out.println("Debit OwnedCurrency: " + inventory);
-
-        sdk.deleteByUuidInventory(Objects.requireNonNull(inventory).getUuid().toString()).block();
 
     }
 

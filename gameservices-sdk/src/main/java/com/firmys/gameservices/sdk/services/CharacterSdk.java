@@ -1,54 +1,42 @@
-//package com.firmys.gameservices.sdk.services;
-//
-//import com.firmys.gameservices.api.CharacterApi;
-//import com.firmys.gameservices.common.ServicePaths;
-//import com.firmys.gameservices.models.Character;
-//import com.firmys.gameservices.sdk.gateway.GatewayClient;
-//import org.springframework.core.ParameterizedTypeReference;
-//import org.springframework.stereotype.Component;
-//import reactor.core.publisher.Mono;
-//
-//@Component
-//public class CharacterSdk extends AbstractSdk implements CharacterApi {
-//    private final ParameterizedTypeReference<Character> typeReference = new ParameterizedTypeReference<>() {};
-//    private final ParameterizedTypeReference<Void> voidTypeReference = new ParameterizedTypeReference<>() {};
-//
-//    public CharacterSdk(GatewayClient client) {
-//        super(client, ServicePaths.CHARACTER_PATH);
-//    }
-//
-//    @Override
-//    public Mono<Character> addCharacter(Character character) {
-//        return getClient().post();
-//    }
-//
-//    @Override
-//    public Mono<Void> deleteByUuidCharacter(String uuid) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Void> deleteCharacter(String uuid, Character character) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Character> findByUuidParamCharacter(String uuid) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Character> findByUuidPathCharacter(String uuid) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Character> updateByUuidCharacter(String uuid, Character character) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Character> updateCharacter(Character character) {
-//        return null;
-//    }
-//}
+package com.firmys.gameservices.sdk.services;
+
+import com.firmys.gameservices.api.CharacterApi;
+import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.models.Character;
+import com.firmys.gameservices.sdk.Parameters;
+import com.firmys.gameservices.sdk.gateway.GatewayDetails;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+import java.util.UUID;
+
+@Component
+public class CharacterSdk extends AbstractSdk<Character> implements CharacterApi {
+
+    public CharacterSdk(GatewayDetails gatewayDetails) {
+        super(gatewayDetails, ServiceStrings.CHARACTER_PATH, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @Override
+    public Mono<Character> createCharacter(Character character) {
+        return getClient().post(Parameters.builder().build(), character);
+    }
+
+    @Override
+    public Mono<Void> deleteCharacter(UUID pathUuid) {
+        return getClient().withPath(pathUuid).delete(Parameters.builder().build());
+    }
+
+    @Override
+    public Mono<Character> findCharacter(UUID pathUuid) {
+        return getClient().withPath(pathUuid).get(Parameters.builder().build());
+    }
+
+    @Override
+    public Mono<Character> updateCharacter(UUID pathUuid, Character character) {
+        return getClient().withPath(pathUuid).put(Parameters.builder().build(), character);
+    }
+
+}

@@ -1,41 +1,42 @@
-//package com.firmys.gameservices.sdk.services;
-//
-//import com.firmys.gameservices.api.CurrenciesApi;
-//import com.firmys.gameservices.common.ServicePaths;
-//import com.firmys.gameservices.models.Currency;
-//import com.firmys.gameservices.sdk.gateway.GatewayClient;
-//import org.springframework.core.ParameterizedTypeReference;
-//import org.springframework.stereotype.Component;
-//import reactor.core.publisher.Mono;
-//
-//import java.util.Set;
-//
-//@Component
-//public class CurrenciesSdk extends AbstractSdk implements CurrenciesApi {
-//    private final ParameterizedTypeReference<Currency> typeReference = new ParameterizedTypeReference<>() {};
-//    private final ParameterizedTypeReference<Void> voidTypeReference = new ParameterizedTypeReference<>() {};
-//
-//    public CurrenciesSdk(GatewayClient client) {
-//        super(client, ServicePaths.CURRENCIES_PATH);
-//    }
-//
-//    @Override
-//    public Mono<Set<Currency>> addMultipleCurrency(Set<Currency> currency) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Void> deleteMultipleCurrency(Set<String> uuid, Set<Currency> currency) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Set<Currency>> findMultipleCurrency(Set<String> uuid) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Set<Currency>> updateMultipleCurrency(Set<Currency> currency) {
-//        return null;
-//    }
-//}
+package com.firmys.gameservices.sdk.services;
+
+import com.firmys.gameservices.api.CurrenciesApi;
+import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.models.Currency;
+import com.firmys.gameservices.sdk.Parameters;
+import com.firmys.gameservices.sdk.gateway.GatewayDetails;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+import java.util.Set;
+import java.util.UUID;
+
+@Component
+public class CurrenciesSdk extends AbstractSdk<Set<Currency>> implements CurrenciesApi {
+
+    public CurrenciesSdk(GatewayDetails gatewayDetails) {
+        super(gatewayDetails, ServiceStrings.CURRENCIES_PATH, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @Override
+    public Mono<Set<Currency>> createSetCurrency(Set<Currency> currency) {
+        return getClient().post(Parameters.builder().build(), currency);
+    }
+
+    @Override
+    public Mono<Void> deleteSetCurrency(Set<UUID> uuid) {
+        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    }
+
+    @Override
+    public Mono<Set<Currency>> findSetCurrency(Set<UUID> uuid) {
+        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    }
+
+    @Override
+    public Mono<Set<Currency>> updateSetCurrency(Set<Currency> currency) {
+        return getClient().put(Parameters.builder().build(), currency);
+    }
+}

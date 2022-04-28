@@ -1,47 +1,48 @@
-//package com.firmys.gameservices.sdk.services;
-//
-//import com.firmys.gameservices.api.CharactersApi;
-//import com.firmys.gameservices.common.ServicePaths;
-//import com.firmys.gameservices.models.Character;
-//import com.firmys.gameservices.sdk.gateway.GatewayClient;
-//import org.springframework.core.ParameterizedTypeReference;
-//import org.springframework.stereotype.Component;
-//import reactor.core.publisher.Mono;
-//
-//import java.util.Set;
-//
-//@Component
-//public class CharactersSdk extends AbstractSdk implements CharactersApi {
-//    private final ParameterizedTypeReference<Character> typeReference = new ParameterizedTypeReference<>() {};
-//    private final ParameterizedTypeReference<Set<Character>> setTypeReference = new ParameterizedTypeReference<>() {};
-//    private final ParameterizedTypeReference<Void> voidTypeReference = new ParameterizedTypeReference<>() {};
-//
-//    public CharactersSdk(GatewayClient client) {
-//        super(client, ServicePaths.CHARACTERS_PATH);
-//    }
-//
-//    @Override
-//    public Mono<Set<Character>> addMultipleCharacter(Set<Character> character) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Void> deleteMultipleCharacter(Set<String> uuid, Set<Character> character) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Set<Character>> findMultipleCharacter(Set<String> uuid) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Set<Character>> searchByAttributesCharacter(Set<String> attribute, String partial, String match) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Mono<Set<Character>> updateMultipleCharacter(Set<Character> character) {
-//        return null;
-//    }
-//}
+package com.firmys.gameservices.sdk.services;
+
+import com.firmys.gameservices.api.CharactersApi;
+import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.models.Character;
+import com.firmys.gameservices.sdk.Parameters;
+import com.firmys.gameservices.sdk.gateway.GatewayDetails;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+import java.util.Set;
+import java.util.UUID;
+
+@Component
+public class CharactersSdk extends AbstractSdk<Set<Character>> implements CharactersApi {
+
+    public CharactersSdk(GatewayDetails gatewayDetails) {
+        super(gatewayDetails, ServiceStrings.CHARACTERS_PATH, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @Override
+    public Mono<Set<Character>> createSetCharacter(Set<Character> character) {
+        return getClient().post(Parameters.builder().build(), character);
+    }
+
+    @Override
+    public Mono<Void> deleteSetCharacter(Set<UUID> uuid) {
+        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    }
+
+    @Override
+    public Mono<Set<Character>> findSetCharacter(Set<UUID> uuid) {
+        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+    }
+
+    @Override
+    public Mono<Set<Character>> searchByAttributesCharacter(Set<String> attribute) {
+        return Mono.error(new RuntimeException("NOT IMPLEMENTED"));
+    }
+
+    @Override
+    public Mono<Set<Character>> updateSetCharacter(Set<Character> character) {
+        return getClient().put(Parameters.builder().build(), character);
+    }
+
+}
