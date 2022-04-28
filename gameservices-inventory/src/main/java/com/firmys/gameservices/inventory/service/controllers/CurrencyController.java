@@ -2,17 +2,15 @@ package com.firmys.gameservices.inventory.service.controllers;
 
 import com.firmys.gameservices.inventory.service.currency.CurrencyDataLookup;
 import com.firmys.gameservices.inventory.service.currency.CurrencyService;
-import com.firmys.gameservices.inventory.service.data.Currency;
+import com.firmys.gameservices.inventory.service.data.*;
 import com.firmys.gameservices.common.AbstractController;
 import com.firmys.gameservices.common.ServiceStrings;
-import com.firmys.gameservices.inventory.service.data.Inventory;
-import com.firmys.gameservices.inventory.service.data.QCurrency;
-import com.firmys.gameservices.inventory.service.data.QInventory;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -82,6 +80,17 @@ public class CurrencyController extends AbstractController<Currency> {
     public Currency update(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
                             @RequestBody Currency entity) {
         return super.update(uuidPathVar, entity);
+    }
+
+    /**
+     * {@link ServiceStrings#CURRENCIES_PATH}/{@link ServiceStrings#QUERY_PATH}
+     * @param queryMap key value style attributes such as http://url:port/path?key0=val0&key1=val1
+     * @return set of entities which match attribute key and value restrictions
+     */
+    @GetMapping(value = ServiceStrings.CURRENCIES_PATH + ServiceStrings.QUERY_PATH)
+    public Set<Currency> findAll(
+            @RequestParam Map<String, String> queryMap) {
+        return super.findAll(queryMap);
     }
 
 }

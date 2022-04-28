@@ -41,7 +41,9 @@ public class ServiceStrings {
     public final static String STRATEGY = "strategy";
     public final static String PARTIAL_PATH = "/" + PARTIAL;
     public final static String SEARCH = "search";
-    public final static String SEARCH_PATH = "/search";
+    public final static String SEARCH_PATH = "/" + SEARCH;
+    public final static String QUERY = "query";
+    public final static String QUERY_PATH = "/" + QUERY;
     public final static String MATCH_PATH_VARIABLE = "/" + "{" + ServiceStrings.MATCH + "}";
 
     public final static String OWNED_ITEMS = "OwnedItems";

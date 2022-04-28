@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -83,6 +84,17 @@ public class ItemController extends AbstractController<Item> {
     public Item update(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
                            @RequestBody Item entity) {
         return super.update(uuidPathVar, entity);
+    }
+
+    /**
+     * {@link ServiceStrings#ITEMS_PATH}/{@link ServiceStrings#QUERY_PATH}
+     * @param queryMap key value style attributes such as http://url:port/path?key0=val0&key1=val1
+     * @return set of entities which match attribute key and value restrictions
+     */
+    @GetMapping(value = ServiceStrings.ITEMS_PATH + ServiceStrings.QUERY_PATH)
+    public Set<Item> findAll(
+            @RequestParam Map<String, String> queryMap) {
+        return super.findAll(queryMap);
     }
 
 }

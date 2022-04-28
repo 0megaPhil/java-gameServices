@@ -3,22 +3,31 @@ package com.firmys.gameservices.sdk.services;
 import com.firmys.gameservices.api.InventoryApi;
 import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.models.Inventory;
+import com.firmys.gameservices.models.Item;
+import com.firmys.gameservices.models.OwnedItem;
 import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
 import org.springframework.core.ParameterizedTypeReference;
 
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi {
 
     public InventorySdk(GatewayDetails gatewayDetails) {
-        super(gatewayDetails, ServiceStrings.INVENTORY_PATH, new ParameterizedTypeReference<>() {});
+        super(gatewayDetails, ServiceStrings.INVENTORY_PATH, new ParameterizedTypeReference<>() {
+        });
     }
 
+    /**
+     * Add {@link OwnedItem} to {@link Inventory}, which represents a unique consumable instance of an {@link Item}
+     * @param pathUuid  (required) {@link UUID} for Inventory to be modified
+     * @param item  (required) UUID of Item to be added as an OwnedItem to Inventory
+     * @param amount  (required) number of OwnedItem of Item to be added to Inventory
+     * @return modified Inventory
+     */
     @Override
     public Mono<Inventory> addOwnedItemInventory(UUID pathUuid, UUID item, Integer amount) {
         return getClient().withPath(pathUuid).withPath(ServiceStrings.ITEM).withPath(ServiceStrings.ADD)
@@ -73,7 +82,6 @@ public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi
         return getClient().withPath(pathUuid).withPath(ServiceStrings.ITEM).withPath(ServiceStrings.DEBIT)
                 .put(Parameters.builder().withParam(ServiceStrings.UUID, currency)
                         .withParam(ServiceStrings.AMOUNT, amount).build(), currency);
-
     }
 
     @Override

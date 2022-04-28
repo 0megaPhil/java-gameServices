@@ -5,20 +5,11 @@ import com.firmys.gameservices.characters.service.CharacterService;
 import com.firmys.gameservices.characters.service.data.Character;
 import com.firmys.gameservices.characters.service.data.QCharacter;
 import com.firmys.gameservices.common.AbstractController;
-import com.firmys.gameservices.common.MatchStrategy;
 import com.firmys.gameservices.common.ServiceStrings;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.SimpleExpression;
-import com.querydsl.core.types.dsl.StringPath;
-import com.querydsl.jpa.hibernate.HibernateQuery;
-import com.querydsl.jpa.hibernate.HibernateQueryFactory;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.http.MediaType;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,20 +60,6 @@ public class CharacterController extends AbstractController<Character> {
         return super.update(entities);
     }
 
-    // TODO - Implement and test
-    @GetMapping(value = ServiceStrings.CHARACTERS_PATH + ServiceStrings.SEARCH_PATH)
-    public Set<Character> searchByAttributes(
-            @RequestParam(value = ServiceStrings.ATTRIBUTE) Set<String> attributes) {
-        Map<String, String> attributeMap = attributes.stream()
-                .filter(s -> attributes.contains(s.split(":")[0])).map(s ->
-                        Map.of(s.split(":")[0], s.split(":")[1]))
-                .flatMap(m -> m.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        return new HashSet<>(getQuerySupplier().get().where(attributeMap.entrySet().stream().map(entry -> Expressions.stringPath(getQueryClass(),
-                        entry.getKey()).like(entry.getValue())).toArray(BooleanExpression[]::new))
-                .fetch());
-    }
-
     /**
      * {@link ServiceStrings#CHARACTER_PATH}
      */
@@ -109,8 +83,19 @@ public class CharacterController extends AbstractController<Character> {
     @PutMapping(value = ServiceStrings.CHARACTER_PATH + ServiceStrings.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public Character update(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-                       @RequestBody Character entity) {
+                            @RequestBody Character entity) {
         return super.update(uuidPathVar, entity);
+    }
+
+    /**
+     * {@link ServiceStrings#CHARACTERS_PATH}/{@link ServiceStrings#QUERY_PATH}
+     * @param queryMap key value style attributes such as http://url:port/path?key0=val0&key1=val1
+     * @return set of entities which match attribute key and value restrictions
+     */
+    @GetMapping(value = ServiceStrings.CHARACTERS_PATH + ServiceStrings.QUERY_PATH)
+    public Set<Character> findAll(
+            @RequestParam Map<String, String> queryMap) {
+        return super.findAll(queryMap);
     }
 
 }

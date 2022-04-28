@@ -2,14 +2,16 @@ package com.firmys.gameservices.common;
 
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EntityPathBase;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.EntityManager;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -63,31 +65,6 @@ public class AbstractController<D extends AbstractGameEntity> {
                 return gameEntity.getUuid();
             } else if (uuidParam != null) {
                 return UUID.fromString(uuidParam);
-            } else {
-                throw new RuntimeException("No uuid found in body or parameters");
-            }
-        } catch (Exception e) {
-            throw GameServiceException.builder
-                    .withGameDataType(gameEntityClass)
-                    .withGameServiceError(
-                            GameServiceError.builder
-                                    .withName(gameEntityClass.getSimpleName())
-                                    .withDescription(e.getMessage())
-                                    .withThrowable(e)
-                                    .build()
-                    )
-                    .build();
-        }
-    }
-
-    protected Set<UUID> parseUuidParams(Set<String> uuidStringSet) {
-        return parseUuidParams(uuidStringSet.toArray(new String[]{}));
-    }
-
-    protected Set<UUID> parseUuidParams(String... uuidStrings) {
-        try {
-            if (uuidStrings != null) {
-                return Arrays.stream(uuidStrings).map(UUID::fromString).collect(Collectors.toSet());
             } else {
                 throw new RuntimeException("No uuid found in body or parameters");
             }
@@ -167,6 +144,18 @@ public class AbstractController<D extends AbstractGameEntity> {
 
     public Set<D> find(Set<UUID> uuids) {
         return uuids.stream().map(this::find).collect(Collectors.toSet());
+    }
+
+    public Set<D> findAll(Map<String, String> queryMap) {
+        return new HashSet<>(getQuerySupplier().get().where(queryMap.entrySet().stream()
+                .map(entry -> Expressions.stringPath(getQueryClass(),
+                        entry.getKey().toLowerCase()).like(entry.getValue().toLowerCase()))
+                .toArray(BooleanExpression[]::new)).fetch());
+    }
+
+    public Set<D> findAll(Predicate predicate) {
+        return StreamSupport.stream(
+                gameService.findAll(predicate).spliterator(), true).collect(Collectors.toSet());
     }
 
     public void delete(UUID uuid) {
@@ -320,10 +309,6 @@ public class AbstractController<D extends AbstractGameEntity> {
                             .build()
             ).withGameDataType(gameEntityClass).build();
         }
-    }
-
-    private UUID parseUuid(UUID uuid, D entityBody) {
-        return Optional.ofNullable(uuid).orElse(Optional.ofNullable(entityBody).orElse(entitySupplier.get()).getUuid());
     }
 
     public EntityPathBase<D> getQueryClass() {
