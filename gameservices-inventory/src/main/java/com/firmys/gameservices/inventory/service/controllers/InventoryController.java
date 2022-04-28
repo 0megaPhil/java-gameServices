@@ -96,7 +96,7 @@ public class InventoryController extends AbstractController<Inventory> {
                     ServiceStrings.CURRENCY_PATH + ServiceStrings.CREDIT_PATH)
     public Inventory creditCurrency(
             @PathVariable(value = ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.UUID) UUID modifierUuid,
+            @RequestParam(value = ServiceStrings.CURRENCY) UUID modifierUuid,
             @RequestParam(value = ServiceStrings.AMOUNT) Integer amountParam) {
         return super.save(InventoryUtils.creditCurrency(
                 currencyController.find(modifierUuid),
@@ -108,7 +108,7 @@ public class InventoryController extends AbstractController<Inventory> {
                     ServiceStrings.CURRENCY_PATH + ServiceStrings.DEBIT_PATH)
     public Inventory debitCurrency(
             @PathVariable(value = ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.UUID) UUID modifierUuid,
+            @RequestParam(value = ServiceStrings.CURRENCY) UUID modifierUuid,
             @RequestParam(value = ServiceStrings.AMOUNT) Integer amountParam) {
         return super.save(InventoryUtils.debitCurrency(
                 currencyController.find(modifierUuid),
@@ -119,7 +119,7 @@ public class InventoryController extends AbstractController<Inventory> {
             ServiceStrings.ITEM_PATH + ServiceStrings.ADD_PATH)
     public Inventory addOwnedItem(
             @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.UUID) UUID modifierUuid,
+            @RequestParam(value = ServiceStrings.ITEM) UUID modifierUuid,
             @RequestParam(value = ServiceStrings.AMOUNT) Integer amount) {
         return super.save(InventoryUtils.addOwnedItemByItemUuid(itemController
                         .find(modifierUuid),
@@ -131,7 +131,7 @@ public class InventoryController extends AbstractController<Inventory> {
                     ServiceStrings.ITEMS_PATH + ServiceStrings.ADD_PATH)
     public Inventory addOwnedItems(
             @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.UUID) Set<UUID> uuidParams,
+            @RequestParam(value = ServiceStrings.ITEM) Set<UUID> uuidParams,
             @RequestParam(value = ServiceStrings.AMOUNT) Integer amount) {
         AtomicReference<Inventory> inventory = new AtomicReference<>(super.find(uuidPathVar));
         itemController.find(uuidParams).forEach(item ->
@@ -144,7 +144,7 @@ public class InventoryController extends AbstractController<Inventory> {
                     ServiceStrings.ITEM_PATH + ServiceStrings.CONSUME_PATH)
     public Inventory consumeOwnedItem(
             @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.UUID) UUID modifierUuid,
+            @RequestParam(value = ServiceStrings.ITEM) UUID modifierUuid,
             @RequestParam(value = ServiceStrings.AMOUNT) Integer amount) {
         return super.save(InventoryUtils.consumeOwnedItemByItem(itemController
                         .find(modifierUuid),
@@ -156,7 +156,7 @@ public class InventoryController extends AbstractController<Inventory> {
                     ServiceStrings.ITEMS_PATH + ServiceStrings.CONSUME_PATH)
     public Inventory consumeOwnedItems(
             @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.UUID) Set<UUID> uuidParams,
+            @RequestParam(value = ServiceStrings.ITEM) Set<UUID> uuidParams,
             @RequestParam(value = ServiceStrings.AMOUNT) Integer amount) {
         AtomicReference<Inventory> inventory = new AtomicReference<>(super.find(uuidPathVar));
         itemController.find(uuidParams).forEach(item ->

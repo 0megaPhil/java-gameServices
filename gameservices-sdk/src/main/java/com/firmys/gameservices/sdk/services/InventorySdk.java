@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi {
@@ -121,17 +122,52 @@ public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi
     }
 
     @Override
-    public Mono<OwnedItems> getOwnedItemsByInventoryUuidInventory(String uuid, Inventory requestBody) {
+    public Mono<Inventory> addOwnedItemInventory(UUID pathUuid, UUID uuid, Integer amount) {
         return null;
     }
 
     @Override
-    public Mono<Inventory> updateByUuidInventory(String uuid, Inventory inventory) {
+    public Mono<Inventory> addOwnedItemsInventory(UUID pathUuid, Set<UUID> uuid, Integer amount) {
         return null;
     }
 
     @Override
-    public Mono<Inventory> updateInventory(Inventory inventory) {
+    public Mono<Inventory> consumeOwnedItemInventory(UUID pathUuid, UUID uuid, Integer amount) {
+        return null;
+    }
+
+    @Override
+    public Mono<Inventory> consumeOwnedItemsInventory(UUID pathUuid, Set<UUID> uuid, Integer amount) {
+        return null;
+    }
+
+    @Override
+    public Mono<Inventory> createInventory(Inventory inventory) {
+        return null;
+    }
+
+    @Override
+    public Mono<Inventory> creditCurrencyInventory(UUID pathUuid, UUID uuid, Integer amount) {
+        return null;
+    }
+
+    @Override
+    public Mono<Inventory> debitCurrencyInventory(UUID pathUuid, UUID uuid, Integer amount) {
+        return null;
+    }
+
+    @Override
+    public Mono<Void> deleteInventory(UUID pathUuid) {
+        return null;
+    }
+
+    @Override
+    public Mono<Inventory> findInventory(UUID pathUuid) {
+        return null;
+    }
+
+    @Override
+    public Mono<Inventory> updateInventory(UUID pathUuid, Inventory inventory) {
         return null;
     }
 }
