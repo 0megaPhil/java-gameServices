@@ -20,7 +20,7 @@ public class ItemSdkIT {
 
     @Test
     public void create() {
-        Item generatedItem = InventoryTestUtilities.generateItem();
+        Item generatedItem = EntityGenerators.generateItem();
         Mono<Item> createdItem = sdk.createItem(generatedItem);
         AtomicReference<UUID> itemUuid = new AtomicReference<>();
         createdItem.map(m -> {

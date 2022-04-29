@@ -7,15 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @SpringBootTest(classes = {SdkConfig.class})
@@ -29,7 +25,7 @@ public class ItemsSdkIT extends SdkBase {
 
     @Test
     public void queryOne() {
-        Item generated = InventoryTestUtilities.generateItem();
+        Item generated = EntityGenerators.generateItem();
         Mono<Item> createdItem = item.createItem(generated);
         Item handled = handleMono(createdItem);
         Set<String> fieldSet = Arrays.stream(Item.class.getDeclaredFields()).map(Field::getName)
@@ -76,7 +72,7 @@ public class ItemsSdkIT extends SdkBase {
 
     @Test
     void queryAll() {
-        Item generated = InventoryTestUtilities.generateItem();
+        Item generated = EntityGenerators.generateItem();
         Mono<Item> createdItem = item.createItem(generated);
         Item handled = handleMono(createdItem);
         Set<String> fieldSet = Arrays.stream(Item.class.getDeclaredFields()).map(Field::getName)

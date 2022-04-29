@@ -1,8 +1,8 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.common.Formatters;
-import com.firmys.gameservices.common.data.Transactions;
 import com.firmys.gameservices.models.*;
+import com.firmys.gameservices.models.Character;
 import com.firmys.gameservices.models.Currency;
 
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class InventoryTestUtilities {
+public class EntityGenerators {
     public static Supplier<String> alphaNumericSup = SdkTestUtilities.RandomString::getAlphaNumeric;
     public static Supplier<String> alphaSup = SdkTestUtilities.RandomString::getAlpha;
     public static Supplier<Integer> numericSup = SdkTestUtilities.RandomString::getNumeric;
@@ -42,7 +42,7 @@ public class InventoryTestUtilities {
 
     public static OwnedItems generateOwnedItems(Set<Item> items) {
         Set<OwnedItem> ownedItemSet = items.stream()
-                .map(InventoryTestUtilities::generateOwnedItem).collect(Collectors.toSet());
+                .map(EntityGenerators::generateOwnedItem).collect(Collectors.toSet());
         Map<String, OwnedItem> ownedItemMap = ownedItemSet.stream()
                 .map(o -> Map.entry(o.getItemUuid().toString(), o))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -64,7 +64,7 @@ public class InventoryTestUtilities {
 
     public static OwnedCurrencies generateOwnedCurrencies(Set<Currency> currencySet) {
         Set<OwnedCurrency> ownedCurrencySet = currencySet.stream()
-                .map(InventoryTestUtilities::generateOwnedCurrency).collect(Collectors.toSet());
+                .map(EntityGenerators::generateOwnedCurrency).collect(Collectors.toSet());
 
         OwnedCurrencies ownedCurrencies = new OwnedCurrencies();
         ownedCurrencies.setUuid(UUID.randomUUID());
@@ -120,6 +120,17 @@ public class InventoryTestUtilities {
         item.setWeight(doubleSup.get());
         item.setRequirements(alphaNumericSup.get());
         return item;
+    }
+
+    public static Character generateCharacter() {
+        Character character = new Character();
+        character.setName("ddd");
+        character.setDescription("ffsfed");
+        character.setHeight(1);
+        character.setWeight(1);
+        character.setAge(1);
+        character.setGender("thing");
+        return character;
     }
 
 }

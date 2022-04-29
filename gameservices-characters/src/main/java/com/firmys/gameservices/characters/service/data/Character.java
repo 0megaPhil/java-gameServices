@@ -24,9 +24,9 @@ public class Character extends AbstractGameEntity {
     @Column(name = "uuid", nullable = false, unique = true)
     @Type(type = "uuid-char")
     private UUID uuid = UUID.randomUUID();
-    @Column(unique = true)
+    @Column(unique = true, length = 512)
     private String name;
-    @Column
+    @Column(length = 512)
     private String description;
     @Column
     private String gender;
@@ -113,5 +113,19 @@ public class Character extends AbstractGameEntity {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    @Override
+    public String toString() {
+        return "Character{" +
+                ", uuid=" + uuid +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", inventoryId=" + inventoryId +
+                '}';
     }
 }

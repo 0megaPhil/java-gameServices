@@ -5,12 +5,11 @@ import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
 import com.firmys.gameservices.sdk.Parameters;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
@@ -54,8 +53,13 @@ public class GatewayClient<R> {
      * @return webclient for baseUrl
      */
     public WebClient getClient() {
+        int size = 16 * 1024 * 1024;
+        ExchangeStrategies strategies = ExchangeStrategies.builder()
+                .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
+                .build();
         return webClientMap.computeIfAbsent(baseUrl, v -> WebClient.builder()
                 .baseUrl(gatewayDetails.getGatewayAddress())
+                .exchangeStrategies(strategies)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultUriVariables(Collections.singletonMap(ServiceStrings.URL, gatewayDetails.getGatewayAddress()))
                 .build());
@@ -164,7 +168,8 @@ public class GatewayClient<R> {
     private <S> Function<WebClient.RequestBodySpec, WebClient.RequestHeadersSpec<?>> requestBodyFunction(S body) {
         return spec -> {
             if (body != null) {
-                return spec.body(BodyInserters.fromValue(body));
+                BodyInserter<S, ReactiveHttpOutputMessage> bodyInserter = BodyInserters.fromValue(body);
+                return spec.body(bodyInserter);
             }
             return spec;
         };

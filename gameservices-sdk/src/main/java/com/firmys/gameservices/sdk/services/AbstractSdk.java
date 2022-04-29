@@ -4,14 +4,13 @@ import com.firmys.gameservices.sdk.gateway.GatewayClient;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
 import org.springframework.core.ParameterizedTypeReference;
 
-import java.util.Collections;
 import java.util.Set;
 
 public abstract class AbstractSdk<R> {
     private final GatewayClient<R> client;
-    private GatewayDetails gatewayDetails;
-    private String uriPath;
-    private ParameterizedTypeReference<R> typeReference;
+    private final GatewayDetails gatewayDetails;
+    private final String uriPath;
+    private final ParameterizedTypeReference<R> typeReference;
 
     public AbstractSdk(GatewayDetails gatewayDetails, String uriPath, ParameterizedTypeReference<R> typeReference) {
         this.gatewayDetails = gatewayDetails;
@@ -24,7 +23,7 @@ public abstract class AbstractSdk<R> {
         return client;
     }
 
-    public <S extends Set> GatewayClient<S> getClient(ParameterizedTypeReference<S> typeReference) {
+    public <S extends Set<S>> GatewayClient<S> getClient(ParameterizedTypeReference<S> typeReference) {
         return new GatewayClient<>(gatewayDetails, uriPath, typeReference);
     }
 

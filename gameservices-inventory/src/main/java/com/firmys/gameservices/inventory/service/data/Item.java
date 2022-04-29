@@ -105,7 +105,6 @@ public class Item extends AbstractGameEntity {
     @Override
     public String toString() {
         return "Item{" +
-                "id=" + id +
                 ", uuid=" + uuid +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
