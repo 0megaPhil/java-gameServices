@@ -30,6 +30,6 @@ public class ViewComponent extends Label {
 
     public ViewComponent(@Autowired InventoriesSdk inventoriesSdk) {
         // it's the same Greeter instance as in the RootComponent class
-        setText(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()).iterator().next().toString());
+//        setText(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()).iterator().next().toString());
     }
 }

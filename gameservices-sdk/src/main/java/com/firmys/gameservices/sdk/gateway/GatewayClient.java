@@ -190,7 +190,8 @@ public class GatewayClient<R> {
      * @return WebClient spec with error handling applied
      */
     private Function<WebClient.ResponseSpec, WebClient.ResponseSpec> errorHandleFunction() {
-        return spec -> spec.onStatus(HttpStatus::isError, response ->
+        return spec -> spec.onStatus(HttpStatus::isError,
+                response ->
                 response.toEntity(GameServiceException.class).map(HttpEntity::getBody));
     }
 

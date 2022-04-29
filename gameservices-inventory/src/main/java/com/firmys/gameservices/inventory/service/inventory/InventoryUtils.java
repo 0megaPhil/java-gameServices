@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class InventoryUtils {
     private static final GameServiceException.Builder exceptionBuilder = GameServiceException.builder
             .withGameDataType(Inventory.class);
-    private static final GameServiceError.Builder errorBuilder = GameServiceError.builder
+    private static final GameServiceError.Builder<Inventory> errorBuilder = new GameServiceError.Builder<Inventory>()
             .withName(ServiceStrings.INVENTORY);
 
     public static Inventory consumeOwnedItemByItem(Item item, Inventory inventory) {
@@ -58,7 +58,7 @@ public class InventoryUtils {
             return inventory;
         } catch (Exception e) {
             throw exceptionBuilder.withGameServiceError(
-                    errorBuilder.withThrowable(e)
+                    new GameServiceError.Builder<>().withThrowable(e)
                             .withRequest(currency)
                             .withDescription(e.getMessage()).build()).build();
         }
@@ -70,7 +70,7 @@ public class InventoryUtils {
             return inventory;
         } catch (Exception e) {
             throw exceptionBuilder.withGameServiceError(
-                    errorBuilder.withThrowable(e)
+                    new GameServiceError.Builder<>().withThrowable(e)
                             .withRequest(currency)
                             .withDescription(e.getMessage()).build()).build();
         }

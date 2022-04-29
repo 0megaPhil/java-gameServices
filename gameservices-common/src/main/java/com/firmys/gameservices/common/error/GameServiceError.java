@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestControllerAdvice
-public class GameServiceError implements Serializable {
+public class GameServiceError<D extends GameEntity> implements Serializable {
 
     private String name;
     private String description;
@@ -21,9 +21,8 @@ public class GameServiceError implements Serializable {
     private Throwable throwable;
     @JsonIgnore
     private Throwable fullThrowable;
-    private GameEntity request;
+    private D request;
     private Date date;
-    public static final Builder builder = new Builder();
 
     public GameServiceError() {
     }
@@ -48,7 +47,7 @@ public class GameServiceError implements Serializable {
         this.fullThrowable = fullThrowable;
     }
 
-    public void setRequest(GameEntity request) {
+    public void setRequest(D request) {
         this.request = request;
     }
 
@@ -57,7 +56,7 @@ public class GameServiceError implements Serializable {
     }
 
     // FIXME
-    private GameServiceError(Builder builder) {
+    private GameServiceError(Builder<D> builder) {
         this.request = builder.request;
         this.name = builder.name;
         this.description = builder.description;
@@ -71,35 +70,35 @@ public class GameServiceError implements Serializable {
         this.date = builder.date;
     }
 
-    public static class Builder {
+    public static class Builder<D extends GameEntity> {
         private final Date date = Date.from(Instant.now());
         private String name;
         private String description;
         private Throwable throwable;
-        private GameEntity request;
+        private D request;
 
-        public Builder withName(String name) {
+        public Builder<D> withName(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withDescription(String description) {
+        public Builder<D> withDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public Builder withRequest(GameEntity request) {
+        public Builder<D> withRequest(D request) {
             this.request = request;
             return this;
         }
 
-        public Builder withThrowable(Throwable throwable) {
+        public Builder<D> withThrowable(Throwable throwable) {
             this.throwable = throwable;
             return this;
         }
 
-        public GameServiceError build() {
-            return new GameServiceError(this);
+        public GameServiceError<D> build() {
+            return new GameServiceError<>(this);
         }
     }
 

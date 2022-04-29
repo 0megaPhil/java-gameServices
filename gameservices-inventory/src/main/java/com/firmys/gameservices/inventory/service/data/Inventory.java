@@ -2,49 +2,42 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
-import org.hibernate.annotations.Type;
-import org.springframework.transaction.annotation.Transactional;
+import com.firmys.gameservices.common.ServiceStrings;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.PrePersist;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "INVENTORY")
-@Transactional
 public class Inventory extends AbstractGameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     @JsonIgnore
     private int id;
-    @Column(name = "uuid", nullable = false, unique = true)
-    @Type(type = "uuid-char")
-    private UUID uuid = UUID.randomUUID();
-    @Column(name = "OWNEDITEMS", length = 100000)
+    @Column(name = ServiceStrings.UUID, updatable = false, nullable = false, unique = true)
+    private UUID uuid;
+    @Column(length = 1000000)
     private OwnedItems ownedItems;
-    @Column(name = "OWNEDCURRENCIES", length = 10000)
+    @Column(length = 1000000)
     private OwnedCurrencies ownedCurrencies;
+
+    @PrePersist
+    protected void onCreate() {
+        uuid = UUID.randomUUID();
+    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public UUID getUuid() {
         return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
     }
 
     public OwnedItems getOwnedItems() {
@@ -66,7 +59,6 @@ public class Inventory extends AbstractGameEntity {
     @Override
     public String toString() {
         return "Inventory{" +
-                "id=" + id +
                 ", uuid=" + uuid +
                 ", ownedItems=" + ownedItems +
                 ", ownedCurrency=" + ownedCurrencies +

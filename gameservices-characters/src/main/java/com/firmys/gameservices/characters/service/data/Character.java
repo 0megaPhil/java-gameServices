@@ -2,31 +2,24 @@ package com.firmys.gameservices.characters.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
+import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.common.data.DefaultData;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "CHARACTER")
 public class Character extends AbstractGameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     @JsonIgnore
     private int id;
-    @Column(name = "uuid", nullable = false, unique = true)
-    @Type(type = "uuid-char")
-    private UUID uuid = UUID.randomUUID();
+    @Column(name = ServiceStrings.UUID, updatable = false, nullable = false, unique = true)
+    private UUID uuid;
     @Column(unique = true, length = 512)
     private String name;
-    @Column(length = 512)
+    @Column(length = 1024)
     private String description;
     @Column
     private String gender;
@@ -36,15 +29,16 @@ public class Character extends AbstractGameEntity {
     private int height = DefaultData.DEFAULT_INT;
     @Column
     private int weight = DefaultData.DEFAULT_INT;
-    @Column(name = "INVENTORYID", unique = true)
+    @Column(unique = true)
     private UUID inventoryId;
+
+    @PrePersist
+    protected void onCreate() {
+        uuid = UUID.randomUUID();
+    }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -111,14 +105,9 @@ public class Character extends AbstractGameEntity {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     @Override
     public String toString() {
         return "Character{" +
-                ", uuid=" + uuid +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", gender='" + gender + '\'' +
@@ -128,4 +117,5 @@ public class Character extends AbstractGameEntity {
                 ", inventoryId=" + inventoryId +
                 '}';
     }
+
 }

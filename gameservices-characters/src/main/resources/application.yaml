@@ -33,5 +33,3 @@ cloud:
     credentials:
       instanceProfile: true
       useDefaultAwsCredentialsChain: true
-server:
-  port: 9001

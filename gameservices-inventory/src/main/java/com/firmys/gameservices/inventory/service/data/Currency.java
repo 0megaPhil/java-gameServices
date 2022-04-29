@@ -2,41 +2,36 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
+import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.common.data.DefaultData;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "CURRENCY")
 public class Currency extends AbstractGameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     @JsonIgnore
     private int id;
-    @Column(name = "uuid", nullable = false, unique = true)
-    @Type(type = "uuid-char")
-    private UUID uuid = UUID.randomUUID();
+    @Column(name = ServiceStrings.UUID, updatable = false, nullable = false, unique = true)
+    private UUID uuid;
     @Column(unique = true, length = 512)
     private String name;
-    @Column(length = 512)
+    @Column(length = 4196)
     private String description;
-    @Column(name = "BASEVALUE")
-    private int baseValue = DefaultData.DEFAULT_INT;;
+    @Column
+    private int baseValue = DefaultData.DEFAULT_INT;
+
+    @PrePersist
+    protected void onCreate() {
+        uuid = UUID.randomUUID();
+    }
 
     public int getId() {
         return id;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
     }
 
     public UUID getUuid() {
@@ -70,7 +65,6 @@ public class Currency extends AbstractGameEntity {
     @Override
     public String toString() {
         return "Currency{" +
-                "id=" + id +
                 ", uuid=" + uuid +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

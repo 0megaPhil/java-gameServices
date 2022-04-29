@@ -1,4 +1,4 @@
-package com.firmys.gameservices.sdk.services;
+package com.firmys.gameservices.sdk.services.utilities;
 
 import java.security.SecureRandom;
 import java.util.Locale;

@@ -16,35 +16,35 @@ public class GatewayController {
     public final static String gameServiceErrorBase = "/" + baseDataName;
 
     @GetMapping(gameServiceErrorBase)
-    public GameServiceError getError(
+    public GameServiceError<GameEntity> getError(
             ServerHttpRequest serverHttpRequest) {
-        return GameServiceError.builder.withName(baseDataName)
+        return  new GameServiceError.Builder<>().withName(baseDataName)
                 .withDescription(serializeRequest(serverHttpRequest)).withThrowable(null).build();
     }
 
     @PostMapping(gameServiceErrorBase)
-    public GameServiceError postError(
+    public GameServiceError<GameEntity> postError(
             ServerHttpRequest serverHttpRequest,
             @RequestBody(required = false) GameEntity requestBody) {
-        return GameServiceError.builder.withName(baseDataName)
+        return new GameServiceError.Builder<>().withName(baseDataName)
                 .withDescription(serializeRequest(serverHttpRequest)).withRequest(requestBody)
                 .withThrowable(null).build();
     }
 
     @PutMapping(value = gameServiceErrorBase)
-    public GameServiceError putError(
+    public GameServiceError<GameEntity> putError(
             ServerHttpRequest serverHttpRequest,
             @RequestBody(required = false) GameEntity requestBody) {
-        return GameServiceError.builder.withName(baseDataName)
+        return new GameServiceError.Builder<>().withName(baseDataName)
                 .withDescription(serializeRequest(serverHttpRequest))
                 .withRequest(requestBody).withThrowable(null).build();
     }
 
     @DeleteMapping(gameServiceErrorBase)
-    public GameServiceError deleteError(
+    public GameServiceError<GameEntity> deleteError(
             ServerHttpRequest serverHttpRequest,
             @RequestBody(required = false) GameEntity requestBody) {
-        return GameServiceError.builder.withName(baseDataName)
+        return new GameServiceError.Builder<>().withName(baseDataName)
                 .withDescription(serializeRequest(serverHttpRequest))
                 .withRequest(requestBody).withThrowable(null).build();
     }

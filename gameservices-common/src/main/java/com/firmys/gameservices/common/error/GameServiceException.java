@@ -1,20 +1,22 @@
 package com.firmys.gameservices.common.error;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.firmys.gameservices.common.AbstractGameEntity;
 import com.firmys.gameservices.common.GameData;
+import com.firmys.gameservices.common.GameEntity;
 
 import java.io.Serializable;
 import java.util.Optional;
 
 // FIXME, make me useful for returning exceptions
 public class GameServiceException extends RuntimeException implements Serializable {
-    private GameServiceError gameServiceError;
+    private GameServiceError<? extends GameEntity> gameServiceError;
     private String gameDataType;
     public static final Builder builder = new Builder();
 
     public GameServiceException(){}
 
-    public GameServiceException(GameServiceError gameServiceError, String gameDataType) {
+    public GameServiceException(GameServiceError<? extends GameEntity> gameServiceError, String gameDataType) {
         this.gameServiceError = gameServiceError;
         this.gameDataType = gameDataType;
     }
@@ -24,7 +26,7 @@ public class GameServiceException extends RuntimeException implements Serializab
         this.gameDataType = builder.gameDataType;
     }
 
-    public GameServiceError getGameServiceError() {
+    public GameServiceError<? extends GameEntity> getGameServiceError() {
         return gameServiceError;
     }
 
@@ -36,7 +38,7 @@ public class GameServiceException extends RuntimeException implements Serializab
         this.gameDataType = gameDataType;
     }
 
-    public void setGameServiceError(GameServiceError gameServiceError) {
+    public void setGameServiceError(GameServiceError<? extends GameEntity> gameServiceError) {
         this.gameServiceError = gameServiceError;
     }
 
@@ -52,7 +54,7 @@ public class GameServiceException extends RuntimeException implements Serializab
 
     @Override
     public String getMessage() {
-        return gameServiceError.getMessage();
+        return Optional.ofNullable(gameServiceError.getMessage()).orElse("No message found");
     }
 
     @Override
@@ -65,10 +67,10 @@ public class GameServiceException extends RuntimeException implements Serializab
     }
 
     public static class Builder {
-        private GameServiceError gameServiceError;
+        private GameServiceError<? extends GameEntity> gameServiceError;
         private String gameDataType;
 
-        public Builder withGameServiceError(GameServiceError gameServiceError) {
+        public Builder withGameServiceError(GameServiceError<? extends GameEntity> gameServiceError) {
             this.gameServiceError = gameServiceError;
             return this;
         }

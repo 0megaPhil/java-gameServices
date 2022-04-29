@@ -1,4 +1,4 @@
-package com.firmys.gameservices.sdk.services;
+package com.firmys.gameservices.sdk.services.utilities;
 
 import com.firmys.gameservices.common.Formatters;
 import com.firmys.gameservices.models.*;

@@ -28,7 +28,7 @@ import java.util.stream.StreamSupport;
 
 public class AbstractController<D extends AbstractGameEntity> {
     private final GameServiceException.Builder exceptionBuilder;
-    private final GameServiceError.Builder errorBuilder;
+    private final GameServiceError.Builder<D> errorBuilder;
     private final GameService<D> gameService;
     private final GameDataLookup<D> gameDataLookup;
     private final Supplier<D> entitySupplier;
@@ -48,7 +48,7 @@ public class AbstractController<D extends AbstractGameEntity> {
         this.gameService = gameService;
         this.gameDataLookup = gameDataLookup;
         this.exceptionBuilder = GameServiceException.builder.withGameDataType(gameEntityClass);
-        this.errorBuilder = GameServiceError.builder.withName(gameEntityClass.getSimpleName());
+        this.errorBuilder = new GameServiceError.Builder<D>().withName(gameEntityClass.getSimpleName());
         this.entitySupplier = entitySupplier;
         this.queryClass = queryClass;
         this.entityManager = entityManager;
@@ -76,7 +76,7 @@ public class AbstractController<D extends AbstractGameEntity> {
             throw GameServiceException.builder
                     .withGameDataType(gameEntityClass)
                     .withGameServiceError(
-                            GameServiceError.builder
+                            new GameServiceError.Builder<>()
                                     .withName(gameEntityClass.getSimpleName())
                                     .withDescription(e.getMessage())
                                     .withThrowable(e)
@@ -90,7 +90,7 @@ public class AbstractController<D extends AbstractGameEntity> {
         return exceptionBuilder;
     }
 
-    public GameServiceError.Builder getErrorBuilder() {
+    public GameServiceError.Builder<D> getErrorBuilder() {
         return errorBuilder;
     }
 
@@ -328,7 +328,7 @@ public class AbstractController<D extends AbstractGameEntity> {
             return callable.call();
         } catch (Exception e) {
             throw GameServiceException.builder.withGameServiceError(
-                    GameServiceError.builder.withThrowable(e)
+                    new GameServiceError.Builder<>().withThrowable(e)
                             .withName(gameEntityClass.getSimpleName())
                             .withDescription(e.getMessage() + " - " + String.join("", details))
                             .withRequest(requestBody)
@@ -344,7 +344,7 @@ public class AbstractController<D extends AbstractGameEntity> {
             return callable.call();
         } catch (Exception e) {
             throw GameServiceException.builder.withGameServiceError(
-                    GameServiceError.builder.withThrowable(e)
+                    new GameServiceError.Builder<>().withThrowable(e)
                             .withName(gameEntityClass.getSimpleName())
                             .withDescription(e.getMessage() + " - " + String.join("", details))
                             .withRequest(requestBody)
@@ -370,7 +370,7 @@ public class AbstractController<D extends AbstractGameEntity> {
             callable.call();
         } catch (Exception e) {
             throw GameServiceException.builder.withGameServiceError(
-                    GameServiceError.builder.withThrowable(e)
+                    new GameServiceError.Builder<>().withThrowable(e)
                             .withName(gameEntityClass.getSimpleName())
                             .withDescription(e.getMessage() + " - " + String.join("", details))
                             .withRequest(requestBody)

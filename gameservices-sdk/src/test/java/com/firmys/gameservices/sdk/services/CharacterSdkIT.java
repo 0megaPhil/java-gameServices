@@ -1,8 +1,8 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.models.Character;
-import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.sdk.config.SdkConfig;
+import com.firmys.gameservices.sdk.services.utilities.EntityGenerators;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

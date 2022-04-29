@@ -44,7 +44,7 @@ public class InventoriesView extends VerticalLayout {
         inventoriesGrid.addColumn(i -> i.getOwnedCurrencies().getOwnedCurrencyMap()).setHeader(ServiceStrings.OWNED_CURRENCIES);
         inventoriesGrid.getColumns().forEach(col -> col.setAutoWidth(true));
         inventoriesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
-        inventoriesGrid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
+//        inventoriesGrid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
         return inventoriesGrid;
     }
 
@@ -54,20 +54,20 @@ public class InventoriesView extends VerticalLayout {
 
     public Button addButton(Grid<Inventory> grid, Text uuidText) {
         return new Button("Add Inventories", e -> {
-            Set<Inventory> addedSet = inventoriesSdk.addMultipleInventory(1).block();
-            uuidText.setText("ADDED -> " + Objects.requireNonNull(addedSet).stream().map(i ->
-                    i.getUuid().toString()).collect(Collectors.joining("\n")));
-            grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
+//            Set<Inventory> addedSet = inventoriesSdk.addMultipleInventory(1).block();
+//            uuidText.setText("ADDED -> " + Objects.requireNonNull(addedSet).stream().map(i ->
+//                    i.getUuid().toString()).collect(Collectors.joining("\n")));
+//            grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
         });
     }
 
     public Button deleteButton(Grid<Inventory> grid, Text uuidText) {
         return new Button("Delete Inventories", e -> {
-            Set<Inventory> inventorySet = inventoriesSelect(grid).getOptionalValue().orElse(Set.of(new Inventory()));
-            uuidText.setText("DELETE -> " + inventorySet.stream().map(i ->
-                            i.getUuid().toString()).collect(Collectors.joining("\n")));
-            inventoriesSdk.deleteMultipleInventory(inventorySet.stream().map(i -> i.getUuid().toString()).collect(Collectors.toSet()), null).block();
-            grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
+//            Set<Inventory> inventorySet = inventoriesSelect(grid).getOptionalValue().orElse(Set.of(new Inventory()));
+//            uuidText.setText("DELETE -> " + inventorySet.stream().map(i ->
+//                            i.getUuid().toString()).collect(Collectors.joining("\n")));
+//            inventoriesSdk.deleteMultipleInventory(inventorySet.stream().map(i -> i.getUuid().toString()).collect(Collectors.toSet()), null).block();
+//            grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
         });
     }
 

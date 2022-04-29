@@ -56,29 +56,29 @@ public class InventoryView extends VerticalLayout {
     }
 
     public Grid<Inventory> fetchInventoriesGrid() {
-        Grid<Inventory> inventoriesGrid = new Grid<>();
-        inventoriesGrid.addColumn(Inventory::getUuid).setHeader(ServiceStrings.UUID);
-        inventoriesGrid.addColumn(i -> i.getOwnedItems().getOwnedItemMap()).setHeader(ServiceStrings.OWNED_ITEMS);
-        inventoriesGrid.addColumn(i -> i.getOwnedCurrencies().getOwnedCurrencyMap()).setHeader(ServiceStrings.OWNED_CURRENCIES);
-        inventoriesGrid.getColumns().forEach(col -> col.setAutoWidth(true));
-        inventoriesGrid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
-        return inventoriesGrid;
+//        Grid<Inventory> inventoriesGrid = new Grid<>();
+//        inventoriesGrid.addColumn(Inventory::getUuid).setHeader(ServiceStrings.UUID);
+//        inventoriesGrid.addColumn(i -> i.getOwnedItems().getOwnedItemMap()).setHeader(ServiceStrings.OWNED_ITEMS);
+//        inventoriesGrid.addColumn(i -> i.getOwnedCurrencies().getOwnedCurrencyMap()).setHeader(ServiceStrings.OWNED_CURRENCIES);
+//        inventoriesGrid.getColumns().forEach(col -> col.setAutoWidth(true));
+//        inventoriesGrid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
+        return null;
     }
 
     public Button addButton(Grid<Inventory> grid, Text uuidText) {
         return new Button("Add Inventory", e -> {
-            Inventory addedInventory = inventorySdk.addInventory().block();
-            uuidText.setText("ADDED -> " + Objects.requireNonNull(addedInventory).getUuid().toString());
-            grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
+//            Inventory addedInventory = inventorySdk.addInventory().block();
+//            uuidText.setText("ADDED -> " + Objects.requireNonNull(addedInventory).getUuid().toString());
+//            grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
         });
     }
 
     public Button deleteButton(Grid<Inventory> grid, Text uuidText) {
         return new Button("Delete Inventory", e -> {
-            Inventory inventory = this.inventorySelect.getOptionalValue().orElse(new Inventory());
-            uuidText.setText("DELETE -> " + inventory.getUuid().toString());
-//            inventorySdk.deleteInventory( null, inventory).block();
-            grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
+//            Inventory inventory = this.inventorySelect.getOptionalValue().orElse(new Inventory());
+//            uuidText.setText("DELETE -> " + inventory.getUuid().toString());
+////            inventorySdk.deleteInventory( null, inventory).block();
+//            grid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));
         });
     }
 }
