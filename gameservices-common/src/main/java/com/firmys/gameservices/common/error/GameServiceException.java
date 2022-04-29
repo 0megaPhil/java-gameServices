@@ -1,88 +1,47 @@
 package com.firmys.gameservices.common.error;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.firmys.gameservices.common.AbstractGameEntity;
-import com.firmys.gameservices.common.GameData;
 import com.firmys.gameservices.common.GameEntity;
+import com.firmys.gameservices.common.GameService;
 
 import java.io.Serializable;
-import java.util.Optional;
 
-// FIXME, make me useful for returning exceptions
 public class GameServiceException extends RuntimeException implements Serializable {
-    private GameServiceError<? extends GameEntity> gameServiceError;
-    private String gameDataType;
-    public static final Builder builder = new Builder();
 
-    public GameServiceException(){}
+    private GameServiceError<? extends GameEntity, ? extends GameService<?>> gameServiceError;
+    private String additionalDetails;
 
-    public GameServiceException(GameServiceError<? extends GameEntity> gameServiceError, String gameDataType) {
+    public GameServiceException(GameServiceError<? extends GameEntity, ? extends GameService<?>> gameServiceError) {
+        super(gameServiceError.toString());
         this.gameServiceError = gameServiceError;
-        this.gameDataType = gameDataType;
     }
 
-    private GameServiceException(GameServiceException.Builder builder) {
-        this.gameServiceError = builder.gameServiceError;
-        this.gameDataType = builder.gameDataType;
+    public GameServiceException(Exception exception) {
+        super(exception);
     }
 
-    public GameServiceError<? extends GameEntity> getGameServiceError() {
+    public GameServiceException(Exception exception, String... additionalDetails) {
+        super(String.join("\n", additionalDetails), exception);
+        this.additionalDetails = String.join("\n", additionalDetails);
+    }
+
+    public GameServiceError<? extends GameEntity, ? extends GameService<?>> getGameServiceError() {
         return gameServiceError;
     }
 
-    public String getGameDataType() {
-        return gameDataType;
+    public String getAdditionalDetails() {
+        return additionalDetails;
     }
 
-    public void setGameDataType(String gameDataType) {
-        this.gameDataType = gameDataType;
-    }
-
-    public void setGameServiceError(GameServiceError<? extends GameEntity> gameServiceError) {
-        this.gameServiceError = gameServiceError;
-    }
-
-    @Override
-    public void setStackTrace(StackTraceElement[] stackTrace) {
-        super.setStackTrace(stackTrace);
-    }
-
+    @JsonIgnore
     @Override
     public synchronized Throwable getCause() {
-        return Optional.ofNullable(gameServiceError.getThrowable()).orElse(super.getCause());
+        return super.getCause();
     }
 
-    @Override
-    public String getMessage() {
-        return Optional.ofNullable(gameServiceError.getMessage()).orElse("No message found");
-    }
-
-    @Override
     @JsonIgnore
+    @Override
     public StackTraceElement[] getStackTrace() {
-        if(gameServiceError != null && gameServiceError.getThrowable() != null) {
-            return gameServiceError.getThrowable().getStackTrace();
-        }
-        return new StackTraceElement[]{};
+        return super.getStackTrace();
     }
-
-    public static class Builder {
-        private GameServiceError<? extends GameEntity> gameServiceError;
-        private String gameDataType;
-
-        public Builder withGameServiceError(GameServiceError<? extends GameEntity> gameServiceError) {
-            this.gameServiceError = gameServiceError;
-            return this;
-        }
-
-        public Builder withGameDataType(Class<? extends GameData> gameDataType) {
-            this.gameDataType = gameDataType.getSimpleName();
-            return this;
-        }
-
-        public GameServiceException build() {
-            return new GameServiceException(this);
-        }
-    }
-
 }

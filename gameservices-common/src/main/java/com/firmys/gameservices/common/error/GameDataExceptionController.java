@@ -23,18 +23,7 @@ public class GameDataExceptionController {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<? extends GameServiceException> generalException(Exception exception) {
-        exception.printStackTrace();
-        return new ResponseEntity<>(GameServiceException.builder.withGameServiceError(
-                new GameServiceError.Builder<>().withName(exception.getClass().getSimpleName())
-                        .withDescription(exception.getMessage()).withThrowable(exception).build()).build(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity<? extends GameServiceException> sqlException(SQLException exception) {
-        exception.printStackTrace();
-        return new ResponseEntity<>(GameServiceException.builder.withGameServiceError(
-                new GameServiceError.Builder<>().withName(exception.getClass().getSimpleName())
-                        .withDescription(exception.getMessage()).withThrowable(exception).build()).build(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new GameServiceException(exception), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

@@ -16,19 +16,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.EntityManager;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class AbstractController<D extends AbstractGameEntity> {
-    private final GameServiceException.Builder exceptionBuilder;
-    private final GameServiceError.Builder<D> errorBuilder;
     private final GameService<D> gameService;
     private final GameDataLookup<D> gameDataLookup;
     private final Supplier<D> entitySupplier;
@@ -47,8 +41,6 @@ public class AbstractController<D extends AbstractGameEntity> {
         this.gameEntityClass = gameEntityClass;
         this.gameService = gameService;
         this.gameDataLookup = gameDataLookup;
-        this.exceptionBuilder = GameServiceException.builder.withGameDataType(gameEntityClass);
-        this.errorBuilder = new GameServiceError.Builder<D>().withName(gameEntityClass.getSimpleName());
         this.entitySupplier = entitySupplier;
         this.queryClass = queryClass;
         this.entityManager = entityManager;
@@ -61,41 +53,6 @@ public class AbstractController<D extends AbstractGameEntity> {
 
     public GameDataLookup<D> getGameDataLookup() {
         return gameDataLookup;
-    }
-
-    protected UUID getUuidFromBodyOrParam(GameEntity gameEntity, String uuidParam) {
-        try {
-            if (gameEntity != null) {
-                return gameEntity.getUuid();
-            } else if (uuidParam != null) {
-                return UUID.fromString(uuidParam);
-            } else {
-                throw new RuntimeException("No uuid found in body or parameters");
-            }
-        } catch (Exception e) {
-            throw GameServiceException.builder
-                    .withGameDataType(gameEntityClass)
-                    .withGameServiceError(
-                            new GameServiceError.Builder<>()
-                                    .withName(gameEntityClass.getSimpleName())
-                                    .withDescription(e.getMessage())
-                                    .withThrowable(e)
-                                    .build()
-                    )
-                    .build();
-        }
-    }
-
-    public GameServiceException.Builder getExceptionBuilder() {
-        return exceptionBuilder;
-    }
-
-    public GameServiceError.Builder<D> getErrorBuilder() {
-        return errorBuilder;
-    }
-
-    public GameServiceException generateGameServiceException(GameServiceError gameServiceError) {
-        return getExceptionBuilder().withGameServiceError(gameServiceError).build();
     }
 
     /**
@@ -217,61 +174,6 @@ public class AbstractController<D extends AbstractGameEntity> {
                 + " of type " + gameEntityClass.getSimpleName() + " with details " + entity);
     }
 
-    /**
-     * Update multiple to match one or more fields of an entity
-     * This is useful for updating many at once with a single set or subset of fields
-     *
-     * @param uuids  set of UUIDs which will be changed to match entity
-     * @param entity entity containing details to be applied to existing entities by UUID
-     * @return set of adjusted entities
-     */
-    public Set<D> updateForUuids(Set<UUID> uuids, D entity) {
-        return uuids.stream().map(u -> update(u, entity)).collect(Collectors.toSet());
-    }
-
-    public Set<String> getEntityAttributes() {
-        return GameDataUtils.getEntityAttributes(entitySupplier.get());
-    }
-
-    public Set<D> matchByAttributes(MatchStrategy strategy, Set<String> attributes, Boolean exactMatch) {
-        Set<String> availableAttributes = getEntityAttributes();
-        Map<String, String> attributeMap = attributes.stream()
-                .filter(s -> availableAttributes.contains(s.split(":")[0])).map(s ->
-                        Map.of(s.split(":")[0], s.split(":")[1]))
-                .flatMap(m -> m.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        if (strategy == MatchStrategy.ANY) {
-            return matchByAnyAttributes(attributeMap, exactMatch);
-        }
-        return matchByAllAttributes(attributeMap, exactMatch);
-    }
-
-    public Set<D> matchByAllAttributes(Map<String, String> attributeMap, Boolean exactMatch) {
-        return entityCallableHandlerSet(
-                () -> GameDataUtils.matchByAllAttributes(attributeMap, findAll(), exactMatch),
-                null, "Cannot match ALL attributes of " +
-                        attributeMap.entrySet().stream().map(e -> e.getKey() + "=" +
-                                e.getValue()).collect(Collectors.joining(", \n")) + " for type " +
-                        gameEntityClass.getSimpleName());
-    }
-
-    public Set<D> matchByAnyAttributes(Map<String, String> attributeMap, Boolean exactMatch) {
-
-        return entityCallableHandlerSet(
-                () -> GameDataUtils.matchByAnyAttributes(attributeMap, findAll(), exactMatch),
-                null, "Cannot match ANY attributes of " +
-                        attributeMap.entrySet().stream().map(e -> e.getKey() + "=" +
-                                e.getValue()).collect(Collectors.joining(", \n")) + " for type " +
-                        gameEntityClass.getSimpleName());
-    }
-
-    private Class<?> getQueryFieldTypeByKey(String key) {
-        try {
-            return getQueryClass().getClass().getDeclaredField(key).getType();
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException("key of " + key + " not available in " + getQueryClass().getClass().getSimpleName());
-        }
-    }
-
     /*
      * FIXME - This is going to turn into tech debt, I should redo this once I know more about QueryDsl
      *  I want to be able to handle different path types dynamically, but maybe I should just rely on building
@@ -327,13 +229,9 @@ public class AbstractController<D extends AbstractGameEntity> {
         try {
             return callable.call();
         } catch (Exception e) {
-            throw GameServiceException.builder.withGameServiceError(
-                    new GameServiceError.Builder<>().withThrowable(e)
-                            .withName(gameEntityClass.getSimpleName())
-                            .withDescription(e.getMessage() + " - " + String.join("", details))
-                            .withRequest(requestBody)
-                            .build()
-            ).withGameDataType(gameEntityClass).build();
+            throw new GameServiceException(new GameServiceError<>(gameService,
+                    Optional.ofNullable(requestBody).orElse(entitySupplier.get()), e.getMessage() +
+                    "\n" + String.join("\n", details)));
         }
     }
 
@@ -343,24 +241,10 @@ public class AbstractController<D extends AbstractGameEntity> {
         try {
             return callable.call();
         } catch (Exception e) {
-            throw GameServiceException.builder.withGameServiceError(
-                    new GameServiceError.Builder<>().withThrowable(e)
-                            .withName(gameEntityClass.getSimpleName())
-                            .withDescription(e.getMessage() + " - " + String.join("", details))
-                            .withRequest(requestBody)
-                            .build()
-            ).withGameDataType(gameEntityClass).build();
+            throw new GameServiceException(new GameServiceError<>(gameService,
+                    Optional.ofNullable(requestBody).orElse(entitySupplier.get()), e.getMessage()
+                    + "\n" + String.join("\n", details)));
         }
-    }
-
-    protected Set<UUID> gatherUuids(Set<String> uuidParams, Set<D> entities) {
-        Set<UUID> uuids = new HashSet<>();
-        if (entities != null) {
-            uuids.addAll(entities.stream().map(GameEntity::getUuid).collect(Collectors.toSet()));
-        } else if (uuidParams != null) {
-            uuids.addAll(uuidParams.stream().map(UUID::fromString).collect(Collectors.toSet()));
-        }
-        return uuids;
     }
 
     public void voidCallableHandler(Callable<Void> callable,
@@ -369,13 +253,9 @@ public class AbstractController<D extends AbstractGameEntity> {
         try {
             callable.call();
         } catch (Exception e) {
-            throw GameServiceException.builder.withGameServiceError(
-                    new GameServiceError.Builder<>().withThrowable(e)
-                            .withName(gameEntityClass.getSimpleName())
-                            .withDescription(e.getMessage() + " - " + String.join("", details))
-                            .withRequest(requestBody)
-                            .build()
-            ).withGameDataType(gameEntityClass).build();
+            throw new GameServiceException(new GameServiceError<>(gameService,
+                    Optional.ofNullable(requestBody).orElse(entitySupplier.get()), e.getMessage()
+                    + "\n" + String.join("\n", details)));
         }
     }
 

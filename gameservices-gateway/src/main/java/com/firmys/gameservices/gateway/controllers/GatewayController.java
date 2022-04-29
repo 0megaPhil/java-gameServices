@@ -1,5 +1,6 @@
 package com.firmys.gameservices.gateway.controllers;
 
+import com.firmys.gameservices.common.GameData;
 import com.firmys.gameservices.common.GameEntity;
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.JsonUtils;
@@ -16,37 +17,62 @@ public class GatewayController {
     public final static String gameServiceErrorBase = "/" + baseDataName;
 
     @GetMapping(gameServiceErrorBase)
-    public GameServiceError<GameEntity> getError(
+    public GameData getError(
             ServerHttpRequest serverHttpRequest) {
-        return  new GameServiceError.Builder<>().withName(baseDataName)
-                .withDescription(serializeRequest(serverHttpRequest)).withThrowable(null).build();
+        return new GameData() {
+            private final String message = serializeRequest(serverHttpRequest);
+            public String getMessage() {
+                return message;
+            }
+        };
     }
 
     @PostMapping(gameServiceErrorBase)
-    public GameServiceError<GameEntity> postError(
+    public GameData postError(
             ServerHttpRequest serverHttpRequest,
             @RequestBody(required = false) GameEntity requestBody) {
-        return new GameServiceError.Builder<>().withName(baseDataName)
-                .withDescription(serializeRequest(serverHttpRequest)).withRequest(requestBody)
-                .withThrowable(null).build();
+        return new GameData() {
+            private final String message = serializeRequest(serverHttpRequest);
+            private final GameEntity entity = requestBody;
+            public String getMessage() {
+                return message;
+            }
+            public GameEntity getEntity() {
+                return entity;
+            }
+        };
     }
 
     @PutMapping(value = gameServiceErrorBase)
-    public GameServiceError<GameEntity> putError(
+    public GameData putError(
             ServerHttpRequest serverHttpRequest,
             @RequestBody(required = false) GameEntity requestBody) {
-        return new GameServiceError.Builder<>().withName(baseDataName)
-                .withDescription(serializeRequest(serverHttpRequest))
-                .withRequest(requestBody).withThrowable(null).build();
+        return new GameData() {
+            private final String message = serializeRequest(serverHttpRequest);
+            private final GameEntity entity = requestBody;
+            public String getMessage() {
+                return message;
+            }
+            public GameEntity getEntity() {
+                return entity;
+            }
+        };
     }
 
     @DeleteMapping(gameServiceErrorBase)
-    public GameServiceError<GameEntity> deleteError(
+    public GameData deleteError(
             ServerHttpRequest serverHttpRequest,
             @RequestBody(required = false) GameEntity requestBody) {
-        return new GameServiceError.Builder<>().withName(baseDataName)
-                .withDescription(serializeRequest(serverHttpRequest))
-                .withRequest(requestBody).withThrowable(null).build();
+        return new GameData() {
+            private final String message = serializeRequest(serverHttpRequest);
+            private final GameEntity entity = requestBody;
+            public String getMessage() {
+                return message;
+            }
+            public GameEntity getEntity() {
+                return entity;
+            }
+        };
     }
 
     private String serializeRequest(ServerHttpRequest serverHttpRequest) {
