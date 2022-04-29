@@ -119,7 +119,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <fork>true</fork>
-                    <mainClass>com.firmys.gameservices.inventory.InventoryServiceApp</mainClass>
+                    <mainClass>com.firmys.gameservices.characters.CharacterServiceApp</mainClass>
                 </configuration>
                 <executions>
                     <execution>
