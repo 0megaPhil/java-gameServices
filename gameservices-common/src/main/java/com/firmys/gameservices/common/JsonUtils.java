@@ -1,8 +1,10 @@
 package com.firmys.gameservices.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.Map;
 
@@ -15,6 +17,15 @@ public class JsonUtils {
     }
 
     public static <J> J mapJsonToObject(String jsonArrayString, JavaType reference) {
+        try {
+            return mapper.readValue(jsonArrayString, reference);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <J> J mapJsonToObject(String jsonArrayString, TypeReference<J> reference) {
         try {
             return mapper.readValue(jsonArrayString, reference);
         } catch (JsonProcessingException e) {

@@ -124,7 +124,7 @@ public class EntityGenerators {
 
     public static Character generateCharacter() {
         Character character = new Character();
-        character.setName("ddd");
+        character.setName("dddd");
         character.setDescription("ffsfed");
         character.setHeight(1);
         character.setWeight(1);

@@ -3,9 +3,6 @@ package com.firmys.gameservices.common;
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.ConstantImpl;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.Ops;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.EntityPathBase;
@@ -16,7 +13,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -229,9 +230,10 @@ public class AbstractController<D extends AbstractGameEntity> {
         try {
             return callable.call();
         } catch (Exception e) {
-            throw new GameServiceException(new GameServiceError<>(gameService,
-                    Optional.ofNullable(requestBody).orElse(entitySupplier.get()), e.getMessage() +
-                    "\n" + String.join("\n", details)));
+            throw new GameServiceException(e, new GameServiceError<>(
+                    e.getMessage() +
+                    "\n" + String.join("\n", details),
+                    Optional.ofNullable(requestBody).orElse(entitySupplier.get())));
         }
     }
 
@@ -241,9 +243,10 @@ public class AbstractController<D extends AbstractGameEntity> {
         try {
             return callable.call();
         } catch (Exception e) {
-            throw new GameServiceException(new GameServiceError<>(gameService,
-                    Optional.ofNullable(requestBody).orElse(entitySupplier.get()), e.getMessage()
-                    + "\n" + String.join("\n", details)));
+            throw new GameServiceException(e, new GameServiceError<>(
+                    e.getMessage() +
+                            "\n" + String.join("\n", details),
+                    Optional.ofNullable(requestBody).orElse(entitySupplier.get())));
         }
     }
 
@@ -253,9 +256,10 @@ public class AbstractController<D extends AbstractGameEntity> {
         try {
             callable.call();
         } catch (Exception e) {
-            throw new GameServiceException(new GameServiceError<>(gameService,
-                    Optional.ofNullable(requestBody).orElse(entitySupplier.get()), e.getMessage()
-                    + "\n" + String.join("\n", details)));
+            throw new GameServiceException(e, new GameServiceError<>(
+                    e.getMessage() +
+                            "\n" + String.join("\n", details),
+                    Optional.ofNullable(requestBody).orElse(entitySupplier.get())));
         }
     }
 

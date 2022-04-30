@@ -1,47 +1,54 @@
 package com.firmys.gameservices.common.error;
 
 import com.firmys.gameservices.common.GameEntity;
-import com.firmys.gameservices.common.GameService;
+import com.firmys.gameservices.common.JsonUtils;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.Serializable;
 
 @RestControllerAdvice
-public class GameServiceError<D extends GameEntity, S extends GameService<D>> implements Serializable {
+public class GameServiceError<D extends GameEntity> implements Serializable {
 
-    private final String message;
-    private final S gameService;
-    private final D request;
-    private final Class<?> requestClass;
-    private final Class<?> serviceClass;
+    private String message;
+    private String request;
 
-    public GameServiceError(S gameService,
-                            D request,
-                            String message) {
-        this.gameService = gameService;
-        this.request = request;
-        this.serviceClass = gameService.getClass();
-        this.requestClass = request.getClass();
+    public GameServiceError(String message,
+                            D request) {
         this.message = message;
+        this.request = JsonUtils.writeObjectAsString(request);
+    }
+
+    public GameServiceError(String message,
+                            String request) {
+        this.message = message;
+        this.request = request;
+    }
+
+    public GameServiceError() {
+
     }
 
     public String getMessage() {
         return message;
     }
 
-    public S getGameService() {
-        return gameService;
-    }
-
-    public D getRequest() {
+    public String getRequest() {
         return request;
     }
 
-    public Class<?> getRequestClass() {
-        return requestClass;
+    public void setRequest(String request) {
+        this.request = request;
     }
 
-    public Class<?> getServiceClass() {
-        return serviceClass;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "GameServiceError{" +
+                "message='" + message + '\'' +
+                ", request='" + request + '\'' +
+                '}';
     }
 }

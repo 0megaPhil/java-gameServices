@@ -36,6 +36,8 @@ public class CharacterSdkIT extends SdkBase {
         AtomicReference<UUID> uuid = new AtomicReference<>();
 //        Character created = handleMono(characterMono);
 
+        characterMono.block();
+
         characterMono.map(m -> {
                     uuid.set(m.getUuid());
                     System.out.println("GENERATED: " + generated);

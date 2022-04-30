@@ -1,5 +1,11 @@
 package com.firmys.gameservices.sdk.gateway;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.firmys.gameservices.common.JsonUtils;
 import com.firmys.gameservices.common.ServiceStrings;
 import com.firmys.gameservices.common.error.GameServiceError;
 import com.firmys.gameservices.common.error.GameServiceException;
@@ -14,6 +20,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
 
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +30,6 @@ public class GatewayClient<R> {
     private static final Map<String, WebClient> webClientMap = new ConcurrentHashMap<>();
     private final ParameterizedTypeReference<R> typeReference;
     private final ParameterizedTypeReference<Void> voidTypeReference;
-    private final ParameterizedTypeReference<GameServiceError> errorTypeReference;
     private final String baseUrl;
     private final GatewayDetails gatewayDetails;
 
@@ -31,7 +37,6 @@ public class GatewayClient<R> {
         this.baseUrl = baseUrl;
         this.typeReference = typeReference;
         this.voidTypeReference = new ParameterizedTypeReference<>() {};
-        this.errorTypeReference = new ParameterizedTypeReference<>() {};
         this.gatewayDetails = gatewayDetails;
     }
 
@@ -39,7 +44,6 @@ public class GatewayClient<R> {
         this.baseUrl = baseUrl;
         this.typeReference = gatewayClient.typeReference;
         this.voidTypeReference = gatewayClient.voidTypeReference;
-        this.errorTypeReference = gatewayClient.errorTypeReference;
         this.gatewayDetails = gatewayClient.gatewayDetails;
     }
 
@@ -192,7 +196,9 @@ public class GatewayClient<R> {
     private Function<WebClient.ResponseSpec, WebClient.ResponseSpec> errorHandleFunction() {
         return spec -> spec.onStatus(HttpStatus::isError,
                 response ->
-                response.toEntity(GameServiceException.class).map(HttpEntity::getBody));
+                response.bodyToMono(GameServiceException.class).map(m -> {
+                    return m;
+                }));
     }
 
 }

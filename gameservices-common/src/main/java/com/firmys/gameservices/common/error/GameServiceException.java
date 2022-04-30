@@ -1,19 +1,23 @@
 package com.firmys.gameservices.common.error;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.GameEntity;
-import com.firmys.gameservices.common.GameService;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class GameServiceException extends RuntimeException implements Serializable {
 
-    private GameServiceError<? extends GameEntity, ? extends GameService<?>> gameServiceError;
+    private GameServiceError<?> gameServiceError;
     private String additionalDetails;
 
-    public GameServiceException(GameServiceError<? extends GameEntity, ? extends GameService<?>> gameServiceError) {
-        super(gameServiceError.toString());
+    public GameServiceException(Exception exception, GameServiceError<? extends GameEntity> gameServiceError) {
+        super(gameServiceError.toString(), exception);
         this.gameServiceError = gameServiceError;
+    }
+
+    public GameServiceException() {
+
     }
 
     public GameServiceException(Exception exception) {
@@ -25,23 +29,24 @@ public class GameServiceException extends RuntimeException implements Serializab
         this.additionalDetails = String.join("\n", additionalDetails);
     }
 
-    public GameServiceError<? extends GameEntity, ? extends GameService<?>> getGameServiceError() {
+    public GameServiceError<?> getGameServiceError() {
         return gameServiceError;
     }
 
     public String getAdditionalDetails() {
-        return additionalDetails;
+        return Optional.ofNullable(additionalDetails).orElse("");
     }
 
-    @JsonIgnore
-    @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
+
     public synchronized Throwable getCause() {
-        return super.getCause();
+        return null;
     }
 
-    @JsonIgnore
-    @Override
     public StackTraceElement[] getStackTrace() {
-        return super.getStackTrace();
+        return Arrays.copyOfRange(super.getStackTrace(), 0, 3);
     }
+
 }

@@ -108,6 +108,7 @@ public class Character extends AbstractGameEntity {
     @Override
     public String toString() {
         return "Character{" +
+                ", uuid=" + uuid +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", gender='" + gender + '\'' +
@@ -117,5 +118,4 @@ public class Character extends AbstractGameEntity {
                 ", inventoryId=" + inventoryId +
                 '}';
     }
-
 }

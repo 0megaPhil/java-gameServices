@@ -3,10 +3,9 @@ gameservices:
     host: 54.153.32.101
     port: 8080
   character:
-    host: localhost # TODO - remove debug
-#    host: 54.219.210.5
+    host: 54.219.210.5
     port: 8080
   gateway:
-    host: localhost # TODO - remove debug
-#    host: 52.52.163.33
+#    host: localhost # TODO - remove debug
+    host: 52.52.163.33
     port: 8080
