@@ -38,7 +38,7 @@ public class GameServiceException extends RuntimeException implements Serializab
     }
 
     public String getMessage() {
-        return super.getMessage();
+        return Optional.ofNullable(super.getMessage()).orElse(gameServiceError.toString());
     }
 
     public synchronized Throwable getCause() {

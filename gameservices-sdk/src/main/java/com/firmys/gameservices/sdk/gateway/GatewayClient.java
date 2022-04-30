@@ -195,10 +195,7 @@ public class GatewayClient<R> {
      */
     private Function<WebClient.ResponseSpec, WebClient.ResponseSpec> errorHandleFunction() {
         return spec -> spec.onStatus(HttpStatus::isError,
-                response ->
-                response.bodyToMono(GameServiceException.class).map(m -> {
-                    return m;
-                }));
+                response -> response.bodyToMono(GameServiceException.class));
     }
 
 }
