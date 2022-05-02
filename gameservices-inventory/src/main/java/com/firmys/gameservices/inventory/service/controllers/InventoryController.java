@@ -1,7 +1,7 @@
 package com.firmys.gameservices.inventory.service.controllers;
 
 import com.firmys.gameservices.common.AbstractController;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.inventory.service.data.*;
 import com.firmys.gameservices.inventory.service.inventory.InventoryDataLookup;
 import com.firmys.gameservices.inventory.service.inventory.InventoryService;
@@ -32,12 +32,12 @@ public class InventoryController extends AbstractController<Inventory> {
     }
 
     /**
-     * {@link ServiceStrings#INVENTORIES_PATH}
+     * {@link ServiceConstants#INVENTORIES_PATH}
      */
-    @GetMapping(ServiceStrings.INVENTORIES_PATH)
+    @GetMapping(ServiceConstants.INVENTORIES_PATH)
     public Set<Inventory> findSet(
-            @RequestParam(value = ServiceStrings.UUID, required = false) Set<UUID> uuidParams) {
-        return uuidParams == null ? super.findAll() : super.find(uuidParams);
+            @RequestParam(value = ServiceConstants.UUID, required = false) Set<UUID> uuidParams) {
+        return uuidParams == null ? super.findAll() : super.findAll(uuidParams);
     }
 
     /**
@@ -46,120 +46,120 @@ public class InventoryController extends AbstractController<Inventory> {
      * @param amount number of {@link Inventory} to create
      * @return set of newly generated Inventory objects
      */
-    @PostMapping(value = ServiceStrings.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = ServiceConstants.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Set<Inventory> createSet(
-            @RequestParam(value = ServiceStrings.AMOUNT) int amount) {
-        return IntStream.range(0, amount).mapToObj(i -> super.save(new Inventory())).collect(Collectors.toSet());
+            @RequestParam(value = ServiceConstants.AMOUNT) int amount) {
+        return super.save(IntStream.range(0, amount).mapToObj(i -> new Inventory()).collect(Collectors.toSet()));
     }
 
-    @DeleteMapping(value = ServiceStrings.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = ServiceConstants.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void deleteSet(
-            @RequestParam(value = ServiceStrings.UUID) Set<UUID> uuidParams) {
+            @RequestParam(value = ServiceConstants.UUID) Set<UUID> uuidParams) {
         super.delete(uuidParams);
     }
 
-    @PutMapping(value = ServiceStrings.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = ServiceConstants.INVENTORIES_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Set<Inventory> updateSet(
             @RequestBody Set<Inventory> entities) {
         return super.update(entities);
     }
 
     /**
-     * {@link ServiceStrings#INVENTORY_PATH}
+     * {@link ServiceConstants#INVENTORY_PATH}
      */
-    @GetMapping(value = ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE)
+    @GetMapping(value = ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE)
     public Inventory find(
-            @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar) {
+            @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar) {
         return super.find(uuidPathVar);
     }
 
-    @PostMapping(value = ServiceStrings.INVENTORY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = ServiceConstants.INVENTORY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Inventory create(@RequestBody(required = false) Inventory entity) {
         return super.save(entity);
     }
 
-    @DeleteMapping(value = ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE,
+    @DeleteMapping(value = ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar) {
+    public void delete(@PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar) {
         super.delete(uuidPathVar);
     }
 
-    @PutMapping(value = ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE,
+    @PutMapping(value = ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Inventory update(@PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
+    public Inventory update(@PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
                             @RequestBody Inventory entity) {
         return super.update(uuidPathVar, entity);
     }
 
     @PutMapping(
-            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
-                    ServiceStrings.CURRENCY_PATH + ServiceStrings.CREDIT_PATH)
+            ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
+                    ServiceConstants.CURRENCY_PATH + ServiceConstants.CREDIT_PATH)
     public Inventory creditCurrency(
-            @PathVariable(value = ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.CURRENCY) UUID currencyUuid,
-            @RequestParam(value = ServiceStrings.AMOUNT) Integer amountParam) {
+            @PathVariable(value = ServiceConstants.PATH_UUID) UUID uuidPathVar,
+            @RequestParam(value = ServiceConstants.CURRENCY) UUID currencyUuid,
+            @RequestParam(value = ServiceConstants.AMOUNT) Integer amountParam) {
         return super.save(InventoryUtils.creditCurrency(
                 currencyController.find(currencyUuid),
                 super.find(uuidPathVar), amountParam));
     }
 
     @PutMapping(
-            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
-                    ServiceStrings.CURRENCY_PATH + ServiceStrings.DEBIT_PATH)
+            ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
+                    ServiceConstants.CURRENCY_PATH + ServiceConstants.DEBIT_PATH)
     public Inventory debitCurrency(
-            @PathVariable(value = ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.CURRENCY) UUID currencyUuid,
-            @RequestParam(value = ServiceStrings.AMOUNT) Integer amountParam) {
+            @PathVariable(value = ServiceConstants.PATH_UUID) UUID uuidPathVar,
+            @RequestParam(value = ServiceConstants.CURRENCY) UUID currencyUuid,
+            @RequestParam(value = ServiceConstants.AMOUNT) Integer amountParam) {
         return super.save(InventoryUtils.debitCurrency(
                 currencyController.find(currencyUuid),
                 super.find(uuidPathVar), amountParam));
     }
 
-    @PutMapping(ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
-            ServiceStrings.ITEM_PATH + ServiceStrings.ADD_PATH)
+    @PutMapping(ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
+            ServiceConstants.ITEM_PATH + ServiceConstants.ADD_PATH)
     public Inventory addOwnedItem(
-            @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.ITEM) UUID itemUuid,
-            @RequestParam(value = ServiceStrings.AMOUNT) Integer amount) {
+            @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
+            @RequestParam(value = ServiceConstants.ITEM) UUID itemUuid,
+            @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
         return super.save(InventoryUtils.addOwnedItemByItemUuid(itemController
                         .find(itemUuid),
                 super.find(uuidPathVar), amount));
     }
 
     @PutMapping(
-            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
-                    ServiceStrings.ITEMS_PATH + ServiceStrings.ADD_PATH)
+            ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
+                    ServiceConstants.ITEMS_PATH + ServiceConstants.ADD_PATH)
     public Inventory addOwnedItems(
-            @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.ITEM) Set<UUID> itemUuids,
-            @RequestParam(value = ServiceStrings.AMOUNT) Integer amount) {
+            @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
+            @RequestParam(value = ServiceConstants.ITEM) Set<UUID> itemUuids,
+            @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
         AtomicReference<Inventory> inventory = new AtomicReference<>(super.find(uuidPathVar));
-        itemController.find(itemUuids).forEach(item ->
+        itemController.findAll(itemUuids).forEach(item ->
                 inventory.set(InventoryUtils.addOwnedItemByItemUuid(item, inventory.get(), amount)));
         return super.save(inventory.get());
     }
 
     @PutMapping(
-            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
-                    ServiceStrings.ITEM_PATH + ServiceStrings.CONSUME_PATH)
+            ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
+                    ServiceConstants.ITEM_PATH + ServiceConstants.CONSUME_PATH)
     public Inventory consumeOwnedItem(
-            @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.ITEM) UUID itemUuid,
-            @RequestParam(value = ServiceStrings.AMOUNT) Integer amount) {
+            @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
+            @RequestParam(value = ServiceConstants.ITEM) UUID itemUuid,
+            @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
         return super.save(InventoryUtils.consumeOwnedItemByItem(itemController
                         .find(itemUuid),
                 super.find(uuidPathVar), amount));
     }
 
     @PutMapping(
-            ServiceStrings.INVENTORY_PATH + ServiceStrings.UUID_PATH_VARIABLE +
-                    ServiceStrings.ITEMS_PATH + ServiceStrings.CONSUME_PATH)
+            ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
+                    ServiceConstants.ITEMS_PATH + ServiceConstants.CONSUME_PATH)
     public Inventory consumeOwnedItems(
-            @PathVariable(ServiceStrings.PATH_UUID) UUID uuidPathVar,
-            @RequestParam(value = ServiceStrings.ITEM) Set<UUID> itemUuids,
-            @RequestParam(value = ServiceStrings.AMOUNT) Integer amount) {
+            @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
+            @RequestParam(value = ServiceConstants.ITEM) Set<UUID> itemUuids,
+            @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
         AtomicReference<Inventory> inventory = new AtomicReference<>(super.find(uuidPathVar));
-        itemController.find(itemUuids).forEach(item ->
+        itemController.findAll(itemUuids).forEach(item ->
                 inventory.set(InventoryUtils.consumeOwnedItemByItem(item, inventory.get(), amount)));
         return super.save(inventory.get());
     }

@@ -1,12 +1,12 @@
 package com.firmys.gameservices.inventory.service.currency;
 
 import com.firmys.gameservices.common.GameDataCacheManager;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import org.springframework.stereotype.Component;
 
-@Component(ServiceStrings.CURRENCY + ServiceStrings.CACHE_MANAGER_SUFFIX)
+@Component(ServiceConstants.CURRENCY + ServiceConstants.CACHE_MANAGER_SUFFIX)
 public class CurrencyCacheManager extends GameDataCacheManager {
-    private final static String cacheName = ServiceStrings.CURRENCY;
+    private final static String cacheName = ServiceConstants.CURRENCY;
 
     public CurrencyCacheManager() {
         super(cacheName);

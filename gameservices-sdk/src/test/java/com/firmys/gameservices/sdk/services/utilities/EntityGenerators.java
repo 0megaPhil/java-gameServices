@@ -4,6 +4,7 @@ import com.firmys.gameservices.common.Formatters;
 import com.firmys.gameservices.models.*;
 import com.firmys.gameservices.models.Character;
 import com.firmys.gameservices.models.Currency;
+import com.github.javafaker.Faker;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -18,6 +19,7 @@ public class EntityGenerators {
     public static Supplier<Integer> numericSup = SdkTestUtilities.RandomString::getNumeric;
     public static Supplier<Double> doubleSup = SdkTestUtilities.RandomString::getDouble;
     public static Supplier<UUID> uuid = UUID::randomUUID;
+    public static Faker faker = new Faker();
 
     public static Set<Inventory> generateInventories(int amount) {
         return IntStream.range(0, amount)
@@ -34,7 +36,6 @@ public class EntityGenerators {
         OwnedCurrencies ownedCurrencies = generateOwnedCurrencies(currencySet);
 
         Inventory inventory = new Inventory();
-        inventory.setUuid(UUID.randomUUID());
         inventory.setOwnedItems(ownedItems);
         inventory.setOwnedCurrencies(ownedCurrencies);
         return inventory;
@@ -49,7 +50,6 @@ public class EntityGenerators {
 
         OwnedItems ownedItems = new OwnedItems();
         ownedItems.setOwnedItemMap(ownedItemMap);
-        ownedItems.setUuid(uuid.get());
         return ownedItems;
     }
 
@@ -67,7 +67,6 @@ public class EntityGenerators {
                 .map(EntityGenerators::generateOwnedCurrency).collect(Collectors.toSet());
 
         OwnedCurrencies ownedCurrencies = new OwnedCurrencies();
-        ownedCurrencies.setUuid(UUID.randomUUID());
         ownedCurrencies.setOwnedCurrencyMap(ownedCurrencySet.stream()
                 .map(c -> Map.entry(c.getCurrencyUuid().toString(), c))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
@@ -101,18 +100,16 @@ public class EntityGenerators {
 
     public static Currency generateCurrency() {
         Currency currency = new Currency();
-        currency.setUuid(uuid.get());
-        currency.setName(alphaSup.get());
-        currency.setDescription(alphaNumericSup.get());
+        currency.setName(faker.currency().name());
+        currency.setDescription(faker.currency().code());
         currency.setBaseValue(new Random().nextInt(1, 10000000));
         return currency;
     }
 
     public static Item generateItem() {
         Item item = new Item();
-        item.setName(alphaSup.get());
-        item.setDescription(alphaNumericSup.get());
-        item.setUuid(uuid.get());
+        item.setName(faker.book().title() + " - " + alphaSup.get());
+        item.setDescription(faker.book().author() + ": " + faker.book().genre() + " - " + faker.book().publisher());
         item.setBaseValue(numericSup.get());
         item.setHeight(numericSup.get());
         item.setLength(numericSup.get());
@@ -124,12 +121,13 @@ public class EntityGenerators {
 
     public static Character generateCharacter() {
         Character character = new Character();
-        character.setName("dddd");
-        character.setDescription("ffsfed");
-        character.setHeight(1);
-        character.setWeight(1);
-        character.setAge(1);
-        character.setGender("thing");
+        character.setName(faker.elderScrolls().firstName() + " " + faker.elderScrolls().lastName() + alphaSup.get());
+        character.setDescription(String.join(", ", faker.elderScrolls().race(),
+                faker.elderScrolls().city(), faker.elderScrolls().quote()));
+        character.setHeight(numericSup.get());
+        character.setWeight(numericSup.get());
+        character.setAge(numericSup.get());
+        character.setGender(faker.animal().name());
         return character;
     }
 

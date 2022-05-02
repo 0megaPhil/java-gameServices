@@ -1,8 +1,7 @@
 package com.firmys.gameservices.inventory.service.item;
 
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.GameService;
-import com.firmys.gameservices.inventory.service.data.Currency;
 import com.firmys.gameservices.inventory.service.data.Item;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -13,19 +12,19 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@Transactional
 public class ItemService implements GameService<Item> {
-    public final String cacheName = ServiceStrings.ITEM;
-    public final String cacheManagerName = ServiceStrings.ITEM + "CacheManager";
+    public final String cacheName = ServiceConstants.ITEM;
+    public final String cacheManagerName = ServiceConstants.ITEM + "CacheManager";
 
     @Autowired
     ItemRepository repository;
@@ -56,7 +55,7 @@ public class ItemService implements GameService<Item> {
     @NonNull
     @CachePut(value = cacheName, cacheManager = cacheManagerName)
     public <S extends Item> Iterable<S> saveAll(@NonNull Iterable<S> entities) {
-        return repository.saveAll(entities);
+            return repository.saveAll(entities);
     }
 
     @NonNull

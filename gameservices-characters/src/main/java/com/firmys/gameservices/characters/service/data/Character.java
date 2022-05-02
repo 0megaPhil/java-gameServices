@@ -2,10 +2,13 @@ package com.firmys.gameservices.characters.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
+import com.firmys.gameservices.common.data.Attributes;
+import com.firmys.gameservices.common.data.AttributesType;
 import com.firmys.gameservices.common.data.DefaultData;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Entity
@@ -15,7 +18,7 @@ public class Character extends AbstractGameEntity {
     @Column(nullable = false, unique = true)
     @JsonIgnore
     private int id;
-    @Column(name = ServiceStrings.UUID, updatable = false, nullable = false, unique = true)
+    @Column(name = ServiceConstants.UUID, length = 36, nullable = false, unique = true)
     private UUID uuid;
     @Column(unique = true, length = 512)
     private String name;
@@ -31,10 +34,15 @@ public class Character extends AbstractGameEntity {
     private int weight = DefaultData.DEFAULT_INT;
     @Column(unique = true)
     private UUID inventoryId;
+    @Column(length = 4192)
+    private Attributes attributes;
 
     @PrePersist
     protected void onCreate() {
         uuid = UUID.randomUUID();
+        this.attributes = new Attributes();
+        Arrays.stream(AttributesType.values())
+                .forEach(a -> attributes.initializeAttribute(a, 1));
     }
 
     public int getId() {
@@ -105,10 +113,18 @@ public class Character extends AbstractGameEntity {
         return uuid;
     }
 
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Attributes attributes) {
+        this.attributes = attributes;
+    }
+
     @Override
     public String toString() {
         return "Character{" +
-                ", uuid=" + uuid +
+                "uuid=" + uuid +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", gender='" + gender + '\'' +
@@ -116,6 +132,7 @@ public class Character extends AbstractGameEntity {
                 ", height=" + height +
                 ", weight=" + weight +
                 ", inventoryId=" + inventoryId +
+                ", attributes=" + attributes +
                 '}';
     }
 }

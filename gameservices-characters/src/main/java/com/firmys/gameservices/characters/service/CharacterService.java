@@ -1,7 +1,7 @@
 package com.firmys.gameservices.characters.service;
 
 import com.firmys.gameservices.characters.service.data.Character;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.GameService;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -15,14 +15,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@Transactional
 public class CharacterService implements GameService<Character> {
-    public final String cacheName = ServiceStrings.CHARACTER;
-    public final String cacheManagerName = ServiceStrings.CHARACTER + ServiceStrings.CACHE_MANAGER_SUFFIX;
+    public final String cacheName = ServiceConstants.CHARACTER;
+    public final String cacheManagerName = ServiceConstants.CHARACTER + ServiceConstants.CACHE_MANAGER_SUFFIX;
 
     @Autowired
     CharacterRepository repository;

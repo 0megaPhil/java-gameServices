@@ -38,6 +38,10 @@ public class GameServiceException extends RuntimeException implements Serializab
     }
 
     public String getMessage() {
+        if(gameServiceError == null) {
+            gameServiceError = new GameServiceError<>();
+            gameServiceError.setMessage("null pointer exception, no GameServiceError populated");
+        }
         return Optional.ofNullable(super.getMessage()).orElse(gameServiceError.toString());
     }
 

@@ -1,7 +1,7 @@
 package com.firmys.gameservices.inventory.service.currency;
 
 import com.firmys.gameservices.common.GameService;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.inventory.service.data.Currency;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -12,18 +12,19 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@Transactional
 public class CurrencyService implements GameService<Currency> {
-    public final String cacheName = ServiceStrings.CURRENCY;
-    public final String cacheManagerName = ServiceStrings.CURRENCY + "CacheManager";
+    public final String cacheName = ServiceConstants.CURRENCY;
+    public final String cacheManagerName = ServiceConstants.CURRENCY + "CacheManager";
 
     @Autowired
     CurrencyRepository repository;

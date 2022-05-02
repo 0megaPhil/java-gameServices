@@ -2,11 +2,13 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
+import com.firmys.gameservices.common.data.Attributes;
+import com.firmys.gameservices.common.data.AttributesType;
 import com.firmys.gameservices.common.data.DefaultData;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Entity
@@ -17,7 +19,7 @@ public class Item extends AbstractGameEntity {
     @Column(nullable = false, unique = true)
     @JsonIgnore
     private int id;
-    @Column(name = ServiceStrings.UUID, updatable = false, nullable = false, unique = true)
+    @Column(name = ServiceConstants.UUID, length = 36, nullable = false, unique = true)
     private UUID uuid;
     @Column(unique = true, length = 512)
     private String name;
@@ -32,13 +34,15 @@ public class Item extends AbstractGameEntity {
     @Column
     private int height = DefaultData.DEFAULT_INT;
     @Column(length = 100000)
-    private String requirements;
+    private Attributes requirements;
     @Column
     private int baseValue = DefaultData.DEFAULT_INT;
+    @Column(length = 4192)
 
     @PrePersist
     protected void onCreate() {
         uuid = UUID.randomUUID();
+        this.requirements = new Attributes();
     }
 
     public int getId() {
@@ -101,24 +105,12 @@ public class Item extends AbstractGameEntity {
         this.height = height;
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                ", uuid=" + uuid +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", weight=" + weight +
-                ", sizeLength=" + length +
-                ", sizeWidth=" + width +
-                ", sizeHeight=" + height +
-                '}';
-    }
 
-    public String getRequirements() {
+    public Attributes getRequirements() {
         return requirements;
     }
 
-    public void setRequirements(String requirements) {
+    public void setRequirements(Attributes requirements) {
         this.requirements = requirements;
     }
 
@@ -129,4 +121,20 @@ public class Item extends AbstractGameEntity {
     public void setBaseValue(int baseValue) {
         this.baseValue = baseValue;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "uuid=" + uuid +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", weight=" + weight +
+                ", length=" + length +
+                ", width=" + width +
+                ", height=" + height +
+                ", requirements=" + requirements +
+                ", baseValue=" + baseValue +
+                '}';
+    }
+
 }

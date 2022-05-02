@@ -1,7 +1,7 @@
 package com.firmys.gameservices.gateway.config;
 
 import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -40,44 +40,44 @@ public class GatewayRouteConfig {
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route(ServiceStrings.INVENTORY + "service", r -> r
-                        .path("/" + ServiceStrings.INVENTORY + "/**")
-                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceStrings.INVENTORY + "CircuitBreaker")
+                .route(ServiceConstants.INVENTORY + "service", r -> r
+                        .path("/" + ServiceConstants.INVENTORY + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceConstants.INVENTORY + "CircuitBreaker")
                                 .setFallbackUri(inventoryHost + "/error")))
                         .uri(inventoryHost))
-                .route(ServiceStrings.CHARACTER + "service", r -> r
-                        .path("/" + ServiceStrings.CHARACTER + "/**")
-                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceStrings.CHARACTER + "CircuitBreaker")
+                .route(ServiceConstants.CHARACTER + "service", r -> r
+                        .path("/" + ServiceConstants.CHARACTER + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceConstants.CHARACTER + "CircuitBreaker")
                                 .setFallbackUri(characterHost + "/error")))
                         .uri(characterHost))
-                .route(ServiceStrings.INVENTORIES + "service", r -> r
-                        .path("/" + ServiceStrings.INVENTORIES + "/**")
-                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceStrings.INVENTORIES + "CircuitBreaker")
+                .route(ServiceConstants.INVENTORIES + "service", r -> r
+                        .path("/" + ServiceConstants.INVENTORIES + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceConstants.INVENTORIES + "CircuitBreaker")
                                 .setFallbackUri(inventoriesHost + "/error")))
                         .uri(inventoriesHost))
-                .route(ServiceStrings.CHARACTERS + "service", r -> r
-                        .path("/" + ServiceStrings.CHARACTERS + "/**")
-                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceStrings.CHARACTERS + "CircuitBreaker")
+                .route(ServiceConstants.CHARACTERS + "service", r -> r
+                        .path("/" + ServiceConstants.CHARACTERS + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceConstants.CHARACTERS + "CircuitBreaker")
                                 .setFallbackUri(charactersHost + "/error")))
                         .uri(charactersHost))
-                .route(ServiceStrings.ITEM + "service", r -> r
-                        .path("/" + ServiceStrings.ITEM + "/**")
-                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceStrings.ITEM + "CircuitBreaker")
+                .route(ServiceConstants.ITEM + "service", r -> r
+                        .path("/" + ServiceConstants.ITEM + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceConstants.ITEM + "CircuitBreaker")
                                 .setFallbackUri(itemHost + "/error")))
                         .uri(itemHost))
-                .route(ServiceStrings.CURRENCY + "service", r -> r
-                        .path("/" + ServiceStrings.CURRENCY + "/**")
-                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceStrings.CURRENCY + "CircuitBreaker")
+                .route(ServiceConstants.CURRENCY + "service", r -> r
+                        .path("/" + ServiceConstants.CURRENCY + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceConstants.CURRENCY + "CircuitBreaker")
                                 .setFallbackUri(currencyHost + "/error")))
                         .uri(currencyHost))
-                .route(ServiceStrings.ITEMS + "service", r -> r
-                        .path("/" + ServiceStrings.ITEMS + "/**")
-                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceStrings.ITEMS + "CircuitBreaker")
+                .route(ServiceConstants.ITEMS + "service", r -> r
+                        .path("/" + ServiceConstants.ITEMS + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceConstants.ITEMS + "CircuitBreaker")
                                 .setFallbackUri(itemsHost + "/error")))
                         .uri(itemsHost))
-                .route(ServiceStrings.CURRENCIES + "service", r -> r
-                        .path("/" + ServiceStrings.CURRENCIES + "/**")
-                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceStrings.CURRENCIES + "CircuitBreaker")
+                .route(ServiceConstants.CURRENCIES + "service", r -> r
+                        .path("/" + ServiceConstants.CURRENCIES + "/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName(ServiceConstants.CURRENCIES + "CircuitBreaker")
                                 .setFallbackUri(currenciesHost + "/error")))
                         .uri(currenciesHost))
                 .build();

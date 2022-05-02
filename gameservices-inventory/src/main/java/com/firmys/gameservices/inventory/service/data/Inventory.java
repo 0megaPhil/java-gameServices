@@ -2,7 +2,7 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +20,7 @@ public class Inventory extends AbstractGameEntity {
     @Column(nullable = false, unique = true)
     @JsonIgnore
     private int id;
-    @Column(name = ServiceStrings.UUID, updatable = false, nullable = false, unique = true)
+    @Column(name = ServiceConstants.UUID, length = 36, nullable = false, unique = true)
     private UUID uuid;
     @Column(length = 1000000)
     private OwnedItems ownedItems;

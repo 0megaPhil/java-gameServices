@@ -8,12 +8,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @SpringBootTest(classes = {SdkConfig.class})
 public class ItemsSdkIT extends SdkBase {
@@ -23,6 +26,18 @@ public class ItemsSdkIT extends SdkBase {
 
     @Autowired
     ItemSdk item;
+
+    @Test
+    public void create() {
+        Set<Item> generatedItems = IntStream.range(0, new Random().nextInt(1, 9))
+                .mapToObj(i -> EntityGenerators.generateItem()).collect(Collectors.toSet());
+        Mono<Set<Item>> createdItems = sdk.createSetItem(generatedItems);
+
+        createdItems.map(set -> set.stream()
+                        .peek(m -> System.out.println("CREATED: " + m))
+                        .collect(Collectors.toSet())).subscribeOn(Schedulers.parallel())
+                .then().block();
+    }
 
     @Test
     public void queryOne() {
@@ -68,7 +83,7 @@ public class ItemsSdkIT extends SdkBase {
                     return set;
             }).handle().accept(ms);
         });
-        item.deleteItem(handled.getUuid()).then().block();
+//        item.deleteItem(handled.getUuid()).then().block();
     }
 
     @Test

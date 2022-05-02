@@ -27,7 +27,7 @@ public class ItemSdkIT {
         createdItem.map(m -> {
                     itemUuid.set(m.getUuid());
                     System.out.println("GENERATED: " + generatedItem);
-                    System.out.println("CREATED: " + createdItem);
+                    System.out.println("CREATED: " + m);
                     Assertions.assertThat(generatedItem.getName()).isEqualTo(m.getName());
                     Assertions.assertThat(generatedItem.getBaseValue()).isEqualTo(m.getBaseValue());
                     Assertions.assertThat(generatedItem.getDescription()).isEqualTo(m.getDescription());
@@ -41,9 +41,9 @@ public class ItemSdkIT {
                 .then()
                 .block();
 
-        sdk.deleteItem(itemUuid.get())
-                .then()
-                .block();
+//        sdk.deleteItem(itemUuid.get())
+//                .then()
+//                .block();
     }
 
 }

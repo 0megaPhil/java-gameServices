@@ -2,9 +2,8 @@ package com.firmys.gameservices.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.data.DefaultData;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -16,7 +15,7 @@ public class Currency extends AbstractGameEntity {
     @Column(nullable = false, unique = true)
     @JsonIgnore
     private int id;
-    @Column(name = ServiceStrings.UUID, updatable = false, nullable = false, unique = true)
+    @Column(name = ServiceConstants.UUID, length = 36, nullable = false, unique = true)
     private UUID uuid;
     @Column(unique = true, length = 512)
     private String name;

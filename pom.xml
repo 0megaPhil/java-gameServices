@@ -49,6 +49,8 @@
         <spring.aws.cloud.version>2.2.6.RELEASE</spring.aws.cloud.version>
         <swagger.v3.version>2.1.13</swagger.v3.version>
         <spring.cloud.aws.version>2.2.6.RELEASE</spring.cloud.aws.version>
+        <assertj.version>3.22.0</assertj.version>
+        <java.faker.version>1.0.2</java.faker.version>
     </properties>
 
     <dependencyManagement>
@@ -87,6 +89,16 @@
                 <groupId>com.firmys</groupId>
                 <artifactId>gameservices-webui</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.javafaker</groupId>
+                <artifactId>javafaker</artifactId>
+                <version>${java.faker.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>

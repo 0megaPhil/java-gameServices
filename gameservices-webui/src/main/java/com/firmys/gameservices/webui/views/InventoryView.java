@@ -1,6 +1,6 @@
 package com.firmys.gameservices.webui.views;
 
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.sdk.services.InventoriesSdk;
 import com.firmys.gameservices.sdk.services.InventorySdk;
@@ -16,12 +16,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Objects;
-
-@Route(ServiceStrings.INVENTORY)
+@Route(ServiceConstants.INVENTORY)
 @UIScope
 public class InventoryView extends VerticalLayout {
-    private static final H1 heading = new H1(ServiceStrings.INVENTORY.toUpperCase());
+    private static final H1 heading = new H1(ServiceConstants.INVENTORY.toUpperCase());
     private final InventoriesSdk inventoriesSdk;
     private final InventorySdk inventorySdk;
     private final ItemSdk itemSdk;

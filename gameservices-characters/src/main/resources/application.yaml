@@ -24,6 +24,9 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
+
+gameservice:
+  version: ${project.version}
 cloud:
   aws:
     stack:

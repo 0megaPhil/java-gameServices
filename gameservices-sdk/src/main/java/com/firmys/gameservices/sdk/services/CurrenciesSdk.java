@@ -1,7 +1,7 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.api.CurrenciesApi;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.models.Currency;
 import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class CurrenciesSdk extends AbstractSdk<Set<Currency>> implements CurrenciesApi {
 
     public CurrenciesSdk(GatewayDetails gatewayDetails) {
-        super(gatewayDetails, ServiceStrings.CURRENCIES_PATH, new ParameterizedTypeReference<>() {
+        super(gatewayDetails, ServiceConstants.CURRENCIES_PATH, new ParameterizedTypeReference<>() {
         });
     }
 
@@ -28,12 +28,12 @@ public class CurrenciesSdk extends AbstractSdk<Set<Currency>> implements Currenc
 
     @Override
     public Mono<Void> deleteSetCurrency(Set<UUID> uuid) {
-        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+        return getClient().delete(Parameters.builder().withParam(ServiceConstants.UUID, uuid).build());
     }
 
     @Override
     public Mono<Set<Currency>> findSetCurrency(Set<UUID> uuid) {
-        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+        return getClient().get(Parameters.builder().withParam(ServiceConstants.UUID, uuid).build());
     }
 
     @Override

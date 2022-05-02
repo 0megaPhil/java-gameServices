@@ -1,7 +1,7 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.api.CharactersApi;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.models.Character;
 import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class CharactersSdk extends AbstractSdk<Set<Character>> implements CharactersApi {
 
     public CharactersSdk(GatewayDetails gatewayDetails) {
-        super(gatewayDetails, ServiceStrings.CHARACTERS_PATH, new ParameterizedTypeReference<>() {
+        super(gatewayDetails, ServiceConstants.CHARACTERS_PATH, new ParameterizedTypeReference<>() {
         });
     }
 
@@ -28,7 +28,7 @@ public class CharactersSdk extends AbstractSdk<Set<Character>> implements Charac
 
     @Override
     public Mono<Void> deleteSetCharacter(Set<UUID> uuid) {
-        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+        return getClient().delete(Parameters.builder().withParam(ServiceConstants.UUID, uuid).build());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CharactersSdk extends AbstractSdk<Set<Character>> implements Charac
 
     @Override
     public Mono<Set<Character>> findSetCharacter(Set<UUID> uuid) {
-        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+        return getClient().get(Parameters.builder().withParam(ServiceConstants.UUID, uuid).build());
     }
 
     @Override

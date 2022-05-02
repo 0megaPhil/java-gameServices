@@ -15,7 +15,7 @@
  */
 package com.firmys.gameservices.webui;
 
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.webui.views.InventoriesView;
 import com.firmys.gameservices.webui.views.InventoryView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +33,11 @@ public class HomeView extends VerticalLayout {
         H1 heading = new H1("Game Services UI");
 
         RouterLink inventoriesLink = new RouterLink(
-                ServiceStrings.INVENTORIES,
+                ServiceConstants.INVENTORIES,
                 InventoriesView.class);
 
         RouterLink inventoryLink = new RouterLink(
-                ServiceStrings.INVENTORY,
+                ServiceConstants.INVENTORY,
                 InventoryView.class);
 
         Style linkStyle = inventoriesLink.getElement().getStyle();

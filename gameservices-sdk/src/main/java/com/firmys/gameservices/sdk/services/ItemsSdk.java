@@ -1,7 +1,7 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.api.ItemsApi;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.models.Item;
 import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class ItemsSdk extends AbstractSdk<Set<Item>> implements ItemsApi {
 
     public ItemsSdk(GatewayDetails gatewayDetails) {
-        super(gatewayDetails, ServiceStrings.ITEMS_PATH, new ParameterizedTypeReference<>() {
+        super(gatewayDetails, ServiceConstants.ITEMS_PATH, new ParameterizedTypeReference<>() {
         });
     }
 
@@ -28,19 +28,19 @@ public class ItemsSdk extends AbstractSdk<Set<Item>> implements ItemsApi {
 
     @Override
     public Mono<Void> deleteSetItem(Set<UUID> uuid) {
-        return getClient().delete(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+        return getClient().delete(Parameters.builder().withParam(ServiceConstants.UUID, uuid).build());
     }
 
     @Override
     public Mono<Set<Item>> findAllItem(Map<String, String> queryMap) {
         Parameters.Builder builder = new Parameters.Builder();
         queryMap.forEach(builder::withParam);
-        return getClient().withPath(ServiceStrings.QUERY_PATH).get(builder.build());
+        return getClient().withPath(ServiceConstants.QUERY_PATH).get(builder.build());
     }
 
     @Override
     public Mono<Set<Item>> findSetItem(Set<UUID> uuid) {
-        return getClient().get(Parameters.builder().withParam(ServiceStrings.UUID, uuid).build());
+        return getClient().get(Parameters.builder().withParam(ServiceConstants.UUID, uuid).build());
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.api.ItemApi;
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.models.Item;
 import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
@@ -15,7 +15,7 @@ import java.util.UUID;
 public class ItemSdk extends AbstractSdk<Item> implements ItemApi {
 
     public ItemSdk(GatewayDetails gatewayDetails) {
-        super(gatewayDetails, ServiceStrings.ITEM_PATH, new ParameterizedTypeReference<>() {
+        super(gatewayDetails, ServiceConstants.ITEM_PATH, new ParameterizedTypeReference<>() {
         });
     }
 

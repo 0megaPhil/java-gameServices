@@ -1,13 +1,6 @@
 package com.firmys.gameservices.sdk.gateway;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.firmys.gameservices.common.JsonUtils;
-import com.firmys.gameservices.common.ServiceStrings;
-import com.firmys.gameservices.common.error.GameServiceError;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.error.GameServiceException;
 import com.firmys.gameservices.sdk.Parameters;
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,7 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,7 +57,7 @@ public class GatewayClient<R> {
                 .baseUrl(gatewayDetails.getGatewayAddress())
                 .exchangeStrategies(strategies)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultUriVariables(Collections.singletonMap(ServiceStrings.URL, gatewayDetails.getGatewayAddress()))
+                .defaultUriVariables(Collections.singletonMap(ServiceConstants.URL, gatewayDetails.getGatewayAddress()))
                 .build());
     }
 
@@ -144,8 +136,11 @@ public class GatewayClient<R> {
         return spec -> bodyToMonoFunction(typeReference)
                 .apply(errorHandleFunction()
                         .apply(requestBodyFunction(body)
-                                .apply(spec.uri(uriBuilder -> uriBuilderFunction(baseUrl, parameters.get())
-                                        .apply(uriBuilder)))
+                                .apply(spec.uri(uriBuilder -> {
+                                    URI uri = uriBuilderFunction(baseUrl, parameters.get())
+                                            .apply(uriBuilder);
+                                    return uri;
+                                }))
                                 .retrieve()));
     }
 

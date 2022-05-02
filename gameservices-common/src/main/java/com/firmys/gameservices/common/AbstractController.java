@@ -11,13 +11,10 @@ import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -87,13 +84,20 @@ public class AbstractController<D extends AbstractGameEntity> {
 
     public D save(D entity) {
         D findOrGenerate = Optional.ofNullable(entity).orElse(entitySupplier.get());
-        return entityCallableHandler(() -> gameService.save(
-                        findOrGenerate), findOrGenerate,
+        return entityCallableHandler(() -> {
+                    return gameService.save(findOrGenerate);
+                }, findOrGenerate,
                 "Unable to either create or update entity of type " + gameEntityClass.getSimpleName());
     }
 
     public Set<D> save(Set<D> entities) {
-        return entities.stream().map(this::save).collect(Collectors.toSet());
+        Set<D> found = findAll();
+        return this.entityCallableHandlerSet(() ->
+                        StreamSupport.stream(
+                                        gameService.saveAll(entities).spliterator(), false)
+                                .collect(Collectors.toSet()), null,
+                "Unable to create entities of type " + gameEntityClass.getSimpleName(),
+                entities.stream().map(Object::toString).collect(Collectors.joining("\n")));
     }
 
     public D find(UUID uuid) {
@@ -104,18 +108,25 @@ public class AbstractController<D extends AbstractGameEntity> {
                         " not found for entity type " + gameEntityClass.getSimpleName());
     }
 
-    public Set<D> find(Set<UUID> uuids) {
-        return uuids.stream().map(this::find).collect(Collectors.toSet());
+    public Set<D> findAll(Set<UUID> uuids) {
+        return this.entityCallableHandlerSet(() ->
+                        StreamSupport.stream(
+                                        gameService.findAllById(uuids.stream().map(u ->
+                                                        getGameDataLookup().
+                                                                getPrimaryKeyByUuid(u)).
+                                                collect(Collectors.toSet())).spliterator(), false)
+                                .collect(Collectors.toSet()), null,
+                "Unable to find any entities for type " + gameEntityClass.getSimpleName());
     }
 
     /*
      * TODO - Consider completely revamping this
      */
     public Set<D> findAll(Map<String, String> queryMap) {
-        if(queryMap.containsKey(ServiceStrings.UUID) && queryMap.size() < 2) {
-            return Set.of(find(UUID.fromString(queryMap.get(ServiceStrings.UUID))));
+        if (queryMap.containsKey(ServiceConstants.UUID) && queryMap.size() < 2) {
+            return Set.of(find(UUID.fromString(queryMap.get(ServiceConstants.UUID))));
         } else {
-            queryMap.remove(ServiceStrings.UUID);
+            queryMap.remove(ServiceConstants.UUID);
         }
         JPAQuery<D> query = getQuerySupplier().get();
         BooleanBuilder combined = new BooleanBuilder();
@@ -127,7 +138,7 @@ public class AbstractController<D extends AbstractGameEntity> {
 
     public Set<D> findAll(Predicate predicate) {
         return StreamSupport.stream(
-                gameService.findAll(predicate).spliterator(), true).collect(Collectors.toSet());
+                gameService.findAll(predicate).spliterator(), false).collect(Collectors.toSet());
     }
 
     public void delete(UUID uuid) {
@@ -232,7 +243,7 @@ public class AbstractController<D extends AbstractGameEntity> {
         } catch (Exception e) {
             throw new GameServiceException(e, new GameServiceError<>(
                     e.getMessage() +
-                    "\n" + String.join("\n", details),
+                            "\n" + String.join("\n", details),
                     Optional.ofNullable(requestBody).orElse(entitySupplier.get())));
         }
     }

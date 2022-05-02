@@ -1,6 +1,6 @@
 package com.firmys.gameservices.webui.views;
 
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.sdk.services.InventoriesSdk;
 import com.firmys.gameservices.sdk.services.ItemSdk;
@@ -14,14 +14,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-@Route(ServiceStrings.INVENTORIES)
+@Route(ServiceConstants.INVENTORIES)
 @UIScope
 public class InventoriesView extends VerticalLayout {
-    private static final H1 heading = new H1(ServiceStrings.INVENTORIES.toUpperCase());
+    private static final H1 heading = new H1(ServiceConstants.INVENTORIES.toUpperCase());
     private final InventoriesSdk inventoriesSdk;
     private final ItemSdk itemSdk;
 
@@ -39,9 +35,9 @@ public class InventoriesView extends VerticalLayout {
 
     public Grid<Inventory> fetchInventoriesGrid() {
         Grid<Inventory> inventoriesGrid = new Grid<>();
-        inventoriesGrid.addColumn(Inventory::getUuid).setHeader(ServiceStrings.UUID);
-        inventoriesGrid.addColumn(i -> i.getOwnedItems().getOwnedItemMap()).setHeader(ServiceStrings.OWNED_ITEMS);
-        inventoriesGrid.addColumn(i -> i.getOwnedCurrencies().getOwnedCurrencyMap()).setHeader(ServiceStrings.OWNED_CURRENCIES);
+        inventoriesGrid.addColumn(Inventory::getUuid).setHeader(ServiceConstants.UUID);
+        inventoriesGrid.addColumn(i -> i.getOwnedItems().getOwnedItemMap()).setHeader(ServiceConstants.OWNED_ITEMS);
+        inventoriesGrid.addColumn(i -> i.getOwnedCurrencies().getOwnedCurrencyMap()).setHeader(ServiceConstants.OWNED_CURRENCIES);
         inventoriesGrid.getColumns().forEach(col -> col.setAutoWidth(true));
         inventoriesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 //        inventoriesGrid.setItems(Objects.requireNonNull(inventoriesSdk.findMultipleInventory(null).block()));

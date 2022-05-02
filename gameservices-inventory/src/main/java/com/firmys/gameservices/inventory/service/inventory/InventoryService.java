@@ -1,8 +1,7 @@
 package com.firmys.gameservices.inventory.service.inventory;
 
-import com.firmys.gameservices.common.ServiceStrings;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.GameService;
-import com.firmys.gameservices.inventory.service.data.Currency;
 import com.firmys.gameservices.inventory.service.data.Inventory;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -16,14 +15,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@Transactional
 public class InventoryService implements GameService<Inventory> {
-    public final String cacheName = ServiceStrings.INVENTORY;
-    public final String cacheManagerName = ServiceStrings.INVENTORY + "CacheManager";
+    public final String cacheName = ServiceConstants.INVENTORY;
+    public final String cacheManagerName = ServiceConstants.INVENTORY + "CacheManager";
 
     @Autowired
     InventoryRepository repository;
