@@ -35,7 +35,8 @@ public class CurrencySdk extends AbstractSdk<Currency> implements CurrencyApi {
     }
 
     @Override
-    public Mono<Currency> updateCurrency(UUID pathUuid, Currency currency) {
-        return getClient().withPath(pathUuid).put(Parameters.builder().build(), currency);
+    public Mono<Currency> updateCurrency(Currency currency) {
+        return getClient().put(Parameters.builder().build(), currency);
     }
+
 }

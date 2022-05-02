@@ -35,7 +35,8 @@ public class ItemSdk extends AbstractSdk<Item> implements ItemApi {
     }
 
     @Override
-    public Mono<Item> updateItem(UUID pathUuid, Item item) {
-        return getClient().withPath(pathUuid).put(Parameters.builder().build(), item);
+    public Mono<Item> updateItem(Item item) {
+        return getClient().put(Parameters.builder().build(), item);
     }
+
 }

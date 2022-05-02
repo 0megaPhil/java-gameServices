@@ -64,7 +64,7 @@ public class CharacterSdkIT extends SdkBase {
         Character character = characterRef.get();
         character.setInventoryId(inventoryRef.get().getUuid());
         // Add InventoryId to Character
-        sdk.updateCharacter(character.getUuid(), character).map(c -> {
+        sdk.updateCharacter(character).map(c -> {
             characterRef.set(c);
             return c;
         }).then().block();

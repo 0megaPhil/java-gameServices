@@ -35,8 +35,8 @@ public class CharacterSdk extends AbstractSdk<Character> implements CharacterApi
     }
 
     @Override
-    public Mono<Character> updateCharacter(UUID pathUuid, Character character) {
-        return getClient().withPath(pathUuid).put(Parameters.builder().build(), character);
+    public Mono<Character> updateCharacter(Character character) {
+        return getClient().put(Parameters.builder().build(), character);
     }
 
 }

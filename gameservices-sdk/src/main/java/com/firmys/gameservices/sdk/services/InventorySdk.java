@@ -95,7 +95,7 @@ public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi
     }
 
     @Override
-    public Mono<Inventory> updateInventory(UUID pathUuid, Inventory inventory) {
-        return getClient().withPath(pathUuid).put(Parameters.builder().build(), inventory);
+    public Mono<Inventory> updateInventory(Inventory inventory) {
+        return getClient().put(Parameters.builder().build(), inventory);
     }
 }

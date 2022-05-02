@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
 import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.data.Attributes;
-import com.firmys.gameservices.common.data.AttributesType;
 import com.firmys.gameservices.common.data.DefaultData;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Entity

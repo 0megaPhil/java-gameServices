@@ -14,7 +14,7 @@ public class Attributes implements GameData {
     }
 
     public Attributes change(AttributesType attribute, Integer delta) {
-        attributes.stream().filter(a -> a.getAttribute().equals(attribute))
+        attributes.stream().filter(a -> AttributesType.valueOf(a.getAttribute()).equals(attribute))
                 .findFirst().orElseGet(() -> {
                     Attribute newAttr = new Attribute(attribute, 1);
                     attributes.add(newAttr);
@@ -28,9 +28,9 @@ public class Attributes implements GameData {
     }
 
     public Attribute getAttribute(AttributesType attribute) {
-        return attributes.stream().filter(a -> a.getAttribute().equals(attribute))
+        return attributes.stream().filter(a -> AttributesType.valueOf(a.getAttribute()).equals(attribute))
                 .findFirst().orElseThrow(() -> new RuntimeException("No Attribute " + attribute + " found in " +
-                        attributes.stream().map(a -> a.getAttribute().name()).collect(Collectors.toSet())));
+                        attributes.stream().map(Attribute::getAttribute).collect(Collectors.toSet())));
     }
 
     public void setAttributes(Set<Attribute> attributes) {
