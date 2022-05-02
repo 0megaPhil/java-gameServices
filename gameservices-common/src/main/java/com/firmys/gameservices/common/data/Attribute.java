@@ -5,8 +5,8 @@ import com.firmys.gameservices.common.GameData;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Attribute implements GameData {
-    private final AttributesType attribute;
-    private final AtomicInteger magnitude;
+    private AttributesType attribute;
+    private AtomicInteger magnitude;
 
     public Attribute(AttributesType attribute, Integer magnitude) {
         this.attribute = attribute;
@@ -30,5 +30,13 @@ public class Attribute implements GameData {
                     " cannot have delta of " + delta + " applied" + "\n" + attribute + " " +
                     "value may not be less than 1 or greater than " + maxValue);
         }
+    }
+
+    public void setAttribute(AttributesType attribute) {
+        this.attribute = attribute;
+    }
+
+    public void setMagnitude(AtomicInteger magnitude) {
+        this.magnitude = magnitude;
     }
 }

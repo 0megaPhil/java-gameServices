@@ -1,6 +1,7 @@
 package com.firmys.gameservices.sdk.services.utilities;
 
 import com.firmys.gameservices.common.Formatters;
+import com.firmys.gameservices.common.data.AttributesType;
 import com.firmys.gameservices.models.*;
 import com.firmys.gameservices.models.Character;
 import com.firmys.gameservices.models.Currency;
@@ -18,7 +19,6 @@ public class EntityGenerators {
     public static Supplier<String> alphaSup = SdkTestUtilities.RandomString::getAlpha;
     public static Supplier<Integer> numericSup = SdkTestUtilities.RandomString::getNumeric;
     public static Supplier<Double> doubleSup = SdkTestUtilities.RandomString::getDouble;
-    public static Supplier<UUID> uuid = UUID::randomUUID;
     public static Faker faker = new Faker();
 
     public static Set<Inventory> generateInventories(int amount) {
@@ -115,8 +115,21 @@ public class EntityGenerators {
         item.setLength(numericSup.get());
         item.setWidth(numericSup.get());
         item.setWeight(doubleSup.get());
-        item.setRequirements(alphaNumericSup.get());
+        Attributes attributes = new Attributes();
+        attributes.addAttributesItem(new Attribute());
+        item.setRequirements(generateAttributes());
         return item;
+    }
+
+    public static Attributes generateAttributes() {
+        Attributes attributes = new Attributes();
+        attributes.setAttributes(Arrays.stream(Attribute.AttributeEnum.values()).map(t -> {
+            Attribute attr = new Attribute();
+            attr.setAttribute(t);
+            attr.setMagnitude(new Random().nextInt(1, 255));
+            return attr;
+        }).collect(Collectors.toSet()));
+        return attributes;
     }
 
     public static Character generateCharacter() {
@@ -128,6 +141,7 @@ public class EntityGenerators {
         character.setWeight(numericSup.get());
         character.setAge(numericSup.get());
         character.setGender(faker.animal().name());
+//        character.setAttributes(generateAttributes());
         return character;
     }
 
