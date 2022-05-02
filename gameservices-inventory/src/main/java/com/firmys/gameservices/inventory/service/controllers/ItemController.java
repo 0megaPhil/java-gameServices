@@ -78,7 +78,7 @@ public class ItemController extends AbstractController<Item> {
         super.delete(uuidPathVar);
     }
 
-    @PutMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = ServiceConstants.ITEM_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Item update(@RequestBody Item entity) {
         return super.update(entity);
     }

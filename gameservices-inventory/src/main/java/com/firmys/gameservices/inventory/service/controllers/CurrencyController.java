@@ -72,7 +72,7 @@ public class CurrencyController extends AbstractController<Currency> {
         super.delete(uuidPathVar);
     }
 
-    @PutMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = ServiceConstants.CURRENCY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Currency update(@RequestBody Currency entity) {
         return super.update(entity);
     }
