@@ -181,7 +181,7 @@ public class AbstractController<D extends AbstractGameEntity> {
     public D update(UUID uuid, D entity) {
         return entityCallableHandler(() -> gameService.save(GameDataUtils
                 .update(gameEntityClass,
-                        find(entity.getUuid()),
+                        find(uuid),
                         entity)), entity, "Unable to update " + uuid.toString()
                 + " of type " + gameEntityClass.getSimpleName() + " with details " + entity);
     }

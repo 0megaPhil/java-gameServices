@@ -84,11 +84,9 @@ public class InventoryController extends AbstractController<Inventory> {
         super.delete(uuidPathVar);
     }
 
-    @PutMapping(value = ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Inventory update(@PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
-                            @RequestBody Inventory entity) {
-        return super.update(uuidPathVar, entity);
+    @PutMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Inventory update(@RequestBody Inventory entity) {
+        return super.update(entity);
     }
 
     @PutMapping(

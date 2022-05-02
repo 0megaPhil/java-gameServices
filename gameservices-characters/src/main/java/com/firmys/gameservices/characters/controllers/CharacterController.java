@@ -76,11 +76,9 @@ public class CharacterController extends AbstractController<Character> {
         super.delete(uuidPathVar);
     }
 
-    @PutMapping(value = ServiceConstants.CHARACTER_PATH + ServiceConstants.UUID_PATH_VARIABLE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Character update(@PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
-                            @RequestBody Character entity) {
-        return super.update(uuidPathVar, entity);
+    @PutMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Character update(@RequestBody Character entity) {
+        return super.update(entity);
     }
 
     /**
