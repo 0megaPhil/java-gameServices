@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 public class Attributes implements GameData {
     private Set<Attribute> attributes = ConcurrentHashMap.newKeySet();
 
+    public Attributes() {
+
+    }
+
     public void initializeAttribute(AttributesType attribute, Integer initialValue) {
         attributes.add(new Attribute(attribute, initialValue));
     }

@@ -115,17 +115,15 @@ public class EntityGenerators {
         item.setLength(numericSup.get());
         item.setWidth(numericSup.get());
         item.setWeight(doubleSup.get());
-        Attributes attributes = new Attributes();
-        attributes.addAttributesItem(new Attribute());
-        item.setRequirements(generateAttributes());
+//        item.setRequirements(generateAttributes());
         return item;
     }
 
     public static Attributes generateAttributes() {
         Attributes attributes = new Attributes();
-        attributes.setAttributes(Arrays.stream(Attribute.AttributeEnum.values()).map(t -> {
+        attributes.setAttributes(Arrays.stream(AttributesType.values()).map(t -> {
             Attribute attr = new Attribute();
-            attr.setAttribute(t);
+            attr.setAttribute(t.name());
             attr.setMagnitude(new Random().nextInt(1, 255));
             return attr;
         }).collect(Collectors.toSet()));

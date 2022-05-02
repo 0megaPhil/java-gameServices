@@ -6,6 +6,10 @@ public class Attribute implements GameData {
     private String attribute;
     private Integer magnitude;
 
+    public Attribute() {
+
+    }
+
     public Attribute(AttributesType attribute, Integer magnitude) {
         this.attribute = attribute.name();
         this.magnitude = magnitude;

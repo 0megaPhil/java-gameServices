@@ -20,7 +20,7 @@ public class Inventory extends AbstractGameEntity {
     @Column(nullable = false, unique = true)
     @JsonIgnore
     private int id;
-    @Column(name = ServiceConstants.UUID, length = 36, nullable = false, unique = true)
+    @Column(name = ServiceConstants.UUID, length = 36, updatable = false, nullable = false, unique = true)
     private UUID uuid;
     @Column(length = 1000000)
     private OwnedItems ownedItems;
