@@ -4,6 +4,8 @@ import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.error.GameServiceException;
 import com.firmys.gameservices.inventory.service.data.*;
 
+import java.util.Optional;
+
 public class InventoryTransaction {
 
     public static Inventory consumeOwnedItemByItem(Item item, Inventory inventory, int amount) {
@@ -36,7 +38,9 @@ public class InventoryTransaction {
             throw new GameServiceException(e, ServiceConstants.ADD,
                     ServiceConstants.ITEM + ": " + item.getUuid(),
                     ServiceConstants.INVENTORY + ": " + inventory.getUuid(),
-                    ServiceConstants.AMOUNT + ": " + amount);
+                    ServiceConstants.AMOUNT + ": " + amount,
+                    Optional.ofNullable(e.getMessage()).orElse("null message in exception of type "
+                            + e.getClass().getSimpleName()));
         }
     }
 

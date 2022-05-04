@@ -70,7 +70,7 @@ public class ItemsSdkIT extends SdkBase {
                         System.out.println("LENGTH: " + generated.getLength() + " - Found: " + item.getLength());
                         System.out.println("WIDTH: " + generated.getWidth() + " - Found: " + item.getWidth());
                         System.out.println("WEIGHT: " + generated.getWeight() + " - Found: " + item.getWeight());
-                        System.out.println("REQS: " + generated.getRequirements() + " - Found: " + item.getRequirements());
+                        System.out.println("REQS: " + generated.getItemRequirements() + " - Found: " + item.getItemRequirements());
                         Assertions.assertThat(item.getName()).isEqualTo(generated.getName());
                         Assertions.assertThat(item.getBaseValue()).isEqualTo(generated.getBaseValue());
                         Assertions.assertThat(item.getDescription()).isEqualTo(generated.getDescription());
@@ -78,7 +78,7 @@ public class ItemsSdkIT extends SdkBase {
                         Assertions.assertThat(item.getLength()).isEqualTo(generated.getLength());
                         Assertions.assertThat(item.getWidth()).isEqualTo(generated.getWidth());
                         Assertions.assertThat(item.getWeight()).isEqualTo(generated.getWeight());
-                        Assertions.assertThat(item.getRequirements()).isEqualTo(generated.getRequirements());
+                        Assertions.assertThat(item.getItemRequirements()).isEqualTo(generated.getItemRequirements());
                     });
                     return set;
             }).handle().accept(ms);
@@ -116,7 +116,7 @@ public class ItemsSdkIT extends SdkBase {
                 System.out.println("LENGTH: " + generated.getLength() + " - Found: " + item.getLength());
                 System.out.println("WIDTH: " + generated.getWidth() + " - Found: " + item.getWidth());
                 System.out.println("WEIGHT: " + generated.getWeight() + " - Found: " + item.getWeight());
-                System.out.println("REQS: " + generated.getRequirements() + " - Found: " + item.getRequirements());
+                System.out.println("REQS: " + generated.getItemRequirements() + " - Found: " + item.getItemRequirements());
                 Assertions.assertThat(item.getName()).isEqualTo(generated.getName());
                 Assertions.assertThat(item.getBaseValue()).isEqualTo(generated.getBaseValue());
                 Assertions.assertThat(item.getDescription()).isEqualTo(generated.getDescription());
@@ -124,7 +124,7 @@ public class ItemsSdkIT extends SdkBase {
                 Assertions.assertThat(item.getLength()).isEqualTo(generated.getLength());
                 Assertions.assertThat(item.getWidth()).isEqualTo(generated.getWidth());
                 Assertions.assertThat(item.getWeight()).isEqualTo(generated.getWeight());
-                Assertions.assertThat(item.getRequirements()).isEqualTo(generated.getRequirements());
+                Assertions.assertThat(item.getItemRequirements()).isEqualTo(generated.getItemRequirements());
             });
             return set;
         }).handle().accept(found);

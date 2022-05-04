@@ -20,6 +20,7 @@ public class Consumable extends AbstractGameEntity {
     private UUID uuid;
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = ServiceConstants.CONSUMABLE_ITEM + ServiceConstants.ID)
     private ConsumableItem consumableItem;
     private String consumableType;
     private Long created;
@@ -62,17 +63,16 @@ public class Consumable extends AbstractGameEntity {
         this.created = created;
     }
 
-    public ConsumableItem getConsumableItem() {
-        return consumableItem;
-    }
-
     @Override
     public String toString() {
         return "Consumable{" +
                 "uuid=" + uuid +
-                ", consumableItem=" + consumableItem +
                 ", consumableType='" + consumableType + '\'' +
                 ", created=" + created +
                 '}';
+    }
+
+    public ConsumableItem getConsumableItem() {
+        return consumableItem;
     }
 }

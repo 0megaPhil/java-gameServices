@@ -4,17 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
 import com.firmys.gameservices.common.ServiceConstants;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
+import javax.persistence.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -33,10 +23,11 @@ public class ConsumableItem extends AbstractGameEntity {
     private UUID itemUuid;
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = ServiceConstants.INVENTORY + ServiceConstants.ID)
     private Inventory inventory;
     @Column(length = 1000000)
     @ElementCollection(targetClass = Consumable.class)
-    @OneToMany(mappedBy = "consumableItem", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = ServiceConstants.CONSUMABLE_ITEM, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Consumable> consumables = ConcurrentHashMap.newKeySet();
     private int ownedCount;
 
@@ -115,16 +106,11 @@ public class ConsumableItem extends AbstractGameEntity {
         return 0;
     }
 
-    public Inventory getInventory() {
-        return inventory;
-    }
-
     @Override
     public String toString() {
         return "ConsumableItem{" +
                 "uuid=" + uuid +
                 ", itemUuid=" + itemUuid +
-                ", inventory=" + inventory +
                 ", consumables=" + consumables +
                 ", ownedCount=" + ownedCount +
                 '}';

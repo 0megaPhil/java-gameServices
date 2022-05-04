@@ -1,7 +1,6 @@
 package com.firmys.gameservices.sdk.services.utilities;
 
 import com.firmys.gameservices.common.Formatters;
-import com.firmys.gameservices.common.data.AttributesType;
 import com.firmys.gameservices.models.*;
 import com.firmys.gameservices.models.Character;
 import com.firmys.gameservices.models.Currency;
@@ -32,69 +31,57 @@ public class EntityGenerators {
 
         Set<Currency> currencySet = IntStream.range(0, new Random().nextInt(0, 256))
                 .mapToObj(i -> generateCurrency()).collect(Collectors.toSet());
-        OwnedItems ownedItems = generateOwnedItems(itemSet);
-        OwnedCurrencies ownedCurrencies = generateOwnedCurrencies(currencySet);
+        Set<ConsumableItem> consumableItems = generateConsumableItems(itemSet);
+        Set<TransactionalCurrency> transactionalCurrencies = generateTransactionalCurrencies(currencySet);
 
         Inventory inventory = new Inventory();
-        inventory.setOwnedItems(ownedItems);
-        inventory.setOwnedCurrencies(ownedCurrencies);
+        inventory.setConsumableItems(consumableItems);
+        inventory.setTransactionalCurrencies(transactionalCurrencies);
         return inventory;
     }
 
-    public static OwnedItems generateOwnedItems(Set<Item> items) {
-        Set<OwnedItem> ownedItemSet = items.stream()
-                .map(EntityGenerators::generateOwnedItem).collect(Collectors.toSet());
-        Map<String, OwnedItem> ownedItemMap = ownedItemSet.stream()
-                .map(o -> Map.entry(o.getItemUuid().toString(), o))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        OwnedItems ownedItems = new OwnedItems();
-        ownedItems.setOwnedItemMap(ownedItemMap);
-        return ownedItems;
+    public static Set<ConsumableItem> generateConsumableItems(Set<Item> items) {
+        return items.stream().map(EntityGenerators::generateConsumableItem).collect(Collectors.toSet());
     }
 
-    public static OwnedItem generateOwnedItem(Item item) {
-        OwnedItem ownedItem = new OwnedItem();
-        ownedItem.setItemUuid(item.getUuid());
-        ownedItem.setOwnedItemUuids(IntStream.range(0, new Random().nextInt(1, 10))
-                .mapToObj(i -> UUID.nameUUIDFromBytes((item.getName() + i).getBytes())).collect(Collectors.toSet()));
-        ownedItem.setCount(ownedItem.getOwnedItemUuids().size());
-        return ownedItem;
+    public static ConsumableItem generateConsumableItem(Item item) {
+        ConsumableItem consumableItem = new ConsumableItem();
+        consumableItem.setItemUuid(item.getUuid());
+        consumableItem.setConsumables(IntStream.range(0, new Random().nextInt(1, 10))
+                .mapToObj(i -> {
+                    Consumable consumable = new Consumable();
+                    consumable.setConsumableType(ConsumableItem.class.getSimpleName());
+                    consumable.setCreated(LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli());
+                    return consumable;
+                }).collect(Collectors.toSet()));
+        consumableItem.setOwnedCount(consumableItem.getConsumables().size());
+        return consumableItem;
     }
 
-    public static OwnedCurrencies generateOwnedCurrencies(Set<Currency> currencySet) {
-        Set<OwnedCurrency> ownedCurrencySet = currencySet.stream()
-                .map(EntityGenerators::generateOwnedCurrency).collect(Collectors.toSet());
-
-        OwnedCurrencies ownedCurrencies = new OwnedCurrencies();
-        ownedCurrencies.setOwnedCurrencyMap(ownedCurrencySet.stream()
-                .map(c -> Map.entry(c.getCurrencyUuid().toString(), c))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
-        return ownedCurrencies;
+    public static Set<TransactionalCurrency> generateTransactionalCurrencies(Set<Currency> currencySet) {
+        return currencySet.stream().map(EntityGenerators::generateTransactionalCurrency).collect(Collectors.toSet());
     }
 
-    public static OwnedCurrency generateOwnedCurrency(Currency currency) {
-        OwnedCurrency ownedCurrency = new OwnedCurrency();
-        ownedCurrency.setCurrencyUuid(currency.getUuid());
-        ownedCurrency.setCount(new Random().nextLong(1, Long.MAX_VALUE));
-        ownedCurrency.setTransactions(IntStream
-                .range(0, new Random().nextInt(1, 10)).mapToObj(i -> generateTransaction()).collect(Collectors.toSet()));
-        return ownedCurrency;
+    public static TransactionalCurrency generateTransactionalCurrency(Currency currency) {
+        TransactionalCurrency transactionalCurrency = new TransactionalCurrency();
+        transactionalCurrency.setCurrencyUuid(currency.getUuid());
+        transactionalCurrency.setTotalCurrency(new Random().nextLong(1, Long.MAX_VALUE));
+        transactionalCurrency.setTransactions(IntStream
+                .range(0, new Random().nextInt(1, 10)).mapToObj(i -> generateTransaction(currency)).collect(Collectors.toSet()));
+        return transactionalCurrency;
     }
 
-    public static Transaction generateTransaction() {
+    public static Transaction generateTransaction(Currency currency) {
         Transaction transaction = new Transaction();
-        long entryNum = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli() % Transaction.TransactionTypeEnum.values().length;
-        Transaction.TransactionTypeEnum typeEnum = Transaction.TransactionTypeEnum.values()[(int) entryNum];
-        transaction.setTransactionType(typeEnum);
+        transaction.setTransactionType(new Random().nextInt() % 2 == 0 ? "CREDIT" : "DEBIT");
         long amount = numericSup.get().longValue();
         transaction.setStart(numericSup.get().longValue());
         transaction.setAmount(amount);
-        transaction.setEnd(amount + transaction.getStart());
+        transaction.setResult(amount + transaction.getStart());
         LocalDateTime localDateTime = LocalDateTime.now();
         transaction.setDateTime(Formatters.dateTimeFormatter.format(localDateTime.atOffset(ZoneOffset.UTC)));
         transaction.setDate(Formatters.dateFormatter.format(localDateTime.atOffset(ZoneOffset.UTC)));
-        transaction.setCurrencyUuid(UUID.randomUUID());
+        transaction.setCurrencyUuid(currency.getUuid());
         return transaction;
     }
 
@@ -115,19 +102,26 @@ public class EntityGenerators {
         item.setLength(numericSup.get());
         item.setWidth(numericSup.get());
         item.setWeight(doubleSup.get());
-//        item.setRequirements(generateAttributes());
+        item.setItemRequirements(generateItemRequirements());
         return item;
     }
 
-    public static Attributes generateAttributes() {
-        Attributes attributes = new Attributes();
-        attributes.setAttributes(Arrays.stream(AttributesType.values()).map(t -> {
-            Attribute attr = new Attribute();
-            attr.setAttribute(t.name());
-            attr.setMagnitude(new Random().nextInt(1, 255));
+    public static Set<ItemRequirement> generateItemRequirements() {
+        return Arrays.stream(ItemRequirement.AttributeEnum.values()).map(a -> {
+            ItemRequirement attr = new ItemRequirement();
+            attr.setAttribute(a);
+            attr.setValue(new Random().nextInt(1, 255));
             return attr;
-        }).collect(Collectors.toSet()));
-        return attributes;
+        }).collect(Collectors.toSet());
+    }
+
+    public static Set<CharacterAttribute> generateCharacterAttributes() {
+        return Arrays.stream(CharacterAttribute.AttributeEnum.values()).map(a -> {
+            CharacterAttribute attr = new CharacterAttribute();
+            attr.setAttribute(a);
+            attr.setValue(new Random().nextInt(1, 255));
+            return attr;
+        }).collect(Collectors.toSet());
     }
 
     public static Character generateCharacter() {
@@ -139,7 +133,7 @@ public class EntityGenerators {
         character.setWeight(numericSup.get());
         character.setAge(numericSup.get());
         character.setGender(faker.animal().name());
-//        character.setAttributes(generateAttributes());
+        character.setCharacterAttributes(generateCharacterAttributes());
         return character;
     }
 

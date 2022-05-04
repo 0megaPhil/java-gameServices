@@ -21,6 +21,9 @@ public class ServiceConstants {
     public static final String INVENTORY_PATH = "/" + INVENTORY;
     public static final String INVENTORIES = "inventories";
     public static final String INVENTORIES_PATH = "/" + INVENTORIES;
+    public static final String CONSUMABLE_ITEM = "consumableItem";
+    public static final String TRANSACTIONAL_CURRENCY = "transactionalCurrency";
+    public static final String ID = "Id";
 
     public static final String CURRENCY = "currency";
     public static final String CURRENCY_PATH = "/" + CURRENCY;

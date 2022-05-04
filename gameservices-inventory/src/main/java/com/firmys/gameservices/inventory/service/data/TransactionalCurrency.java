@@ -32,10 +32,11 @@ public class TransactionalCurrency extends AbstractGameEntity {
     private Long totalCurrency;
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = ServiceConstants.INVENTORY + ServiceConstants.ID)
     private Inventory inventory;
     @Column(length = 1000000)
     @ElementCollection(targetClass = Transaction.class)
-    @OneToMany(mappedBy = "transactionalCurrency", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = ServiceConstants.TRANSACTIONAL_CURRENCY, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Transaction> transactions = ConcurrentHashMap.newKeySet();
 
     @PrePersist
@@ -121,17 +122,12 @@ public class TransactionalCurrency extends AbstractGameEntity {
         return 0;
     }
 
-    public Inventory getInventory() {
-        return inventory;
-    }
-
     @Override
     public String toString() {
         return "TransactionalCurrency{" +
                 "uuid=" + uuid +
                 ", currencyUuid=" + currencyUuid +
                 ", totalCurrency=" + totalCurrency +
-                ", inventory=" + inventory +
                 ", transactions=" + transactions +
                 '}';
     }

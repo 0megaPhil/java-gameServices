@@ -75,12 +75,12 @@ public class CharacterSdkIT extends SdkBase {
     void addOwnedItemAddOwnedCurrency() {
 
         // Add OwnedItem
-        inventorySdk.addOwnedItemInventory(inventoryRef.get().getUuid(),
+        inventorySdk.addConsumableItemInventory(inventoryRef.get().getUuid(),
                         itemRef.get().getUuid(), new Random().nextInt(1, 9))
                 .then().block();
 
         // Add OwnedCurrency
-        inventorySdk.creditCurrencyInventory(inventoryRef.get().getUuid(),
+        inventorySdk.creditTransactionalCurrencyInventory(inventoryRef.get().getUuid(),
                 currencyRef.get().getUuid(), new Random().nextInt(1, 255)).then().block();
 
         // Verify Character

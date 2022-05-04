@@ -23,6 +23,7 @@ public class Transaction extends AbstractGameEntity implements Comparable<Transa
     private UUID currencyUuid;
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = ServiceConstants.TRANSACTIONAL_CURRENCY + ServiceConstants.ID)
     private TransactionalCurrency transactionalCurrency;
     private String transactionType;
     private long start;
