@@ -103,7 +103,7 @@ public class InventoryController extends AbstractController<Inventory> {
     @PutMapping(
             ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
                     ServiceConstants.CURRENCY_PATH + ServiceConstants.CREDIT_PATH)
-    public Inventory creditCurrency(
+    public Inventory creditTransactionalCurrency(
             @PathVariable(value = ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.CURRENCY) UUID currencyUuid,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amountParam) {
@@ -120,7 +120,7 @@ public class InventoryController extends AbstractController<Inventory> {
     @PutMapping(
             ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
                     ServiceConstants.CURRENCY_PATH + ServiceConstants.DEBIT_PATH)
-    public Inventory debitCurrency(
+    public Inventory debitTransactionalCurrency(
             @PathVariable(value = ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.CURRENCY) UUID currencyUuid,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amountParam) {
@@ -131,7 +131,7 @@ public class InventoryController extends AbstractController<Inventory> {
 
     @PutMapping(ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
             ServiceConstants.ITEM_PATH + ServiceConstants.ADD_PATH)
-    public Inventory addOwnedItem(
+    public Inventory addConsumableItem(
             @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.ITEM) UUID itemUuid,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
@@ -149,7 +149,7 @@ public class InventoryController extends AbstractController<Inventory> {
     @PutMapping(
             ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
                     ServiceConstants.ITEMS_PATH + ServiceConstants.ADD_PATH)
-    public Inventory addOwnedItems(
+    public Inventory addConsumableItems(
             @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.ITEM) Set<UUID> itemUuids,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
@@ -162,7 +162,7 @@ public class InventoryController extends AbstractController<Inventory> {
     @PutMapping(
             ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
                     ServiceConstants.ITEM_PATH + ServiceConstants.CONSUME_PATH)
-    public Inventory consumeOwnedItem(
+    public Inventory consumeConsumableItem(
             @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.ITEM) UUID itemUuid,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
@@ -174,7 +174,7 @@ public class InventoryController extends AbstractController<Inventory> {
     @PutMapping(
             ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
                     ServiceConstants.ITEMS_PATH + ServiceConstants.CONSUME_PATH)
-    public Inventory consumeOwnedItems(
+    public Inventory consumeConsumableItems(
             @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.ITEM) Set<UUID> itemUuids,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {

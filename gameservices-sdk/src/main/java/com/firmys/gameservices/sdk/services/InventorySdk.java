@@ -5,7 +5,6 @@ import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.models.ConsumableItem;
 import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.models.Item;
-import com.firmys.gameservices.models.OwnedItem;
 import com.firmys.gameservices.sdk.Parameters;
 import com.firmys.gameservices.sdk.gateway.GatewayDetails;
 import org.springframework.core.ParameterizedTypeReference;
