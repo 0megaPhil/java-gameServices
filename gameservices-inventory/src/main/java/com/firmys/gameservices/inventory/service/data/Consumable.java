@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Entity
 public class Consumable extends AbstractGameEntity {
@@ -65,5 +64,15 @@ public class Consumable extends AbstractGameEntity {
 
     public ConsumableItem getConsumableItem() {
         return consumableItem;
+    }
+
+    @Override
+    public String toString() {
+        return "Consumable{" +
+                "uuid=" + uuid +
+                ", consumableItem=" + consumableItem +
+                ", consumableType='" + consumableType + '\'' +
+                ", created=" + created +
+                '}';
     }
 }

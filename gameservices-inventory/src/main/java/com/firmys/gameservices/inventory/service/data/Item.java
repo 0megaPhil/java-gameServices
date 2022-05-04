@@ -3,10 +3,22 @@ package com.firmys.gameservices.inventory.service.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
 import com.firmys.gameservices.common.ServiceConstants;
+import com.firmys.gameservices.common.data.AttributesType;
 import com.firmys.gameservices.common.data.DefaultData;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Entity
 public class Item extends AbstractGameEntity {
@@ -31,11 +43,16 @@ public class Item extends AbstractGameEntity {
     private int height = DefaultData.DEFAULT_INT;
     @Column
     private int baseValue = DefaultData.DEFAULT_INT;
-    @Column(length = 4192)
+    @Column(updatable = false)
+    @OneToMany(mappedBy = ServiceConstants.ITEM, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<ItemRequirement> itemRequirements;
 
     @PrePersist
     protected void onCreate() {
         uuid = UUID.randomUUID();
+        itemRequirements = ConcurrentHashMap.newKeySet();
+        Arrays.stream(AttributesType.values()).forEach(a ->
+                itemRequirements.add(new ItemRequirement(this, a, 1)));
     }
 
     public int getId() {
@@ -120,4 +137,11 @@ public class Item extends AbstractGameEntity {
                 '}';
     }
 
+    public Set<ItemRequirement> getItemRequirements() {
+        return itemRequirements;
+    }
+
+    public void setItemRequirements(Set<ItemRequirement> itemRequirements) {
+        this.itemRequirements = itemRequirements;
+    }
 }

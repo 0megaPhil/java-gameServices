@@ -3,9 +3,18 @@ package com.firmys.gameservices.inventory.service.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
 import com.firmys.gameservices.common.ServiceConstants;
-import org.hibernate.annotations.Proxy;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -108,5 +117,16 @@ public class ConsumableItem extends AbstractGameEntity {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    @Override
+    public String toString() {
+        return "ConsumableItem{" +
+                "uuid=" + uuid +
+                ", itemUuid=" + itemUuid +
+                ", inventory=" + inventory +
+                ", consumables=" + consumables +
+                ", ownedCount=" + ownedCount +
+                '}';
     }
 }

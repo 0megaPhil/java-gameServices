@@ -1,18 +1,19 @@
 package com.firmys.gameservices.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.firmys.gameservices.common.AbstractGameEntity;
-import com.firmys.gameservices.common.GameData;
 import com.firmys.gameservices.common.ServiceConstants;
-import org.hibernate.annotations.Proxy;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.hibernate.annotations.TypeDefs;
 
-import javax.persistence.*;
-import java.util.HashSet;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,11 +29,11 @@ public class Inventory extends AbstractGameEntity {
     private UUID uuid;
     @Column(length = 1000000)
     @ElementCollection(targetClass = ConsumableItem.class)
-    @OneToMany(mappedBy = "inventory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = ServiceConstants.INVENTORY, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<ConsumableItem> consumableItems;
     @Column(length = 1000000)
     @ElementCollection(targetClass = TransactionalCurrency.class)
-    @OneToMany(mappedBy = "inventory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = ServiceConstants.INVENTORY, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<TransactionalCurrency> transactionalCurrencies;
 
     @PrePersist
@@ -41,14 +42,6 @@ public class Inventory extends AbstractGameEntity {
         consumableItems = ConcurrentHashMap.newKeySet();
         transactionalCurrencies = ConcurrentHashMap.newKeySet();
     }
-
-//    public void addConsumableItem(Item item, Integer amount) {
-//        if(consumableItems.stream().noneMatch(c -> c.getItemUuid().equals(item.getUuid()))) {
-//            consumableItems.add(new ConsumableItem(item));
-//        }
-//        consumableItems.stream().filter(c ->
-//                c.getItemUuid().equals(item.getUuid())).findFirst().orElseThrow().add(amount);
-//    }
 
     public Set<ConsumableItem> getConsumableItems() {
         return consumableItems;
@@ -74,13 +67,12 @@ public class Inventory extends AbstractGameEntity {
         return uuid;
     }
 
-
     @Override
     public String toString() {
         return "Inventory{" +
-                ", uuid=" + uuid +
-                ", ownedItems=" + consumableItems +
-                ", ownedCurrency=" + transactionalCurrencies +
+                "uuid=" + uuid +
+                ", consumableItems=" + consumableItems +
+                ", transactionalCurrencies=" + transactionalCurrencies +
                 '}';
     }
 }

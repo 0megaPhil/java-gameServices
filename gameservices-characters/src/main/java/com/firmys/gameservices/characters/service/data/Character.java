@@ -3,10 +3,14 @@ package com.firmys.gameservices.characters.service.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
 import com.firmys.gameservices.common.ServiceConstants;
+import com.firmys.gameservices.common.data.AttributesType;
 import com.firmys.gameservices.common.data.DefaultData;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Entity
 public class Character extends AbstractGameEntity {
@@ -29,12 +33,18 @@ public class Character extends AbstractGameEntity {
     private int height = DefaultData.DEFAULT_INT;
     @Column
     private int weight = DefaultData.DEFAULT_INT;
-    @Column(unique = true)
+    @Column(unique = true, updatable = false)
     private UUID inventoryId;
+    @Column(updatable = false)
+    @OneToMany(mappedBy = ServiceConstants.CHARACTER, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<CharacterAttribute> characterAttributes;
 
     @PrePersist
     protected void onCreate() {
         uuid = UUID.randomUUID();
+        characterAttributes = ConcurrentHashMap.newKeySet();
+        Arrays.stream(AttributesType.values()).forEach(a ->
+                characterAttributes.add(new CharacterAttribute(this, a, 1)));
     }
 
     public int getId() {
@@ -116,6 +126,15 @@ public class Character extends AbstractGameEntity {
                 ", height=" + height +
                 ", weight=" + weight +
                 ", inventoryId=" + inventoryId +
+                ", characterAttributes=" + characterAttributes +
                 '}';
+    }
+
+    public Set<CharacterAttribute> getCharacterAttributes() {
+        return characterAttributes;
+    }
+
+    public void setCharacterAttributes(Set<CharacterAttribute> characterAttributes) {
+        this.characterAttributes = characterAttributes;
     }
 }

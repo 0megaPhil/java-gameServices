@@ -124,4 +124,15 @@ public class TransactionalCurrency extends AbstractGameEntity {
     public Inventory getInventory() {
         return inventory;
     }
+
+    @Override
+    public String toString() {
+        return "TransactionalCurrency{" +
+                "uuid=" + uuid +
+                ", currencyUuid=" + currencyUuid +
+                ", totalCurrency=" + totalCurrency +
+                ", inventory=" + inventory +
+                ", transactions=" + transactions +
+                '}';
+    }
 }
