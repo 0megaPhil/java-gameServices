@@ -42,50 +42,50 @@ public class CharacterSdkIT extends SdkBase {
 
     @BeforeAll
     void generate() {
-//        inventorySdk.createInventory().map(i -> {
-//            inventoryRef.set(i);
-//            return i;
-//        }).retry(5).then().block();
-//
-//        sdk.createCharacter(EntityGenerators.generateCharacter()).map(i -> {
-//            characterRef.set(i);
-//            return i;
-//        }).retry(5).then().block();
-//
-//        itemSdk.createItem(EntityGenerators.generateItem()).map(i -> {
-//            itemRef.set(i);
-//            return i;
-//        }).retry(5).then().block();
-//
-//        currencySdk.createCurrency(EntityGenerators.generateCurrency()).map(i -> {
-//            currencyRef.set(i);
-//            return i;
-//        }).retry(5).then().block();
-//
-//        Character character = characterRef.get();
-//        character.setInventoryId(inventoryRef.get().getUuid());
-//        // Add InventoryId to Character
-//        sdk.updateCharacter(character).map(c -> {
-//            characterRef.set(c);
-//            return c;
-//        }).retry(5).then().block();
+        inventorySdk.createInventory().map(i -> {
+            inventoryRef.set(i);
+            return i;
+        }).retry(5).then().block();
+
+        sdk.createCharacter(EntityGenerators.generateCharacter()).map(i -> {
+            characterRef.set(i);
+            return i;
+        }).retry(5).then().block();
+
+        itemSdk.createItem(EntityGenerators.generateItem()).map(i -> {
+            itemRef.set(i);
+            return i;
+        }).retry(5).then().block();
+
+        currencySdk.createCurrency(EntityGenerators.generateCurrency()).map(i -> {
+            currencyRef.set(i);
+            return i;
+        }).retry(5).then().block();
+
+        Character character = characterRef.get();
+        character.setInventoryId(inventoryRef.get().getUuid());
+        // Add InventoryId to Character
+        sdk.updateCharacter(character).map(c -> {
+            characterRef.set(c);
+            return c;
+        }).retry(5).then().block();
 
     }
 
     @Test
     void addOwnedItemAddOwnedCurrency() {
 
-//        // Add OwnedItem
-//        inventorySdk.addConsumableItemInventory(inventoryRef.get().getUuid(),
-//                        itemRef.get().getUuid(), new Random().nextInt(1, 9))
-//                .retry(5)
-//                .then().block();
-//
-//        // Add OwnedCurrency
-//        inventorySdk.creditTransactionalCurrencyInventory(inventoryRef.get().getUuid(),
-//                currencyRef.get().getUuid(), new Random().nextInt(1, 255))
-//                .retry(5)
-//                .then().block();
+        // Add OwnedItem
+        inventorySdk.addConsumableItemInventory(inventoryRef.get().getUuid(),
+                        itemRef.get().getUuid(), new Random().nextInt(1, 9))
+                .retry(5)
+                .then().block();
+
+        // Add OwnedCurrency
+        inventorySdk.creditTransactionalCurrencyInventory(inventoryRef.get().getUuid(),
+                currencyRef.get().getUuid(), new Random().nextInt(1, 255))
+                .retry(5)
+                .then().block();
 
         // Verify Character
         sdk.findCharacter(UUID.fromString("38e7f606-1588-4bd9-8e17-2f4920578b77")).map(c -> {
