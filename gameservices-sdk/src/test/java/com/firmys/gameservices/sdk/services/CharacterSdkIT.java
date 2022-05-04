@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @SpringBootTest(classes = {SdkConfig.class})
@@ -41,53 +42,60 @@ public class CharacterSdkIT extends SdkBase {
 
     @BeforeAll
     void generate() {
-        inventorySdk.createInventory().map(i -> {
-            inventoryRef.set(i);
-            return i;
-        }).then().block();
-
-        sdk.createCharacter(EntityGenerators.generateCharacter()).map(i -> {
-            characterRef.set(i);
-            return i;
-        }).then().block();
-
-        itemSdk.createItem(EntityGenerators.generateItem()).map(i -> {
-            itemRef.set(i);
-            return i;
-        }).then().block();
-
-        currencySdk.createCurrency(EntityGenerators.generateCurrency()).map(i -> {
-            currencyRef.set(i);
-            return i;
-        }).then().block();
-
-        Character character = characterRef.get();
-        character.setInventoryId(inventoryRef.get().getUuid());
-        // Add InventoryId to Character
-        sdk.updateCharacter(character).map(c -> {
-            characterRef.set(c);
-            return c;
-        }).then().block();
+//        inventorySdk.createInventory().map(i -> {
+//            inventoryRef.set(i);
+//            return i;
+//        }).retry(5).then().block();
+//
+//        sdk.createCharacter(EntityGenerators.generateCharacter()).map(i -> {
+//            characterRef.set(i);
+//            return i;
+//        }).retry(5).then().block();
+//
+//        itemSdk.createItem(EntityGenerators.generateItem()).map(i -> {
+//            itemRef.set(i);
+//            return i;
+//        }).retry(5).then().block();
+//
+//        currencySdk.createCurrency(EntityGenerators.generateCurrency()).map(i -> {
+//            currencyRef.set(i);
+//            return i;
+//        }).retry(5).then().block();
+//
+//        Character character = characterRef.get();
+//        character.setInventoryId(inventoryRef.get().getUuid());
+//        // Add InventoryId to Character
+//        sdk.updateCharacter(character).map(c -> {
+//            characterRef.set(c);
+//            return c;
+//        }).retry(5).then().block();
 
     }
 
     @Test
     void addOwnedItemAddOwnedCurrency() {
 
-        // Add OwnedItem
-        inventorySdk.addConsumableItemInventory(inventoryRef.get().getUuid(),
-                        itemRef.get().getUuid(), new Random().nextInt(1, 9))
-                .then().block();
-
-        // Add OwnedCurrency
-        inventorySdk.creditTransactionalCurrencyInventory(inventoryRef.get().getUuid(),
-                currencyRef.get().getUuid(), new Random().nextInt(1, 255)).then().block();
+//        // Add OwnedItem
+//        inventorySdk.addConsumableItemInventory(inventoryRef.get().getUuid(),
+//                        itemRef.get().getUuid(), new Random().nextInt(1, 9))
+//                .retry(5)
+//                .then().block();
+//
+//        // Add OwnedCurrency
+//        inventorySdk.creditTransactionalCurrencyInventory(inventoryRef.get().getUuid(),
+//                currencyRef.get().getUuid(), new Random().nextInt(1, 255))
+//                .retry(5)
+//                .then().block();
 
         // Verify Character
-        sdk.findCharacter(characterRef.get().getUuid()).map(c -> {
+        sdk.findCharacter(UUID.fromString("38e7f606-1588-4bd9-8e17-2f4920578b77")).map(c -> {
             characterRef.set(c);
             return c;
-        }).then().block();
+        }).retry(5).then().block();
+
+        Character updated = characterRef.get();
+        updated.setInventoryId(UUID.fromString("11f80942-cbc0-418f-b500-2b11c4be19b6"));
+        sdk.updateCharacter(updated).retry(5).then().block();
 
         System.out.println("Character: " + characterRef.get());
 

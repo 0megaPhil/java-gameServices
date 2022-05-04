@@ -33,7 +33,7 @@ public class Character extends AbstractGameEntity {
     private int height = DefaultData.DEFAULT_INT;
     @Column
     private int weight = DefaultData.DEFAULT_INT;
-    @Column(unique = true, updatable = false)
+    @Column(unique = true)
     private UUID inventoryId;
     @Column(updatable = false)
     @OneToMany(mappedBy = ServiceConstants.CHARACTER, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
