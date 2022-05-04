@@ -44,7 +44,7 @@ public class Consumable extends AbstractGameEntity {
     }
 
     public int getId() {
-        return 0;
+        return id;
     }
 
     public String getConsumableType() {

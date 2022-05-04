@@ -8,6 +8,7 @@ import com.firmys.gameservices.common.data.Transactions;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +28,7 @@ public class TransactionalCurrency extends AbstractGameEntity {
     @JsonIgnore
     private int id;
     @Column(name = ServiceConstants.UUID, length = 36, updatable = false, nullable = false, unique = true)
-    private UUID uuid = UUID.randomUUID();
+    private UUID uuid;
     private UUID currencyUuid;
     private Long totalCurrency;
     @ManyToOne
@@ -37,21 +38,20 @@ public class TransactionalCurrency extends AbstractGameEntity {
     @Column(length = 1000000)
     @ElementCollection(targetClass = Transaction.class)
     @OneToMany(mappedBy = ServiceConstants.TRANSACTIONAL_CURRENCY, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Transaction> transactions = ConcurrentHashMap.newKeySet();
+    private Set<Transaction> transactions;
 
     @PrePersist
     protected void onCreate() {
         uuid = UUID.randomUUID();
         transactions = ConcurrentHashMap.newKeySet();
-        totalCurrency = 0L;
     }
 
     public TransactionalCurrency() {}
 
-    public TransactionalCurrency(Inventory inventory, Currency currency) {
-        this.currencyUuid = currency.getUuid();
+    public TransactionalCurrency(Inventory inventory, UUID currencyUuid) {
+        this.currencyUuid = currencyUuid;
         this.inventory = inventory;
-        this.totalCurrency = 0L;
+        transactions = ConcurrentHashMap.newKeySet();
     }
 
     public void setCurrencyUuid(UUID currencyUuid) {
@@ -71,6 +71,7 @@ public class TransactionalCurrency extends AbstractGameEntity {
     }
 
     public TransactionalCurrency credit(long amount) {
+        this.totalCurrency = Optional.ofNullable(totalCurrency).orElse(0L);
         if(totalCurrency + amount >= Long.MAX_VALUE) {
             throw new RuntimeException("Currency count " +
                     getTotalCurrency() + " plus " + amount + " for Currency " + currencyUuid.toString() +
@@ -88,6 +89,7 @@ public class TransactionalCurrency extends AbstractGameEntity {
     }
 
     public TransactionalCurrency debit(long amount) {
+        this.totalCurrency = Optional.ofNullable(totalCurrency).orElse(0L);
         if(totalCurrency - amount < 0) {
             throw new RuntimeException("Insufficient currency count of " +
                     getTotalCurrency() + " for consumption of " + amount + " Currency " + currencyUuid.toString());
@@ -106,7 +108,7 @@ public class TransactionalCurrency extends AbstractGameEntity {
 
     public Set<Transaction> getTransactionsByDate(LocalDate localDate) {
         return this.transactions.stream()
-                .filter(t -> t.getDate()
+                .filter(t -> t.getDateTime()
                         .contains(Formatters.dateFormatter.format(localDate))).collect(Collectors.toSet());
     }
 
@@ -119,7 +121,7 @@ public class TransactionalCurrency extends AbstractGameEntity {
     }
 
     public int getId() {
-        return 0;
+        return id;
     }
 
     @Override

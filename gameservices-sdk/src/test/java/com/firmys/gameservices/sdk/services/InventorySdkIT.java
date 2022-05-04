@@ -28,9 +28,6 @@ import java.util.stream.IntStream;
 public class InventorySdkIT {
 
     @Autowired
-    CharacterSdk sdk;
-
-    @Autowired
     InventorySdk inventorySdk;
 
     @Autowired
@@ -49,17 +46,18 @@ public class InventorySdkIT {
         inventorySdk.createInventory().map(i -> {
             inventoryRef.set(i);
             return i;
-        }).then().block();
+        }).retry(5).then().block();
 
         itemSdk.createItem(EntityGenerators.generateItem()).map(i -> {
             itemRef.set(i);
             return i;
-        }).then().block();
+        }).retry(5).then().block();
 
         currencySdk.createCurrency(EntityGenerators.generateCurrency()).map(i -> {
             currencyRef.set(i);
             return i;
-        }).then().block();
+        }).retry(5).then().block();
+
     }
 
     @Test
@@ -68,11 +66,26 @@ public class InventorySdkIT {
         // Add OwnedItem
         inventorySdk.addConsumableItemInventory(inventoryRef.get().getUuid(),
                         itemRef.get().getUuid(), new Random().nextInt(1, 9))
+                .retry(5)
                 .then().block();
 
         // Add OwnedCurrency
         inventorySdk.creditTransactionalCurrencyInventory(inventoryRef.get().getUuid(),
-                currencyRef.get().getUuid(), new Random().nextInt(1, 255)).then().block();
+                        currencyRef.get().getUuid(), new Random().nextInt(1, 255))
+                .retry(5)
+                .then().block();
+
+        inventorySdk.consumeConsumableItemInventory(inventoryRef.get().getUuid(),
+                        itemRef.get().getUuid(), 1)
+                .retry(5).then().block();
+
+        inventorySdk.debitTransactionalCurrencyInventory(inventoryRef.get().getUuid(),
+                currencyRef.get().getUuid(), 1).retry(5).then().block();
+
+        inventoryRef.set(inventorySdk.findInventory(inventoryRef.get().getUuid()).retry(5).block());
+
+        System.out.println(inventoryRef.get());
+
     }
 
 }

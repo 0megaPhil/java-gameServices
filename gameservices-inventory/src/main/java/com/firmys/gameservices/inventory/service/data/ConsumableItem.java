@@ -19,7 +19,7 @@ public class ConsumableItem extends AbstractGameEntity {
     @JsonIgnore
     private int id;
     @Column(name = ServiceConstants.UUID, length = 36, updatable = false, nullable = false, unique = true)
-    private UUID uuid = UUID.randomUUID();
+    private UUID uuid;
     private UUID itemUuid;
     @ManyToOne
     @JsonIgnore
@@ -28,7 +28,7 @@ public class ConsumableItem extends AbstractGameEntity {
     @Column(length = 1000000)
     @ElementCollection(targetClass = Consumable.class)
     @OneToMany(mappedBy = ServiceConstants.CONSUMABLE_ITEM, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Consumable> consumables = ConcurrentHashMap.newKeySet();
+    private Set<Consumable> consumables;
     private int ownedCount;
 
     @PrePersist
@@ -40,6 +40,7 @@ public class ConsumableItem extends AbstractGameEntity {
     public ConsumableItem(Inventory inventory, Item item) {
         this.inventory = inventory;
         this.itemUuid = item.getUuid();
+        this.consumables = ConcurrentHashMap.newKeySet();
     }
 
     public ConsumableItem() {
@@ -103,7 +104,7 @@ public class ConsumableItem extends AbstractGameEntity {
     }
 
     public int getId() {
-        return 0;
+        return id;
     }
 
     @Override

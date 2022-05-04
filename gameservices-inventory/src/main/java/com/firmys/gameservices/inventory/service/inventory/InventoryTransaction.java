@@ -47,7 +47,7 @@ public class InventoryTransaction {
     public static Inventory creditCurrency(Currency currency, Inventory inventory, int amount) {
         try {
             if(inventory.getTransactionalCurrencies().stream().noneMatch(c -> c.getCurrencyUuid().equals(currency.getUuid()))) {
-                inventory.getTransactionalCurrencies().add(new TransactionalCurrency(inventory, currency));
+                inventory.getTransactionalCurrencies().add(new TransactionalCurrency(inventory, currency.getUuid()));
             }
             inventory.getTransactionalCurrencies().stream()
                     .filter(c -> c.getCurrencyUuid().equals(currency.getUuid())).findFirst().orElseThrow()

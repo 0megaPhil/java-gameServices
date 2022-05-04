@@ -126,7 +126,7 @@ public class EntityGenerators {
 
     public static Character generateCharacter() {
         Character character = new Character();
-        character.setName(faker.elderScrolls().firstName() + " " + faker.elderScrolls().lastName() + alphaSup.get());
+        character.setName(faker.elderScrolls().firstName() + " " + faker.elderScrolls().lastName() + " - " + alphaSup.get());
         character.setDescription(String.join(", ", faker.elderScrolls().race(),
                 faker.elderScrolls().city(), faker.elderScrolls().quote()));
         character.setHeight(numericSup.get());

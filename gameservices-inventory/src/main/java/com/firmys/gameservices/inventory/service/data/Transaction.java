@@ -38,6 +38,7 @@ public class Transaction extends AbstractGameEntity implements Comparable<Transa
         uuid = UUID.randomUUID();
     }
 
+
     public Transaction() {}
 
     public Transaction(TransactionalCurrency transactionalCurrency,
@@ -85,7 +86,7 @@ public class Transaction extends AbstractGameEntity implements Comparable<Transa
 
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
     @Override
