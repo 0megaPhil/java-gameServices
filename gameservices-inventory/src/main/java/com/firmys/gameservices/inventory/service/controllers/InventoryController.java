@@ -2,7 +2,9 @@ package com.firmys.gameservices.inventory.service.controllers;
 
 import com.firmys.gameservices.common.AbstractController;
 import com.firmys.gameservices.common.ServiceConstants;
-import com.firmys.gameservices.inventory.service.data.*;
+import com.firmys.gameservices.inventory.service.data.ConsumableItem;
+import com.firmys.gameservices.inventory.service.data.Inventory;
+import com.firmys.gameservices.inventory.service.data.QInventory;
 import com.firmys.gameservices.inventory.service.inventory.InventoryDataLookup;
 import com.firmys.gameservices.inventory.service.inventory.InventoryService;
 import com.firmys.gameservices.inventory.service.inventory.InventoryTransaction;
@@ -10,7 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -32,6 +35,8 @@ public class InventoryController extends AbstractController<Inventory> {
     }
 
     /**
+     * Parameters are optional, and will return all entities if none are passed
+     * get /inventories?uuid={@param uuidParams}
      * {@link ServiceConstants#INVENTORIES_PATH}
      */
     @GetMapping(ServiceConstants.INVENTORIES_PATH)
@@ -42,6 +47,7 @@ public class InventoryController extends AbstractController<Inventory> {
 
     /**
      * A bit of a special case, as Inventory have no identifying attributes, and so creating bulk is handled differently
+     * post /inventories?amount={@param amount}
      *
      * @param amount number of {@link Inventory} to create
      * @return set of newly generated Inventory objects
@@ -89,6 +95,11 @@ public class InventoryController extends AbstractController<Inventory> {
         return super.update(entity);
     }
 
+    /**
+     * put /inventory/{@param uuidPathVar}/currency/credit?currency={@param currencyUuid}&amount={@param amountParam}
+     *
+     * @return entity object with changes applied
+     */
     @PutMapping(
             ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
                     ServiceConstants.CURRENCY_PATH + ServiceConstants.CREDIT_PATH)
@@ -101,6 +112,11 @@ public class InventoryController extends AbstractController<Inventory> {
                 super.find(uuidPathVar), amountParam));
     }
 
+    /**
+     * put /inventory/{@param uuidPathVar}/currency/debit?currency={@param currencyUuid}&amount={@param amountParam}
+     *
+     * @return entity object with changes applied
+     */
     @PutMapping(
             ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
                     ServiceConstants.CURRENCY_PATH + ServiceConstants.DEBIT_PATH)
@@ -124,6 +140,12 @@ public class InventoryController extends AbstractController<Inventory> {
                 super.find(uuidPathVar), amount));
     }
 
+    /**
+     * put /inventory/{@param uuidPathVar}/items/debit?item={@param itemUuids}&amount={@param amountParam}
+     * Can include multiple items to be added as {@link ConsumableItem} objects
+     *
+     * @return entity object with changes applied
+     */
     @PutMapping(
             ServiceConstants.INVENTORY_PATH + ServiceConstants.UUID_PATH_VARIABLE +
                     ServiceConstants.ITEMS_PATH + ServiceConstants.ADD_PATH)

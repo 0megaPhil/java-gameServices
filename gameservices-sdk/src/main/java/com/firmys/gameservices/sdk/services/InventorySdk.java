@@ -2,6 +2,7 @@ package com.firmys.gameservices.sdk.services;
 
 import com.firmys.gameservices.api.InventoryApi;
 import com.firmys.gameservices.common.ServiceConstants;
+import com.firmys.gameservices.models.ConsumableItem;
 import com.firmys.gameservices.models.Inventory;
 import com.firmys.gameservices.models.Item;
 import com.firmys.gameservices.models.OwnedItem;
@@ -22,7 +23,7 @@ public class InventorySdk extends AbstractSdk<Inventory> implements InventoryApi
     }
 
     /**
-     * Add {@link OwnedItem} to {@link Inventory}, which represents a unique consumable instance of an {@link Item}
+     * Add {@link ConsumableItem} to {@link Inventory}, which represents a unique consumable instance of an {@link Item}
      * @param pathUuid  (required) {@link UUID} for Inventory to be modified
      * @param item  (required) UUID of Item to be added as an OwnedItem to Inventory
      * @param amount  (required) number of OwnedItem of Item to be added to Inventory
