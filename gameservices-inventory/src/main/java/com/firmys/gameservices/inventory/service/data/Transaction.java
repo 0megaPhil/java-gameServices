@@ -1,31 +1,52 @@
 package com.firmys.gameservices.inventory.service.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.firmys.gameservices.common.AbstractGameEntity;
 import com.firmys.gameservices.common.Formatters;
-import com.firmys.gameservices.common.GameData;
+import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.data.Transactions;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-public class Transaction implements Comparable<Transaction>, GameData {
+@Entity
+public class Transaction extends AbstractGameEntity implements Comparable<Transaction> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
+    @JsonIgnore
+    private int id;
+    @Column(name = ServiceConstants.UUID, length = 36, updatable = false, nullable = false, unique = true)
+    private UUID uuid;
+    private UUID currencyUuid;
+    @ManyToOne
+    @JsonIgnore
+    private TransactionalCurrency transactionalCurrency;
+    private String transactionType;
+    private long start;
+    private long amount;
+    private long result;
+    private Long epochMillis;
+    private String dateTime;
+    private String date;
 
-    private final UUID uuid = UUID.randomUUID();
-    private final UUID currencyUuid;
-    private final Transactions transactionType;
-    private final long start;
-    private final long amount;
-    private final long end;
-    private final Long epochMillis;
-    private final String dateTime;
-    private final String date;
+    @PrePersist
+    protected void onCreate() {
+        uuid = UUID.randomUUID();
+    }
 
-    Transaction(Transactions transactionType, UUID currencyUuid, long amount, long start, long end) {
-        this.transactionType = transactionType;
+    public Transaction() {}
+
+    public Transaction(TransactionalCurrency transactionalCurrency,
+                Transactions transactionType, UUID currencyUuid, long amount, long start, long result) {
+        this.transactionalCurrency = transactionalCurrency;
+        this.transactionType = transactionType.name();
         this.currencyUuid = currencyUuid;
         this.start = start;
         this.amount = amount;
-        this.end = end;
+        this.result = result;
         LocalDateTime localDateTime = LocalDateTime.now();
         this.epochMillis = localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
 
@@ -45,8 +66,8 @@ public class Transaction implements Comparable<Transaction>, GameData {
         return amount;
     }
 
-    public long getEnd() {
-        return end;
+    public long getResult() {
+        return result;
     }
 
     public String getDateTime() {
@@ -62,6 +83,11 @@ public class Transaction implements Comparable<Transaction>, GameData {
     }
 
     @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
     public int compareTo(Transaction transaction) {
         return this.epochMillis.compareTo(transaction.epochMillis);
     }
@@ -74,13 +100,17 @@ public class Transaction implements Comparable<Transaction>, GameData {
                 ", transactionType=" + transactionType +
                 ", start=" + start +
                 ", amount=" + amount +
-                ", end=" + end +
+                ", end=" + result +
                 ", epochMillis=" + epochMillis +
                 ", dateTime='" + dateTime + '\'' +
                 '}';
     }
 
-    public Transactions getTransactionType() {
+    public String getTransactionType() {
         return transactionType;
+    }
+
+    public TransactionalCurrency getTransactionalCurrency() {
+        return transactionalCurrency;
     }
 }

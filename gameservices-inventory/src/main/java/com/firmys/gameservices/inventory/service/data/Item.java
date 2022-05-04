@@ -3,14 +3,12 @@ package com.firmys.gameservices.inventory.service.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.AbstractGameEntity;
 import com.firmys.gameservices.common.ServiceConstants;
-import com.firmys.gameservices.common.data.Attributes;
 import com.firmys.gameservices.common.data.DefaultData;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-// TODO - Add delete all OwnedItems from all Inventories when Item is deleted
 public class Item extends AbstractGameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +29,6 @@ public class Item extends AbstractGameEntity {
     private int width = DefaultData.DEFAULT_INT;
     @Column
     private int height = DefaultData.DEFAULT_INT;
-    @Column(length = 100000)
-    private Attributes requirements;
     @Column
     private int baseValue = DefaultData.DEFAULT_INT;
     @Column(length = 4192)
@@ -40,7 +36,6 @@ public class Item extends AbstractGameEntity {
     @PrePersist
     protected void onCreate() {
         uuid = UUID.randomUUID();
-        this.requirements = new Attributes();
     }
 
     public int getId() {
@@ -103,15 +98,6 @@ public class Item extends AbstractGameEntity {
         this.height = height;
     }
 
-
-    public Attributes getRequirements() {
-        return requirements;
-    }
-
-    public void setRequirements(Attributes requirements) {
-        this.requirements = requirements;
-    }
-
     public int getBaseValue() {
         return baseValue;
     }
@@ -130,7 +116,6 @@ public class Item extends AbstractGameEntity {
                 ", length=" + length +
                 ", width=" + width +
                 ", height=" + height +
-                ", requirements=" + requirements +
                 ", baseValue=" + baseValue +
                 '}';
     }

@@ -5,7 +5,7 @@ import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.inventory.service.data.*;
 import com.firmys.gameservices.inventory.service.inventory.InventoryDataLookup;
 import com.firmys.gameservices.inventory.service.inventory.InventoryService;
-import com.firmys.gameservices.inventory.service.inventory.InventoryUtils;
+import com.firmys.gameservices.inventory.service.inventory.InventoryTransaction;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -96,7 +96,7 @@ public class InventoryController extends AbstractController<Inventory> {
             @PathVariable(value = ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.CURRENCY) UUID currencyUuid,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amountParam) {
-        return super.save(InventoryUtils.creditCurrency(
+        return super.save(InventoryTransaction.creditCurrency(
                 currencyController.find(currencyUuid),
                 super.find(uuidPathVar), amountParam));
     }
@@ -108,7 +108,7 @@ public class InventoryController extends AbstractController<Inventory> {
             @PathVariable(value = ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.CURRENCY) UUID currencyUuid,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amountParam) {
-        return super.save(InventoryUtils.debitCurrency(
+        return super.save(InventoryTransaction.debitCurrency(
                 currencyController.find(currencyUuid),
                 super.find(uuidPathVar), amountParam));
     }
@@ -119,7 +119,7 @@ public class InventoryController extends AbstractController<Inventory> {
             @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.ITEM) UUID itemUuid,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
-        return super.save(InventoryUtils.addOwnedItemByItemUuid(itemController
+        return super.save(InventoryTransaction.addOwnedItemByItemUuid(itemController
                         .find(itemUuid),
                 super.find(uuidPathVar), amount));
     }
@@ -133,7 +133,7 @@ public class InventoryController extends AbstractController<Inventory> {
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
         AtomicReference<Inventory> inventory = new AtomicReference<>(super.find(uuidPathVar));
         itemController.findAll(itemUuids).forEach(item ->
-                inventory.set(InventoryUtils.addOwnedItemByItemUuid(item, inventory.get(), amount)));
+                inventory.set(InventoryTransaction.addOwnedItemByItemUuid(item, inventory.get(), amount)));
         return super.save(inventory.get());
     }
 
@@ -144,7 +144,7 @@ public class InventoryController extends AbstractController<Inventory> {
             @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar,
             @RequestParam(value = ServiceConstants.ITEM) UUID itemUuid,
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
-        return super.save(InventoryUtils.consumeOwnedItemByItem(itemController
+        return super.save(InventoryTransaction.consumeOwnedItemByItem(itemController
                         .find(itemUuid),
                 super.find(uuidPathVar), amount));
     }
@@ -158,7 +158,7 @@ public class InventoryController extends AbstractController<Inventory> {
             @RequestParam(value = ServiceConstants.AMOUNT) Integer amount) {
         AtomicReference<Inventory> inventory = new AtomicReference<>(super.find(uuidPathVar));
         itemController.findAll(itemUuids).forEach(item ->
-                inventory.set(InventoryUtils.consumeOwnedItemByItem(item, inventory.get(), amount)));
+                inventory.set(InventoryTransaction.consumeOwnedItemByItem(item, inventory.get(), amount)));
         return super.save(inventory.get());
     }
 

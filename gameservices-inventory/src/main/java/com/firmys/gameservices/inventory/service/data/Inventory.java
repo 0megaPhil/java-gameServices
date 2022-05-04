@@ -1,17 +1,21 @@
 package com.firmys.gameservices.inventory.service.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.firmys.gameservices.common.AbstractGameEntity;
+import com.firmys.gameservices.common.GameData;
 import com.firmys.gameservices.common.ServiceConstants;
+import org.hibernate.annotations.Proxy;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Entity
 public class Inventory extends AbstractGameEntity {
@@ -23,13 +27,43 @@ public class Inventory extends AbstractGameEntity {
     @Column(name = ServiceConstants.UUID, length = 36, updatable = false, nullable = false, unique = true)
     private UUID uuid;
     @Column(length = 1000000)
-    private OwnedItems ownedItems;
+    @ElementCollection(targetClass = ConsumableItem.class)
+    @OneToMany(mappedBy = "inventory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<ConsumableItem> consumableItems;
     @Column(length = 1000000)
-    private OwnedCurrencies ownedCurrencies;
+    @ElementCollection(targetClass = TransactionalCurrency.class)
+    @OneToMany(mappedBy = "inventory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<TransactionalCurrency> transactionalCurrencies;
 
     @PrePersist
     protected void onCreate() {
         uuid = UUID.randomUUID();
+        consumableItems = ConcurrentHashMap.newKeySet();
+        transactionalCurrencies = ConcurrentHashMap.newKeySet();
+    }
+
+//    public void addConsumableItem(Item item, Integer amount) {
+//        if(consumableItems.stream().noneMatch(c -> c.getItemUuid().equals(item.getUuid()))) {
+//            consumableItems.add(new ConsumableItem(item));
+//        }
+//        consumableItems.stream().filter(c ->
+//                c.getItemUuid().equals(item.getUuid())).findFirst().orElseThrow().add(amount);
+//    }
+
+    public Set<ConsumableItem> getConsumableItems() {
+        return consumableItems;
+    }
+
+    public void setConsumableItems(Set<ConsumableItem> consumableItems) {
+        this.consumableItems = consumableItems;
+    }
+
+    public Set<TransactionalCurrency> getTransactionalCurrencies() {
+        return transactionalCurrencies;
+    }
+
+    public void setTransactionalCurrencies(Set<TransactionalCurrency> transactionalCurrencies) {
+        this.transactionalCurrencies = transactionalCurrencies;
     }
 
     public int getId() {
@@ -40,28 +74,13 @@ public class Inventory extends AbstractGameEntity {
         return uuid;
     }
 
-    public OwnedItems getOwnedItems() {
-        return Objects.requireNonNullElseGet(ownedItems, OwnedItems::new);
-    }
-
-    public void setOwnedItems(OwnedItems ownedItems) {
-        this.ownedItems = ownedItems;
-    }
-
-    public OwnedCurrencies getOwnedCurrencies() {
-        return Objects.requireNonNullElseGet(ownedCurrencies, OwnedCurrencies::new);
-    }
-
-    public void setOwnedCurrencies(OwnedCurrencies ownedCurrencies) {
-        this.ownedCurrencies = ownedCurrencies;
-    }
 
     @Override
     public String toString() {
         return "Inventory{" +
                 ", uuid=" + uuid +
-                ", ownedItems=" + ownedItems +
-                ", ownedCurrency=" + ownedCurrencies +
+                ", ownedItems=" + consumableItems +
+                ", ownedCurrency=" + transactionalCurrencies +
                 '}';
     }
 }

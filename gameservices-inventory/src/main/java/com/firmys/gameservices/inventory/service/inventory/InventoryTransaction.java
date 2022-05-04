@@ -4,11 +4,15 @@ import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.error.GameServiceException;
 import com.firmys.gameservices.inventory.service.data.*;
 
-public class InventoryUtils {
+public class InventoryTransaction {
 
     public static Inventory consumeOwnedItemByItem(Item item, Inventory inventory, int amount) {
         try {
-            inventory.setOwnedItems(inventory.getOwnedItems().consumeItem(item, amount));
+            inventory.getConsumableItems().stream()
+                    .filter(c -> c.getItemUuid().equals(item.getUuid())).findFirst().orElseThrow(() ->
+                            new RuntimeException("No ConsumableItem matching " + item.getUuid() +
+                                    " found in Inventory " + inventory.getUuid()))
+                    .consume(amount);
             return inventory;
         } catch (Exception e) {
             throw new GameServiceException(e, ServiceConstants.CONSUME,
@@ -20,7 +24,13 @@ public class InventoryUtils {
 
     public static Inventory addOwnedItemByItemUuid(Item item, Inventory inventory, int amount) {
         try {
-            inventory.setOwnedItems(inventory.getOwnedItems().addItem(item, amount));
+            if(inventory.getConsumableItems().stream().noneMatch(c -> c.getItemUuid().equals(item.getUuid()))) {
+                inventory.getConsumableItems().add(new ConsumableItem(inventory, item));
+            }
+            inventory.getConsumableItems().stream()
+                    .filter(c -> c.getItemUuid().equals(item.getUuid())).findFirst().orElseThrow()
+                    .add(amount);
+            System.out.println("" + inventory.getConsumableItems());
             return inventory;
         } catch (Exception e) {
             throw new GameServiceException(e, ServiceConstants.ADD,
@@ -32,7 +42,12 @@ public class InventoryUtils {
 
     public static Inventory creditCurrency(Currency currency, Inventory inventory, int amount) {
         try {
-            inventory.setOwnedCurrencies(inventory.getOwnedCurrencies().creditCurrency(currency, amount));
+            if(inventory.getTransactionalCurrencies().stream().noneMatch(c -> c.getCurrencyUuid().equals(currency.getUuid()))) {
+                inventory.getTransactionalCurrencies().add(new TransactionalCurrency(inventory, currency));
+            }
+            inventory.getTransactionalCurrencies().stream()
+                    .filter(c -> c.getCurrencyUuid().equals(currency.getUuid())).findFirst().orElseThrow()
+                    .credit(amount);
             return inventory;
         } catch (Exception e) {
             throw new GameServiceException(e, ServiceConstants.CREDIT,
@@ -44,7 +59,11 @@ public class InventoryUtils {
 
     public static Inventory debitCurrency(Currency currency, Inventory inventory, int amount) {
         try {
-            inventory.setOwnedCurrencies(inventory.getOwnedCurrencies().debitCurrency(currency, amount));
+            inventory.getTransactionalCurrencies().stream()
+                    .filter(c -> c.getCurrencyUuid().equals(currency.getUuid())).findFirst().orElseThrow(() ->
+                            new RuntimeException("No TransactionalCurrency matching " + currency.getUuid() +
+                                    " found in Inventory " + inventory.getUuid()))
+                    .debit(amount);
             return inventory;
         } catch (Exception e) {
             throw new GameServiceException(e, ServiceConstants.DEBIT,
