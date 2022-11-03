@@ -13,6 +13,8 @@ target/
 
 # Package Files #
 *.jar
+*node*
+*node*/
 *.war
 *.nar
 *.ear

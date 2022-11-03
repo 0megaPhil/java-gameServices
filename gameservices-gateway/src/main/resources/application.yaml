@@ -18,6 +18,22 @@ spring:
           uri: http://${VM_HOST_CHARACTER}:${SERVICE_PORT}
           predicates:
             - Path=/characters/**
+        - id: itemService
+          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          predicates:
+            - Path="/item/**"
+        - id: currencyService
+          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          predicates:
+            - Path=/currency/**
+        - id: itemsService
+          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          predicates:
+            - Path="/items/**"
+        - id: currenciesService
+          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          predicates:
+            - Path=/currencies/**
 
   health:
     defaults:
