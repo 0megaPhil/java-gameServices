@@ -1,0 +1,17 @@
+server:
+  port: 8082
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:keys/firmys.p12
+    key-password: changeit
+    key-alias: firmys
+    trust-store: classpath:keys/truststore
+    trust-store-password: changeit
+    enabled: true
+spring:
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+  r2dbc:
+    url: r2dbc:h2:file:///./usersdb

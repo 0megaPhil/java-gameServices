@@ -2,75 +2,78 @@ package com.firmys.gameservices.common;
 
 public class ServiceConstants {
 
-    public static final String VERSION = "0.1.0-SNAPSHOT";
-    public static final String GAME_SERVICES_GATEWAY = "GameServicesGateway";
-    public static final String CACHE_MANAGER_SUFFIX = "CacheManager";
-    public static final String ITEM = "item";
-    public static final String ITEM_PATH = "/" + ITEM;
-    public static final String ITEMS = "items";
-    public static final String ITEMS_PATH = "/" + ITEMS;
+  public static final String VERSION = "0.1.0-SNAPSHOT";
+  public static final String GAME_SERVICES_GATEWAY = "GameServicesGateway";
+  public static final String CACHE_MANAGER_SUFFIX = "CacheManager";
+  public static final String ITEM = "item";
+  public static final String ITEM_PATH = "/" + ITEM;
+  public static final String ITEMS = "items";
+  public static final String ITEMS_PATH = "/" + ITEMS;
+  public static final String TRANSACTION = "transaction";
+  public static final String TRANSACTION_PATH = "/" + TRANSACTION;
+  public static final String TRANSACTIONS = "transactions";
+  public static final String TRANSACTIONS_PATH = "/" + TRANSACTIONS;
 
-    public static final String CHARACTER = "character";
-    public static final String CHARACTER_SERVICE = "CharacterService";
-    public static final String CHARACTER_PATH = "/" + CHARACTER;
-    public static final String CHARACTERS = "characters";
-    public static final String CHARACTERS_PATH = "/" + CHARACTERS;
+  public static final String CHARACTER = "character";
+  public static final String CHARACTER_SERVICE = "CharacterService";
+  public static final String CHARACTER_PATH = "/" + CHARACTER;
+  public static final String CHARACTERS = "characters";
+  public static final String CHARACTERS_PATH = "/" + CHARACTERS;
 
-    public static final String INVENTORY = "inventory";
-    public static final String INVENTORY_SERVICE = "InventoryService";
-    public static final String INVENTORY_PATH = "/" + INVENTORY;
-    public static final String INVENTORIES = "inventories";
-    public static final String INVENTORIES_PATH = "/" + INVENTORIES;
-    public static final String CONSUMABLE_ITEM = "consumableItem";
-    public static final String TRANSACTIONAL_CURRENCY = "transactionalCurrency";
-    public static final String ID = "Id";
+  public static final String INVENTORY = "inventory";
+  public static final String INVENTORY_SERVICE = "InventoryService";
+  public static final String INVENTORY_PATH = "/" + INVENTORY;
+  public static final String INVENTORIES = "inventories";
+  public static final String INVENTORIES_PATH = "/" + INVENTORIES;
+  public static final String CONSUMABLE_ITEM = "consumableItem";
+  public static final String TRANSACTIONAL_CURRENCY = "transactionalCurrency";
+  public static final String ID = "Id";
 
-    public static final String CURRENCY = "currency";
-    public static final String CURRENCY_PATH = "/" + CURRENCY;
-    public static final String CURRENCIES = "currencies";
-    public static final String CURRENCIES_PATH = "/" + CURRENCIES;
+  public static final String CURRENCY = "currency";
+  public static final String CURRENCY_PATH = "/" + CURRENCY;
+  public static final String CURRENCIES = "currencies";
+  public static final String CURRENCIES_PATH = "/" + CURRENCIES;
 
-    public static final String WORLD = "world";
-    public static final String WORLDS = "worlds";
-    public static final String WORLD_SERVICE = "WorldService";
-    public static final String WORLD_PATH = "/" + WORLD;
-    public static final String WORLDS_PATH = "/" + WORLDS;
+  public static final String WORLD = "world";
+  public static final String WORLDS = "worlds";
+  public static final String WORLD_SERVICE = "WorldService";
+  public static final String WORLD_PATH = "/" + WORLD;
+  public static final String WORLDS_PATH = "/" + WORLDS;
 
-    public final static String UUID = "uuid";
-    public final static String PATH_UUID = "pathUuid";
-    public final static String UUID_PATH_VARIABLE = "/" + "{" + ServiceConstants.PATH_UUID + "}";
+  public static final String UUID = "uuid";
+  public static final String PATH_UUID = "pathUuid";
+  public static final String UUID_PATH_VARIABLE = "/" + "{" + ServiceConstants.PATH_UUID + "}";
 
-    public final static String AMOUNT = "amount";
-    public final static String ATTRIBUTE = "attribute";
-    public final static String ATTRIBUTES = "attributes";
-    public final static String MATCH = "match";
-    public final static String PARTIAL = "partial";
-    public final static String EXACT = "exact";
-    public final static String STRATEGY = "strategy";
-    public final static String PARTIAL_PATH = "/" + PARTIAL;
-    public final static String SEARCH = "search";
-    public final static String SEARCH_PATH = "/" + SEARCH;
-    public final static String QUERY = "query";
-    public final static String QUERY_PATH = "/" + QUERY;
-    public final static String MATCH_PATH_VARIABLE = "/" + "{" + ServiceConstants.MATCH + "}";
+  public static final String AMOUNT = "amount";
+  public static final String ATTRIBUTE = "attribute";
+  public static final String ATTRIBUTES = "attributes";
+  public static final String MATCH = "match";
+  public static final String PARTIAL = "partial";
+  public static final String EXACT = "exact";
+  public static final String STRATEGY = "strategy";
+  public static final String PARTIAL_PATH = "/" + PARTIAL;
+  public static final String SEARCH = "search";
+  public static final String SEARCH_PATH = "/" + SEARCH;
+  public static final String QUERY = "query";
+  public static final String QUERY_PATH = "/" + QUERY;
+  public static final String MATCH_PATH_VARIABLE = "/" + "{" + ServiceConstants.MATCH + "}";
 
-    public final static String OWNED_ITEMS = "OwnedItems";
-    public final static String OWNED_CURRENCIES = "OwnedCurrencies";
+  public static final String OWNED_ITEMS = "OwnedItems";
+  public static final String OWNED_CURRENCIES = "OwnedCurrencies";
 
-    public final static String OWNED_ITEM = "OwnedItem";
-    public final static String OWNED_CURRENCY = "OwnedCurrency";
+  public static final String OWNED_ITEM = "OwnedItem";
+  public static final String OWNED_CURRENCY = "OwnedCurrency";
 
-    public final static String URL = "url";
-    public final static String URI = "uri";
+  public static final String URL = "url";
+  public static final String URI = "uri";
 
-    public final static String CREDIT = "credit";
-    public final static String DEBIT = "debit";
-    public final static String CREDIT_PATH = "/" + CREDIT;
-    public final static String DEBIT_PATH = "/" + DEBIT;
+  public static final String CREDIT = "credit";
+  public static final String DEBIT = "debit";
+  public static final String CREDIT_PATH = "/" + CREDIT;
+  public static final String DEBIT_PATH = "/" + DEBIT;
 
-    public final static String ADD = "add";
-    public final static String CONSUME = "consume";
-    public final static String ADD_PATH = "/" + ADD;
-    public final static String CONSUME_PATH = "/" + CONSUME;
-
+  public static final String ADD = "add";
+  public static final String CONSUME = "consume";
+  public static final String ADD_PATH = "/" + ADD;
+  public static final String CONSUME_PATH = "/" + CONSUME;
 }

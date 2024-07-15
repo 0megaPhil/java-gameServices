@@ -1,95 +1,76 @@
 package com.firmys.gameservices.characters.controllers;
 
-import com.firmys.gameservices.characters.service.CharacterDataLookup;
-import com.firmys.gameservices.characters.service.CharacterService;
-import com.firmys.gameservices.characters.service.data.Character;
-import com.firmys.gameservices.characters.service.data.QCharacter;
-import com.firmys.gameservices.common.AbstractController;
+import com.firmys.gameservices.characters.models.Character;
+import com.firmys.gameservices.characters.services.CharacterService;
+import com.firmys.gameservices.common.CommonController;
 import com.firmys.gameservices.common.ServiceConstants;
+import java.util.UUID;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import javax.persistence.EntityManager;
-import java.util.*;
-
+@Getter
 @RestController
-public class CharacterController extends AbstractController<Character> {
+@Builder(toBuilder = true)
+@Accessors(chain = true, fluent = true)
+public class CharacterController extends CommonController<Character> {
 
-    public CharacterController(
-            CharacterService service,
-            CharacterDataLookup dataLookup,
-            EntityManager entityManager) {
-        super(service, dataLookup, Character.class, Character::new, QCharacter.character, entityManager);
-    }
+  private final CharacterService service;
+  private final Class<Character> entityClass = Character.class;
 
-    /**
-     * {@link ServiceConstants#CHARACTERS_PATH}
-     */
-    @GetMapping(ServiceConstants.CHARACTERS_PATH)
-    public Set<Character> findSet(
-            @RequestParam(value = ServiceConstants.UUID, required = false) Set<UUID> uuidParams) {
-        return uuidParams == null ? super.findAll() : super.findAll(uuidParams);
-    }
+  @GetMapping(ServiceConstants.CHARACTERS_PATH)
+  public Flux<Character> batchGet(
+      @RequestParam(value = ServiceConstants.UUID, required = false) Flux<UUID> uuids) {
+    return service.find(uuids);
+  }
 
-    @PostMapping(value = ServiceConstants.CHARACTERS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Character> createSet(
-            @RequestBody Set<Character> entities) {
-        return super.save(entities);
-    }
+  @GetMapping(ServiceConstants.CHARACTER_PATH)
+  public Mono<Character> get(
+      @RequestParam(value = ServiceConstants.UUID, required = false) UUID uuid) {
+    return service.find(uuid);
+  }
 
-    @DeleteMapping(value = ServiceConstants.CHARACTERS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteSet(
-            @RequestParam(value = ServiceConstants.UUID) Set<UUID> uuidParams) {
-        super.delete(uuidParams);
-    }
+  @PostMapping(
+      value = ServiceConstants.CHARACTERS_PATH,
+      consumes = MediaType.APPLICATION_JSON_VALUE)
+  public Flux<Character> batchCreate(@RequestBody Flux<Character> objects) {
+    return service.create(objects);
+  }
 
-    @PutMapping(value = ServiceConstants.CHARACTERS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Set<Character> updateSet(
-            @RequestBody Set<Character> entities) {
-        return super.update(entities);
-    }
+  @PostMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<Character> create(@RequestBody Mono<Character> object) {
+    return service.create(object);
+  }
 
-    /**
-     * {@link ServiceConstants#CHARACTER_PATH}
-     */
-    @GetMapping(value = ServiceConstants.CHARACTER_PATH + ServiceConstants.UUID_PATH_VARIABLE)
-    public Character find(
-            @PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar) {
-        return super.find(uuidPathVar);
-    }
+  @PutMapping(value = ServiceConstants.CHARACTERS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public Flux<Character> batchUpdate(@RequestBody Flux<Character> objects) {
+    return service.update(objects);
+  }
 
-    @PostMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Character create(@RequestBody(required = false) Character entity) {
-        return super.save(entity);
-    }
+  @PutMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public Mono<Character> update(@RequestBody Mono<Character> object) {
+    return service.update(object);
+  }
 
-    @DeleteMapping(value = ServiceConstants.CHARACTER_PATH + ServiceConstants.UUID_PATH_VARIABLE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void delete(@PathVariable(ServiceConstants.PATH_UUID) UUID uuidPathVar) {
-        super.delete(uuidPathVar);
-    }
+  @DeleteMapping(ServiceConstants.CHARACTERS_PATH)
+  public Mono<Void> batchDelete(
+      @RequestParam(value = ServiceConstants.UUID, required = false) Flux<UUID> uuids) {
+    return service.delete(uuids);
+  }
 
-    @PutMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Character update(@RequestBody Character entity) {
-        return super.update(entity);
-    }
-
-    /**
-     * {@link ServiceConstants#CHARACTERS_PATH}/{@link ServiceConstants#QUERY_PATH}
-     * @param queryMap key value style attributes such as http://url:port/path?key0=val0&key1=val1
-     * @return set of entities which match attribute key and value restrictions
-     */
-    @GetMapping(value = ServiceConstants.CHARACTERS_PATH + ServiceConstants.QUERY_PATH)
-    public Set<Character> findAll(
-            @RequestParam Map<String, String> queryMap) {
-        return super.findAll(queryMap);
-    }
-
+  @DeleteMapping(ServiceConstants.CHARACTER_PATH)
+  public Mono<Void> delete(
+      @RequestParam(value = ServiceConstants.UUID, required = false) Mono<UUID> uuid) {
+    return service.delete(uuid);
+  }
 }

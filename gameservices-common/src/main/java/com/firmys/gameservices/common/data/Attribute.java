@@ -1,13 +1,5 @@
 package com.firmys.gameservices.common.data;
 
-import com.firmys.gameservices.common.GameData;
+import com.firmys.gameservices.common.CommonObject;
 
-public interface Attribute extends GameData {
-    AttributesType getAttribute();
-    void setAttribute(AttributesType attribute);
-    String getDescription();
-    void setDescription(String description);
-    Integer getValue();
-    void setValue(Integer magnitude);
-    void shiftValue(Integer delta);
-}
+public record Attribute(AttributesType type, Long value) implements CommonObject {}

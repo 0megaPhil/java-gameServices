@@ -1,96 +1,104 @@
 package com.firmys.gameservices.gateway.controllers;
 
-import com.firmys.gameservices.common.GameData;
-import com.firmys.gameservices.common.GameEntity;
-import com.firmys.gameservices.common.error.GameServiceError;
+import com.firmys.gameservices.common.CommonEntity;
+import com.firmys.gameservices.common.CommonObject;
 import com.firmys.gameservices.common.JsonUtils;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GatewayController {
-    public final static String baseDataName = "error";
-    public final static String gameServiceErrorBase = "/" + baseDataName;
 
-    @GetMapping(gameServiceErrorBase)
-    public GameData getError(
-            ServerHttpRequest serverHttpRequest) {
-        return new GameData() {
-            private final String message = serializeRequest(serverHttpRequest);
-            public String getMessage() {
-                return message;
-            }
-        };
-    }
+  public static final String baseDataName = "error";
+  public static final String gameServiceErrorBase = "/" + baseDataName;
 
-    @PostMapping(gameServiceErrorBase)
-    public GameData postError(
-            ServerHttpRequest serverHttpRequest,
-            @RequestBody(required = false) GameEntity requestBody) {
-        return new GameData() {
-            private final String message = serializeRequest(serverHttpRequest);
-            private final GameEntity entity = requestBody;
-            public String getMessage() {
-                return message;
-            }
-            public GameEntity getEntity() {
-                return entity;
-            }
-        };
-    }
+  @GetMapping(gameServiceErrorBase)
+  public CommonObject getError(ServerHttpRequest serverHttpRequest) {
+    return new CommonObject() {
+      private final String message = serializeRequest(serverHttpRequest);
 
-    @PutMapping(value = gameServiceErrorBase)
-    public GameData putError(
-            ServerHttpRequest serverHttpRequest,
-            @RequestBody(required = false) GameEntity requestBody) {
-        return new GameData() {
-            private final String message = serializeRequest(serverHttpRequest);
-            private final GameEntity entity = requestBody;
-            public String getMessage() {
-                return message;
-            }
-            public GameEntity getEntity() {
-                return entity;
-            }
-        };
-    }
+      public String getMessage() {
+        return message;
+      }
+    };
+  }
 
-    @DeleteMapping(gameServiceErrorBase)
-    public GameData deleteError(
-            ServerHttpRequest serverHttpRequest,
-            @RequestBody(required = false) GameEntity requestBody) {
-        return new GameData() {
-            private final String message = serializeRequest(serverHttpRequest);
-            private final GameEntity entity = requestBody;
-            public String getMessage() {
-                return message;
-            }
-            public GameEntity getEntity() {
-                return entity;
-            }
-        };
-    }
+  @PostMapping(gameServiceErrorBase)
+  public CommonObject postError(
+      ServerHttpRequest serverHttpRequest,
+      @RequestBody(required = false) CommonEntity requestBody) {
+    return new CommonObject() {
+      private final String message = serializeRequest(serverHttpRequest);
+      private final CommonEntity entity = requestBody;
 
-    private String serializeRequest(ServerHttpRequest serverHttpRequest) {
-        String cookies = JsonUtils.writeObjectAsString(serverHttpRequest.getCookies());
-        return JsonUtils.writeObjectAsString(Map.of(
-                "Query Params",
-                serverHttpRequest.getQueryParams(),
-                "Id",
-                serverHttpRequest.getId(),
-                "Local Address",
-                Optional.ofNullable(Objects.requireNonNull(serverHttpRequest.getLocalAddress()).toString())
-                        .orElse("null"),
-                "Remote Address",
-                Optional.ofNullable(Objects.requireNonNull(serverHttpRequest.getRemoteAddress()).toString())
-                        .orElse("null"),
-                "Path",
-                serverHttpRequest.getPath().toString(),
-                "Cookies",
-                cookies));
-    }
+      public String getMessage() {
+        return message;
+      }
+
+      public CommonEntity getEntity() {
+        return entity;
+      }
+    };
+  }
+
+  @PutMapping(value = gameServiceErrorBase)
+  public CommonObject putError(
+      ServerHttpRequest serverHttpRequest,
+      @RequestBody(required = false) CommonEntity requestBody) {
+    return new CommonObject() {
+      private final String message = serializeRequest(serverHttpRequest);
+      private final CommonEntity entity = requestBody;
+
+      public String getMessage() {
+        return message;
+      }
+
+      public CommonEntity getEntity() {
+        return entity;
+      }
+    };
+  }
+
+  @DeleteMapping(gameServiceErrorBase)
+  public CommonObject deleteError(
+      ServerHttpRequest serverHttpRequest,
+      @RequestBody(required = false) CommonEntity requestBody) {
+    return new CommonObject() {
+      private final String message = serializeRequest(serverHttpRequest);
+      private final CommonEntity entity = requestBody;
+
+      public String getMessage() {
+        return message;
+      }
+
+      public CommonEntity getEntity() {
+        return entity;
+      }
+    };
+  }
+
+  private String serializeRequest(ServerHttpRequest serverHttpRequest) {
+    String cookies = JsonUtils.toJson(serverHttpRequest.getCookies());
+    return JsonUtils.toJson(
+        Map.of(
+            "Query Params",
+            serverHttpRequest.getQueryParams(),
+            "Id",
+            serverHttpRequest.getId(),
+            "Local Address",
+            String.valueOf(Objects.requireNonNull(serverHttpRequest.getLocalAddress()).toString()),
+            "Remote Address",
+            String.valueOf(Objects.requireNonNull(serverHttpRequest.getRemoteAddress()).toString()),
+            "Path",
+            serverHttpRequest.getPath().toString(),
+            "Cookies",
+            cookies));
+  }
 }

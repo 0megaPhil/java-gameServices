@@ -1,56 +1,62 @@
+server:
+  port: 8080
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:keys/firmys.p12
+    key-password: changeit
+    key-alias: firmys
+    trust-store: classpath:keys/truststore
+    trust-store-password: changeit
+    enabled: true
+gameservices:
+  service:
+    character:
+      host: localhost
+      port: 8081
+    inventory:
+      host: localhost
+      port: 8082
+    world:
+      host: localhost
+      port: 8083
+
 spring:
   cloud:
     gateway:
       routes:
         - id: inventoryService
-          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path="/inventory/**"
         - id: characterService
-          uri: http://${VM_HOST_CHARACTER}:${SERVICE_PORT}
+          uri: http://${gameservices.service.character.host}:${gameservices.service.character.port}
           predicates:
             - Path=/character/**
         - id: inventoriesService
-          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path="/inventories/**"
         - id: charactersService
-          uri: http://${VM_HOST_CHARACTER}:${SERVICE_PORT}
+          uri: http://${gameservices.service.character.host}:${gameservices.service.character.port}
           predicates:
             - Path=/characters/**
         - id: itemService
-          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path="/item/**"
         - id: currencyService
-          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path=/currency/**
         - id: itemsService
-          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path="/items/**"
         - id: currenciesService
-          uri: http://${VM_HOST_INVENTORY}:${SERVICE_PORT}
+          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path=/currencies/**
-
-  health:
-    defaults:
-      enabled: true
-
-logging:
-  level:
-    com:
-      amazonaws:
-        util:
-          EC2MetadataUtils: error
-cloud:
-  aws:
-    stack:
-      auto: false
-    region:
-      static: us-west-1
-    credentials:
-      instanceProfile: true
-      useDefaultAwsCredentialsChain: true
+        - id: worldService
+          uri: http://${gameservices.service.world.host}:${gameservices.service.world.port}
+          predicates:
+            - Path="/world/**"
