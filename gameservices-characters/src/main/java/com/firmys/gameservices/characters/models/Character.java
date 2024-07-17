@@ -1,13 +1,15 @@
 package com.firmys.gameservices.characters.models;
 
 import com.firmys.gameservices.common.CommonEntity;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import lombok.experimental.Accessors;
+import lombok.Builder;
+import org.springframework.data.annotation.Id;
 
-@Accessors(fluent = true, chain = true)
+@Builder(toBuilder = true)
 public record Character(
-    UUID uuid,
+    @Id UUID uuid,
     String name,
     String description,
     String gender,
@@ -17,4 +19,9 @@ public record Character(
     UUID userId,
     UUID inventoryId,
     Set<CharacterAttribute> attributes)
-    implements CommonEntity {}
+    implements CommonEntity {
+
+  public Character {
+    uuid = Optional.ofNullable(uuid).orElseGet(UUID::randomUUID);
+  }
+}

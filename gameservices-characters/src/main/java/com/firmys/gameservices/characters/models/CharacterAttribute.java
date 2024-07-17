@@ -1,5 +1,9 @@
 package com.firmys.gameservices.characters.models;
 
+import com.firmys.gameservices.common.CommonObject;
 import java.util.UUID;
+import lombok.Builder;
 
-public record CharacterAttribute(UUID characterId, Attribute attribute, long value) {}
+@Builder(toBuilder = true)
+public record CharacterAttribute(UUID characterId, Attribute attribute, long value)
+    implements CommonObject {}

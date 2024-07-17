@@ -1,5 +1,6 @@
 package com.firmys.gameservices.common;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -19,6 +20,11 @@ public class JsonUtils {
 
   @SneakyThrows
   public static <T> T fromJson(String jsonStr, Class<T> objectType) {
+    return mapper.readValue(jsonStr, objectType);
+  }
+
+  @SneakyThrows
+  public static <T> T fromJson(String jsonStr, TypeReference<T> objectType) {
     return mapper.readValue(jsonStr, objectType);
   }
 }
