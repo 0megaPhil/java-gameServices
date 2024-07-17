@@ -40,6 +40,12 @@ public class ServiceConstants {
   public static final String WORLD_PATH = "/" + WORLD;
   public static final String WORLDS_PATH = "/" + WORLDS;
 
+  public static final String USER = "user";
+  public static final String USERS = "users";
+  public static final String USERS_SERVICE = "UsersService";
+  public static final String USER_PATH = "/" + USER;
+  public static final String USERS_PATH = "/" + USERS;
+
   public static final String UUID = "uuid";
   public static final String PATH_UUID = "pathUuid";
   public static final String UUID_PATH_VARIABLE = "/" + "{" + ServiceConstants.PATH_UUID + "}";

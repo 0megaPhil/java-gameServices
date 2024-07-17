@@ -1,23 +1,16 @@
 package com.firmys.gameservices.common.config;
 
 import com.firmys.gameservices.common.error.GameDataExceptionController;
-import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
-import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
-import io.github.resilience4j.timelimiter.TimeLimiterConfig;
-import java.time.Duration;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.web.server.Ssl;
-import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JCircuitBreakerFactory;
-import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
-import org.springframework.cloud.client.circuitbreaker.Customizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({SpringSecurityConfiguration.class, GameDataExceptionController.class})
+@Import({GameDataExceptionController.class})
 public class CommonConfig {
 
   @Value("${server.ssl.key-password}")
@@ -30,18 +23,6 @@ public class CommonConfig {
     ServerProperties serverProperties = new ServerProperties();
     serverProperties.setSsl(ssl);
     return serverProperties;
-  }
-
-  @Bean
-  public Customizer<ReactiveResilience4JCircuitBreakerFactory> defaultCustomizer() {
-    return factory ->
-        factory.configureDefault(
-            id ->
-                new Resilience4JConfigBuilder(id)
-                    .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
-                    .timeLimiterConfig(
-                        TimeLimiterConfig.custom().timeoutDuration(Duration.ofMillis(200)).build())
-                    .build());
   }
 
   @Bean

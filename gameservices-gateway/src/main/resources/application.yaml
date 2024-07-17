@@ -2,11 +2,9 @@ server:
   port: 8080
   ssl:
     key-store-type: PKCS12
-    key-store: classpath:keys/firmys.p12
+    key-store: classpath:keys/firmys.jks
     key-password: changeit
     key-alias: firmys
-    trust-store: classpath:keys/truststore
-    trust-store-password: changeit
     enabled: true
 gameservices:
   service:
@@ -16,36 +14,45 @@ gameservices:
     inventory:
       host: localhost
       port: 8082
-    world:
+    users:
       host: localhost
       port: 8083
+    world:
+      host: localhost
+      port: 8084
 
 spring:
+  application:
+    name: GameServicesGateway
   cloud:
     gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
       routes:
         - id: inventoryService
-          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
+          uri: https://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path="/inventory/**"
         - id: characterService
-          uri: http://${gameservices.service.character.host}:${gameservices.service.character.port}
+          uri: https://${gameservices.service.character.host}:${gameservices.service.character.port}
           predicates:
             - Path=/character/**
         - id: inventoriesService
-          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
+          uri: https://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path="/inventories/**"
         - id: charactersService
-          uri: http://${gameservices.service.character.host}:${gameservices.service.character.port}
+          uri: https://${gameservices.service.character.host}:${gameservices.service.character.port}
           predicates:
             - Path=/characters/**
         - id: itemService
-          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
+          uri: https://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path="/item/**"
         - id: currencyService
-          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
+          uri: https://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path=/currency/**
         - id: itemsService
@@ -53,10 +60,24 @@ spring:
           predicates:
             - Path="/items/**"
         - id: currenciesService
-          uri: http://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
+          uri: https://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
           predicates:
             - Path=/currencies/**
+        - id: usersService
+          uri: https://${gameservices.service.users.host}:${gameservices.service.users.port}
+          predicates:
+            - Path="/users/**"
         - id: worldService
-          uri: http://${gameservices.service.world.host}:${gameservices.service.world.port}
+          uri: https://${gameservices.service.world.host}:${gameservices.service.world.port}
           predicates:
             - Path="/world/**"
+  main:
+    web-application-type: reactive
+springdoc:
+  api-docs:
+    enabled: true
+  enable-spring-security: false
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui/index.html
+    use-root-path: true

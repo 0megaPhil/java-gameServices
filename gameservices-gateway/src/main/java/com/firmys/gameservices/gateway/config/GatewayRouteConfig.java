@@ -3,6 +3,7 @@ package com.firmys.gameservices.gateway.config;
 import com.firmys.gameservices.common.ServiceConstants;
 import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(SpringSecurityConfiguration.class)
+@Import({SpringSecurityConfiguration.class})
 public class GatewayRouteConfig {
 
   @Value("${spring.cloud.gateway.routes[0].uri}")
@@ -38,6 +39,7 @@ public class GatewayRouteConfig {
   private String currenciesHost;
 
   @Bean
+  @ConditionalOnBean(RouteLocatorBuilder.class)
   public RouteLocator routeLocator(RouteLocatorBuilder builder) {
     return builder
         .routes()

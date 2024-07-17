@@ -1,4 +1,4 @@
-package com.firmys.gameservices.world;
+package com.firmys.gameservices.users;
 
 import com.firmys.gameservices.common.ServiceConstants;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -12,12 +12,12 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 @OpenAPIDefinition(
     info =
         @Info(
-            title = ServiceConstants.WORLD_SERVICE,
+            title = ServiceConstants.USERS_SERVICE,
             version = ServiceConstants.VERSION,
             description = "Game Services API"))
-public class WorldApplication {
+public class UsersApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(WorldApplication.class, args);
+    SpringApplication.run(UsersApplication.class, args);
   }
 }
