@@ -26,6 +26,12 @@
         <dependency>
             <artifactId>assertj-core</artifactId>
             <groupId>org.assertj</groupId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

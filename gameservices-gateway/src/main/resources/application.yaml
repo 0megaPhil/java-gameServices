@@ -20,6 +20,9 @@ gameservices:
     world:
       host: localhost
       port: 8084
+    transactions:
+      host: localhost
+      port: 8085
 
 spring:
   application:
@@ -52,7 +55,7 @@ spring:
           predicates:
             - Path="/item/**"
         - id: currencyService
-          uri: https://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
+          uri: https://${gameservices.service.transactions.host}:${gameservices.service.transactions.port}
           predicates:
             - Path=/currency/**
         - id: itemsService
@@ -60,7 +63,7 @@ spring:
           predicates:
             - Path="/items/**"
         - id: currenciesService
-          uri: https://${gameservices.service.inventory.host}:${gameservices.service.inventory.port}
+          uri: https://${gameservices.service.transactions.host}:${gameservices.service.transactions.port}
           predicates:
             - Path=/currencies/**
         - id: usersService
@@ -71,6 +74,10 @@ spring:
           uri: https://${gameservices.service.world.host}:${gameservices.service.world.port}
           predicates:
             - Path="/world/**"
+        - id: transactionsService
+          uri: https://${gameservices.service.transactions.host}:${gameservices.service.transactions.port}
+          predicates:
+            - Path="/transactions/**"
   main:
     web-application-type: reactive
 springdoc:

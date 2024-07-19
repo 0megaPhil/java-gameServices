@@ -13,6 +13,7 @@ public class ServiceConstants {
   public static final String TRANSACTION_PATH = "/" + TRANSACTION;
   public static final String TRANSACTIONS = "transactions";
   public static final String TRANSACTIONS_PATH = "/" + TRANSACTIONS;
+  public static final String TRANSACTIONS_SERVICES = "TransactionsService";
 
   public static final String CHARACTER = "character";
   public static final String CHARACTER_SERVICE = "CharacterService";

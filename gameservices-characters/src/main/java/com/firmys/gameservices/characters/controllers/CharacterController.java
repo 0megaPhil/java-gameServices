@@ -30,7 +30,7 @@ public class CharacterController extends CommonController<Character> {
 
   @GetMapping(ServiceConstants.CHARACTERS_PATH)
   public Flux<Character> batchGet(
-      @RequestParam(value = ServiceConstants.UUID, required = false) Flux<UUID> uuids) {
+      @RequestParam(value = ServiceConstants.UUID, required = false) UUID... uuids) {
     return service.find(uuids);
   }
 
@@ -48,8 +48,8 @@ public class CharacterController extends CommonController<Character> {
   }
 
   @PostMapping(value = ServiceConstants.CHARACTER_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public Mono<Character> create(@RequestBody Mono<Character> object) {
-    return service.create(object);
+  public Mono<Character> create(@RequestBody Character object) {
+    return service.create(Mono.just(object));
   }
 
   @PutMapping(value = ServiceConstants.CHARACTERS_PATH, consumes = MediaType.APPLICATION_JSON_VALUE)

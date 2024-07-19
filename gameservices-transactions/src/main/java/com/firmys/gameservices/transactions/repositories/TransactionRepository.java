@@ -1,6 +1,6 @@
-package com.firmys.gameservices.inventory.repositories;
+package com.firmys.gameservices.transactions.repositories;
 
 import com.firmys.gameservices.common.CommonRepository;
-import com.firmys.gameservices.inventory.models.Transaction;
+import com.firmys.gameservices.transactions.models.Transaction;
 
 public interface TransactionRepository extends CommonRepository<Transaction> {}

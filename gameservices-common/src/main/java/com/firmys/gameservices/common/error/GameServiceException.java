@@ -4,7 +4,9 @@ import com.firmys.gameservices.common.CommonEntity;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class GameServiceException extends RuntimeException implements Serializable {
 
   private GameServiceError<?> gameServiceError;
@@ -13,6 +15,7 @@ public class GameServiceException extends RuntimeException implements Serializab
   public GameServiceException(
       Exception exception, GameServiceError<? extends CommonEntity> gameServiceError) {
     super(gameServiceError.toString(), exception);
+    log.error(exception.getMessage(), exception);
     this.gameServiceError = gameServiceError;
   }
 
@@ -25,10 +28,6 @@ public class GameServiceException extends RuntimeException implements Serializab
   public GameServiceException(Exception exception, String... additionalDetails) {
     super(String.join("\n", additionalDetails), exception);
     this.additionalDetails = String.join("\n", additionalDetails);
-  }
-
-  public GameServiceError<?> getGameServiceError() {
-    return gameServiceError;
   }
 
   public String getAdditionalDetails() {

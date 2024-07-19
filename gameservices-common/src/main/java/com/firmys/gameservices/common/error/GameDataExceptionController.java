@@ -22,6 +22,7 @@ public class GameDataExceptionController {
    */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<? extends GameServiceException> generalException(Exception exception) {
+    exception.printStackTrace();
     return new ResponseEntity<>(
         new GameServiceException(exception), HttpStatus.INTERNAL_SERVER_ERROR);
   }

@@ -4,4 +4,4 @@ import com.firmys.gameservices.common.CommonObject;
 import lombok.Builder;
 
 @Builder(toBuilder = true)
-public record Attribute(AttributesType type, Long value) implements CommonObject {}
+public record Attribute(AttributesType type, Boolean value) implements CommonObject {}

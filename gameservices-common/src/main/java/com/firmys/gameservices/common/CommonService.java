@@ -1,5 +1,7 @@
 package com.firmys.gameservices.common;
 
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,8 +22,15 @@ public abstract class CommonService<E extends CommonEntity> {
     return repository().findAllById(uuids);
   }
 
+  public Flux<E> find(UUID... uuids) {
+    return Optional.ofNullable(uuids)
+        .filter(ids -> ids.length > 0)
+        .map(ids -> find(Flux.fromStream(Arrays.stream(ids))))
+        .orElseGet(() -> repository().findAll());
+  }
+
   public final Mono<E> create(Mono<E> object) {
-    return create(Flux.from(object)).single();
+    return object.flatMap(obj -> repository().save(obj));
   }
 
   public final Flux<E> create(Flux<E> objects) {

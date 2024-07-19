@@ -16,7 +16,9 @@ spring:
       repositories:
         enabled: true
   r2dbc:
-    url: r2dbc:h2:file:///./characterdb
+    url: r2dbc:h2:file:///./charactersdb
+    name: characters
+
 springdoc:
   api-docs:
     enabled: true

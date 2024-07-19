@@ -66,6 +66,7 @@
         <module>gameservices-gateway</module>
         <module>gameservices-common</module>
         <module>gameservices-users</module>
+        <module>gameservices-transactions</module>
     </modules>
     <packaging>pom</packaging>
 

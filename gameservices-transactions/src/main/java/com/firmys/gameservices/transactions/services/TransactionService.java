@@ -1,8 +1,8 @@
-package com.firmys.gameservices.inventory.services;
+package com.firmys.gameservices.transactions.services;
 
 import com.firmys.gameservices.common.CommonService;
-import com.firmys.gameservices.inventory.models.Transaction;
-import com.firmys.gameservices.inventory.repositories.TransactionRepository;
+import com.firmys.gameservices.transactions.models.Transaction;
+import com.firmys.gameservices.transactions.repositories.TransactionRepository;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.Accessors;

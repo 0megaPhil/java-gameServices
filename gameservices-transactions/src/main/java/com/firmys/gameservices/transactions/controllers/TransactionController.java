@@ -1,13 +1,13 @@
-package com.firmys.gameservices.inventory.controllers;
+package com.firmys.gameservices.transactions.controllers;
 
-import static com.firmys.gameservices.common.ServiceConstants.CURRENCIES_PATH;
-import static com.firmys.gameservices.common.ServiceConstants.CURRENCY_PATH;
+import static com.firmys.gameservices.common.ServiceConstants.TRANSACTIONS_PATH;
+import static com.firmys.gameservices.common.ServiceConstants.TRANSACTION_PATH;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.firmys.gameservices.common.CommonController;
 import com.firmys.gameservices.common.ServiceConstants;
-import com.firmys.gameservices.inventory.models.Currency;
-import com.firmys.gameservices.inventory.services.CurrencyService;
+import com.firmys.gameservices.transactions.models.Transaction;
+import com.firmys.gameservices.transactions.services.TransactionService;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,50 +26,50 @@ import reactor.core.publisher.Mono;
 @RestController
 @Builder(toBuilder = true)
 @Accessors(chain = true, fluent = true)
-public class CurrencyController extends CommonController<Currency> {
+public class TransactionController extends CommonController<Transaction> {
 
-  private final CurrencyService service;
-  private final Class<Currency> entityClass = Currency.class;
+  private final TransactionService service;
+  private final Class<Transaction> entityClass = Transaction.class;
 
-  @GetMapping(CURRENCIES_PATH)
-  public Flux<Currency> batchGet(
+  @GetMapping(TRANSACTIONS_PATH)
+  public Flux<Transaction> batchGet(
       @RequestParam(value = ServiceConstants.UUID, required = false) Flux<UUID> uuids) {
     return service.find(uuids);
   }
 
-  @GetMapping(CURRENCY_PATH)
-  public Mono<Currency> get(
+  @GetMapping(TRANSACTION_PATH)
+  public Mono<Transaction> get(
       @RequestParam(value = ServiceConstants.UUID, required = false) UUID uuid) {
     return service.find(uuid);
   }
 
-  @PostMapping(value = CURRENCIES_PATH, consumes = APPLICATION_JSON_VALUE)
-  public Flux<Currency> batchCreate(@RequestBody Flux<Currency> objects) {
+  @PostMapping(value = TRANSACTIONS_PATH, consumes = APPLICATION_JSON_VALUE)
+  public Flux<Transaction> batchCreate(@RequestBody Flux<Transaction> objects) {
     return service.create(objects);
   }
 
-  @PostMapping(value = CURRENCY_PATH, consumes = APPLICATION_JSON_VALUE)
-  public Mono<Currency> create(@RequestBody Mono<Currency> object) {
+  @PostMapping(value = TRANSACTION_PATH, consumes = APPLICATION_JSON_VALUE)
+  public Mono<Transaction> create(@RequestBody Mono<Transaction> object) {
     return service.create(object);
   }
 
-  @PutMapping(value = CURRENCIES_PATH, consumes = APPLICATION_JSON_VALUE)
-  public Flux<Currency> batchUpdate(@RequestBody Flux<Currency> objects) {
+  @PutMapping(value = TRANSACTIONS_PATH, consumes = APPLICATION_JSON_VALUE)
+  public Flux<Transaction> batchUpdate(@RequestBody Flux<Transaction> objects) {
     return service.update(objects);
   }
 
-  @PutMapping(value = CURRENCY_PATH, consumes = APPLICATION_JSON_VALUE)
-  public Mono<Currency> update(@RequestBody Mono<Currency> object) {
+  @PutMapping(value = TRANSACTION_PATH, consumes = APPLICATION_JSON_VALUE)
+  public Mono<Transaction> update(@RequestBody Mono<Transaction> object) {
     return service.update(object);
   }
 
-  @DeleteMapping(CURRENCIES_PATH)
+  @DeleteMapping(TRANSACTIONS_PATH)
   public Mono<Void> batchDelete(
       @RequestParam(value = ServiceConstants.UUID, required = false) Flux<UUID> uuids) {
     return service.delete(uuids);
   }
 
-  @DeleteMapping(CURRENCY_PATH)
+  @DeleteMapping(TRANSACTION_PATH)
   public Mono<Void> delete(
       @RequestParam(value = ServiceConstants.UUID, required = false) Mono<UUID> uuid) {
     return service.delete(uuid);

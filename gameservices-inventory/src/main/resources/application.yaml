@@ -14,7 +14,7 @@ spring:
       repositories:
         enabled: true
   r2dbc:
-    url: r2dbc:h2:file:///./inventorydb
+    url: r2dbc:h2:file:///./inventoriesdb
 springdoc:
   api-docs:
     enabled: true

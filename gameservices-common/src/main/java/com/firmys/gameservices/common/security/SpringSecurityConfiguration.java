@@ -7,6 +7,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -20,6 +23,7 @@ public class SpringSecurityConfiguration {
         "/world**",
         "/item*/**",
         "/currenc*/**",
+        "/transaction*/**",
         "*api-docs",
         "/swagger-resources",
         "/swagger-resources/**",
@@ -33,9 +37,28 @@ public class SpringSecurityConfiguration {
         "/swagger-ui/**"
       };
 
+  private CorsConfigurationSource createCorsConfigSource() {
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    CorsConfiguration config = new CorsConfiguration();
+    config.addAllowedOrigin("http://localhost:4200");
+    config.addAllowedMethod("OPTIONS");
+    config.addAllowedMethod("GET");
+    config.addAllowedMethod("PUT");
+    config.addAllowedMethod("POST");
+    config.addAllowedMethod("DELETE");
+    config.addAllowedHeader("Access-Control-Allow-Origin");
+    config.addAllowedHeader("authorization");
+    config.addAllowedHeader("Content-Type");
+    config.addAllowedHeader("credential");
+    config.addAllowedHeader("X-XSRF-TOKEN");
+    source.registerCorsConfiguration("/**", config);
+    return source;
+  }
+
   @Bean
   public SecurityWebFilterChain configure(ServerHttpSecurity http) {
-    return http.csrf(Customizer.withDefaults())
+    return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
+        .cors(cors -> cors.configurationSource(createCorsConfigSource()))
         .x509(Customizer.withDefaults())
         .authorizeExchange(
             auth -> auth.pathMatchers(permittedUrl).permitAll().pathMatchers("/**").authenticated())

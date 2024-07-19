@@ -1,4 +1,4 @@
-package com.firmys.gameservices.inventory.models;
+package com.firmys.gameservices.transactions.models;
 
 import com.firmys.gameservices.common.CommonEntity;
 import com.firmys.gameservices.common.Fungible;
@@ -10,5 +10,6 @@ import lombok.With;
 import org.springframework.data.annotation.Id;
 
 @Builder(toBuilder = true)
-public record Item(@With @Id UUID uuid, String name, String description, Set<Attribute> attributes)
+public record Currency(
+    @With @Id UUID uuid, String name, String description, Set<Attribute> attributes)
     implements CommonEntity, Fungible {}

@@ -1,5 +1,5 @@
 server:
-  port: 8084
+  port: 8085
   ssl:
     key-store-type: PKCS12
     key-store: classpath:keys/firmys.jks
@@ -14,8 +14,7 @@ spring:
       repositories:
         enabled: true
   r2dbc:
-    url: r2dbc:h2:file:///./worldsdb
-    name: worlds
+    url: r2dbc:h2:file:///./transactionsdb
 springdoc:
   api-docs:
     enabled: true

@@ -1,13 +1,22 @@
 package com.firmys.gameservices.common.config;
 
+import com.firmys.gameservices.common.CommonEntity;
 import com.firmys.gameservices.common.error.GameDataExceptionController;
+import io.r2dbc.spi.ConnectionFactory;
+import java.util.UUID;
 import org.springdoc.core.customizers.OpenApiCustomiser;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.r2dbc.mapping.event.BeforeConvertCallback;
+import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
+import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
+import reactor.core.publisher.Mono;
 
 @Configuration
 @Import({GameDataExceptionController.class})
@@ -23,6 +32,17 @@ public class CommonConfig {
     ServerProperties serverProperties = new ServerProperties();
     serverProperties.setSsl(ssl);
     return serverProperties;
+  }
+
+  @Bean
+  ConnectionFactoryInitializer initializer(
+      @Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
+    ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
+    initializer.setConnectionFactory(connectionFactory);
+    ResourceDatabasePopulator resource =
+        new ResourceDatabasePopulator(new ClassPathResource("schema.sql"));
+    initializer.setDatabasePopulator(resource);
+    return initializer;
   }
 
   @Bean
@@ -47,5 +67,15 @@ public class CommonConfig {
                     operation.setOperationId(operation.getOperationId() + capitalized);
                   }
                 });
+  }
+
+  @Bean
+  public BeforeConvertCallback<CommonEntity> beforeConvertCallback() {
+    return (d, table) -> {
+      if (d.uuid() == null) {
+        d = d.withUuid(UUID.randomUUID());
+      }
+      return Mono.just(d);
+    };
   }
 }
