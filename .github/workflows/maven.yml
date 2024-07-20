@@ -16,9 +16,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
@@ -27,7 +25,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+      - uses: s4u/maven-settings-action@v3.0.0
+        with:
+          servers: '[{"id": "github", "username": ${{env.MAVEN_USERNAME}}, "password": ${{env.MAVEN_PASSWORD}}}]'
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - name: Deploy with Maven
-        run: mvn deploy
+        run: mvn -U clean deploy
