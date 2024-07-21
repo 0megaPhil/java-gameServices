@@ -1,6 +1,8 @@
 package com.firmys.gameservices.common.config;
 
 import com.firmys.gameservices.common.CommonEntity;
+import com.firmys.gameservices.common.CommonProperties;
+import com.firmys.gameservices.common.GatewayClient;
 import com.firmys.gameservices.common.error.GameDataExceptionController;
 import io.r2dbc.spi.ConnectionFactory;
 import java.util.UUID;
@@ -8,6 +10,7 @@ import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +22,8 @@ import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
 import reactor.core.publisher.Mono;
 
 @Configuration
-@Import({GameDataExceptionController.class})
+@Import({GameDataExceptionController.class, WebClientConfig.class, GatewayClient.class})
+@EnableConfigurationProperties(CommonProperties.class)
 public class CommonConfig {
 
   @Value("${server.ssl.key-password}")
@@ -35,7 +39,7 @@ public class CommonConfig {
   }
 
   @Bean
-  ConnectionFactoryInitializer initializer(
+  public ConnectionFactoryInitializer initializer(
       @Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
     ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
     initializer.setConnectionFactory(connectionFactory);

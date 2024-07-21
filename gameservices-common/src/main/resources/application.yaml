@@ -1,0 +1,5 @@
+gameservices:
+  services:
+    - name: gateway
+      host: ${SERVICES_GATEWAY_HOST:localhost}
+      port: ${SERVICES_GATEWAY_PORT:8080}

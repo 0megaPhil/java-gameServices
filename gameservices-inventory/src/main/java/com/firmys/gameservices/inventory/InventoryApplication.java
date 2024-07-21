@@ -1,6 +1,6 @@
 package com.firmys.gameservices.inventory;
 
-import com.firmys.gameservices.common.ServiceConstants;
+import com.firmys.gameservices.common.CommonConstants;
 import com.firmys.gameservices.common.config.CommonConfig;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Import;
 @OpenAPIDefinition(
     info =
         @Info(
-            title = ServiceConstants.INVENTORY_SERVICE,
-            version = ServiceConstants.VERSION,
+            title = CommonConstants.INVENTORY_SERVICE,
+            version = CommonConstants.VERSION,
             description = "Game Services API"))
 public class InventoryApplication {
 

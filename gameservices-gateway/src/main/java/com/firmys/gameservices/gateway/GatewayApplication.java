@@ -1,6 +1,6 @@
 package com.firmys.gameservices.gateway;
 
-import com.firmys.gameservices.common.ServiceConstants;
+import com.firmys.gameservices.common.CommonConstants;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
@@ -12,8 +12,8 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 @OpenAPIDefinition(
     info =
         @Info(
-            title = ServiceConstants.GAME_SERVICES_GATEWAY,
-            version = ServiceConstants.VERSION,
+            title = CommonConstants.GAME_SERVICES_GATEWAY,
+            version = CommonConstants.VERSION,
             description = "Game Services API"))
 public class GatewayApplication {
 

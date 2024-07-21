@@ -1,6 +1,6 @@
 package com.firmys.gameservices.transactions;
 
-import com.firmys.gameservices.common.ServiceConstants;
+import com.firmys.gameservices.common.CommonConstants;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
@@ -12,8 +12,8 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 @OpenAPIDefinition(
     info =
         @Info(
-            title = ServiceConstants.TRANSACTIONS_SERVICES,
-            version = ServiceConstants.VERSION,
+            title = CommonConstants.TRANSACTIONS_SERVICES,
+            version = CommonConstants.VERSION,
             description = "Game Services API"))
 public class TransactionsApplication {
 

@@ -33,6 +33,10 @@
             <artifactId>javafaker</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.firmys</groupId>
+            <artifactId>gameservices-inventory</artifactId>
+        </dependency>
     </dependencies>
 
     <modelVersion>4.0.0</modelVersion>

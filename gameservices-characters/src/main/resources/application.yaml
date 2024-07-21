@@ -27,3 +27,23 @@ springdoc:
     enabled: true
     path: /swagger-ui/index.html
     use-root-path: true
+gameservices:
+  services:
+    - name: gateway
+      host: ${SERVICES_GATEWAY_HOST:localhost}
+      port: ${SERVICES_GATEWAY_PORT:8080}
+    - name: character
+      host: ${SERVICES_CHARACTER_HOST:localhost}
+      port: ${SERVICES_CHARACTER_PORT:8081}
+    - name: inventory
+      host: ${SERVICES_INVENTORY_HOST:localhost}
+      port: ${SERVICES_INVENTORY_PORT:8082}
+    - name: user
+      host: ${SERVICES_USER_HOST:localhost}
+      port: ${SERVICES_USER_PORT:8083}
+    - name: world
+      host: ${SERVICES_WORLD_HOST:localhost}
+      port: ${SERVICES_WORLD_PORT:8084}
+    - name: transaction
+      host: ${SERVICES_TRANSACTION_HOST:localhost}
+      port: ${SERVICES_TRANSACTION_PORT:8085}
