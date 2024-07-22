@@ -6,9 +6,13 @@ import lombok.Getter;
 public enum Services {
   CHARACTER(CommonConstants.CHARACTER),
   INVENTORY(CommonConstants.INVENTORY),
+  ITEM(CommonConstants.ITEM),
   TRANSACTION(CommonConstants.TRANSACTION),
+  CURRENCY(CommonConstants.CURRENCY),
   USER(CommonConstants.USER),
-  WORLD(CommonConstants.WORLD);
+  WORLD(CommonConstants.WORLD),
+  CONFIG(CommonConstants.CONFIG),
+  GATEWAY(CommonConstants.GATEWAY);
 
   private final String name;
 

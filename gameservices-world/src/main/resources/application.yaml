@@ -1,31 +1,28 @@
+gameservices:
+  type: WORLD
+  current:
+    id: ${gameservices.services.${gameservices.type}.id}
+    name: ${gameservices.services.${gameservices.type}.name}
+    host: ${gameservices.services.${gameservices.type}.host}
+    port: ${gameservices.services.${gameservices.type}.port}
 server:
-  port: 8084
   ssl:
     key-store-type: PKCS12
     key-store: classpath:keys/firmys.jks
-    key-password: changeit
     key-alias: firmys
     enabled: true
+    key-store-password: ${SSL_KEY_PASSWORD:changeit}
 spring:
-  main:
-    web-application-type: reactive
-  data:
-    r2dbc:
-      repositories:
-        enabled: true
-  r2dbc:
-    url: r2dbc:h2:file:///./worldsdb
-    name: worlds
-springdoc:
-  api-docs:
-    enabled: true
-  enable-spring-security: false
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui/index.html
-    use-root-path: true
-gameservices:
-  services:
-    - name: gateway
-      host: ${SERVICES_GATEWAY_HOST:localhost}
-      port: ${SERVICES_GATEWAY_PORT:8080}
+  cloud:
+    config:
+      enabled: true
+      password: ${CONFIG_PASSWORD:changeit}
+      uri: https://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}/
+      username: ${CONFIG_USERNAME:firmys}
+  profiles:
+    active:
+      - native
+      - service
+      - data
+  config:
+    import: "configserver:"

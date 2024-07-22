@@ -9,21 +9,24 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "gameservices")
 public class CommonProperties {
 
+  private Services type;
+  private Service config;
   private Service gateway;
-  private Set<Service> services = new HashSet<>();
+  private Service current;
+  private Map<Services, Service> services = new HashMap<>();
 
-  public Service service(@Nonnull String name) {
-    return services.stream()
-        .filter(service -> name.equals(service.getName()))
-        .findFirst()
-        .orElseThrow();
+  public Service service(@Nonnull Services service) {
+    return services.get(service);
   }
 
   @Data
   public static final class Service {
+    private String id;
     private String name;
     private String host;
     private String port;
+    private String username;
+    private String password;
 
     public String baseUri() {
       return "https://" + host + ":" + port;
@@ -33,16 +36,8 @@ public class CommonProperties {
       return name + "Service";
     }
 
-    public String predicate() {
-      return "Path=/" + name + "/**";
-    }
-
     public String endpoint() {
-      return baseUri() + "/" + name;
-    }
-
-    public String fallback() {
-      return baseUri() + "/error";
+      return baseUri() + "/" + id;
     }
   }
 }

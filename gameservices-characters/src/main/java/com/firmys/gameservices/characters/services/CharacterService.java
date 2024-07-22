@@ -4,7 +4,6 @@ import com.firmys.gameservices.characters.models.Character;
 import com.firmys.gameservices.common.CommonService;
 import com.firmys.gameservices.common.GatewayClient;
 import com.firmys.gameservices.inventory.models.Inventory;
-import java.util.HashSet;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -26,12 +25,7 @@ public class CharacterService extends CommonService<Character> {
 
   public Mono<Character> generateInventory(Character character) {
     return gatewayClient
-        .create(
-            Inventory.builder()
-                .characterId(character.uuid())
-                .currencies(new HashSet<>())
-                .items(new HashSet<>())
-                .build())
+        .create(Inventory.builder().characterId(character.uuid()).build())
         .flatMap(inv -> super.update(character.toBuilder().inventoryId(inv.uuid()).build()));
   }
 }

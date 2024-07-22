@@ -12,7 +12,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 @OpenAPIDefinition(
     info =
         @Info(
-            title = CommonConstants.TRANSACTIONS_SERVICES,
+            title = CommonConstants.TRANSACTION_SERVICES,
             version = CommonConstants.VERSION,
             description = "Game Services API"))
 public class TransactionsApplication {

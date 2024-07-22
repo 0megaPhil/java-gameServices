@@ -1,6 +1,5 @@
 package com.firmys.gameservices.common.config;
 
-import static com.firmys.gameservices.common.CommonConstants.GATEWAY;
 import static reactor.netty.http.client.HttpClient.*;
 
 import com.firmys.gameservices.common.CommonProperties;
@@ -33,18 +32,16 @@ public class WebClientConfig {
 
   @Bean
   public Service gateway(CommonProperties properties) {
-    return properties.service(GATEWAY);
+    return properties.getGateway();
   }
 
   @Bean
   public Map<Services, WebClient> serviceClients(
       WebClient.Builder webClientBuilder, CommonProperties properties) {
-    return properties.getServices().stream()
-        .filter(s -> !GATEWAY.equals(s.getName()))
+    return properties.getServices().entrySet().stream()
         .collect(
             Collectors.toMap(
-                s -> Services.valueOf(s.getName().toUpperCase()),
-                s -> webClientBuilder.baseUrl(s.endpoint()).build()));
+                Map.Entry::getKey, s -> webClientBuilder.baseUrl(s.getValue().endpoint()).build()));
   }
 
   @Bean

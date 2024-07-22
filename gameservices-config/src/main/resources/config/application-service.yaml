@@ -1,0 +1,74 @@
+server:
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:keys/firmys.jks
+    key-password: ${SSL_KEY_PASSWORD:changeit}
+    key-alias: firmys
+    enabled: true
+  port: ${gameservices.current.port}
+gameservices:
+  services:
+    CHARACTER:
+      id: character
+      name: CharacterService
+      host: ${SERVICES_CHARACTER_HOST:localhost}
+      port: ${SERVICES_CHARACTER_PORT:8081}
+    INVENTORY:
+      id: inventory
+      name: InventoryService
+      host: ${SERVICES_INVENTORY_HOST:localhost}
+      port: ${SERVICES_INVENTORY_PORT:8082}
+    ITEM:
+      id: item
+      name: ItemService
+      host: ${SERVICES_INVENTORY_HOST:localhost}
+      port: ${SERVICES_INVENTORY_PORT:8082}
+    USER:
+      id: user
+      name: UserService
+      host: ${SERVICES_USER_HOST:localhost}
+      port: ${SERVICES_USER_PORT:8083}
+    WORLD:
+      id: world
+      name: WorldService
+      host: ${SERVICES_WORLD_HOST:localhost}
+      port: ${SERVICES_WORLD_PORT:8084}
+    TRANSACTION:
+      id: transaction
+      name: TransactionService
+      host: ${SERVICES_TRANSACTION_HOST:localhost}
+      port: ${SERVICES_TRANSACTION_PORT:8085}
+    CURRENCY:
+      id: currency
+      name: CurrencyService
+      host: ${SERVICES_TRANSACTION_HOST:localhost}
+      port: ${SERVICES_TRANSACTION_PORT:8085}
+    CONFIG:
+      id: config
+      name: ConfigService
+      username: ${CONFIG_USERNAME:firmys}
+      password: ${CONFIG_PASSWORD:changeit}
+      host: ${CONFIG_HOST:localhost}
+      port: ${CONFIG_PORT:8888}
+    GATEWAY: &gateway
+      id: gateway
+      name: GatewayService
+      username: ${GATEWAY_USERNAME:firmys}
+      password: ${GATEWAY_PASSWORD:changeit}
+      host: ${GATEWAY_HOST:localhost}
+      port: ${GATEWAY_PORT:8080}
+  gateway: *gateway
+
+spring:
+  application:
+    name: ${gameservices.current.name}
+  main:
+    web-application-type: reactive
+springdoc:
+  api-docs:
+    enabled: true
+  enable-spring-security: false
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui/index.html
+    use-root-path: true

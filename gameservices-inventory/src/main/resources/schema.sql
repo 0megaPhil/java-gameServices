@@ -1,25 +1,25 @@
 CREATE TABLE IF NOT EXISTS Inventory
 (
-    uuid        UUID NOT NULL PRIMARY KEY,
-    characterId UUID,
-    currencies  UUID ARRAY[4196],
-    items       UUID ARRAY[4196]
+    UUID         UUID NOT NULL PRIMARY KEY,
+    CHARACTER_ID UUID,
+    CURRENCIES   UUID ARRAY[4196],
+    ITEMS        UUID ARRAY[4196]
 );
 
 CREATE TABLE IF NOT EXISTS InventoryItem
 (
-    uuid        UUID NOT NULL PRIMARY KEY,
-    itemId      UUID,
-    inventoryId UUID,
-    quantity    BIGINT,
-    FOREIGN KEY (inventoryId) REFERENCES Inventory (uuid)
+    UUID         UUID NOT NULL PRIMARY KEY,
+    ITEM_ID      UUID,
+    INVENTORY_ID UUID,
+    QUANTITY     BIGINT,
+    FOREIGN KEY (INVENTORY_ID) REFERENCES Inventory (uuid)
 );
 
 CREATE TABLE IF NOT EXISTS InventoryCurrency
 (
-    uuid        UUID NOT NULL PRIMARY KEY,
-    currencyId  UUID,
-    inventoryId UUID,
-    quantity    BIGINT,
-    FOREIGN KEY (inventoryId) REFERENCES Inventory (uuid)
+    UUID         UUID NOT NULL PRIMARY KEY,
+    CURRENCY_ID  UUID,
+    INVENTORY_ID UUID,
+    QUANTITY     BIGINT,
+    FOREIGN KEY (INVENTORY_ID) REFERENCES Inventory (uuid)
 );

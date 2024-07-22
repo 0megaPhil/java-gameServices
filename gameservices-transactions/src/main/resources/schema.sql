@@ -1,18 +1,18 @@
 CREATE TABLE IF NOT EXISTS Transaction
 (
-    uuid        UUID NOT NULL PRIMARY KEY,
-    type        VARCHAR(255),
-    fungibleId  UUID,
-    characterId UUID,
-    delta       BIGINT,
-    initial     BIGINT,
-    result      BIGINT,
-    timestamp   TIMESTAMP
+    UUID         UUID NOT NULL PRIMARY KEY,
+    TYPE         VARCHAR(255),
+    FUNGIBLE_ID  UUID,
+    CHARACTER_ID UUID,
+    DELTA        BIGINT,
+    INITIAL      BIGINT,
+    RESULT       BIGINT,
+    TIMESTAMP    TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS Currency
 (
-    uuid        UUID NOT NULL PRIMARY KEY,
-    name        VARCHAR(255),
-    description VARCHAR(255)
+    UUID        UUID NOT NULL PRIMARY KEY,
+    NAME        VARCHAR(255),
+    DESCRIPTION VARCHAR(255)
 );
