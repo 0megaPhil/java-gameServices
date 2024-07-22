@@ -1,0 +1,8 @@
+spring:
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+  r2dbc:
+    url: r2dbc:h2:file:///./${gameservices.current.id}sdb
+    name: ${gameservices.current.id}s

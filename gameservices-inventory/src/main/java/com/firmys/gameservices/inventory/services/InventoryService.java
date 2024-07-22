@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Getter
 @Service
@@ -22,6 +23,11 @@ public class InventoryService extends CommonService<Inventory> {
   private final InventoryRepository repository;
   private final InventoryItemRepository itemRepository;
   private final InventoryCurrencyRepository currencyRepository;
+
+  @Override
+  public Mono<Inventory> create(Mono<Inventory> object) {
+    return super.create(object);
+  }
 
   public Flux<InventoryItem> items(UUID inventoryId) {
     return find(inventoryId)

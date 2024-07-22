@@ -1,74 +1,60 @@
+gameservices:
+  current:
+    id: ${gameservices.gateway.id}
+    name: ${gameservices.gateway.name}
+    host: ${gameservices.gateway.host}
+    port: ${gameservices.gateway.port}
 server:
-  port: 8080
   ssl:
     key-store-type: PKCS12
     key-store: classpath:keys/firmys.jks
-    key-password: changeit
     key-alias: firmys
     enabled: true
-gameservices:
-  services:
-    - name: character
-      host: ${SERVICES_CHARACTER_HOST:localhost}
-      port: ${SERVICES_CHARACTER_PORT:8081}
-    - name: inventory
-      host: ${SERVICES_INVENTORY_HOST:localhost}
-      port: ${SERVICES_INVENTORY_PORT:8082}
-    - name: user
-      host: ${SERVICES_USER_HOST:localhost}
-      port: ${SERVICES_USER_PORT:8083}
-    - name: world
-      host: ${SERVICES_WORLD_HOST:localhost}
-      port: ${SERVICES_WORLD_PORT:8084}
-    - name: transaction
-      host: ${SERVICES_TRANSACTION_HOST:localhost}
-      port: ${SERVICES_TRANSACTION_PORT:8085}
-
+    key-store-password: ${SSL_KEY_PASSWORD:changeit}
 spring:
-  application:
-    name: GameServicesGateway
   cloud:
+    config:
+      enabled: true
+      password: ${CONFIG_PASSWORD:changeit}
+      uri: https://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}/
+      username: ${CONFIG_USERNAME:firmys}
     gateway:
       discovery:
         locator:
           lower-case-service-id: true
           enabled: true
       routes:
-        - id: inventoryService
-          uri: https://${gameservices.services[1].host}:${gameservices.services[1].port}
+        - id: ${gameservices.services.INVENTORY.name}
+          uri: https://${gameservices.services.INVENTORY.host}:${gameservices.services.INVENTORY.port}
           predicates:
-            - Path="/inventory/**"
-        - id: characterService
-          uri: https://${gameservices.services[0].host}:${gameservices.services[0].port}
+            - Path="/${gameservices.services.INVENTORY.id}/**"
+        - id: ${gameservices.services.CHARACTER.name}
+          uri: https://${gameservices.services.CHARACTER.host}:${gameservices.services.CHARACTER.port}
           predicates:
-            - Path=/character/**
-        - id: itemService
-          uri: https://${gameservices.services[1].host}:${gameservices.services[1].port}
+            - Path=/${gameservices.services.CHARACTER.id}/**
+        - id: ${gameservices.services.ITEM.name}
+          uri: https://${gameservices.services.ITEM.host}:${gameservices.services.ITEM.port}
           predicates:
-            - Path="/item/**"
-        - id: currencyService
-          uri: https://${gameservices.services[4].host}:${gameservices.services[4].port}
+            - Path="/${gameservices.services.ITEM.id}/**"
+        - id: ${gameservices.services.CURRENCY.name}
+          uri: https://${gameservices.services.TRANSACTION.host}:${gameservices.services.TRANSACTION.port}
           predicates:
-            - Path=/currency/**
-        - id: userService
-          uri: https://${gameservices.services[2].host}:${gameservices.services[2].port}
+            - Path=/${gameservices.services.CURRENCY.id}/**
+        - id: ${gameservices.services.USER.name}
+          uri: https://${gameservices.services.USER.host}:${gameservices.services.USER.port}
           predicates:
-            - Path="/user/**"
-        - id: worldService
-          uri: https://${gameservices.services[3].host}:${gameservices.services[3].port}
+            - Path="/${gameservices.services.USER.id}/**"
+        - id: ${gameservices.services.WORLD.name}
+          uri: https://${gameservices.services.WORLD.host}:${gameservices.services.WORLD.port}
           predicates:
-            - Path="/world/**"
-        - id: transactionService
-          uri: https://${gameservices.services[4].host}:${gameservices.services[4].port}
+            - Path="/${gameservices.services.WORLD.id}/**"
+        - id: ${gameservices.services.TRANSACTION.name}
+          uri: https://${gameservices.services.TRANSACTION.host}:${gameservices.services.TRANSACTION.port}
           predicates:
-            - Path="/transaction/**"
-  main:
-    web-application-type: reactive
-springdoc:
-  api-docs:
-    enabled: true
-  enable-spring-security: false
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui/index.html
-    use-root-path: true
+            - Path="/${gameservices.services.TRANSACTION.id}/**"
+  profiles:
+    active:
+      - native
+      - service
+  config:
+    import: "configserver:"

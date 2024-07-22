@@ -9,7 +9,7 @@ public class CommonConstants {
   public static final String ITEM_PATH = "/" + ITEM;
   public static final String TRANSACTION = "transaction";
   public static final String TRANSACTION_PATH = "/" + TRANSACTION;
-  public static final String TRANSACTIONS_SERVICES = "TransactionsService";
+  public static final String TRANSACTION_SERVICES = "TransactionService";
 
   public static final String CHARACTER = "character";
   public static final String CHARACTER_SERVICE = "CharacterService";
@@ -28,6 +28,10 @@ public class CommonConstants {
   public static final String WORLD_SERVICE = "WorldService";
   public static final String WORLD_PATH = "/" + WORLD;
 
+  public static final String CONFIG = "config";
+  public static final String CONFIG_SERVICE = "ConfigService";
+  public static final String CONFIG_PATH = "/" + CONFIG;
+
   public static final String USER = "user";
   public static final String USERS_SERVICE = "UsersService";
   public static final String USER_PATH = "/" + USER;
@@ -43,4 +47,7 @@ public class CommonConstants {
   public static final String CONSUME = "consume";
   public static final String ADD_PATH = "/" + ADD;
   public static final String CONSUME_PATH = "/" + CONSUME;
+
+  public static final String PROFILE_SERVICE = "service";
+  public static final String PROFILE_GATEWAY = "gateway";
 }

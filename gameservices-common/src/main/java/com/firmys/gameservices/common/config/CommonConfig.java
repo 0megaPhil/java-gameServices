@@ -8,10 +8,7 @@ import io.r2dbc.spi.ConnectionFactory;
 import java.util.UUID;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.server.Ssl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -25,18 +22,6 @@ import reactor.core.publisher.Mono;
 @Import({GameDataExceptionController.class, WebClientConfig.class, GatewayClient.class})
 @EnableConfigurationProperties(CommonProperties.class)
 public class CommonConfig {
-
-  @Value("${server.ssl.key-password}")
-  private String keyStorePassword;
-
-  @Bean
-  public ServerProperties serverProperties() {
-    Ssl ssl = new Ssl();
-    ssl.setKeyStorePassword(keyStorePassword);
-    ServerProperties serverProperties = new ServerProperties();
-    serverProperties.setSsl(ssl);
-    return serverProperties;
-  }
 
   @Bean
   public ConnectionFactoryInitializer initializer(
