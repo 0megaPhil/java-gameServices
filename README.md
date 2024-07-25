@@ -5,41 +5,44 @@ Author: [Phillip Platt](https://www.linkedin.com/in/phillipplatt/)
 ## Description
 
 <hr>
-This is a hobby project that I enjoy working on in my spare time.
-This project acts as a focal point for me to learn and grow as an engineer, 
-by working through the entire lifecycle of complex service-based platform. I've found that many engineers can become overspecialized, 
-or become blind to many of the aspects of software implementation which are out of their immediate set of responsibilities.
-I believe that by flexing myself on this project, I can gain a more holistic understanding of platform development.
+This project is intended to stretch my knowledge and capability, and may or may not develop into a realistically useful platform.
 
-The project may pivot throughout the lifetime of it, and I expect that I will add new goals and
-functionality,
-perhaps even with connected clients that can meaningfully make use of this platform.
+The project will pivot throughout its lifetime until I feel that it has stabalized, and I expect that I will change technology, add new goals and
+improve or change functionality.
 
-## Goals and Wishlist
+## Current Goals and Wishlist
 
 <hr>
-I have many greater and lesser goals for this project, and many will take me quite some time, 
-however, here are some of my aspirations. 
 
-- Simple game focused platform and backend
+- Simple game services platform with applications TBD
     - Inventory
     - Characters
+    - Users
+    - Transactions
+      - Virtual
+      - In-game
     - World
+- Front-end via [angular-gameServices](https://github.com/0megaPhil/angular-gameServices)
+- CICD pipelines using Github workflows/actions
 - Cloud-first architecture
-- Horizontally scalable
+  - Cloud-based configuration
+  - Horizontally scalable
+- Secure
+  - OAuth2 SSO capable
+- Flexible persistence interface 
 - High-performance
-- Reactive API
-- OpenApi Swagger support
-- Security focused
-- Cloud-based logging
-- JavaDoc documentation
-- Simple example game SDK using platform
+  - Reactive API
+  - Graphql-based Gateway
+- Auto-documenting
+  - OpenApi Swagger support
+  - Static Javadocs site
+- Auto-generated SDK
 - Unit, Integration, Service and System testing
 
 ## Technology
 
 <hr>
 
-- JDK 17
+- JDK 21
 - Maven
 - Spring Boot
