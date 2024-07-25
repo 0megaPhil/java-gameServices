@@ -9,32 +9,37 @@
         <dependencies>
             <dependency>
                 <artifactId>gameservices-world</artifactId>
-                <groupId>com.firmys</groupId>
+                <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <artifactId>gameservices-inventory</artifactId>
-                <groupId>com.firmys</groupId>
+                <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <artifactId>gameservices-users</artifactId>
-                <groupId>com.firmys</groupId>
+                <groupId>com.firmys.gameservices</groupId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>gameservices-transactions</artifactId>
+                <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <artifactId>gameservices-characters</artifactId>
-                <groupId>com.firmys</groupId>
+                <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <artifactId>gameservices-gateway</artifactId>
-                <groupId>com.firmys</groupId>
+                <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <artifactId>gameservices-common</artifactId>
-                <groupId>com.firmys</groupId>
+                <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -57,7 +62,7 @@
         </dependencies>
     </dependencyManagement>
 
-    <groupId>com.firmys</groupId>
+    <groupId>com.firmys.gameservices</groupId>
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>gameservices-world</module>
@@ -83,7 +88,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
-        <springdoc-webflux-ui.version>1.8.0</springdoc-webflux-ui.version>
+        <springdoc-openapi-common.version>1.8.0</springdoc-openapi-common.version>
         <springdoc-webflux-starter-ui.version>2.6.0</springdoc-webflux-starter-ui.version>
         <swagger-annotations.version>2.2.20</swagger-annotations.version>
     </properties>

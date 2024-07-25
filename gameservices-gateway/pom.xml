@@ -11,16 +11,31 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-            <version>${springdoc-webflux-starter-ui.version}</version>
+            <groupId>com.firmys.gameservices</groupId>
+            <artifactId>gameservices-characters</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.firmys</groupId>
-            <artifactId>gameservices-common</artifactId>
+            <groupId>com.firmys.gameservices</groupId>
+            <artifactId>gameservices-inventory</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.firmys.gameservices</groupId>
+            <artifactId>gameservices-users</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.firmys.gameservices</groupId>
+            <artifactId>gameservices-transactions</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.firmys.gameservices</groupId>
+            <artifactId>gameservices-world</artifactId>
         </dependency>
     </dependencies>
 
@@ -28,7 +43,7 @@
 
     <parent>
         <artifactId>java-gameservices</artifactId>
-        <groupId>com.firmys</groupId>
+        <groupId>com.firmys.gameservices</groupId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 

@@ -1,23 +1,150 @@
 package com.firmys.gameservices.gateway.controllers;
 
+import com.firmys.gameservices.characters.models.Character;
 import com.firmys.gameservices.common.CommonEntity;
 import com.firmys.gameservices.common.CommonObject;
 import com.firmys.gameservices.common.JsonUtils;
+import com.firmys.gameservices.gateway.services.GatewayService;
+import com.firmys.gameservices.inventory.models.Inventory;
+import com.firmys.gameservices.inventory.models.InventoryCurrency;
+import com.firmys.gameservices.inventory.models.InventoryItem;
+import com.firmys.gameservices.inventory.models.Item;
+import com.firmys.gameservices.transactions.models.Currency;
+import com.firmys.gameservices.users.models.User;
+import com.firmys.gameservices.world.models.World;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-@RestController
+@Controller
+@RequiredArgsConstructor
 public class GatewayController {
 
   public static final String baseDataName = "error";
   public static final String gameServiceErrorBase = "/" + baseDataName;
+  private final GatewayService service;
+
+  @QueryMapping
+  public Flux<Character> allCharacters(@Argument Integer limit) {
+    return service.getAll(limit, Character.class);
+  }
+
+  @QueryMapping
+  public Mono<Character> characterById(@Argument UUID uuid) {
+    return service.getById(uuid, Character.class);
+  }
+
+  @QueryMapping
+  public Mono<Character> createCharacter(@Argument Character input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<Character> updateCharacter(@Argument Character input) {
+    return service.update(input);
+  }
+
+  @QueryMapping
+  public Mono<Inventory> createInventory(@Argument Inventory input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<Inventory> updateInventory(@Argument Inventory input) {
+    return service.update(input);
+  }
+
+  @QueryMapping
+  public Mono<Item> createItem(@Argument Item input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<Item> updateItem(@Argument Item input) {
+    return service.update(input);
+  }
+
+  @QueryMapping
+  public Mono<Currency> createCurrency(@Argument Currency input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<Currency> updateCurrency(@Argument Currency input) {
+    return service.update(input);
+  }
+
+  @QueryMapping
+  public Mono<InventoryItem> createInventoryItem(@Argument InventoryItem input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<InventoryItem> updateInventoryItem(@Argument InventoryItem input) {
+    return service.update(input);
+  }
+
+  @QueryMapping
+  public Mono<InventoryCurrency> createInventoryCurrency(@Argument InventoryCurrency input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<InventoryCurrency> updateInventoryCurrency(@Argument InventoryCurrency input) {
+    return service.update(input);
+  }
+
+  @QueryMapping
+  public Flux<Character> charactersByName(@Argument String name) {
+    return service.charactersByName(name);
+  }
+
+  @QueryMapping
+  public Mono<Inventory> inventoryById(@Argument UUID uuid) {
+    return service.getById(uuid, Inventory.class);
+  }
+
+  @QueryMapping
+  public Mono<InventoryItem> inventoryItemById(@Argument UUID uuid) {
+    return service.getById(uuid, InventoryItem.class);
+  }
+
+  @QueryMapping
+  public Mono<InventoryCurrency> inventoryCurrencyById(@Argument UUID uuid) {
+    return service.getById(uuid, InventoryCurrency.class);
+  }
+
+  @QueryMapping
+  public Mono<Item> itemById(@Argument UUID uuid) {
+    return service.getById(uuid, Item.class);
+  }
+
+  @QueryMapping
+  public Mono<Currency> currencyById(@Argument UUID uuid) {
+    return service.getById(uuid, Currency.class);
+  }
+
+  @QueryMapping
+  public Mono<User> userById(@Argument UUID uuid) {
+    return service.getById(uuid, User.class);
+  }
+
+  @QueryMapping
+  public Mono<World> worldById(@Argument UUID uuid) {
+    return service.getById(uuid, World.class);
+  }
 
   @GetMapping(gameServiceErrorBase)
   public CommonObject getError(ServerHttpRequest serverHttpRequest) {

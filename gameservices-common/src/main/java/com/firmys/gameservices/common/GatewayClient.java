@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.Builder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Builder
@@ -19,11 +20,20 @@ public class GatewayClient {
 
   public <E extends CommonEntity> Mono<E> get(Class<E> entityType, UUID uuid) {
     return clients
-        .get(Services.valueOf(entityType.getSimpleName().toLowerCase()))
+        .get(Services.valueOf(entityType.getSimpleName().toUpperCase()))
         .get()
         .uri(uriBuilder -> uriBuilder.queryParam(CommonConstants.UUID, uuid).build())
         .retrieve()
         .bodyToMono(entityType);
+  }
+
+  public <E extends CommonEntity> Flux<E> getAll(Integer limit, Class<E> entityType) {
+    return clients
+        .get(Services.valueOf(entityType.getSimpleName().toUpperCase()))
+        .get()
+        .uri(uriBuilder -> uriBuilder.queryParam(CommonConstants.LIMIT, limit).build())
+        .retrieve()
+        .bodyToFlux(entityType);
   }
 
   public <E extends CommonEntity> Mono<E> create(E object) {

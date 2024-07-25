@@ -38,7 +38,8 @@ public class SpringSecurityConfiguration {
         "/v3/api-docs/**",
         "/v3/api-docs.yml/**",
         "/v3/api-docs.yaml/**",
-        "/swagger-ui/**"
+        "/swagger-ui/**",
+        "/graphql*"
       };
 
   private CorsConfigurationSource createCorsConfigSource() {
