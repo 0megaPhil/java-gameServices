@@ -1,4 +1,4 @@
-package com.firmys.gameservices.gateway;
+package com.firmys.gameservices.app;
 
 import com.firmys.gameservices.common.CommonConstants;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -15,10 +15,10 @@ import org.springframework.web.reactive.config.EnableWebFlux;
             title = CommonConstants.GAME_SERVICES_GATEWAY,
             version = CommonConstants.VERSION,
             description = "Game Services API"))
-public class GatewayApplication {
+public class GameServicesApplication {
 
   public static void main(String[] args) {
-    SpringApplication application = new SpringApplication(GatewayApplication.class);
+    SpringApplication application = new SpringApplication(GameServicesApplication.class);
     application.run(args);
   }
 }

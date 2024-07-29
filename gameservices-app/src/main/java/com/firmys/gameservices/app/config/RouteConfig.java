@@ -1,4 +1,4 @@
-package com.firmys.gameservices.gateway.config;
+package com.firmys.gameservices.app.config;
 
 import com.firmys.gameservices.common.CommonProperties;
 import com.firmys.gameservices.common.GatewayClient;
@@ -11,4 +11,4 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({SpringSecurityConfiguration.class, GatewayClient.class, WebClientConfig.class})
 @EnableConfigurationProperties(CommonProperties.class)
-public class GatewayRouteConfig {}
+public class RouteConfig {}

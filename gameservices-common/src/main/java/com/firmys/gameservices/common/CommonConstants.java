@@ -15,6 +15,8 @@ public class CommonConstants {
   public static final String CHARACTER_SERVICE = "CharacterService";
   public static final String CHARACTER_PATH = "/" + CHARACTER;
 
+  public static final String FLAVOR = "text";
+
   public static final String INVENTORY = "inventory";
   public static final String INVENTORY_SERVICE = "InventoryService";
   public static final String INVENTORY_PATH = "/" + INVENTORY;

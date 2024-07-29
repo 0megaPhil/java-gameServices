@@ -33,7 +33,7 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>gameservices-gateway</artifactId>
+                <artifactId>gameservices-app</artifactId>
                 <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
@@ -68,7 +68,7 @@
         <module>gameservices-world</module>
         <module>gameservices-characters</module>
         <module>gameservices-inventory</module>
-        <module>gameservices-gateway</module>
+        <module>gameservices-app</module>
         <module>gameservices-common</module>
         <module>gameservices-users</module>
         <module>gameservices-transactions</module>
@@ -88,6 +88,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
+        <spring-ai.version>1.0.0-M1</spring-ai.version>
         <springdoc-openapi-common.version>1.8.0</springdoc-openapi-common.version>
         <springdoc-webflux-starter-ui.version>2.6.0</springdoc-webflux-starter-ui.version>
         <swagger-annotations.version>2.2.20</swagger-annotations.version>

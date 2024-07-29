@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Services {
   CHARACTER(CommonConstants.CHARACTER),
+  FLAVOR(CommonConstants.FLAVOR),
   INVENTORY(CommonConstants.INVENTORY),
   ITEM(CommonConstants.ITEM),
   TRANSACTION(CommonConstants.TRANSACTION),

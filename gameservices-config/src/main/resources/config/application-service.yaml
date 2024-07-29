@@ -43,6 +43,12 @@ gameservices:
       name: CurrencyService
       host: ${SERVICES_TRANSACTION_HOST:localhost}
       port: ${SERVICES_TRANSACTION_PORT:8085}
+    FLAVOR:
+      id: flavor
+      name: FlavorService
+      protocol: http
+      host: ${SERVICES_FLAVOR_HOST:localhost}
+      port: ${SERVICES_FLAVOR_PORT:9000}
     CONFIG:
       id: config
       name: ConfigService

@@ -1,7 +1,14 @@
 package com.firmys.gameservices.common.data;
 
 import com.firmys.gameservices.common.CommonObject;
-import lombok.Builder;
 
-@Builder(toBuilder = true)
-public record Attribute(AttributesType type, Boolean value) implements CommonObject {}
+public interface Attribute<K, V> extends CommonObject {
+    Attribute<K, V> withValue(V value);
+    V value();
+
+    Attribute<K, V> withKey(K key);
+    K key();
+
+    Attribute<K, V> withDescription(String description);
+    String description();
+}

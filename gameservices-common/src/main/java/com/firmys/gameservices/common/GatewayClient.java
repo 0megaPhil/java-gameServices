@@ -1,5 +1,8 @@
 package com.firmys.gameservices.common;
 
+import static com.firmys.gameservices.common.Services.FLAVOR;
+
+import com.firmys.gameservices.common.data.Flavor;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
@@ -18,13 +21,13 @@ public class GatewayClient {
 
   @Builder.Default private final Map<Services, WebClient> clients = new ConcurrentHashMap<>();
 
-  public <E extends CommonEntity> Mono<E> get(Class<E> entityType, UUID uuid) {
+  public <E extends CommonEntity> Mono<E> get(UUID uuid, Class<E> entityClass) {
     return clients
-        .get(Services.valueOf(entityType.getSimpleName().toUpperCase()))
+        .get(Services.valueOf(entityClass.getSimpleName().toUpperCase()))
         .get()
-        .uri(uriBuilder -> uriBuilder.queryParam(CommonConstants.UUID, uuid).build())
+        .uri(uriBuilder -> uriBuilder.path("/" + uuid).build())
         .retrieve()
-        .bodyToMono(entityType);
+        .bodyToMono(entityClass);
   }
 
   public <E extends CommonEntity> Flux<E> getAll(Integer limit, Class<E> entityType) {
@@ -41,6 +44,19 @@ public class GatewayClient {
         .filter(obj -> obj.uuid() == null)
         .map(this::save)
         .orElseThrow();
+  }
+
+  public <E extends CommonEntity> Mono<Flavor> flavor(E object) {
+    return clients
+        .get(FLAVOR)
+        .post()
+        .uri(
+            uriBuilder ->
+                uriBuilder.path("/" + object.getClass().getSimpleName().toLowerCase()).build())
+        .body(Mono.just(object), object.getClass())
+        .retrieve()
+        .bodyToMono(String.class)
+        .map(str -> JsonUtils.fromJson(str, Flavor.class));
   }
 
   public <E extends CommonEntity> Mono<E> update(E object) {

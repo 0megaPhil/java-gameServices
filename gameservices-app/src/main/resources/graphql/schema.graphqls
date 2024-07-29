@@ -22,6 +22,25 @@ type Query {
     userById(uuid: ID): User
     worldById(uuid: ID): World
     detailedCharacter(uuid: ID): DetailedCharacter
+    characterFlavor(uuid: ID): Flavor
+}
+
+type Flavor {
+    targetId: ID!
+    text: String!
+    objectType: String!
+}
+
+input CharacterStatInput {
+    value: String!
+    key: String!
+    description: String
+}
+
+interface Attribute {
+    value: String!
+    key: String!
+    description: String
 }
 
 input CharacterInput {
@@ -32,6 +51,8 @@ input CharacterInput {
     age: Int
     height: Int
     weight: Int
+    inventoryId: ID
+    stats: [CharacterStatInput]
 }
 
 input InventoryInput {
@@ -58,6 +79,12 @@ input CurrencyInput {
     name: String!
     description: String!
     attributes: [String]
+}
+
+type CharacterStat implements Attribute {
+    value: String!
+    key: String!
+    description: String
 }
 
 input InventoryCurrencyInput {
@@ -112,6 +139,7 @@ type Character {
     weight: Int
     userId: ID
     inventoryId: ID
+    stats: [CharacterStat]
 }
 
 type User {

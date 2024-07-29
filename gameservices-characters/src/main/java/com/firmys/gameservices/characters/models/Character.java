@@ -2,8 +2,10 @@ package com.firmys.gameservices.characters.models;
 
 import com.firmys.gameservices.common.CommonEntity;
 import jakarta.validation.constraints.NotEmpty;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Builder;
+import lombok.Singular;
 import lombok.With;
 import org.springframework.data.annotation.Id;
 
@@ -17,5 +19,6 @@ public record Character(
     int height,
     int weight,
     UUID userId,
-    UUID inventoryId)
+    UUID inventoryId,
+    @Singular Set<CharacterStat> stats)
     implements CommonEntity {}

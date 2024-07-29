@@ -1,10 +1,10 @@
-package com.firmys.gameservices.gateway.controllers;
+package com.firmys.gameservices.app.controllers;
 
 import com.firmys.gameservices.characters.models.Character;
 import com.firmys.gameservices.common.CommonEntity;
 import com.firmys.gameservices.common.CommonObject;
 import com.firmys.gameservices.common.JsonUtils;
-import com.firmys.gameservices.gateway.services.GatewayService;
+import com.firmys.gameservices.app.services.QueryService;
 import com.firmys.gameservices.inventory.models.Inventory;
 import com.firmys.gameservices.inventory.models.InventoryCurrency;
 import com.firmys.gameservices.inventory.models.InventoryItem;
@@ -30,11 +30,11 @@ import reactor.core.publisher.Mono;
 
 @Controller
 @RequiredArgsConstructor
-public class GatewayController {
+public class QueryController {
 
   public static final String baseDataName = "error";
   public static final String gameServiceErrorBase = "/" + baseDataName;
-  private final GatewayService service;
+  private final QueryService service;
 
   @QueryMapping
   public Flux<Character> allCharacters(@Argument Integer limit) {

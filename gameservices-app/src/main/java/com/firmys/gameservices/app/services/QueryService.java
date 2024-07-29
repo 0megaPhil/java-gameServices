@@ -1,4 +1,4 @@
-package com.firmys.gameservices.gateway.services;
+package com.firmys.gameservices.app.services;
 
 import com.firmys.gameservices.characters.models.Character;
 import com.firmys.gameservices.common.CommonEntity;
@@ -16,23 +16,27 @@ import reactor.core.publisher.Mono;
 @Service
 @Builder(toBuilder = true)
 @Accessors(chain = true, fluent = true)
-public class GatewayService {
+public class QueryService {
   private final GatewayClient client;
 
-  public <E extends CommonEntity> Mono<E> getById(UUID uuid, Class<E> entityType) {
-    return client.get(entityType, uuid);
+  public <E extends CommonEntity> Mono<E> getById(UUID uuid, Class<E> entityClass) {
+    return client.get(uuid, entityClass);
   }
 
-  public <E extends CommonEntity> Flux<E> getAll(Integer limit, Class<E> entityType) {
-    return client.getAll(limit, entityType);
+  public <E extends CommonEntity> Flux<E> getAll(Integer limit, Class<E> entityClass) {
+    return client.getAll(limit, entityClass);
   }
 
-  public <E extends CommonEntity> Mono<E> create(String json, Class<E> entityType) {
-    return Mono.just(json).map(str -> JsonUtils.fromJson(json, entityType)).flatMap(client::create);
+  public <E extends CommonEntity> Mono<E> create(String json, Class<E> entityClass) {
+    return Mono.just(json)
+        .map(str -> JsonUtils.fromJson(json, entityClass))
+        .flatMap(client::create);
   }
 
-  public <E extends CommonEntity> Mono<E> update(String json, Class<E> entityType) {
-    return Mono.just(json).map(str -> JsonUtils.fromJson(json, entityType)).flatMap(client::update);
+  public <E extends CommonEntity> Mono<E> update(String json, Class<E> entityClass) {
+    return Mono.just(json)
+        .map(str -> JsonUtils.fromJson(json, entityClass))
+        .flatMap(client::update);
   }
 
   public <E extends CommonEntity> Mono<E> update(E object) {
