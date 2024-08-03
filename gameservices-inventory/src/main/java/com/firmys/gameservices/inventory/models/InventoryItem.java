@@ -7,5 +7,6 @@ import lombok.With;
 import org.springframework.data.annotation.Id;
 
 @Builder(toBuilder = true)
-public record InventoryItem(@With @Id UUID uuid, UUID itemId, UUID inventoryId, Long quantity)
+public record InventoryItem(
+    @With @Id UUID uuid, String name, UUID itemId, UUID inventoryId, Long quantity)
     implements CommonEntity {}

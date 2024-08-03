@@ -59,6 +59,31 @@
                 <type>pom</type>
                 <version>${spring-cloud.version}</version>
             </dependency>
+            <dependency>
+                <groupId>systems.uom</groupId>
+                <artifactId>systems-common</artifactId>
+                <version>${uom-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.graphql-java</groupId>
+                <artifactId>graphql-java-extended-scalars</artifactId>
+                <version>${graphql-extended-scalers.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>si.uom</groupId>
+                <artifactId>si-quantity</artifactId>
+                <version>${uom-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>si.uom</groupId>
+                <artifactId>si-units</artifactId>
+                <version>${uom-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.measure</groupId>
+                <artifactId>unit-api</artifactId>
+                <version>${javax-measure.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -89,8 +114,13 @@
         <maven.compiler.target>21</maven.compiler.target>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-ai.version>1.0.0-M1</spring-ai.version>
-        <springdoc-openapi-common.version>1.8.0</springdoc-openapi-common.version>
+        <springdoc-common.version>1.8.0</springdoc-common.version>
         <springdoc-webflux-starter-ui.version>2.6.0</springdoc-webflux-starter-ui.version>
+        <javax-measure.version>2.2</javax-measure.version>
+        <jscience.version>4.3.1</jscience.version>
+        <uom-version>2.1</uom-version>
+        <graphql-extended-scalers.version>22.0</graphql-extended-scalers.version>
+        <unit-ri.version>1.0.3</unit-ri.version>
         <swagger-annotations.version>2.2.20</swagger-annotations.version>
     </properties>
 
@@ -107,6 +137,10 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 

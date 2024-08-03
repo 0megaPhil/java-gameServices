@@ -1,9 +1,10 @@
 package com.firmys.gameservices.app.services;
 
+import static com.firmys.gameservices.common.JsonUtils.JSON;
+
 import com.firmys.gameservices.characters.models.Character;
 import com.firmys.gameservices.common.CommonEntity;
 import com.firmys.gameservices.common.GatewayClient;
-import com.firmys.gameservices.common.JsonUtils;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,15 +29,11 @@ public class QueryService {
   }
 
   public <E extends CommonEntity> Mono<E> create(String json, Class<E> entityClass) {
-    return Mono.just(json)
-        .map(str -> JsonUtils.fromJson(json, entityClass))
-        .flatMap(client::create);
+    return Mono.just(json).map(str -> JSON.fromJson(json, entityClass)).flatMap(client::create);
   }
 
   public <E extends CommonEntity> Mono<E> update(String json, Class<E> entityClass) {
-    return Mono.just(json)
-        .map(str -> JsonUtils.fromJson(json, entityClass))
-        .flatMap(client::update);
+    return Mono.just(json).map(str -> JSON.fromJson(json, entityClass)).flatMap(client::update);
   }
 
   public <E extends CommonEntity> Mono<E> update(E object) {

@@ -1,10 +1,14 @@
 package com.firmys.gameservices.common;
 
+import java.util.Arrays;
 import lombok.Getter;
 
 @Getter
 public enum Services {
   CHARACTER(CommonConstants.CHARACTER),
+  SKILL(CommonConstants.SKILL),
+  STAT(CommonConstants.STAT),
+  RACE(CommonConstants.RACE),
   FLAVOR(CommonConstants.FLAVOR),
   INVENTORY(CommonConstants.INVENTORY),
   ITEM(CommonConstants.ITEM),
@@ -15,9 +19,16 @@ public enum Services {
   CONFIG(CommonConstants.CONFIG),
   GATEWAY(CommonConstants.GATEWAY);
 
-  private final String name;
+  private final String baseUri;
 
-  Services(String name) {
-    this.name = name.toLowerCase();
+  Services(String baseUri) {
+    this.baseUri = baseUri;
+  }
+
+  public static Services byEntityName(String entityName) {
+    return Arrays.stream(Services.values())
+        .filter(entry -> entry.baseUri.equalsIgnoreCase(entityName))
+        .findFirst()
+        .orElseThrow();
   }
 }

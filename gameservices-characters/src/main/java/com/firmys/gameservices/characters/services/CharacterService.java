@@ -1,5 +1,6 @@
 package com.firmys.gameservices.characters.services;
 
+import com.firmys.gameservices.characters.data.CharacterRepository;
 import com.firmys.gameservices.characters.models.Character;
 import com.firmys.gameservices.common.CommonService;
 import com.firmys.gameservices.common.GatewayClient;
@@ -16,10 +17,16 @@ import reactor.core.publisher.Mono;
 @Accessors(chain = true, fluent = true)
 public class CharacterService extends CommonService<Character> {
   private final CharacterRepository repository;
+  private final SkillService skillService;
+  private final StatService statService;
+  private final CharacterSkillService charSkillService;
+  private final CharacterStatService charStatService;
   private final GatewayClient gatewayClient;
 
   @Override
   public Mono<Character> create(Mono<Character> object) {
+    object = charSkillService.applyCharacterSkills(object);
+    object = charStatService.applyCharacterStats(object);
     return super.create(object).flatMap(this::generateInventory);
   }
 

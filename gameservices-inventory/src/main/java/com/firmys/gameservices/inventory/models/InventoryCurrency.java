@@ -8,5 +8,5 @@ import org.springframework.data.annotation.Id;
 
 @Builder(toBuilder = true)
 public record InventoryCurrency(
-    @With @Id UUID uuid, UUID currencyId, UUID inventoryId, Long quantity)
+    @With @Id UUID uuid, String name, UUID currencyId, UUID inventoryId, Long quantity)
     implements CommonEntity {}

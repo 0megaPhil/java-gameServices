@@ -15,6 +15,18 @@ public class CommonConstants {
   public static final String CHARACTER_SERVICE = "CharacterService";
   public static final String CHARACTER_PATH = "/" + CHARACTER;
 
+  public static final String SKILL = "skill";
+  public static final String SKILL_SERVICE = "SkillService";
+  public static final String SKILL_PATH = "/" + SKILL;
+
+  public static final String STAT = "stat";
+  public static final String STAT_SERVICE = "StatService";
+  public static final String STAT_PATH = "/" + STAT;
+
+  public static final String RACE = "race";
+  public static final String RACE_SERVICE = "RaceService";
+  public static final String RACE_PATH = "/" + RACE;
+
   public static final String FLAVOR = "text";
 
   public static final String INVENTORY = "inventory";
@@ -52,4 +64,6 @@ public class CommonConstants {
 
   public static final String PROFILE_SERVICE = "service";
   public static final String PROFILE_GATEWAY = "gateway";
+  public static final String PROFILE_TEST = "test";
+  public static final String PROFILE_NOT_TEST = "!test";
 }

@@ -13,6 +13,21 @@ gameservices:
       name: CharacterService
       host: ${SERVICES_CHARACTER_HOST:localhost}
       port: ${SERVICES_CHARACTER_PORT:8081}
+    SKILL:
+      id: skill
+      name: SkillService
+      host: ${SERVICES_CHARACTER_HOST:localhost}
+      port: ${SERVICES_CHARACTER_PORT:8081}
+    STAT:
+      id: stat
+      name: StatService
+      host: ${SERVICES_CHARACTER_HOST:localhost}
+      port: ${SERVICES_CHARACTER_PORT:8081}
+    RACE:
+      id: race
+      name: RaceService
+      host: ${SERVICES_CHARACTER_HOST:localhost}
+      port: ${SERVICES_CHARACTER_PORT:8081}
     INVENTORY:
       id: inventory
       name: InventoryService

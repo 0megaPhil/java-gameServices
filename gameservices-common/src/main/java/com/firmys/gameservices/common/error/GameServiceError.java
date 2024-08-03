@@ -1,8 +1,9 @@
 package com.firmys.gameservices.common.error;
 
+import static com.firmys.gameservices.common.JsonUtils.JSON;
+
 import com.firmys.gameservices.common.CommonEntity;
 import com.firmys.gameservices.common.CommonObject;
-import com.firmys.gameservices.common.JsonUtils;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,7 +20,7 @@ public class GameServiceError<D extends CommonEntity> implements CommonObject {
 
   public GameServiceError(String message, D request) {
     this.message = message;
-    this.request = JsonUtils.toJson(request);
+    this.request = JSON.toJson(request);
   }
 
   public GameServiceError(String message, String request) {

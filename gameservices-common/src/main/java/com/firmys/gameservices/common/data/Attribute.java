@@ -2,13 +2,16 @@ package com.firmys.gameservices.common.data;
 
 import com.firmys.gameservices.common.CommonObject;
 
-public interface Attribute<K, V> extends CommonObject {
-    Attribute<K, V> withValue(V value);
-    V value();
+public interface Attribute<N, V> extends CommonObject {
+  Attribute<N, V> withValue(V value);
 
-    Attribute<K, V> withKey(K key);
-    K key();
+  V value();
 
-    Attribute<K, V> withDescription(String description);
-    String description();
+  Attribute<N, V> withName(N name);
+
+  N name();
+
+  Attribute<N, V> withDescription(String description);
+
+  String description();
 }

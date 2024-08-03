@@ -30,7 +30,7 @@ public class CommonProperties {
     private String protocol;
 
     public String baseUri() {
-      return protocol() + "://" +  host + ":" + port;
+      return protocol() + "://" + host + ":" + port;
     }
 
     public String id() {

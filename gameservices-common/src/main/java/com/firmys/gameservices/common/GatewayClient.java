@@ -1,9 +1,9 @@
 package com.firmys.gameservices.common;
 
+import static com.firmys.gameservices.common.JsonUtils.JSON;
 import static com.firmys.gameservices.common.Services.FLAVOR;
 
 import com.firmys.gameservices.common.data.Flavor;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,21 +22,23 @@ public class GatewayClient {
   @Builder.Default private final Map<Services, WebClient> clients = new ConcurrentHashMap<>();
 
   public <E extends CommonEntity> Mono<E> get(UUID uuid, Class<E> entityClass) {
+    Services service = Services.byEntityName(entityClass.getSimpleName().toUpperCase());
     return clients
-        .get(Services.valueOf(entityClass.getSimpleName().toUpperCase()))
+        .get(service)
         .get()
         .uri(uriBuilder -> uriBuilder.path("/" + uuid).build())
         .retrieve()
         .bodyToMono(entityClass);
   }
 
-  public <E extends CommonEntity> Flux<E> getAll(Integer limit, Class<E> entityType) {
+  public <E extends CommonEntity> Flux<E> getAll(Integer limit, Class<E> entityClass) {
+    Services service = Services.byEntityName(entityClass.getSimpleName().toUpperCase());
     return clients
-        .get(Services.valueOf(entityType.getSimpleName().toUpperCase()))
+        .get(service)
         .get()
         .uri(uriBuilder -> uriBuilder.queryParam(CommonConstants.LIMIT, limit).build())
         .retrieve()
-        .bodyToFlux(entityType);
+        .bodyToFlux(entityClass);
   }
 
   public <E extends CommonEntity> Mono<E> create(E object) {
@@ -47,16 +49,15 @@ public class GatewayClient {
   }
 
   public <E extends CommonEntity> Mono<Flavor> flavor(E object) {
+    String className = object.getClass().getSimpleName().toLowerCase();
     return clients
         .get(FLAVOR)
         .post()
-        .uri(
-            uriBuilder ->
-                uriBuilder.path("/" + object.getClass().getSimpleName().toLowerCase()).build())
+        .uri(uriBuilder -> uriBuilder.path("/" + className).build())
         .body(Mono.just(object), object.getClass())
         .retrieve()
         .bodyToMono(String.class)
-        .map(str -> JsonUtils.fromJson(str, Flavor.class));
+        .map(str -> JSON.fromJson(str, Flavor.class));
   }
 
   public <E extends CommonEntity> Mono<E> update(E object) {
@@ -66,22 +67,18 @@ public class GatewayClient {
         .orElseThrow();
   }
 
-  public Mono<Void> delete(Services service, UUID uuid) {
+  public <E extends CommonEntity> Mono<Void> delete(UUID uuid, Class<E> entityClass) {
+    Services service = Services.byEntityName(entityClass.getSimpleName().toLowerCase());
     return clients
         .get(service)
         .delete()
-        .uri(uriBuilder -> uriBuilder.queryParam(CommonConstants.UUID, uuid).build())
+        .uri(uriBuilder -> uriBuilder.path("/" + uuid).build())
         .retrieve()
         .bodyToMono(Void.class);
   }
 
   private <E extends CommonEntity> Mono<E> save(E object) {
-    String className = object.getClass().getSimpleName().toLowerCase();
-    Services service =
-        Arrays.stream(Services.values())
-            .filter(s -> s.getName().equals(className))
-            .findFirst()
-            .orElseThrow();
+    Services service = Services.byEntityName(object.getClass().getSimpleName().toLowerCase());
     return (Mono<E>)
         clients
             .get(service)

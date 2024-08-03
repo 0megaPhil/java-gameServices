@@ -8,6 +8,6 @@ import org.springframework.data.annotation.Id;
 
 @With
 @Builder(toBuilder = true)
-public record CharacterStat(
-    @Id UUID uuid, UUID statId, String name, Long statValue, String description)
+public record CharacterSkill(
+    @Id UUID uuid, UUID skillId, String name, Long skillValue, String description)
     implements CommonEntity {}

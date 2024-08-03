@@ -1,8 +1,7 @@
 package com.firmys.gameservices.world.models;
 
-import lombok.Builder;
-
 import java.util.UUID;
+import lombok.Builder;
 
 @Builder(toBuilder = true)
 public record WorldCell(UUID uuid) {}

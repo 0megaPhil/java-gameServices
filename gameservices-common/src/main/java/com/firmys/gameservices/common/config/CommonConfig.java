@@ -1,9 +1,9 @@
 package com.firmys.gameservices.common.config;
 
-import com.firmys.gameservices.common.CommonConstants;
-import com.firmys.gameservices.common.CommonEntity;
-import com.firmys.gameservices.common.CommonProperties;
-import com.firmys.gameservices.common.GatewayClient;
+import static com.firmys.gameservices.common.CommonConstants.PROFILE_NOT_TEST;
+import static com.firmys.gameservices.common.CommonConstants.PROFILE_SERVICE;
+
+import com.firmys.gameservices.common.*;
 import com.firmys.gameservices.common.error.GameDataExceptionController;
 import io.r2dbc.spi.ConnectionFactory;
 import java.util.UUID;
@@ -24,7 +24,7 @@ import reactor.core.publisher.Mono;
 public class CommonConfig {
 
   @Bean
-  @Profile(CommonConstants.PROFILE_SERVICE)
+  @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST})
   public ConnectionFactoryInitializer initializer(
       @Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
     ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
@@ -36,6 +36,7 @@ public class CommonConfig {
   }
 
   @Bean
+  @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST})
   public OpenApiCustomiser openApiCustomiser() {
     return openApi ->
         openApi.getPaths().values().stream()
@@ -61,7 +62,7 @@ public class CommonConfig {
 
   @Bean
   @ConditionalOnMissingBean
-  @Profile(CommonConstants.PROFILE_SERVICE)
+  @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST})
   public BeforeConvertCallback<CommonEntity> beforeConvertCallback() {
     return (d, table) -> {
       if (d.uuid() == null) {

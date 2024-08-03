@@ -1,10 +1,14 @@
 package com.firmys.gameservices.app.controllers;
 
+import static com.firmys.gameservices.common.JsonUtils.JSON;
+
+import com.firmys.gameservices.app.services.QueryService;
 import com.firmys.gameservices.characters.models.Character;
+import com.firmys.gameservices.characters.models.Race;
+import com.firmys.gameservices.characters.models.Skill;
+import com.firmys.gameservices.characters.models.Stat;
 import com.firmys.gameservices.common.CommonEntity;
 import com.firmys.gameservices.common.CommonObject;
-import com.firmys.gameservices.common.JsonUtils;
-import com.firmys.gameservices.app.services.QueryService;
 import com.firmys.gameservices.inventory.models.Inventory;
 import com.firmys.gameservices.inventory.models.InventoryCurrency;
 import com.firmys.gameservices.inventory.models.InventoryItem;
@@ -42,8 +46,53 @@ public class QueryController {
   }
 
   @QueryMapping
+  public Flux<Skill> allSkills(@Argument Integer limit) {
+    return service.getAll(limit, Skill.class);
+  }
+
+  @QueryMapping
+  public Flux<Race> allRaces(@Argument Integer limit) {
+    return service.getAll(limit, Race.class);
+  }
+
+  @QueryMapping
+  public Flux<Stat> allStats(@Argument Integer limit) {
+    return service.getAll(limit, Stat.class);
+  }
+
+  @QueryMapping
   public Mono<Character> characterById(@Argument UUID uuid) {
     return service.getById(uuid, Character.class);
+  }
+
+  @QueryMapping
+  public Mono<Stat> createStat(@Argument Stat input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<Stat> updateStat(@Argument Stat input) {
+    return service.update(input);
+  }
+
+  @QueryMapping
+  public Mono<Skill> createSkill(@Argument Skill input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<Skill> updateSkill(@Argument Skill input) {
+    return service.update(input);
+  }
+
+  @QueryMapping
+  public Mono<Race> createRace(@Argument Race input) {
+    return service.create(input);
+  }
+
+  @QueryMapping
+  public Mono<Race> updateRace(@Argument Race input) {
+    return service.update(input);
   }
 
   @QueryMapping
@@ -212,8 +261,8 @@ public class QueryController {
   }
 
   private String serializeRequest(ServerHttpRequest serverHttpRequest) {
-    String cookies = JsonUtils.toJson(serverHttpRequest.getCookies());
-    return JsonUtils.toJson(
+    String cookies = JSON.toJson(serverHttpRequest.getCookies());
+    return JSON.toJson(
         Map.of(
             "Query Params",
             serverHttpRequest.getQueryParams(),

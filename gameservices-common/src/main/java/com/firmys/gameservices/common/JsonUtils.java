@@ -2,29 +2,36 @@ package com.firmys.gameservices.common;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.experimental.Accessors;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class JsonUtils {
 
-  @Getter
-  @Accessors(fluent = true, chain = true)
-  private static final ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
+  public static JsonUtils JSON;
+
+  private final ObjectMapper mapper;
 
   @SneakyThrows
-  public static <T> String toJson(T object) {
+  public <T> String toJson(T object) {
     return mapper.writeValueAsString(object);
   }
 
   @SneakyThrows
-  public static <T> T fromJson(String jsonStr, Class<T> objectType) {
+  public <T> T fromJson(String jsonStr, Class<T> objectType) {
     return mapper.readValue(jsonStr, objectType);
   }
 
   @SneakyThrows
-  public static <T> T fromJson(String jsonStr, TypeReference<T> objectType) {
+  public <T> T fromJson(String jsonStr, TypeReference<T> objectType) {
     return mapper.readValue(jsonStr, objectType);
+  }
+
+  @PostConstruct
+  public void setupKeyTrustStores() {
+    JSON = this;
   }
 }

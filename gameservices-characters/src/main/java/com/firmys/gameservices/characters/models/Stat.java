@@ -6,8 +6,5 @@ import lombok.Builder;
 import lombok.With;
 import org.springframework.data.annotation.Id;
 
-@With
 @Builder(toBuilder = true)
-public record CharacterStat(
-    @Id UUID uuid, UUID statId, String name, Long statValue, String description)
-    implements CommonEntity {}
+public record Stat(@With @Id UUID uuid, String name, String description) implements CommonEntity {}
