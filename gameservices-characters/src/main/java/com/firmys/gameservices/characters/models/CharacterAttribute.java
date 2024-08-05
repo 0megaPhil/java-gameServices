@@ -7,4 +7,5 @@ import lombok.With;
 
 @With
 @Builder(toBuilder = true)
-public record CharacterSkill(UUID skillId, String name, Long value) implements CommonObject {}
+public record CharacterAttribute(UUID attributeId, String name, Long value)
+    implements CommonObject {}

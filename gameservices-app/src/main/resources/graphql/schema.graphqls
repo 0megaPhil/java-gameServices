@@ -35,8 +35,11 @@ type Query {
 
 type Flavor {
     targetId: ID!
-    text: String!
     objectType: String!
+    appearance: String!
+    background: String!
+    personality: String!
+    summary: String!
 }
 
 type Race {
@@ -80,24 +83,21 @@ input StatInput {
 }
 
 type CharacterSkill {
-    uuid: ID!
     skillId: ID!
     name: String!
-    skillValue: Int
+    skillValue: Int!
 }
 
 input CharacterSkillInput {
-    uuid: ID
     skillId: ID!
-    name: String!
-    skillValue: String!
+    name: String
+    skillValue: Int!
 }
 
 type CharacterStat {
-    uuid: ID!
     statId: ID!
-    name: String!
-    statValue: Int
+    name: String
+    statValue: Int!
 }
 
 type Character {
@@ -108,14 +108,10 @@ type Character {
     personality: String
     background: String
     sex: String
-    raceId: ID
-    age: Dimension
-    height: Dimension
-    weight: Dimension
-    userId: ID
-    inventoryId: ID
-    skillIds: [ID]
-    statIds: [ID]
+    race: Race
+    dimensions: [Dimension]
+    user: User
+    inventory: Inventory
     skills: [CharacterSkill]
     stats: [CharacterStat]
 }
@@ -135,19 +131,20 @@ input CharacteristicInput {
 type Dimension {
     value: String!
     name: String!
+    unitType: String!
     description: String
 }
 
 input DimensionInput {
     value: String!
     name: String!
+    unitType: String!
     description: String
 }
 
 input CharacterStatInput {
-    uuid: ID
-    statId: ID
-    name: String!
+    statId: ID!
+    name: String
     statValue: Int!
 }
 
@@ -165,28 +162,26 @@ input CharacterInput {
     personality: String
     background: String
     sex: String
-    raceId: ID
-    age: DimensionInput
-    height: DimensionInput
-    weight: DimensionInput
-    userId: ID
-    inventoryId: ID
-    skillIds: [ID]
-    statIds: [ID]
+    race: RaceInput
+    dimensions: [DimensionInput]
+    user: UserInput
+    inventory: InventoryInput
     skills: [CharacterSkillInput]
     stats: [CharacterStatInput]
 }
 
 input InventoryInput {
     uuid: ID
-    characterId: ID!
+    characterId: ID
+    items: [InventoryItemInput]
+    currencies: [InventoryCurrencyInput]
 }
 
 type Inventory {
     uuid: ID!
     characterId: ID!
-    items: [ID!]
-    currencies: [ID!]
+    items: [InventoryItem]
+    currencies: [InventoryCurrency]
 }
 
 input InventoryItemInput {
@@ -251,6 +246,12 @@ type Item {
 
 type User {
     uuid: ID!
+    firstName: String!
+    lastName: String!
+}
+
+input UserInput {
+    uuid: ID
     firstName: String!
     lastName: String!
 }

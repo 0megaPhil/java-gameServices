@@ -118,6 +118,7 @@
         <springdoc-webflux-starter-ui.version>2.6.0</springdoc-webflux-starter-ui.version>
         <javax-measure.version>2.2</javax-measure.version>
         <jscience.version>4.3.1</jscience.version>
+        <reflections.version>0.10.2</reflections.version>
         <uom-version>2.1</uom-version>
         <graphql-extended-scalers.version>22.0</graphql-extended-scalers.version>
         <unit-ri.version>1.0.3</unit-ri.version>

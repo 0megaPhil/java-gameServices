@@ -19,20 +19,16 @@ public class CharacterService extends CommonService<Character> {
   private final CharacterRepository repository;
   private final SkillService skillService;
   private final StatService statService;
-  private final CharacterSkillService charSkillService;
-  private final CharacterStatService charStatService;
   private final GatewayClient gatewayClient;
 
   @Override
   public Mono<Character> create(Mono<Character> object) {
-    object = charSkillService.applyCharacterSkills(object);
-    object = charStatService.applyCharacterStats(object);
     return super.create(object).flatMap(this::generateInventory);
   }
 
   public Mono<Character> generateInventory(Character character) {
     return gatewayClient
         .create(Inventory.builder().characterId(character.uuid()).build())
-        .flatMap(inv -> super.update(character.toBuilder().inventoryId(inv.uuid()).build()));
+        .flatMap(inv -> super.update(character.toBuilder().inventory(inv).build()));
   }
 }

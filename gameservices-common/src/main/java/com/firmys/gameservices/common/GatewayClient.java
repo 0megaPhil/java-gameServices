@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Builder;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -16,10 +17,12 @@ import reactor.core.publisher.Mono;
 
 @Builder
 @Component
+@Import(JsonUtils.class)
 @SuppressWarnings("unchecked")
 public class GatewayClient {
 
   @Builder.Default private final Map<Services, WebClient> clients = new ConcurrentHashMap<>();
+  private final JsonUtils json;
 
   public <E extends CommonEntity> Mono<E> get(UUID uuid, Class<E> entityClass) {
     Services service = Services.byEntityName(entityClass.getSimpleName().toUpperCase());

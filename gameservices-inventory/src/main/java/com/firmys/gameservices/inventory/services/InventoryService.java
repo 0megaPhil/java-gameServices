@@ -31,20 +31,27 @@ public class InventoryService extends CommonService<Inventory> {
 
   public Flux<InventoryItem> items(UUID inventoryId) {
     return find(inventoryId)
-        .flatMapMany(inv -> itemRepository.findAllById(Flux.fromStream(inv.items().stream())));
+        .flatMapMany(
+            inv ->
+                itemRepository.findAllById(
+                    Flux.fromStream(inv.items().stream().map(InventoryItem::itemId))));
   }
 
   public Flux<InventoryCurrency> currencies(UUID inventoryId) {
     return find(inventoryId)
         .flatMapMany(
-            inv -> currencyRepository.findAllById(Flux.fromStream(inv.currencies().stream())));
+            inv ->
+                currencyRepository.findAllById(
+                    Flux.fromStream(inv.currencies().stream().map(InventoryCurrency::currencyId))));
   }
 
   public Flux<InventoryItem> items(Inventory inventory) {
-    return itemRepository.findAllById(Flux.fromStream(inventory.items().stream()));
+    return itemRepository.findAllById(
+        Flux.fromStream(inventory.items().stream().map(InventoryItem::itemId)));
   }
 
   public Flux<InventoryCurrency> currencies(Inventory inventory) {
-    return currencyRepository.findAllById(Flux.fromStream(inventory.currencies().stream()));
+    return currencyRepository.findAllById(
+        Flux.fromStream(inventory.currencies().stream().map(InventoryCurrency::currencyId)));
   }
 }

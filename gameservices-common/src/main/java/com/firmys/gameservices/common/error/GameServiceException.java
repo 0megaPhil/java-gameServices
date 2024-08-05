@@ -25,6 +25,10 @@ public class GameServiceException extends RuntimeException implements Serializab
     super(exception);
   }
 
+  public GameServiceException(String errorStr) {
+    super(errorStr);
+  }
+
   public GameServiceException(Exception exception, String... additionalDetails) {
     super(String.join("\n", additionalDetails), exception);
     this.additionalDetails = String.join("\n", additionalDetails);

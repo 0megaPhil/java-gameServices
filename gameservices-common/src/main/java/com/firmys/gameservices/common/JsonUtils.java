@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class JsonUtils {
 
-  public static JsonUtils JSON;
+  public static JsonUtils JSON = new JsonUtils(new ObjectMapper());
 
   private final ObjectMapper mapper;
 
@@ -31,7 +31,7 @@ public class JsonUtils {
   }
 
   @PostConstruct
-  public void setupKeyTrustStores() {
+  public void postConstruct() {
     JSON = this;
   }
 }

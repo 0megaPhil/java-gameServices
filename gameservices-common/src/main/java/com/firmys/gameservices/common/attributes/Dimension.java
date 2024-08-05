@@ -1,5 +1,8 @@
 package com.firmys.gameservices.common.attributes;
 
+import static com.firmys.gameservices.common.JsonUtils.JSON;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firmys.gameservices.common.data.Attribute;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -14,15 +17,20 @@ import systems.uom.common.USCustomary;
 
 @With
 @Builder(toBuilder = true)
-public record Dimension<L extends Quantity<L>>(String name, Double value, String description)
+public record Dimension(String name, String unitType, Double value, String description)
     implements Attribute<String, Double> {
 
-  public static <L1 extends Quantity<L1>> Dimension<L1> of(Unit<L1> key, Number value) {
-    return Dimension.<L1>builder().name(key.getName()).value(value.doubleValue()).build();
+  public static <L1 extends Quantity<L1>> Dimension of(
+      String name, Unit<L1> unitType, Number value) {
+    return Dimension.builder()
+        .name(name)
+        .unitType(unitType.getName())
+        .value(value.doubleValue())
+        .build();
   }
 
-  public static <L1 extends Quantity<L1>> Dimension<L1> of(String unitName, Number value) {
-    return Dimension.<L1>builder().name(unitName).value(value.doubleValue()).build();
+  public static Dimension of(String name, String unitName, Number value) {
+    return Dimension.builder().name(name).unitType(unitName).value(value.doubleValue()).build();
   }
 
   @SuppressWarnings("unchecked")
@@ -43,30 +51,35 @@ public record Dimension<L extends Quantity<L>>(String name, Double value, String
             .orElse(null);
   }
 
-  public Unit<L> unit() {
-    return findUnit(name);
+  @JsonIgnore
+  public <L1 extends Quantity<L1>> Unit<L1> asUnit() {
+    return findUnit(unitType);
   }
 
-  public Dimension<L> translate(String unitName) {
+  public <L extends Quantity<L>> Dimension translate(String unitName) {
     Unit<L> newUnit = findUnit(unitName);
     Unit<L> originalUnit = findUnit(name);
     Number newValue = originalUnit.getConverterTo(newUnit).convert(value);
-    return Dimension.of(newUnit, newValue);
+    return Dimension.of(name, newUnit, newValue);
   }
 
-  public Dimension<L> translate(Unit<L> unit) {
+  public <L extends Quantity<L>> Dimension translate(Unit<L> unit) {
     Unit<L> originalUnit = findUnit(name);
     Number newValue = originalUnit.getConverterTo(unit).convert(value);
-    return Dimension.of(unit, newValue);
+    return Dimension.of(name, unit, newValue);
   }
 
-  public Number valueAs(Unit<L> unit) {
-    Unit<L> originalUnit = findUnit(name);
-    return originalUnit.getConverterTo(unit).convert(value);
+  @SuppressWarnings("unchecked")
+  public <L extends Quantity<L>> Number valueAs(Unit<L> unit) {
+    return ((Unit<L>) findUnit(unitType)).getConverterTo(unit).convert(value);
   }
 
-  public Number valueAs(String unitName) {
-    Unit<L> originalUnit = findUnit(name);
-    return originalUnit.getConverterTo(findUnit(unitName)).convert(value);
+  public <L extends Quantity<L>> Number valueAs(String unitName) {
+    return findUnit(unitType).getConverterTo(findUnit(unitName)).convert(value);
+  }
+
+  @Override
+  public String toString() {
+    return JSON.toJson(this);
   }
 }

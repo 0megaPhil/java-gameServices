@@ -6,4 +6,11 @@ import lombok.Builder;
 
 @Builder(toBuilder = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record Flavor(String targetId, String text, String objectType) implements CommonObject {}
+public record Flavor(
+    String targetId,
+    String objectType,
+    String appearance,
+    String background,
+    String personality,
+    String summary)
+    implements CommonObject {}

@@ -19,7 +19,12 @@ import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
 import reactor.core.publisher.Mono;
 
 @Configuration
-@Import({GameDataExceptionController.class, WebClientConfig.class, GatewayClient.class})
+@Import({
+  GameDataExceptionController.class,
+  ConversionConfig.class,
+  WebClientConfig.class,
+  GatewayClient.class
+})
 @EnableConfigurationProperties(CommonProperties.class)
 public class CommonConfig {
 
