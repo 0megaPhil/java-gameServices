@@ -1,0 +1,123 @@
+type CharacterQuery {
+    create(input: CharacterInput): Character
+    update(input: CharacterInput): Character
+    find(options: Options): [Character]
+    get(uuid: UUID): Character
+    flavor(uuid: UUID): Character
+}
+
+type SkillQuery {
+    create(input: SkillInput): Skill
+    update(input: SkillInput): Skill
+    find(options: Options): [Skill]
+    get(uuid: UUID): Skill
+    flavor(uuid: UUID): Skill
+}
+
+type StatQuery {
+    create(input: StatInput): Stat
+    update(input: StatInput): Stat
+    find(options: Options): [Stat]
+    get(uuid: UUID): Stat
+    flavor(uuid: UUID): Stat
+}
+
+type RaceQuery {
+    create(input: RaceInput): Race
+    update(input: RaceInput): Race
+    find(options: Options): [Race]
+    get(uuid: UUID): Race
+    flavor(uuid: UUID): Race
+}
+
+type Race implements Entity {
+    uuid: UUID!
+    name: String!
+    description: String
+    worldId: ID
+    flavor: Flavor
+}
+
+input RaceInput {
+    uuid: UUID
+    name: String!
+    description: String
+    worldId: ID
+    flavor: FlavorInput
+}
+
+type Skill implements Entity {
+    uuid: UUID!
+    name: String!
+    description: String
+    flavor: Flavor
+}
+
+input SkillInput {
+    uuid: UUID
+    name: String!
+    description: String
+    flavor: FlavorInput
+}
+
+type Stat implements Entity {
+    uuid: UUID!
+    name: String!
+    flavor: Flavor
+}
+
+input StatInput {
+    uuid: UUID
+    name: String!
+    flavor: FlavorInput
+}
+
+type CharacterSkill implements Object {
+    skillId: UUID!
+    name: String!
+    skillValue: Int!
+}
+
+input CharacterSkillInput {
+    skillId: UUID!
+    name: String
+    skillValue: Int!
+}
+
+type CharacterStat implements Object {
+    statId: UUID!
+    name: String
+    statValue: Int!
+}
+
+type Character implements Entity {
+    uuid: UUID!
+    name: String!
+    sex: String
+    race: Race
+    dimensions: [Dimension]
+    user: User
+    inventory: Inventory
+    skills: [CharacterSkill]
+    stats: [CharacterStat]
+    flavor: Flavor
+}
+
+input CharacterStatInput {
+    statId: UUID!
+    name: String
+    statValue: Int!
+}
+
+input CharacterInput {
+    uuid: UUID
+    name: String!
+    sex: String
+    race: RaceInput
+    dimensions: [DimensionInput]
+    user: UserInput
+    inventory: InventoryInput
+    skills: [CharacterSkillInput]
+    stats: [CharacterStatInput]
+    flavor: FlavorInput
+}

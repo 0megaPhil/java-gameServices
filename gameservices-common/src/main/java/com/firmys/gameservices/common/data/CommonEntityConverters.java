@@ -2,7 +2,6 @@ package com.firmys.gameservices.common.data;
 
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 
-import com.firmys.gameservices.common.CommonObject;
 import jakarta.annotation.Nonnull;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class CommonEntityConverters {
     @Override
     public String convert(
         Object source, @Nonnull TypeDescriptor sourceType, @Nonnull TypeDescriptor typeDescriptor) {
-      return ((CommonObject) source).toJson();
+      return JSON.toJson(source);
     }
   }
 

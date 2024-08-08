@@ -1,0 +1,21 @@
+type UserQuery {
+    create(input: UserInput): User
+    update(input: UserInput): User
+    find(options: Options): [User]
+    get(uuid: UUID): User
+    flavor(uuid: UUID): User
+}
+
+type User implements Entity {
+    uuid: UUID!
+    firstName: String!
+    lastName: String!
+    flavor: Flavor
+}
+
+input UserInput {
+    uuid: UUID
+    firstName: String!
+    lastName: String!
+    flavor: FlavorInput
+}

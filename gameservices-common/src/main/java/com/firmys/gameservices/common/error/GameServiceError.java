@@ -3,7 +3,6 @@ package com.firmys.gameservices.common.error;
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 
 import com.firmys.gameservices.common.CommonEntity;
-import com.firmys.gameservices.common.CommonObject;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @NoArgsConstructor
 @RestControllerAdvice
 @Accessors(chain = true, fluent = true)
-public class GameServiceError<D extends CommonEntity> implements CommonObject {
+public class GameServiceError<D extends CommonEntity> {
 
   private String message;
   private String request;

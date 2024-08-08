@@ -4,7 +4,7 @@ import static com.firmys.gameservices.common.CommonConstants.*;
 
 import com.firmys.gameservices.common.CommonConstants;
 import com.firmys.gameservices.common.CommonController;
-import com.firmys.gameservices.transactions.models.Currency;
+import com.firmys.gameservices.generated.models.Currency;
 import com.firmys.gameservices.transactions.services.CurrencyService;
 import java.util.UUID;
 import lombok.Builder;

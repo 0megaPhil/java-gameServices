@@ -91,5 +91,5 @@ springdoc:
   enable-spring-security: false
   swagger-ui:
     enabled: true
-    path: /swagger-ui/index.html
     use-root-path: true
+    path: swagger-ui.html

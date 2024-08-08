@@ -3,7 +3,9 @@ package com.firmys.gameservices.common;
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 import static com.firmys.gameservices.common.Services.FLAVOR;
 
-import com.firmys.gameservices.common.data.Flavor;
+import com.firmys.gameservices.generated.models.Flavor;
+import com.firmys.gameservices.generated.models.Options;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,12 +36,15 @@ public class GatewayClient {
         .bodyToMono(entityClass);
   }
 
-  public <E extends CommonEntity> Flux<E> getAll(Integer limit, Class<E> entityClass) {
+  // @TODO: Finish filtering and sorting for graphql queries
+  public <E extends CommonEntity> Flux<E> find(Options options, Class<E> entityClass) {
     Services service = Services.byEntityName(entityClass.getSimpleName().toUpperCase());
     return clients
         .get(service)
         .get()
-        .uri(uriBuilder -> uriBuilder.queryParam(CommonConstants.LIMIT, limit).build())
+        .uri(
+            uriBuilder ->
+                uriBuilder.queryParam(CommonConstants.LIMIT, validOptions(options).limit()).build())
         .retrieve()
         .bodyToFlux(entityClass);
   }
@@ -89,5 +94,10 @@ public class GatewayClient {
             .body(Mono.just(object), object.getClass())
             .retrieve()
             .bodyToMono(object.getClass());
+  }
+
+  private Options validOptions(Options options) {
+    return Optional.ofNullable(options)
+        .orElseGet(() -> Options.builder().limit(1000).filters(List.of()).sortBy("uuid").build());
   }
 }

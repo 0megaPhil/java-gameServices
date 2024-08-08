@@ -1,0 +1,40 @@
+type WorldQuery {
+    create(input: WorldInput): World
+    update(input: WorldInput): World
+    find(options: Options): [World]
+    get(uuid: UUID): World
+    flavor(uuid: UUID): World
+}
+
+type TerrainQuery {
+    create(input: TerrainInput): Terrain
+    update(input: TerrainInput): Terrain
+    find(options: Options): [Terrain]
+    get(uuid: UUID): Terrain
+    flavor(uuid: UUID): Terrain
+}
+
+
+type World implements Entity {
+    uuid: UUID!
+    terrain: Terrain
+    flavor: Flavor
+}
+
+input WorldInput {
+    uuid: UUID
+    terrain: TerrainInput
+    flavor: FlavorInput
+}
+
+type Terrain implements Entity {
+    uuid: UUID!
+    type: String!
+    flavor: Flavor
+}
+
+input TerrainInput {
+    uuid: UUID
+    type: String!
+    flavor: FlavorInput
+}

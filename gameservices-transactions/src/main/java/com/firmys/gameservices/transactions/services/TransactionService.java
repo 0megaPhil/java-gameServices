@@ -1,7 +1,7 @@
 package com.firmys.gameservices.transactions.services;
 
 import com.firmys.gameservices.common.CommonService;
-import com.firmys.gameservices.transactions.models.Transaction;
+import com.firmys.gameservices.generated.models.Transaction;
 import com.firmys.gameservices.transactions.repositories.TransactionRepository;
 import lombok.Builder;
 import lombok.Getter;

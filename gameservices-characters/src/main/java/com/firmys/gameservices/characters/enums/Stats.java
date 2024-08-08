@@ -1,10 +1,9 @@
 package com.firmys.gameservices.characters.enums;
 
 import lombok.Getter;
-import lombok.experimental.Accessors;
 
 @Getter
-@Accessors(fluent = true)
+@lombok.experimental.Accessors(fluent = true)
 public enum Stats {
   STRENGTH("Strength"),
   AGILITY("Agility"),

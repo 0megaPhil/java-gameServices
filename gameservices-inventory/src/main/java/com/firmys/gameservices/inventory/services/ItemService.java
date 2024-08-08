@@ -1,7 +1,7 @@
 package com.firmys.gameservices.inventory.services;
 
 import com.firmys.gameservices.common.CommonService;
-import com.firmys.gameservices.inventory.models.Item;
+import com.firmys.gameservices.generated.models.Item;
 import com.firmys.gameservices.inventory.repositories.ItemRepository;
 import lombok.Builder;
 import lombok.Getter;

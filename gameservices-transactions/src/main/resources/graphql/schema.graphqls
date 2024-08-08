@@ -1,0 +1,44 @@
+type TransactionQuery {
+    create(input: TransactionInput): Transaction
+    update(input: TransactionInput): Transaction
+    find(options: Options): [Transaction]
+    get(uuid: UUID): Transaction
+    flavor(uuid: UUID): Transaction
+}
+
+type CurrencyQuery {
+    create(input: CurrencyInput): Currency
+    update(input: CurrencyInput): Currency
+    find(options: Options): [Currency]
+    get(uuid: UUID): Currency
+    flavor(uuid: UUID): Currency
+}
+
+
+input TransactionInput {
+    uuid: UUID
+    inventoryId: String
+    currency: String!
+    item: String
+    flavor: FlavorInput
+}
+
+type Transaction implements Entity {
+    uuid: UUID!
+    inventoryId: String!
+    currency: String
+    item: String
+    flavor: Flavor
+}
+
+input CurrencyInput {
+    uuid: UUID
+    name: String!
+    flavor: FlavorInput
+}
+
+type Currency implements Entity {
+    uuid: UUID!
+    name: String!
+    flavor: Flavor
+}

@@ -1,9 +1,9 @@
 package com.firmys.gameservices.characters.services;
 
 import com.firmys.gameservices.characters.data.SkillRepository;
-import com.firmys.gameservices.characters.models.Skill;
 import com.firmys.gameservices.common.CommonService;
 import com.firmys.gameservices.common.GatewayClient;
+import com.firmys.gameservices.generated.models.Skill;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.Accessors;

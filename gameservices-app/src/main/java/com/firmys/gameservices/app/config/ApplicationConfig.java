@@ -8,6 +8,7 @@ import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
 import graphql.scalars.ExtendedScalars;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.graphql.execution.RuntimeWiringConfigurer;
@@ -19,11 +20,16 @@ import org.springframework.graphql.execution.RuntimeWiringConfigurer;
   ConversionConfig.class,
   WebClientConfig.class
 })
+@ComponentScan(
+    basePackages = {
+      "com.firmys.gameservices.generated",
+      "com.firmys.gameservices.common",
+    })
 @EnableConfigurationProperties(CommonProperties.class)
 public class ApplicationConfig {
 
   @Bean
   public RuntimeWiringConfigurer runtimeWiringConfigurer() {
-    return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.Json);
+    return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.Json).scalar(ExtendedScalars.UUID);
   }
 }

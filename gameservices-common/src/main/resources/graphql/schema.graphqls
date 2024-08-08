@@ -1,0 +1,63 @@
+scalar UUID
+
+interface Entity {
+    uuid: UUID
+    flavor: Flavor
+}
+
+interface Object {
+    name: String
+}
+
+input Options {
+    filters: [Filter]
+    sortBy: String
+    limit: Int!
+}
+
+input Filter {
+    byField: String!
+    forValue: String!
+}
+
+type Flavor implements Object {
+    targetId: UUID!
+    name: String!
+    summary: String!
+    objectType: String!
+    characteristics: [Characteristic]!
+}
+
+input FlavorInput {
+    targetId: UUID
+    name: String
+    summary: String
+    objectType: String
+    characteristics: [CharacteristicInput]
+}
+
+type Dimension implements Object {
+    value: String!
+    name: String!
+    unitType: String!
+    description: String
+}
+
+input DimensionInput {
+    value: String!
+    name: String!
+    unitType: String!
+    description: String
+}
+
+type Characteristic implements Object {
+    value: String!
+    name: String!
+    description: String
+}
+
+input CharacteristicInput {
+    value: String!
+    name: String!
+    description: String
+}

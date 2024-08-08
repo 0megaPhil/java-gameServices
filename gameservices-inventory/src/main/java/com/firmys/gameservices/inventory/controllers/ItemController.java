@@ -4,7 +4,7 @@ import static com.firmys.gameservices.common.CommonConstants.*;
 
 import com.firmys.gameservices.common.CommonConstants;
 import com.firmys.gameservices.common.CommonController;
-import com.firmys.gameservices.inventory.models.Item;
+import com.firmys.gameservices.generated.models.Item;
 import com.firmys.gameservices.inventory.services.ItemService;
 import java.util.UUID;
 import lombok.Builder;

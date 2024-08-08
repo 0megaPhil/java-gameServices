@@ -2,10 +2,10 @@ package com.firmys.gameservices.characters.controllers;
 
 import static com.firmys.gameservices.common.CommonConstants.*;
 
-import com.firmys.gameservices.characters.models.Stat;
 import com.firmys.gameservices.characters.services.StatService;
 import com.firmys.gameservices.common.CommonConstants;
 import com.firmys.gameservices.common.CommonController;
+import com.firmys.gameservices.generated.models.Stat;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;

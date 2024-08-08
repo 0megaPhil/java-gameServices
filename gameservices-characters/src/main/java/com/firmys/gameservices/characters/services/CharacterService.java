@@ -1,10 +1,10 @@
 package com.firmys.gameservices.characters.services;
 
 import com.firmys.gameservices.characters.data.CharacterRepository;
-import com.firmys.gameservices.characters.models.Character;
 import com.firmys.gameservices.common.CommonService;
 import com.firmys.gameservices.common.GatewayClient;
-import com.firmys.gameservices.inventory.models.Inventory;
+import com.firmys.gameservices.generated.models.Character;
+import com.firmys.gameservices.generated.models.Inventory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.Accessors;
