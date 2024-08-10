@@ -1,17 +1,17 @@
 package com.firmys.gameservices.app.config;
 
+import static com.firmys.gameservices.common.CommonConstants.PACKAGE_GENERATED;
+
 import com.firmys.gameservices.common.CommonProperties;
+import com.firmys.gameservices.common.CommonQueryService;
 import com.firmys.gameservices.common.GatewayClient;
 import com.firmys.gameservices.common.config.ConversionConfig;
 import com.firmys.gameservices.common.config.WebClientConfig;
 import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
-import graphql.scalars.ExtendedScalars;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 
 @Configuration
 @Import({
@@ -21,15 +21,7 @@ import org.springframework.graphql.execution.RuntimeWiringConfigurer;
   WebClientConfig.class
 })
 @ComponentScan(
-    basePackages = {
-      "com.firmys.gameservices.generated",
-      "com.firmys.gameservices.common",
-    })
+    basePackages = {PACKAGE_GENERATED},
+    basePackageClasses = CommonQueryService.class)
 @EnableConfigurationProperties(CommonProperties.class)
-public class ApplicationConfig {
-
-  @Bean
-  public RuntimeWiringConfigurer runtimeWiringConfigurer() {
-    return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.Json).scalar(ExtendedScalars.UUID);
-  }
-}
+public class ApplicationConfig {}

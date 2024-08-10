@@ -1,0 +1,78 @@
+extend type Query {
+    createInventory(input: InventoryInput): Inventory
+    updateInventory(input: InventoryInput): Inventory
+    findInventory(options: Options): [Inventory]
+    getInventory(uuid: UUID): Inventory
+    flavorInventory(uuid: UUID): Inventory
+
+    createItem(input: ItemInput): Item
+    updateItem(input: ItemInput): Item
+    findItem(options: Options): [Item]
+    getItem(uuid: UUID): Item
+    flavorItem(uuid: UUID): Item
+}
+
+input InventoryInput {
+    uuid: UUID
+    characterId: UUID
+    items: [InventoryItemInput]
+    currencies: [InventoryCurrencyInput]
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Inventory implements CommonEntity {
+    uuid: UUID!
+    characterId: UUID!
+    items: [InventoryItem]
+    currencies: [InventoryCurrency]
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Inventory
+    withFlavor(flavor: FlavorInput): Inventory
+}
+
+input InventoryItemInput {
+    itemId: UUID!
+    name: String
+    inventoryId: UUID!
+    quantity: Int!
+}
+
+input InventoryCurrencyInput {
+    uuid: UUID
+    name: String
+    currencyId: UUID!
+    inventoryId: UUID!
+    quantity: Int!
+}
+
+input ItemInput {
+    uuid: UUID
+    name: String!
+    flavor: FlavorInput
+    prompt: String
+}
+
+type InventoryItem implements CommonObject {
+    itemId: UUID!
+    name: String
+    inventoryId: UUID!
+    quantity: Int!
+}
+
+type InventoryCurrency implements CommonObject {
+    currencyId: UUID!
+    name: String
+    inventoryId: UUID!
+    quantity: Int!
+}
+
+type Item implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Item
+    withFlavor(flavor: FlavorInput): Item
+}

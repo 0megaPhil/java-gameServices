@@ -5,10 +5,10 @@ import static com.firmys.gameservices.common.CommonConstants.PROFILE_SERVICE;
 
 import com.firmys.gameservices.common.*;
 import com.firmys.gameservices.common.error.GameDataExceptionController;
+import com.firmys.gameservices.generated.models.CommonEntity;
 import io.r2dbc.spi.ConnectionFactory;
 import java.util.UUID;
 import org.springdoc.core.customizers.OpenApiCustomiser;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
@@ -30,8 +30,7 @@ public class CommonConfig {
 
   @Bean
   @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST})
-  public ConnectionFactoryInitializer initializer(
-      @Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
+  public ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
     ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
     initializer.setConnectionFactory(connectionFactory);
     ResourceDatabasePopulator resource =

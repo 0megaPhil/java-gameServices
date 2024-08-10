@@ -4,7 +4,7 @@ import com.firmys.gameservices.common.CommonConstants;
 import com.firmys.gameservices.common.config.CommonConfig;
 import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
 import com.firmys.gameservices.generated.models.Character;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ public class CharacterConfig {
       d =
           d.toBuilder()
               .uuid(Optional.ofNullable(d.uuid()).orElseGet(UUID::randomUUID))
-              .stats(Optional.ofNullable(d.stats()).orElseGet(ArrayList::new))
+              .stats(Optional.ofNullable(d.stats()).orElseGet(HashSet::new))
               .build();
       return Mono.just(d);
     };

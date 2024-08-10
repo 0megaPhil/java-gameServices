@@ -2,7 +2,7 @@ package com.firmys.gameservices.common.error;
 
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 
-import com.firmys.gameservices.common.CommonEntity;
+import com.firmys.gameservices.generated.models.CommonEntity;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;

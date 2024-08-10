@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Phillip Platt
+
+name: java-gameservices.yaml
+environment: testing
+is-enabled: false

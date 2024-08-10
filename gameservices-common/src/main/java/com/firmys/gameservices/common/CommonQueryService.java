@@ -1,5 +1,6 @@
 package com.firmys.gameservices.common;
 
+import com.firmys.gameservices.generated.models.CommonEntity;
 import com.firmys.gameservices.generated.models.Options;
 import java.util.UUID;
 import lombok.Builder;

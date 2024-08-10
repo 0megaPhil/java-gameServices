@@ -1,7 +1,8 @@
 package com.firmys.gameservices.common.config;
 
-import com.firmys.gameservices.common.CommonObject;
 import com.firmys.gameservices.common.data.CommonEntityConverters;
+import com.firmys.gameservices.generated.models.CommonObject;
+import graphql.scalars.ExtendedScalars;
 import io.r2dbc.spi.ConnectionFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.GenericConverter.ConvertiblePair;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.data.r2dbc.dialect.DialectResolver;
+import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 
 @Slf4j
 @Configuration
@@ -39,5 +41,10 @@ public class ConversionConfig {
     converters.add(new CommonEntityConverters.EntityReadConverter(readPairs));
     converters.add(new CommonEntityConverters.EntityWriteConverter(writePairs));
     return R2dbcCustomConversions.of(DialectResolver.getDialect(connectionFactory), converters);
+  }
+
+  @Bean
+  public RuntimeWiringConfigurer runtimeWiringConfigurer() {
+    return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.Json).scalar(ExtendedScalars.UUID);
   }
 }

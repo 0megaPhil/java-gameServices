@@ -2,7 +2,7 @@ package com.firmys.gameservices.common;
 
 public class CommonConstants {
 
-  public static final String VERSION = "0.1.0-SNAPSHOT";
+  public static final String VERSION = "0.0.2-SNAPSHOT";
   public static final String GAME_SERVICES_GATEWAY = "GameServicesGateway";
   public static final String GATEWAY = "gateway";
   public static final String ITEM = "item";
@@ -64,6 +64,9 @@ public class CommonConstants {
 
   public static final String PROFILE_SERVICE = "service";
   public static final String PROFILE_GATEWAY = "gateway";
+  public static final String PROFILE_NOT_GATEWAY = "!gateway";
   public static final String PROFILE_TEST = "test";
   public static final String PROFILE_NOT_TEST = "!test";
+
+  public static final String PACKAGE_GENERATED = "com.firmys.gameservices.generated";
 }

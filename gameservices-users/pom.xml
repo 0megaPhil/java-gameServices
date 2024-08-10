@@ -2,13 +2,13 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <artifactId>gameservices-users</artifactId>
+    <artifactId>gameservices-user</artifactId>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <artifactId>java-gameservices</artifactId>
         <groupId>com.firmys.gameservices</groupId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -50,9 +50,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
-    <name>users</name>
+    <name>user</name>
 
 </project>

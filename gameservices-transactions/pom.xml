@@ -6,10 +6,10 @@
     <parent>
         <groupId>com.firmys.gameservices</groupId>
         <artifactId>java-gameservices</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gameservices-transactions</artifactId>
+    <artifactId>gameservices-transaction</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -49,9 +49,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
-    <name>transactions</name>
+    <name>transaction</name>
 
 </project>

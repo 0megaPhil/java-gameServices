@@ -3,11 +3,12 @@ package com.firmys.gameservices.common;
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 import static com.firmys.gameservices.common.Services.FLAVOR;
 
+import com.firmys.gameservices.generated.models.CommonEntity;
 import com.firmys.gameservices.generated.models.Flavor;
 import com.firmys.gameservices.generated.models.Options;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Builder;
@@ -98,6 +99,6 @@ public class GatewayClient {
 
   private Options validOptions(Options options) {
     return Optional.ofNullable(options)
-        .orElseGet(() -> Options.builder().limit(1000).filters(List.of()).sortBy("uuid").build());
+        .orElseGet(() -> Options.builder().limit(1000).filters(Set.of()).sortBy("uuid").build());
   }
 }

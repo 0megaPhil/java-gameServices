@@ -1,11 +1,17 @@
 scalar UUID
 
-interface Entity {
-    uuid: UUID
-    flavor: Flavor
+type Query {
+
 }
 
-interface Object {
+interface CommonEntity {
+    uuid: UUID
+    prompt: String
+    withUuid(uuid: UUID): CommonEntity
+    withFlavor(flavor: FlavorInput): CommonEntity
+}
+
+interface CommonObject {
     name: String
 }
 
@@ -20,7 +26,19 @@ input Filter {
     forValue: String!
 }
 
-type Flavor implements Object {
+type Prompt implements CommonObject {
+    name: String!
+    description: String!
+    objectType: String!
+}
+
+input PromptInput {
+    name: String
+    prompt: String
+    objectType: String!
+}
+
+type Flavor implements CommonObject {
     targetId: UUID!
     name: String!
     summary: String!
@@ -36,7 +54,7 @@ input FlavorInput {
     characteristics: [CharacteristicInput]
 }
 
-type Dimension implements Object {
+type Dimension implements CommonObject {
     value: String!
     name: String!
     unitType: String!
@@ -50,7 +68,7 @@ input DimensionInput {
     description: String
 }
 
-type Characteristic implements Object {
+type Characteristic implements CommonObject {
     value: String!
     name: String!
     description: String

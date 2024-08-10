@@ -22,15 +22,4 @@ import org.springframework.test.context.ActiveProfiles;
 public class DimensionTest {
 
   @Autowired private JsonUtils jsonUtils;
-
-  //  //  @Test
-  //  void testDimension_construct() {
-  //    var original = Dimension.of("height", "INCH", 10);
-  //    String originalJson = original.toJson();
-  //    log.info("Original: {}", originalJson);
-  //    var fromJson = jsonUtils.fromJson(originalJson, Dimension.class);
-  //    log.info("Deserialized {}", fromJson.toJson());
-  //    Assertions.assertThat(originalJson).isEqualTo(fromJson.toJson());
-  //    Assertions.assertThat(original).isEqualTo(fromJson);
-  //  }
 }

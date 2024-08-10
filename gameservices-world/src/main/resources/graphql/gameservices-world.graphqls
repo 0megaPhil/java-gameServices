@@ -1,0 +1,45 @@
+extend type Query {
+    createWorld(input: WorldInput): World
+    updateWorld(input: WorldInput): World
+    findWorld(options: Options): [World]
+    getWorld(uuid: UUID): World
+    flavorWorld(uuid: UUID): World
+
+    createTerrain(input: TerrainInput): Terrain
+    updateTerrain(input: TerrainInput): Terrain
+    findTerrain(options: Options): [Terrain]
+    getTerrain(uuid: UUID): Terrain
+    flavorTerrain(uuid: UUID): Terrain
+}
+
+type World implements CommonEntity {
+    uuid: UUID!
+    terrain: Terrain
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): World
+    withFlavor(flavor: FlavorInput): World
+}
+
+input WorldInput {
+    uuid: UUID
+    terrain: TerrainInput
+    flavor: FlavorInput
+    prompts: [PromptInput]
+}
+
+type Terrain implements CommonEntity {
+    uuid: UUID!
+    type: String!
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Terrain
+    withFlavor(flavor: FlavorInput): Terrain
+}
+
+input TerrainInput {
+    uuid: UUID
+    type: String!
+    flavor: FlavorInput
+    prompts: [PromptInput]
+}

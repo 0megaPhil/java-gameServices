@@ -3,6 +3,7 @@ package com.firmys.gameservices.common;
 import static com.firmys.gameservices.common.CommonConstants.LIMIT;
 import static com.firmys.gameservices.common.CommonConstants.PATH_UUID;
 
+import com.firmys.gameservices.generated.models.CommonEntity;
 import java.util.UUID;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

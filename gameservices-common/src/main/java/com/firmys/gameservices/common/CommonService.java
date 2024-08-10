@@ -1,5 +1,6 @@
 package com.firmys.gameservices.common;
 
+import com.firmys.gameservices.generated.models.CommonEntity;
 import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Optional;

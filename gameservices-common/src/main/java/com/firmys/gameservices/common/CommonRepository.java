@@ -1,5 +1,6 @@
 package com.firmys.gameservices.common;
 
+import com.firmys.gameservices.generated.models.CommonEntity;
 import java.util.UUID;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 

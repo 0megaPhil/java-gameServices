@@ -1,0 +1,140 @@
+extend type Query {
+    createCharacter(input: CharacterInput): Character
+    updateCharacter(input: CharacterInput): Character
+    findCharacter(options: Options): [Character]
+    getCharacter(uuid: UUID): Character
+    flavorCharacter(uuid: UUID): Character
+
+    createSkill(input: SkillInput): Skill
+    updateSkill(input: SkillInput): Skill
+    findSkill(options: Options): [Skill]
+    getSkill(uuid: UUID): Skill
+    flavorSkill(uuid: UUID): Skill
+
+    createStat(input: StatInput): Stat
+    updateStat(input: StatInput): Stat
+    findStat(options: Options): [Stat]
+    getStat(uuid: UUID): Stat
+    flavorStat(uuid: UUID): Stat
+
+    createRace(input: RaceInput): Race
+    updateRace(input: RaceInput): Race
+    findRace(options: Options): [Race]
+    getRace(uuid: UUID): Race
+    flavorRace(uuid: UUID): Race
+}
+
+type Race implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    description: String
+    worldId: UUID
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Race
+    withFlavor(flavor: FlavorInput): Race
+}
+
+input RaceInput {
+    uuid: UUID
+    name: String!
+    worldId: UUID
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Skill implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    description: String
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Skill
+    withFlavor(flavor: FlavorInput): Skill
+}
+
+input SkillInput {
+    uuid: UUID
+    name: String!
+    description: String
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Stat implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Stat
+    withFlavor(flavor: FlavorInput): Stat
+}
+
+input StatInput {
+    uuid: UUID
+    name: String!
+    flavor: FlavorInput
+    prompt: String
+}
+
+type CharacterSkill implements CommonObject {
+    skillId: UUID!
+    name: String!
+    skillValue: Int!
+}
+
+input CharacterSkillInput {
+    skillId: UUID!
+    name: String
+    skillValue: Int!
+}
+
+type CharacterStat implements CommonObject {
+    statId: UUID!
+    name: String
+    statValue: Int!
+}
+
+type Character implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    sex: Sexes
+    race: Race
+    dimensions: [Dimension]
+    user: User
+    inventory: Inventory
+    skills: [CharacterSkill]
+    stats: [CharacterStat]
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Character
+    withFlavor(flavor: FlavorInput): Character
+}
+
+input CharacterStatInput {
+    statId: UUID!
+    name: String
+    statValue: Int!
+}
+
+input CharacterInput {
+    uuid: UUID
+    name: String!
+    sex: Sexes
+    race: RaceInput
+    dimensions: [DimensionInput]
+    user: UserInput
+    inventory: InventoryInput
+    skills: [CharacterSkillInput]
+    stats: [CharacterStatInput]
+    flavor: FlavorInput
+    prompt: String
+}
+
+enum Sexes {
+    MALE,
+    FEMALE,
+    HERMAPHRODITIC,
+    ASEXUAL,
+    OTHER
+}

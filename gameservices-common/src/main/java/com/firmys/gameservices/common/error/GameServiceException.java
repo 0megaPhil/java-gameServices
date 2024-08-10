@@ -1,6 +1,6 @@
 package com.firmys.gameservices.common.error;
 
-import com.firmys.gameservices.common.CommonEntity;
+import com.firmys.gameservices.generated.models.CommonEntity;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Optional;

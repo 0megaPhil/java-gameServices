@@ -1,0 +1,49 @@
+extend type Query {
+    createTransaction(input: TransactionInput): Transaction
+    updateTransaction(input: TransactionInput): Transaction
+    findTransaction(options: Options): [Transaction]
+    getTransaction(uuid: UUID): Transaction
+    flavorTransaction(uuid: UUID): Transaction
+
+    createCurrency(input: CurrencyInput): Currency
+    updateCurrency(input: CurrencyInput): Currency
+    findCurrency(options: Options): [Currency]
+    getCurrency(uuid: UUID): Currency
+    flavorCurrency(uuid: UUID): Currency
+}
+
+input TransactionInput {
+    uuid: UUID
+    inventoryId: String
+    currency: String!
+    item: String
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Transaction implements CommonEntity {
+    uuid: UUID!
+    inventoryId: String!
+    currency: String
+    item: String
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Transaction
+    withFlavor(flavor: FlavorInput): Transaction
+}
+
+input CurrencyInput {
+    uuid: UUID
+    name: String!
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Currency implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    flavor: Flavor
+    prompt: String
+    withUuid(uuid: UUID): Currency
+    withFlavor(flavor: FlavorInput): Currency
+}

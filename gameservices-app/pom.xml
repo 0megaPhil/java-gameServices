@@ -18,12 +18,16 @@
             <artifactId>graphql-java-extended-scalars</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
-            <artifactId>gameservices-characters</artifactId>
+            <artifactId>gameservices-character</artifactId>
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
@@ -31,11 +35,11 @@
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
-            <artifactId>gameservices-users</artifactId>
+            <artifactId>gameservices-user</artifactId>
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
-            <artifactId>gameservices-transactions</artifactId>
+            <artifactId>gameservices-transaction</artifactId>
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
@@ -58,7 +62,7 @@
     <parent>
         <artifactId>java-gameservices</artifactId>
         <groupId>com.firmys.gameservices</groupId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -67,6 +71,10 @@
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
             </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>io.github.kobylynskyi</groupId>-->
+            <!--                <artifactId>graphql-codegen-maven-plugin</artifactId>-->
+            <!--            </plugin>-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -74,6 +82,101 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>resource-dependencies</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <phase>install</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <artifactId>gameservices-common</artifactId>
+                                    <groupId>com.firmys.gameservices</groupId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>META-INF/**</includes>
+                                </artifactItem>
+                                <artifactItem>
+                                    <artifactId>gameservices-character</artifactId>
+                                    <groupId>com.firmys.gameservices</groupId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>META-INF/**</includes>
+                                </artifactItem>
+                                <artifactItem>
+                                    <artifactId>gameservices-inventory</artifactId>
+                                    <groupId>com.firmys.gameservices</groupId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>META-INF/**</includes>
+                                </artifactItem>
+                                <artifactItem>
+                                    <artifactId>gameservices-common</artifactId>
+                                    <groupId>com.firmys.gameservices</groupId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>META-INF/**</includes>
+                                </artifactItem>
+                                <artifactItem>
+                                    <artifactId>gameservices-transaction</artifactId>
+                                    <groupId>com.firmys.gameservices</groupId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>META-INF/**</includes>
+                                </artifactItem>
+                                <artifactItem>
+                                    <artifactId>gameservices-user</artifactId>
+                                    <groupId>com.firmys.gameservices</groupId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>META-INF/**</includes>
+                                </artifactItem>
+                                <artifactItem>
+                                    <artifactId>gameservices-world</artifactId>
+                                    <groupId>com.firmys.gameservices</groupId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                    <includes>META-INF/**</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.github.kobylynskyi</groupId>
+                <artifactId>graphql-codegen-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>install</phase>
+                        <configuration>
+                            <graphqlSchemas>
+                                <rootDir>${project.build.outputDirectory}/META-INF/schema</rootDir>
+                                <includePattern>.*\.graphqls?</includePattern>
+                            </graphqlSchemas>
+                            <outputDir>${project.build.directory}/generated-sources</outputDir>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

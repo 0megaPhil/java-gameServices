@@ -18,17 +18,17 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>gameservices-users</artifactId>
+                <artifactId>gameservices-user</artifactId>
                 <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>gameservices-transactions</artifactId>
+                <artifactId>gameservices-transaction</artifactId>
                 <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>gameservices-characters</artifactId>
+                <artifactId>gameservices-character</artifactId>
                 <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
@@ -121,6 +121,7 @@
         <spring-cloud.version>2023.0.3</spring-cloud.version>
         <spring-ai.version>1.0.0-M1</spring-ai.version>
         <springdoc-common.version>1.8.0</springdoc-common.version>
+        <graphql-java-kickstart.version>13.1.1</graphql-java-kickstart.version>
         <springdoc-webflux-starter-ui.version>2.6.0</springdoc-webflux-starter-ui.version>
         <javax-measure.version>2.2</javax-measure.version>
         <jscience.version>4.3.1</jscience.version>
@@ -136,7 +137,7 @@
         <openapi-generator-plugin.version>7.7.0</openapi-generator-plugin.version>
     </properties>
 
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -186,11 +187,11 @@
                     <artifactId>maven-dependency-plugin</artifactId>
                     <executions>
                         <execution>
-                            <id>resource-dependencies</id>
-                            <phase>initialize</phase>
+                            <id>resource-keys</id>
                             <goals>
                                 <goal>unpack</goal>
                             </goals>
+                            <phase>initialize</phase>
                             <configuration>
                                 <artifactItems>
                                     <artifactItem>
@@ -200,7 +201,7 @@
                                         <type>jar</type>
                                         <overWrite>true</overWrite>
                                         <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                                        <includes>keys/**, templates/**, META-INF/**</includes>
+                                        <includes>keys/**, templates/**</includes>
                                     </artifactItem>
                                 </artifactItems>
                             </configuration>
@@ -257,52 +258,46 @@
                                 https://github.com/kobylynskyi/graphql-java-codegen/blob/main/docs/codegen-options.md
                                 -->
                                 <graphqlSchemas>
-                                    <includePattern>schema\.graphqls</includePattern>
+                                    <includePattern>.*\.graphqls?</includePattern>
                                 </graphqlSchemas>
-                                <fieldsToExcludeFromGeneration>
-                                    CommonEntity.uuid
-                                    CommonObject.name
-                                    Resolver.name
-                                </fieldsToExcludeFromGeneration>
                                 <outputDir>${project.build.directory}/generated-sources</outputDir>
-                                <packageName>com.firmys.gameservices.generated</packageName>
-                                <modelPackageName>com.firmys.gameservices.generated.models</modelPackageName>
-                                <generateNoArgsConstructorOnly>true</generateNoArgsConstructorOnly>
-                                <modelValidationAnnotation>@jakarta.annotation.Nonnull</modelValidationAnnotation>
-                                <customTemplatesRoot>${project.build.outputDirectory}/templates</customTemplatesRoot>
-                                <customTemplates>
-                                    <TYPE>
-                                        type.ftl
-                                    </TYPE>
-                                    <INTERFACE>
-                                        interface.ftl
-                                    </INTERFACE>
-                                    <OPERATIONS>
-                                        operations.ftl
-                                    </OPERATIONS>
-                                    <JACKSON_TYPE_ID_RESOLVER>
-                                        jackson_type_id_resolver.ftl
-                                    </JACKSON_TYPE_ID_RESOLVER>
-                                    <PARAMETRIZED_INPUT>
-                                        parametrized_input.ftl
-                                    </PARAMETRIZED_INPUT>
-                                </customTemplates>
-                                <customTypesMapping>
-                                    <UUID>
-                                        UUID
-                                    </UUID>
-                                    <CHARACTER>
-                                        com.firmys.gameservices.generated.models.Character
-                                    </CHARACTER>
-                                </customTypesMapping>
-                                <addGeneratedAnnotation>false</addGeneratedAnnotation>
-                                <generateBuilder>false</generateBuilder>
-                                <generateModelsWithPublicFields>false</generateModelsWithPublicFields>
-                                <generateClient>true</generateClient>
-                                <generateApis>true</generateApis>
                             </configuration>
                         </execution>
                     </executions>
+                    <configuration>
+                        <graphqlSchemas>
+                            <includePattern>.*\.graphqls?</includePattern>
+                        </graphqlSchemas>
+                        <outputDir>${project.build.directory}/generated-sources</outputDir>
+                        <packageName>com.firmys.gameservices.generated</packageName>
+                        <modelPackageName>com.firmys.gameservices.generated.models</modelPackageName>
+                        <generateNoArgsConstructorOnly>true</generateNoArgsConstructorOnly>
+                        <modelValidationAnnotation>@jakarta.annotation.Nonnull</modelValidationAnnotation>
+                        <customTemplatesRoot>${project.build.outputDirectory}/templates</customTemplatesRoot>
+                        <customTemplates>
+                            <TYPE>
+                                type.ftl
+                            </TYPE>
+                            <INTERFACE>
+                                interface.ftl
+                            </INTERFACE>
+                            <OPERATIONS>
+                                operations.ftl
+                            </OPERATIONS>
+                        </customTemplates>
+                        <customTypesMapping>
+                            <UUID>
+                                UUID
+                            </UUID>
+                            <CHARACTER>
+                                com.firmys.gameservices.generated.models.Character
+                            </CHARACTER>
+                        </customTypesMapping>
+                        <addGeneratedAnnotation>false</addGeneratedAnnotation>
+                        <generateBuilder>false</generateBuilder>
+                        <generateModelsWithPublicFields>false</generateModelsWithPublicFields>
+                        <generateApis>true</generateApis>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -331,6 +326,61 @@
                             <useSpringBoot3>true</useSpringBoot3>
                         </configOptions>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>${liquibase.version}</version>
+                    <executions>
+                        <execution>
+                            <id>liquibase</id>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>generateChangeLog</goal>
+                            </goals>
+                            <configuration>
+                                <url>jdbc:h2:file:./${project.artifactId}sdb</url>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>liquibase-update</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>update</goal>
+                            </goals>
+                            <configuration>
+                                <url>jdbc:h2:file:./${project.artifactId}sdb</url>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>liquibase-sql</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>updateSQL</goal>
+                            </goals>
+                            <configuration>
+                                <url>jdbc:h2:file:./${project.artifactId}sdb</url>
+                                <outputDefaultSchema>true</outputDefaultSchema>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <driver>org.h2.Driver</driver>
+                        <username/>
+                        <password/>
+                        <url>jdbc:h2:file:./${project.artifactId}sdb</url>
+                        <outputChangeLogFile>src/main/resources/db/changelog/changelog-output.yaml
+                        </outputChangeLogFile>
+                        <autoUpdate>true</autoUpdate>
+                        <changeLogFile>src/main/resources/db/changelog/${project.artifactId}s.yaml</changeLogFile>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.h2database</groupId>
+                            <artifactId>h2</artifactId>
+                            <version>${h2.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>

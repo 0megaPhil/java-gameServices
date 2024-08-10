@@ -1,49 +1,41 @@
 CREATE TABLE IF NOT EXISTS Race
 (
-    uuid            UUID PRIMARY KEY,
-    name            TEXT UNIQUE NOT NULL,
-    description     TEXT,
-    worldId         UUID,
-    characteristics TEXT ARRAY
+    uuid        UUID PRIMARY KEY,
+    name        TEXT NOT NULL,
+    description TEXT,
+    worldId     UUID,
+    flavor      TEXT,
+    prompt      TEXT
 );
-
 
 CREATE TABLE IF NOT EXISTS Skill
 (
     uuid        UUID PRIMARY KEY,
-    name        TEXT UNIQUE NOT NULL,
-    description TEXT
+    name        TEXT NOT NULL,
+    description TEXT,
+    flavor      TEXT,
+    prompt      TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Stat
 (
-    uuid        UUID PRIMARY KEY,
-    name        TEXT UNIQUE NOT NULL,
-    description TEXT
+    uuid   UUID PRIMARY KEY,
+    name   TEXT NOT NULL,
+    flavor TEXT,
+    prompt TEXT
 );
-
-CREATE TABLE IF NOT EXISTS Profession
-(
-    uuid        UUID PRIMARY KEY,
-    name        TEXT UNIQUE NOT NULL,
-    description TEXT
-);
-
--- DROP TABLE Character;
 
 CREATE TABLE IF NOT EXISTS Character
 (
-    uuid        UUID PRIMARY KEY,
-    name        TEXT UNIQUE NOT NULL,
-    summary     TEXT,
-    appearance  TEXT,
-    personality TEXT,
-    background  TEXT,
-    sex         TEXT,
-    race        TEXT,
-    dimensions  TEXT ARRAY,
-    _user       TEXT,
-    inventory   TEXT,
-    skills      TEXT ARRAY,
-    stats       TEXT ARRAY
+    uuid       UUID PRIMARY KEY,
+    name       TEXT NOT NULL,
+    sex        TEXT,
+    race       TEXT,
+    dimensions TEXT, -- May need a separate table depending on the structure of Dimension
+    _user      TEXT, -- May need a separate table depending on the structure of User
+    inventory  TEXT, -- May need a separate table depending on the structure of Inventory
+    skills     TEXT ARRAY,
+    stats      TEXT ARRAY,
+    flavor     TEXT,
+    prompt     TEXT
 );

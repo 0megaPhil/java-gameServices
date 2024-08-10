@@ -58,7 +58,6 @@ spring:
       - service
   config:
     import: "configserver:"
-
   graphql:
     websocket:
       path: /graphql
@@ -68,3 +67,11 @@ spring:
       allowed-origins: '*'
     graphiql:
       enabled: true
+      path: /graphiql
+    path: /graphql
+    schema:
+      locations: classpath:META-INF/schema/**
+      introspection:
+        enabled: true
+      inspection:
+        enabled: true

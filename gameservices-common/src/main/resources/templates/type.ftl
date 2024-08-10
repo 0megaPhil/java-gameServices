@@ -10,13 +10,10 @@
         </#list>
     </#list>
 </#if>
+import java.util.Set;
 import java.util.UUID;
 import lombok.With;
 import lombok.Builder;
-<#if implements?has_content><#list implements as interface>
-    import com.firmys.gameservices.common.Common${interface};
-    <#if interface_has_next>;
-    </#if></#list></#if>
 <#list annotations as annotation>
     @${annotation}
 </#list>
@@ -25,8 +22,13 @@ import lombok.Builder;
 @Builder(toBuilder = true)
 public record ${className}(<#if fields?has_content>
     <#list fields as field>
-        ${field.type} ${field.name}<#if field_has_next>,</#if>
+        <#if field.type?contains("List")>
+            ${field.type?replace("java.util.List<", "Set<")} ${field.name}<#if field_has_next>,</#if>
+        </#if>
+        <#if !field.type?contains("List")>
+            ${field.type} ${field.name}<#if field_has_next>,</#if>
+        </#if>
     </#list>
-</#if>) <#if implements?has_content>implements <#list implements as interface>Common${interface}<#if interface_has_next>, </#if></#list> </#if> {
+</#if>) <#if implements?has_content>implements <#list implements as interface>${interface}<#if interface_has_next>, </#if></#list> </#if> {
 
 }
