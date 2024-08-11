@@ -26,9 +26,8 @@ extend type Query {
 
 type Race implements CommonEntity {
     uuid: UUID!
-    name: String!
-    description: String
-    worldId: UUID
+    name: String
+    type: Races
     flavor: Flavor
     prompt: String
     withUuid(uuid: UUID): Race
@@ -37,16 +36,16 @@ type Race implements CommonEntity {
 
 input RaceInput {
     uuid: UUID
-    name: String!
-    worldId: UUID
+    name: String
+    type: Races
     flavor: FlavorInput
     prompt: String
 }
 
 type Skill implements CommonEntity {
     uuid: UUID!
-    name: String!
-    description: String
+    type: Skills!
+    name: String
     flavor: Flavor
     prompt: String
     withUuid(uuid: UUID): Skill
@@ -55,15 +54,16 @@ type Skill implements CommonEntity {
 
 input SkillInput {
     uuid: UUID
-    name: String!
-    description: String
+    type: Skills!
+    name: String
     flavor: FlavorInput
     prompt: String
 }
 
 type Stat implements CommonEntity {
     uuid: UUID!
-    name: String!
+    type: Stats!
+    name: String
     flavor: Flavor
     prompt: String
     withUuid(uuid: UUID): Stat
@@ -72,63 +72,120 @@ type Stat implements CommonEntity {
 
 input StatInput {
     uuid: UUID
-    name: String!
+    type: Stats!
+    name: String
     flavor: FlavorInput
     prompt: String
 }
 
-type CharacterSkill implements CommonObject {
-    skillId: UUID!
-    name: String!
-    skillValue: Int!
+type CharacterSkill implements CommonValue {
+    skill: Skill!
+    value: Float!
 }
 
 input CharacterSkillInput {
-    skillId: UUID!
-    name: String
-    skillValue: Int!
+    skill: SkillInput!
+    value: Float!
 }
 
-type CharacterStat implements CommonObject {
-    statId: UUID!
-    name: String
-    statValue: Int!
+type CharacterStat implements CommonValue {
+    stat: Stat!
+    value: Float!
+}
+
+input CharacterStatInput {
+    stat: StatInput!
+    value: Float!
+}
+
+type CharacterEffect implements CommonValue {
+    effect: Effect!
+    value: Float!
+}
+
+input CharacterEffectInput {
+    effect: EffectInput!
+    value: Float!
+}
+
+type CharacterAttribute implements CommonValue {
+    attribute: Attribute
+    value: Float!
+}
+
+input CharacterAttributeInput {
+    attribute: AttributeInput
+    value: Float!
 }
 
 type Character implements CommonEntity {
     uuid: UUID!
-    name: String!
+    name: String
     sex: Sexes
     race: Race
-    dimensions: [Dimension]
     user: User
     inventory: Inventory
+    dimensions: [Dimension]
     skills: [CharacterSkill]
     stats: [CharacterStat]
+    attributes: [CharacterAttribute]
+    effects: [CharacterEffect]
     flavor: Flavor
     prompt: String
     withUuid(uuid: UUID): Character
     withFlavor(flavor: FlavorInput): Character
 }
 
-input CharacterStatInput {
-    statId: UUID!
-    name: String
-    statValue: Int!
-}
-
 input CharacterInput {
     uuid: UUID
-    name: String!
+    name: String
     sex: Sexes
     race: RaceInput
-    dimensions: [DimensionInput]
     user: UserInput
     inventory: InventoryInput
+    dimensions: [DimensionInput]
     skills: [CharacterSkillInput]
     stats: [CharacterStatInput]
+    attributes: [CharacterAttributeInput]
+    effects: [CharacterEffectInput]
     flavor: FlavorInput
     prompt: String
+}
+
+type Effect implements CommonEntity{
+    uuid: UUID!
+    type: Effects!
+    name: String
+    prompt: String
+    flavor: Flavor
+    withUuid(uuid: UUID): Effect
+    withFlavor(flavor: FlavorInput): Effect
+}
+
+input EffectInput {
+    uuid: UUID
+    type: Effects!
+    name: String
+    prompt: String
+    flavor: FlavorInput
+}
+
+type Attribute implements CommonEntity{
+    uuid: UUID!
+    type: Attributes!
+    name: String
+    prompt: String
+    flavor: Flavor
+    withUuid(uuid: UUID): Attribute
+    withFlavor(flavor: FlavorInput): Attribute
+}
+
+input AttributeInput {
+    uuid: UUID
+    type: Attributes!
+    name: String
+    prompt: String
+    flavor: FlavorInput
 }
 
 enum Sexes {
@@ -136,5 +193,67 @@ enum Sexes {
     FEMALE,
     HERMAPHRODITIC,
     ASEXUAL,
+    OTHER
+}
+
+enum Effects {
+    ATTRIBUTE,
+    STAT,
+    SKILL,
+    CHARACTERISTIC
+    DIMENSION,
+    STATUS,
+    OTHER
+}
+
+enum Attributes {
+    HEALTH,
+    MANA,
+    SANITY,
+    ENERGY,
+    OTHER
+}
+
+enum Stats {
+    STRENGTH,
+    AGILITY,
+    DEXTERITY,
+    CHARISMA,
+    INTELLIGENCE,
+    CREATIVITY,
+    MEMORY,
+    WILL,
+    PRESENCE,
+    DETERMINATION,
+    LUCK,
+    MAGNETISM,
+    WISDOM,
+    CONSTITUTION,
+    OTHER
+}
+
+enum Skills {
+    COMBAT,
+    UTILITY,
+    SOCIAL,
+    MOVEMENT,
+    INTERNAL,
+    CREATIVE,
+    OTHER
+}
+
+enum Races {
+    HUMAN,
+    ELF,
+    DWARF,
+    GOBLIN,
+    ORC,
+    DRACONIAN,
+    KOBOLD,
+    HALFLING,
+    HALF_ELF,
+    HALF_ORC,
+    HALF_DWARF,
+    HALF_GOBLIN,
     OTHER
 }

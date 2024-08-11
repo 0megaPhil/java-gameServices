@@ -12,52 +12,52 @@ gameservices:
       id: character
       name: CharacterService
       host: ${SERVICES_CHARACTER_HOST:localhost}
-      port: ${SERVICES_CHARACTER_PORT:8081}
+      port: ${SERVICES_CHARACTER_PORT:8444}
     SKILL:
       id: skill
       name: SkillService
       host: ${SERVICES_CHARACTER_HOST:localhost}
-      port: ${SERVICES_CHARACTER_PORT:8081}
+      port: ${SERVICES_CHARACTER_PORT:8444}
     STAT:
       id: stat
       name: StatService
       host: ${SERVICES_CHARACTER_HOST:localhost}
-      port: ${SERVICES_CHARACTER_PORT:8081}
+      port: ${SERVICES_CHARACTER_PORT:8444}
     RACE:
       id: race
       name: RaceService
       host: ${SERVICES_CHARACTER_HOST:localhost}
-      port: ${SERVICES_CHARACTER_PORT:8081}
+      port: ${SERVICES_CHARACTER_PORT:8444}
     INVENTORY:
       id: inventory
       name: InventoryService
       host: ${SERVICES_INVENTORY_HOST:localhost}
-      port: ${SERVICES_INVENTORY_PORT:8082}
+      port: ${SERVICES_INVENTORY_PORT:8445}
     ITEM:
       id: item
       name: ItemService
       host: ${SERVICES_INVENTORY_HOST:localhost}
-      port: ${SERVICES_INVENTORY_PORT:8082}
+      port: ${SERVICES_INVENTORY_PORT:8445}
     USER:
       id: user
       name: UserService
       host: ${SERVICES_USER_HOST:localhost}
-      port: ${SERVICES_USER_PORT:8083}
+      port: ${SERVICES_USER_PORT:8446}
     WORLD:
       id: world
       name: WorldService
       host: ${SERVICES_WORLD_HOST:localhost}
-      port: ${SERVICES_WORLD_PORT:8084}
+      port: ${SERVICES_WORLD_PORT:8447}
     TRANSACTION:
       id: transaction
       name: TransactionService
       host: ${SERVICES_TRANSACTION_HOST:localhost}
-      port: ${SERVICES_TRANSACTION_PORT:8085}
+      port: ${SERVICES_TRANSACTION_PORT:8448}
     CURRENCY:
       id: currency
       name: CurrencyService
       host: ${SERVICES_TRANSACTION_HOST:localhost}
-      port: ${SERVICES_TRANSACTION_PORT:8085}
+      port: ${SERVICES_TRANSACTION_PORT:8448}
     FLAVOR:
       id: flavor
       name: FlavorService
@@ -77,7 +77,7 @@ gameservices:
       username: ${GATEWAY_USERNAME:firmys}
       password: ${GATEWAY_PASSWORD:changeit}
       host: ${GATEWAY_HOST:localhost}
-      port: ${GATEWAY_PORT:8080}
+      port: ${GATEWAY_PORT:8443}
   gateway: *gateway
 
 spring:

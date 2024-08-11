@@ -5,4 +5,4 @@ databaseChangeLog:
 
 name: java-gameservices.yaml
 environment: testing
-is-enabled: false
+is-enabled: true

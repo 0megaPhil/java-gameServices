@@ -1,5 +1,7 @@
 package com.firmys.gameservices.inventory.services;
 
+import static com.firmys.gameservices.common.FunctionUtils.safeSet;
+
 import com.firmys.gameservices.common.CommonService;
 import com.firmys.gameservices.generated.models.Inventory;
 import com.firmys.gameservices.inventory.repositories.InventoryRepository;
@@ -18,6 +20,8 @@ public class InventoryService extends CommonService<Inventory> {
 
   @Override
   public Mono<Inventory> create(Mono<Inventory> object) {
-    return super.create(object);
+    return super.create(
+        object.map(
+            obj -> obj.withCurrencies(safeSet(obj.currencies())).withItems(safeSet(obj.items()))));
   }
 }

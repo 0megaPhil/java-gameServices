@@ -15,6 +15,10 @@ interface CommonObject {
     name: String
 }
 
+interface CommonValue {
+    value: Float
+}
+
 input Options {
     filters: [Filter]
     sortBy: String
@@ -24,18 +28,6 @@ input Options {
 input Filter {
     byField: String!
     forValue: String!
-}
-
-type Prompt implements CommonObject {
-    name: String!
-    description: String!
-    objectType: String!
-}
-
-input PromptInput {
-    name: String
-    prompt: String
-    objectType: String!
 }
 
 type Flavor implements CommonObject {
@@ -54,28 +46,26 @@ input FlavorInput {
     characteristics: [CharacteristicInput]
 }
 
-type Dimension implements CommonObject {
-    value: String!
+type Dimension implements CommonValue {
+    value: Float!
     name: String!
     unitType: String!
-    description: String
 }
 
 input DimensionInput {
-    value: String!
+    value: Float!
     name: String!
     unitType: String!
-    description: String
 }
 
-type Characteristic implements CommonObject {
-    value: String!
+type Characteristic implements CommonValue {
+    value: Float!
     name: String!
     description: String
 }
 
 input CharacteristicInput {
-    value: String!
+    value: Float!
     name: String!
     description: String
 }

@@ -24,6 +24,10 @@
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
+            <artifactId>gameservices-transaction</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.firmys.gameservices</groupId>
             <artifactId>gameservices-user</artifactId>
         </dependency>
         <dependency>

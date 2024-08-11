@@ -1,9 +1,9 @@
 package com.firmys.gameservices.characters.services;
 
-import com.firmys.gameservices.characters.data.RaceRepository;
+import com.firmys.gameservices.characters.data.AttributeRepository;
 import com.firmys.gameservices.common.CommonService;
 import com.firmys.gameservices.common.GatewayClient;
-import com.firmys.gameservices.generated.models.Race;
+import com.firmys.gameservices.generated.models.Attribute;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -17,12 +17,12 @@ import reactor.core.publisher.Mono;
 @Service
 @Builder(toBuilder = true)
 @Accessors(chain = true, fluent = true)
-public class RaceService extends CommonService<Race> {
-  private final RaceRepository repository;
+public class AttributeService extends CommonService<Attribute> {
+  private final AttributeRepository repository;
   private final GatewayClient gatewayClient;
 
   @Override
-  public Mono<Race> create(Mono<Race> object) {
+  public Mono<Attribute> create(Mono<Attribute> object) {
     return object
         .flatMap(this::findBy)
         .flatMap(
@@ -34,15 +34,15 @@ public class RaceService extends CommonService<Race> {
                     .orElse(Mono.fromSupplier(() -> obj)));
   }
 
-  public Predicate<Race> creatable() {
+  public Predicate<Attribute> creatable() {
     return obj -> obj != null && obj.uuid() == null && obj.type() != null;
   }
 
-  public Function<Race, Race> complete() {
+  public Function<Attribute, Attribute> complete() {
     return obj -> prompt().apply(name().apply(obj));
   }
 
-  private Function<Race, Race> prompt() {
+  private Function<Attribute, Attribute> prompt() {
     return obj ->
         Optional.of(obj)
             .filter(st -> st.prompt() != null)
@@ -57,10 +57,10 @@ public class RaceService extends CommonService<Race> {
                         .build());
   }
 
-  public Function<Race, Race> name() {
-    return obj ->
-        Optional.of(obj)
+  public Function<Attribute, Attribute> name() {
+    return stat ->
+        Optional.of(stat)
             .filter(st -> st.name() != null)
-            .orElseGet(() -> obj.toBuilder().name(obj.type().name()).build());
+            .orElseGet(() -> stat.toBuilder().name(stat.type().name()).build());
   }
 }

@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.Builder;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -92,7 +93,7 @@ public class GatewayClient {
         clients
             .get(service)
             .post()
-            .body(Mono.just(object), object.getClass())
+            .body(BodyInserters.fromValue(object))
             .retrieve()
             .bodyToMono(object.getClass());
   }

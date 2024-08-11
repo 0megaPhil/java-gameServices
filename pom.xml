@@ -4,6 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <artifactId>java-gameservices</artifactId>
+    <developers>
+        <developer>
+            <name>Phillip Platt</name>
+            <id>0megaPhil</id>
+            <email>pplatt@firmys.com</email>
+        </developer>
+    </developers>
 
     <dependencyManagement>
         <dependencies>
@@ -265,7 +272,7 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <graphqlSchemas>
+                        <graphqlSchemas>F
                             <includePattern>.*\.graphqls?</includePattern>
                         </graphqlSchemas>
                         <outputDir>${project.build.directory}/generated-sources</outputDir>
@@ -292,6 +299,9 @@
                             <CHARACTER>
                                 com.firmys.gameservices.generated.models.Character
                             </CHARACTER>
+                            <Float>
+                                java.lang.Double
+                            </Float>
                         </customTypesMapping>
                         <addGeneratedAnnotation>false</addGeneratedAnnotation>
                         <generateBuilder>false</generateBuilder>
@@ -333,16 +343,6 @@
                     <version>${liquibase.version}</version>
                     <executions>
                         <execution>
-                            <id>liquibase</id>
-                            <phase>initialize</phase>
-                            <goals>
-                                <goal>generateChangeLog</goal>
-                            </goals>
-                            <configuration>
-                                <url>jdbc:h2:file:./${project.artifactId}sdb</url>
-                            </configuration>
-                        </execution>
-                        <execution>
                             <id>liquibase-update</id>
                             <phase>install</phase>
                             <goals>
@@ -368,8 +368,10 @@
                         <driver>org.h2.Driver</driver>
                         <username/>
                         <password/>
+                        <changeSetAuthor>MAVEN</changeSetAuthor>
                         <url>jdbc:h2:file:./${project.artifactId}sdb</url>
-                        <outputChangeLogFile>src/main/resources/db/changelog/changelog-output.yaml
+                        <outputChangeLogFile>
+                            ${project.basedir}/src/main/resources/db/changelog/${project.artifactId}-changelog-output.yaml
                         </outputChangeLogFile>
                         <autoUpdate>true</autoUpdate>
                         <changeLogFile>src/main/resources/db/changelog/${project.artifactId}s.yaml</changeLogFile>
@@ -394,4 +396,36 @@
         </resources>
     </build>
 
+    <profiles>
+        <profile>
+            <id>initialize</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.liquibase</groupId>
+                            <artifactId>liquibase-maven-plugin</artifactId>
+                            <version>${liquibase.version}</version>
+                            <executions>
+                                <execution>
+                                    <id>liquibase</id>
+                                    <phase>initialize</phase>
+                                    <goals>
+                                        <goal>generateChangeLog</goal>
+                                    </goals>
+                                    <configuration>
+                                        <url>jdbc:h2:file:./${project.artifactId}sdb</url>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <changeLogFile>src/main/resources/db/changelog/${project.artifactId}s.yaml
+                                </changeLogFile>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>

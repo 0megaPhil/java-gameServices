@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1723316876616-1
+      author: pahnc (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: CONSTRAINT_D
+                  name: UUID
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: TYPE
+                  type: VARCHAR(1000000000)
+              - column:
+                  name: FLAVOR
+                  type: VARCHAR(1000000000)
+              - column:
+                  name: PROMPT
+                  type: VARCHAR(1000000000)
+            tableName: TERRAIN
+  - changeSet:
+      id: 1723316876616-2
+      author: pahnc (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: CONSTRAINT_4
+                  name: UUID
+                  type: UUID
+              - column:
+                  name: TERRAINID
+                  type: UUID
+              - column:
+                  name: FLAVOR
+                  type: VARCHAR(1000000000)
+              - column:
+                  name: PROMPT
+                  type: VARCHAR(1000000000)
+            tableName: WORLD
+

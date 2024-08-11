@@ -14,7 +14,6 @@ extend type Query {
 
 input InventoryInput {
     uuid: UUID
-    characterId: UUID
     items: [InventoryItemInput]
     currencies: [InventoryCurrencyInput]
     flavor: FlavorInput
@@ -23,7 +22,6 @@ input InventoryInput {
 
 type Inventory implements CommonEntity {
     uuid: UUID!
-    characterId: UUID!
     items: [InventoryItem]
     currencies: [InventoryCurrency]
     flavor: Flavor
@@ -33,18 +31,13 @@ type Inventory implements CommonEntity {
 }
 
 input InventoryItemInput {
-    itemId: UUID!
-    name: String
-    inventoryId: UUID!
-    quantity: Int!
+    item: ItemInput!
+    value: Float!
 }
 
 input InventoryCurrencyInput {
-    uuid: UUID
-    name: String
-    currencyId: UUID!
-    inventoryId: UUID!
-    quantity: Int!
+    currency: CurrencyInput!
+    value: Float!
 }
 
 input ItemInput {
@@ -52,20 +45,17 @@ input ItemInput {
     name: String!
     flavor: FlavorInput
     prompt: String
+    dimensions: [DimensionInput]
 }
 
-type InventoryItem implements CommonObject {
-    itemId: UUID!
-    name: String
-    inventoryId: UUID!
-    quantity: Int!
+type InventoryItem implements CommonValue {
+    item: Item!
+    value: Float!
 }
 
-type InventoryCurrency implements CommonObject {
-    currencyId: UUID!
-    name: String
-    inventoryId: UUID!
-    quantity: Int!
+type InventoryCurrency implements CommonValue {
+    currency: Currency!
+    value: Float!
 }
 
 type Item implements CommonEntity {
@@ -73,6 +63,7 @@ type Item implements CommonEntity {
     name: String!
     flavor: Flavor
     prompt: String
+    dimensions: [Dimension]
     withUuid(uuid: UUID): Item
     withFlavor(flavor: FlavorInput): Item
 }

@@ -63,8 +63,6 @@ public class ${className} <#if className == "QueryResolver">implements CommonRes
             return service.flavor(uuid, ${operation.type}.class);
             }
         </#if>
-    <#--    ${operation.type} ${operation.name}(<#list operation.parameters as param><#list param.annotations as paramAnnotation>@${paramAnnotation}<#if param.annotations?has_content> </#if></#list>${param.type} ${param.name}<#if param_has_next>, </#if></#list>)<#if operation.throwsException> throws Exception</#if>;-->
-
     </#list>
 </#if>
 }

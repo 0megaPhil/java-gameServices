@@ -1,10 +1,15 @@
 package com.firmys.gameservices.common;
 
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.ignoreCase;
+
 import com.firmys.gameservices.generated.models.CommonEntity;
 import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -15,6 +20,7 @@ import reactor.core.publisher.Mono;
  *
  * @param <E> The type of entity that extends CommonEntity
  */
+@Slf4j
 public abstract class CommonService<E extends CommonEntity> {
 
   public abstract CommonRepository<E> repository();
@@ -25,6 +31,18 @@ public abstract class CommonService<E extends CommonEntity> {
 
   public Flux<E> find(Flux<UUID> uuids) {
     return repository().findAllById(uuids);
+  }
+
+  public Mono<E> findOneLike(E exampleObj) {
+    ExampleMatcher matcher =
+        ExampleMatcher.matching()
+            .withIgnoreNullValues()
+            .withMatcher("name", ignoreCase())
+            .withIgnoreCase();
+    return repository()
+        .findOne(Example.of(exampleObj, matcher))
+        .switchIfEmpty(Mono.just(exampleObj))
+        .doOnError(th -> log.error(th.getMessage(), th));
   }
 
   public Flux<E> find(@Nullable Integer limit, UUID... uuids) {
@@ -48,7 +66,7 @@ public abstract class CommonService<E extends CommonEntity> {
   }
 
   public Mono<E> update(Mono<E> object) {
-    return update(Flux.from(object)).single();
+    return object.flatMap(obj -> repository().save(obj));
   }
 
   public Flux<E> update(Flux<E> objects) {
@@ -61,5 +79,15 @@ public abstract class CommonService<E extends CommonEntity> {
 
   public Mono<Void> delete(Flux<UUID> uuids) {
     return uuids.flatMap(repository()::deleteById).then();
+  }
+
+  public Mono<E> findOrCreate(E object) {
+    return findOneLike(object).switchIfEmpty(this.create(Mono.just(object)));
+  }
+
+  public Mono<E> findBy(E object) {
+    return findOneLike(object)
+        .onErrorReturn(object)
+        .doOnNext(obj -> log.info("{}: {}", obj.getClass().getSimpleName(), obj));
   }
 }

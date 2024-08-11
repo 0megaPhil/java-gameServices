@@ -14,7 +14,9 @@ extend type Query {
 
 type World implements CommonEntity {
     uuid: UUID!
-    terrain: Terrain
+    type: String
+    terrains: [Terrain]
+    races: [Race]
     flavor: Flavor
     prompt: String
     withUuid(uuid: UUID): World
@@ -22,10 +24,12 @@ type World implements CommonEntity {
 }
 
 input WorldInput {
-    uuid: UUID
-    terrain: TerrainInput
+    uuid: UUID!
+    type: String
+    terrains: [TerrainInput]
+    races: [RaceInput]
     flavor: FlavorInput
-    prompts: [PromptInput]
+    prompt: String
 }
 
 type Terrain implements CommonEntity {
@@ -41,5 +45,5 @@ input TerrainInput {
     uuid: UUID
     type: String!
     flavor: FlavorInput
-    prompts: [PromptInput]
+    prompt: String
 }

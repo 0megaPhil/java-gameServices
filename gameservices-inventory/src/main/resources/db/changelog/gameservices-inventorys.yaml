@@ -5,4 +5,4 @@ databaseChangeLog:
 
 name: gameservices-inventorys.yaml
 environment: testing
-is-enabled: false
+is-enabled: true

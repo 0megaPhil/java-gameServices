@@ -27,7 +27,7 @@ import static com.firmys.gameservices.common.JsonUtils.JSON;
 <#list annotations as annotation>
     @${annotation}
 </#list>
-public interface ${className} <#if className == "CommonEntity">extends CommonObject </#if><#if implements?has_content>extends <#list implements as interface>${interface}<#if interface_has_next>, </#if></#list></#if>{
+public interface ${className} <#if className == "CommonEntity" || className == "CommonValue">extends CommonObject </#if><#if implements?has_content>extends <#list implements as interface>${interface}<#if interface_has_next>, </#if></#list></#if>{
 
 <#if !className?contains("Common")>
     <#if fields?has_content>
