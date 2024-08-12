@@ -7,6 +7,8 @@ import com.firmys.gameservices.common.*;
 import com.firmys.gameservices.common.error.GameDataExceptionController;
 import com.firmys.gameservices.generated.models.CommonEntity;
 import io.r2dbc.spi.ConnectionFactory;
+import java.time.OffsetDateTime;
+import java.util.Optional;
 import java.util.UUID;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -23,7 +25,7 @@ import reactor.core.publisher.Mono;
   GameDataExceptionController.class,
   ConversionConfig.class,
   WebClientConfig.class,
-  GatewayClient.class
+  ServiceClient.class,
 })
 @EnableConfigurationProperties(CommonProperties.class)
 public class CommonConfig {
@@ -70,7 +72,10 @@ public class CommonConfig {
   public BeforeConvertCallback<CommonEntity> beforeConvertCallback() {
     return (d, table) -> {
       if (d.uuid() == null) {
-        d = d.withUuid(UUID.randomUUID());
+        d =
+            d.withUuid(UUID.randomUUID())
+                .withCreated(Optional.ofNullable(d.created()).orElse(OffsetDateTime.now()))
+                .withUpdated(OffsetDateTime.now());
       }
       return Mono.just(d);
     };

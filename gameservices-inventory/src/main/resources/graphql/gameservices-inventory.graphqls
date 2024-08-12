@@ -24,10 +24,12 @@ type Inventory implements CommonEntity {
     uuid: UUID!
     items: [InventoryItem]
     currencies: [InventoryCurrency]
-    flavor: Flavor
     prompt: String
-    withUuid(uuid: UUID): Inventory
-    withFlavor(flavor: FlavorInput): Inventory
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
 }
 
 input InventoryItemInput {
@@ -61,9 +63,11 @@ type InventoryCurrency implements CommonValue {
 type Item implements CommonEntity {
     uuid: UUID!
     name: String!
-    flavor: Flavor
-    prompt: String
     dimensions: [Dimension]
-    withUuid(uuid: UUID): Item
-    withFlavor(flavor: FlavorInput): Item
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
 }

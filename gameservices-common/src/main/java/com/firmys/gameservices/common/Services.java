@@ -9,6 +9,7 @@ public enum Services {
   SKILL(CommonConstants.SKILL),
   STAT(CommonConstants.STAT),
   RACE(CommonConstants.RACE),
+  PROFESSION(CommonConstants.RACE),
   FLAVOR(CommonConstants.FLAVOR),
   INVENTORY(CommonConstants.INVENTORY),
   ITEM(CommonConstants.ITEM),

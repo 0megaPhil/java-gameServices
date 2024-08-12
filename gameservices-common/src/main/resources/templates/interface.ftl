@@ -10,6 +10,7 @@
     </#list>
 </#if>
 import java.util.UUID;
+import java.time.OffsetDateTime;
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 <#if javaDoc?has_content>
     /**
@@ -59,8 +60,18 @@ public interface ${className} <#if className == "CommonEntity" || className == "
 </#if>
 <#if className == "CommonEntity">
     UUID uuid();
+    Error error();
+    String prompt();
+    Flavor flavor();
+    Integer version();
+    OffsetDateTime created();
+    OffsetDateTime updated();
     CommonEntity withUuid(UUID uuid);
+    CommonEntity withError(Error error);
+    CommonEntity withPrompt(String prompt);
     CommonEntity withFlavor(Flavor flavor);
+    CommonEntity withCreated(OffsetDateTime dateTime);
+    CommonEntity withUpdated(OffsetDateTime dateTime);
 </#if>
 
 

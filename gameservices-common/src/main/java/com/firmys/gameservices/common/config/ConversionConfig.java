@@ -45,6 +45,10 @@ public class ConversionConfig {
 
   @Bean
   public RuntimeWiringConfigurer runtimeWiringConfigurer() {
-    return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.Json).scalar(ExtendedScalars.UUID);
+    return wiringBuilder ->
+        wiringBuilder
+            .scalar(ExtendedScalars.Json)
+            .scalar(ExtendedScalars.DateTime)
+            .scalar(ExtendedScalars.UUID);
   }
 }

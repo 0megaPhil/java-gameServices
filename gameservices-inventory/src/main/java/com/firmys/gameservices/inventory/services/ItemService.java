@@ -14,4 +14,6 @@ import org.springframework.stereotype.Service;
 @Accessors(chain = true, fluent = true)
 public class ItemService extends CommonService<Item> {
   private final ItemRepository repository;
+
+  private final Class<Item> entityType = Item.class;
 }

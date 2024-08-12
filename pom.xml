@@ -103,11 +103,11 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>gameservices-world</module>
-        <module>gameservices-characters</module>
+        <module>gameservices-character</module>
         <module>gameservices-inventory</module>
         <module>gameservices-app</module>
         <module>gameservices-common</module>
-        <module>gameservices-users</module>
+        <module>gameservices-user</module>
         <module>gameservices-transactions</module>
         <module>gameservices-config</module>
     </modules>

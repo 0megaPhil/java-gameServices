@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Builder(toBuilder = true)
 @Accessors(chain = true, fluent = true)
 public class CommonQueryService {
-  private final GatewayClient client;
+  private final ServiceClient client;
 
   public <E extends CommonEntity> Mono<E> get(UUID uuid, Class<E> entityClass) {
     return client.get(uuid, entityClass);

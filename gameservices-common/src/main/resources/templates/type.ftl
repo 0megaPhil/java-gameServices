@@ -12,10 +12,15 @@
 </#if>
 import java.util.Set;
 import java.util.UUID;
+import java.time.OffsetDateTime;
+
 import lombok.With;
 import lombok.Builder;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Version;
+
 <#list annotations as annotation>
     @${annotation}
 </#list>
@@ -32,8 +37,12 @@ public record ${className}(<#if fields?has_content>
         <#if !field.type?contains("List")>
             <#if field.type == "double">
                 Double ${field.name}<#if field_has_next>,</#if>
-            </#if>
-            <#if field.type != "double">
+            <#elseif field.type == "DateTime" || field.name == "created" || field.name == "updated">
+                OffsetDateTime ${field.name}<#if field_has_next>,</#if>
+            <#elseif field.name == "version">
+                @Version
+                ${field.type} ${field.name}<#if field_has_next>,</#if>
+            <#else>
                 ${field.type} ${field.name}<#if field_has_next>,</#if>
             </#if>
         </#if>

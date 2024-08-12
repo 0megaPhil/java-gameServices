@@ -17,33 +17,119 @@ type World implements CommonEntity {
     type: String
     terrains: [Terrain]
     races: [Race]
-    flavor: Flavor
+    techLevel: TechLevels
+    magicLevel: MagicLevels
     prompt: String
-    withUuid(uuid: UUID): World
-    withFlavor(flavor: FlavorInput): World
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
 }
 
 input WorldInput {
     uuid: UUID!
     type: String
+    name: String!
     terrains: [TerrainInput]
     races: [RaceInput]
+    techLevel: TechLevels
+    magicLevel: MagicLevels
     flavor: FlavorInput
     prompt: String
+}
+
+type TerrainEffect implements CommonValue{
+    effect: Effect!
+    value: Float!
+}
+
+input TerrainEffectInput {
+    effect: EffectInput!
+    value: Float!
 }
 
 type Terrain implements CommonEntity {
     uuid: UUID!
     type: String!
-    flavor: Flavor
+    effects: [TerrainEffect]
     prompt: String
-    withUuid(uuid: UUID): Terrain
-    withFlavor(flavor: FlavorInput): Terrain
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
 }
 
 input TerrainInput {
     uuid: UUID
     type: String!
+    effects: [TerrainEffectInput]
     flavor: FlavorInput
     prompt: String
+}
+
+enum Events {
+    COMBAT
+    DIALOG
+    TRANSACTION
+    PARTY_CHANGE
+    CHARACTER
+    ECONOMIC
+    POLITICAL
+}
+
+enum Terrains {
+    DESERT
+    FORREST
+    PLAINS
+    TUNDRA
+    OCEAN
+    SEA
+    LAKE
+    MOUNTAINS
+    DUNGEON
+    URBAN
+    LABYRINTH
+    INDOORS
+    VOID
+    RIVER
+    SKY
+    LUNAR
+    AQUATIC
+}
+
+enum TechLevels {
+    STONE_AGE
+    BRONZE_AGE
+    IRON_AGE
+    PRE_INDUSTRIAL_AGE
+    INDUSTRIAL_AGE
+    INFORMATION_AGE
+    NEAR_FUTURE
+    FAR_FUTURE
+    PRE_SINGULARITY
+    SINGULARITY
+}
+
+enum MagicLevels {
+    NO_MAGIC
+    LOW_MAGIC
+    MODERATE_MAGIC
+    HIGH_MAGIC
+    INHERENT_MAGIC
+}
+
+enum Worlds {
+    TERRAN
+    AQUATIC
+    JUNGLE
+    FOREST
+    ICE
+    SNOW
+    LAVA
+    DESERT
+    FLOATING
+    HOLLOW
+    MAGICAL
 }

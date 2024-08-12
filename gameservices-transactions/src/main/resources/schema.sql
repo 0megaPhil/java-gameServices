@@ -5,13 +5,19 @@ CREATE TABLE IF NOT EXISTS Transaction
     currency    TEXT NOT NULL,
     item        TEXT,
     flavor      TEXT,
-    prompt      TEXT
+    prompt      TEXT,
+    created     TIMESTAMP,
+    updated     TIMESTAMP,
+    version     INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS Currency
 (
-    uuid   UUID PRIMARY KEY,
-    name   TEXT NOT NULL,
-    flavor TEXT,
-    prompt TEXT
+    uuid    UUID PRIMARY KEY,
+    name    TEXT NOT NULL,
+    flavor  TEXT,
+    prompt  TEXT,
+    created TIMESTAMP,
+    updated TIMESTAMP,
+    version INTEGER
 );

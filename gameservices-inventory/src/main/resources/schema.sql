@@ -4,7 +4,10 @@ CREATE TABLE IF NOT EXISTS Inventory
     items      TEXT ARRAY,
     currencies TEXT ARRAY,
     flavor     TEXT,
-    prompt     TEXT
+    prompt     TEXT,
+    created    TIMESTAMP,
+    updated    TIMESTAMP,
+    version    INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS Item
@@ -13,5 +16,8 @@ CREATE TABLE IF NOT EXISTS Item
     name       TEXT NOT NULL,
     dimensions TEXT ARRAY,
     flavor     TEXT,
-    prompt     TEXT
+    prompt     TEXT,
+    created    TIMESTAMP,
+    updated    TIMESTAMP,
+    version    INTEGER
 );

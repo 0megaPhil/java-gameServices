@@ -26,10 +26,12 @@ type Transaction implements CommonEntity {
     inventoryId: String!
     currency: String
     item: String
-    flavor: Flavor
     prompt: String
-    withUuid(uuid: UUID): Transaction
-    withFlavor(flavor: FlavorInput): Transaction
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
 }
 
 input CurrencyInput {
@@ -42,8 +44,10 @@ input CurrencyInput {
 type Currency implements CommonEntity {
     uuid: UUID!
     name: String!
-    flavor: Flavor
     prompt: String
-    withUuid(uuid: UUID): Currency
-    withFlavor(flavor: FlavorInput): Currency
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
 }

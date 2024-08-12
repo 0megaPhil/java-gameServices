@@ -18,6 +18,8 @@ import reactor.core.publisher.Mono;
 public class InventoryService extends CommonService<Inventory> {
   private final InventoryRepository repository;
 
+  private final Class<Inventory> entityType = Inventory.class;
+
   @Override
   public Mono<Inventory> create(Mono<Inventory> object) {
     return super.create(

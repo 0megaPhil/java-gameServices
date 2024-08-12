@@ -80,26 +80,6 @@ public class WebClientConfig {
     };
   }
 
-  //  public List<SimpleModule> mapperModules() {
-  //    List<Object> converters = new ArrayList<>();
-  //    Reflections reflections = new Reflections("com.firmys.gameservices");
-  //    Set<Class<? extends CommonObject>> classes = reflections.getSubTypesOf(CommonObject.class);
-  //
-  //    Set<GenericConverter.ConvertiblePair> writePairs =
-  //        classes.stream()
-  //            .map(cls -> new GenericConverter.ConvertiblePair(cls, String.class))
-  //            .collect(Collectors.toSet());
-  //
-  //    Set<GenericConverter.ConvertiblePair> readPairs =
-  //        classes.stream()
-  //            .map(cls -> new GenericConverter.ConvertiblePair(String.class, cls))
-  //            .collect(Collectors.toSet());
-  //
-  //    converters.add(new CommonEntityConverters.EntityReadConverter(readPairs));
-  //    converters.add(new CommonEntityConverters.EntityWriteConverter(writePairs));
-  //    return R2dbcCustomConversions.of(DialectResolver.getDialect(connectionFactory), converters);
-  //  }
-
   @Bean
   public Service gateway(CommonProperties properties) {
     return properties.getGateway();

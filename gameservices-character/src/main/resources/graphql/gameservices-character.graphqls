@@ -1,0 +1,342 @@
+extend type Query {
+    createCharacter(input: CharacterInput): Character
+    updateCharacter(input: CharacterInput): Character
+    findCharacter(options: Options): [Character]
+    getCharacter(uuid: UUID): Character
+    flavorCharacter(uuid: UUID): Character
+
+    createSkill(input: SkillInput): Skill
+    updateSkill(input: SkillInput): Skill
+    findSkill(options: Options): [Skill]
+    getSkill(uuid: UUID): Skill
+    flavorSkill(uuid: UUID): Skill
+
+    createStat(input: StatInput): Stat
+    updateStat(input: StatInput): Stat
+    findStat(options: Options): [Stat]
+    getStat(uuid: UUID): Stat
+    flavorStat(uuid: UUID): Stat
+
+    createRace(input: RaceInput): Race
+    updateRace(input: RaceInput): Race
+    findRace(options: Options): [Race]
+    getRace(uuid: UUID): Race
+    flavorRace(uuid: UUID): Race
+
+    createCreature(input: CreatureInput): Creature
+    updateCreature(input: CreatureInput): Creature
+    findCreature(options: Options): [Creature]
+    getCreature(uuid: UUID): Creature
+    flavorCreature(uuid: UUID): Creature
+
+    createProfession(input: ProfessionInput): Profession
+    updateProfession(input: ProfessionInput): Profession
+    findProfession(options: Options): [Profession]
+    getProfession(uuid: UUID): Profession
+    flavorProfession(uuid: UUID): Profession
+}
+
+type Profession implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    type: Professions
+    stats: [CharacterStat]
+    skills: [CharacterSkill]
+    attributes: [CharacterAttribute]
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input ProfessionInput {
+    uuid: UUID
+    name: String!
+    type: Professions!
+    stats: [CharacterStatInput]
+    skills: [CharacterSkillInput]
+    attributes: [CharacterAttributeInput]
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Race implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    type: Species!
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input RaceInput {
+    uuid: UUID
+    name: String!
+    type: Species!
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Skill implements CommonEntity {
+    uuid: UUID!
+    type: Skills!
+    name: String
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input SkillInput {
+    uuid: UUID
+    type: Skills!
+    name: String
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Stat implements CommonEntity {
+    uuid: UUID!
+    type: Stats!
+    name: String
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input StatInput {
+    uuid: UUID
+    type: Stats!
+    name: String
+    flavor: FlavorInput
+    prompt: String
+}
+
+type CharacterSkill implements CommonValue {
+    skill: Skill!
+    value: Float!
+}
+
+input CharacterSkillInput {
+    skill: SkillInput!
+    value: Float!
+}
+
+type CharacterStat implements CommonValue {
+    stat: Stat!
+    value: Float!
+}
+
+input CharacterStatInput {
+    stat: StatInput!
+    value: Float!
+}
+
+type CharacterEffect implements CommonValue {
+    effect: Effect!
+    value: Float!
+}
+
+input CharacterEffectInput {
+    effect: EffectInput!
+    value: Float!
+}
+
+type CharacterAttribute implements CommonValue {
+    attribute: Attribute
+    value: Float!
+}
+
+input CharacterAttributeInput {
+    attribute: AttributeInput
+    value: Float!
+}
+
+type Character implements CommonEntity {
+    uuid: UUID!
+    name: String
+    sex: Sexes
+    race: Race
+    user: User
+    profession: Profession
+    inventory: Inventory
+    dimensions: [Dimension]
+    skills: [CharacterSkill]
+    stats: [CharacterStat]
+    attributes: [CharacterAttribute]
+    effects: [CharacterEffect]
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input CharacterInput {
+    uuid: UUID
+    name: String
+    sex: Sexes
+    race: RaceInput
+    user: UserInput
+    profession: ProfessionInput
+    inventory: InventoryInput
+    dimensions: [DimensionInput]
+    skills: [CharacterSkillInput]
+    stats: [CharacterStatInput]
+    attributes: [CharacterAttributeInput]
+    effects: [CharacterEffectInput]
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Creature implements CommonEntity {
+    uuid: UUID!
+    name: String!
+    type: Species!
+    sex: Sexes
+    inventory: Inventory
+    profession: Profession
+    dimensions: [Dimension]
+    skills: [CharacterSkill]
+    stats: [CharacterStat]
+    attributes: [CharacterAttribute]
+    effects: [CharacterEffect]
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input CreatureInput {
+    uuid: UUID
+    name: String!
+    type: Species!
+    sex: Sexes
+    inventory: InventoryInput
+    profession: ProfessionInput
+    dimensions: [DimensionInput]
+    skills: [CharacterSkillInput]
+    stats: [CharacterStatInput]
+    attributes: [CharacterAttributeInput]
+    effects: [CharacterEffectInput]
+    flavor: FlavorInput
+    prompt: String
+}
+
+type Effect implements CommonEntity{
+    uuid: UUID!
+    type: Effects!
+    name: String
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input EffectInput {
+    uuid: UUID
+    type: Effects!
+    name: String
+    prompt: String
+    flavor: FlavorInput
+}
+
+type Attribute implements CommonEntity{
+    uuid: UUID!
+    type: Attributes!
+    name: String
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input AttributeInput {
+    uuid: UUID
+    type: Attributes!
+    name: String
+    prompt: String
+    flavor: FlavorInput
+}
+
+enum Sexes {
+    MALE,
+    FEMALE,
+    HERMAPHRODITIC,
+    ASEXUAL,
+    OTHER
+}
+
+enum Effects {
+    ATTRIBUTE,
+    STAT,
+    SKILL,
+    CHARACTERISTIC
+    DIMENSION,
+    STATUS,
+    OTHER
+}
+
+enum Attributes {
+    HEALTH,
+    MANA,
+    SANITY,
+    ENERGY,
+    OTHER
+}
+
+enum Stats {
+    PHYSICAL,
+    MENTAL,
+    SOCIAL
+}
+
+enum Skills {
+    COMBAT,
+    UTILITY,
+    SOCIAL,
+    MOVEMENT,
+    INTERNAL,
+    CREATIVE,
+    OTHER
+}
+
+enum Species {
+    HOMINID
+    META_HOMINID
+    HOMINID_DEUM
+    REPTILIAN
+    XENOBIOTIC
+    AVIAN
+    ANIMALIA
+    ICHTHYS
+    PLANTAE
+    FUNGI
+    OTHER
+}
+
+enum Professions {
+    COMBAT
+    MILITARY
+    UTILITY
+    POLITICAL
+    RELIGIOUS
+    OTHER
+}

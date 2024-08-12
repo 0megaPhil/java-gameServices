@@ -4,7 +4,7 @@ import static com.firmys.gameservices.common.CommonConstants.PACKAGE_GENERATED;
 
 import com.firmys.gameservices.common.CommonProperties;
 import com.firmys.gameservices.common.CommonQueryService;
-import com.firmys.gameservices.common.GatewayClient;
+import com.firmys.gameservices.common.ServiceClient;
 import com.firmys.gameservices.common.config.ConversionConfig;
 import com.firmys.gameservices.common.config.WebClientConfig;
 import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({
   SpringSecurityConfiguration.class,
-  GatewayClient.class,
+  ServiceClient.class,
   ConversionConfig.class,
   WebClientConfig.class
 })
