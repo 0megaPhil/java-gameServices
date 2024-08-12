@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Phillip Platt
+
+name: gameservices-worlds.yaml
+environment: testing
+is-enabled: true

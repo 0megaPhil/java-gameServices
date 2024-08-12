@@ -1,0 +1,83 @@
+scalar UUID
+scalar DateTime
+
+type Query {
+
+}
+
+# CommonEntity inheritors are static and used to generated data model
+# This is to be used for more complex domain model exposures
+interface CommonEntity {
+    uuid: UUID
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+interface CommonObject {
+    name: String
+}
+
+interface CommonValue {
+    value: Float
+}
+
+input Options {
+    filters: [Filter]
+    sortBy: String
+    limit: Int!
+}
+
+input Filter {
+    byField: String!
+    forValue: String!
+}
+
+type Flavor implements CommonObject {
+    targetId: UUID!
+    name: String!
+    summary: String!
+    objectType: String!
+    characteristics: [Characteristic]!
+}
+
+input FlavorInput {
+    targetId: UUID
+    name: String
+    summary: String
+    objectType: String
+    characteristics: [CharacteristicInput]
+}
+
+type Dimension implements CommonValue {
+    value: Float!
+    name: String!
+    unitType: String!
+}
+
+input DimensionInput {
+    value: Float!
+    name: String!
+    unitType: String!
+}
+
+type Characteristic implements CommonValue {
+    value: Float!
+    name: String!
+    description: String
+}
+
+input CharacteristicInput {
+    value: Float!
+    name: String!
+    description: String
+}
+
+type Error implements CommonObject {
+    name: String
+    message: String
+    status: Int
+}

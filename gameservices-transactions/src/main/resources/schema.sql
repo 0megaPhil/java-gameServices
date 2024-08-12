@@ -1,18 +1,23 @@
 CREATE TABLE IF NOT EXISTS Transaction
 (
-    UUID         UUID NOT NULL PRIMARY KEY,
-    TYPE         VARCHAR(255),
-    FUNGIBLE_ID  UUID,
-    CHARACTER_ID UUID,
-    DELTA        BIGINT,
-    INITIAL      BIGINT,
-    RESULT       BIGINT,
-    TIMESTAMP    TIMESTAMP
+    uuid        UUID PRIMARY KEY,
+    inventoryId TEXT NOT NULL,
+    currency    TEXT NOT NULL,
+    item        TEXT,
+    flavor      TEXT,
+    prompt      TEXT,
+    created     TIMESTAMP,
+    updated     TIMESTAMP,
+    version     INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS Currency
 (
-    UUID        UUID NOT NULL PRIMARY KEY,
-    NAME        VARCHAR(255),
-    DESCRIPTION VARCHAR(255)
+    uuid    UUID PRIMARY KEY,
+    name    TEXT NOT NULL,
+    flavor  TEXT,
+    prompt  TEXT,
+    created TIMESTAMP,
+    updated TIMESTAMP,
+    version INTEGER
 );

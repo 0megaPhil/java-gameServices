@@ -1,0 +1,77 @@
+gameservices:
+  current:
+    id: ${gameservices.gateway.id}
+    name: ${gameservices.gateway.name}
+    host: ${gameservices.gateway.host}
+    port: ${gameservices.gateway.port}
+server:
+  ssl:
+    key-store-type: PKCS12
+    key-store: classpath:keys/firmys.jks
+    key-alias: firmys
+    enabled: true
+    key-store-password: ${SSL_KEY_PASSWORD:changeit}
+spring:
+  cloud:
+    config:
+      enabled: true
+      password: ${CONFIG_PASSWORD:changeit}
+      uri: https://${CONFIG_HOST:localhost}:${CONFIG_PORT:8888}/
+      username: ${CONFIG_USERNAME:firmys}
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+      routes:
+        - id: ${gameservices.services.INVENTORY.name}
+          uri: https://${gameservices.services.INVENTORY.host}:${gameservices.services.INVENTORY.port}
+          predicates:
+            - Path="/${gameservices.services.INVENTORY.id}/**"
+        - id: ${gameservices.services.CHARACTER.name}
+          uri: https://${gameservices.services.CHARACTER.host}:${gameservices.services.CHARACTER.port}
+          predicates:
+            - Path=/${gameservices.services.CHARACTER.id}/**
+        - id: ${gameservices.services.ITEM.name}
+          uri: https://${gameservices.services.ITEM.host}:${gameservices.services.ITEM.port}
+          predicates:
+            - Path="/${gameservices.services.ITEM.id}/**"
+        - id: ${gameservices.services.CURRENCY.name}
+          uri: https://${gameservices.services.TRANSACTION.host}:${gameservices.services.TRANSACTION.port}
+          predicates:
+            - Path=/${gameservices.services.CURRENCY.id}/**
+        - id: ${gameservices.services.USER.name}
+          uri: https://${gameservices.services.USER.host}:${gameservices.services.USER.port}
+          predicates:
+            - Path="/${gameservices.services.USER.id}/**"
+        - id: ${gameservices.services.WORLD.name}
+          uri: https://${gameservices.services.WORLD.host}:${gameservices.services.WORLD.port}
+          predicates:
+            - Path="/${gameservices.services.WORLD.id}/**"
+        - id: ${gameservices.services.TRANSACTION.name}
+          uri: https://${gameservices.services.TRANSACTION.host}:${gameservices.services.TRANSACTION.port}
+          predicates:
+            - Path="/${gameservices.services.TRANSACTION.id}/**"
+  profiles:
+    active:
+      - native
+      - service
+  config:
+    import: "configserver:"
+  graphql:
+    websocket:
+      path: /graphql
+    cors:
+      allowed-headers: '*'
+      allowed-methods: '*'
+      allowed-origins: '*'
+    graphiql:
+      enabled: true
+      path: /graphiql
+    path: /graphql
+    schema:
+      locations: classpath:META-INF/schema/**
+      introspection:
+        enabled: true
+      inspection:
+        enabled: true

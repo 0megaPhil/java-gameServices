@@ -1,0 +1,27 @@
+extend type Query {
+    createUser(input: UserInput): User
+    updateUser(input: UserInput): User
+    findUser(options: Options): [User]
+    getUser(uuid: UUID): User
+    flavorUser(uuid: UUID): User
+}
+
+type User implements CommonEntity {
+    uuid: UUID!
+    firstName: String!
+    lastName: String!
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input UserInput {
+    uuid: UUID
+    firstName: String!
+    lastName: String!
+    flavor: FlavorInput
+    prompt: String
+}

@@ -1,6 +1,12 @@
 package com.firmys.gameservices.common;
 
 import com.firmys.gameservices.common.error.GameServiceException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +30,22 @@ public class FunctionUtils {
           e.getClass().getSimpleName(),
           e.getMessage());
       return null;
+    }
+  }
+
+  public static <T> List<T> safeList(Collection<T> collection) {
+    try {
+      return Optional.ofNullable(collection).map(List::copyOf).orElseGet(ArrayList::new);
+    } catch (Exception e) {
+      return new ArrayList<>();
+    }
+  }
+
+  public static <T> Set<T> safeSet(Collection<T> collection) {
+    try {
+      return Optional.ofNullable(collection).map(Set::copyOf).orElseGet(HashSet::new);
+    } catch (Exception e) {
+      return new HashSet<>();
     }
   }
 

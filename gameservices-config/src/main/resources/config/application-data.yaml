@@ -4,5 +4,12 @@ spring:
       repositories:
         enabled: true
   r2dbc:
-    url: r2dbc:h2:file:///./${gameservices.current.id}sdb
+    url: r2dbc:h2:file:///./gameservices-${gameservices.current.id}sdb
     name: ${gameservices.current.id}s
+  liquibase:
+    url: jdbc:h2:file:.///gameservices-${gameservices.current.id}sdb
+    enabled: true
+    change-log: classpath:db/changelog/gameservices-${gameservices.current.id}s.yaml
+  jpa:
+    hibernate:
+      ddl-auto: update

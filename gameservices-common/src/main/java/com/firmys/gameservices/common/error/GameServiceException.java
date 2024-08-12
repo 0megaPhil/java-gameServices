@@ -1,6 +1,6 @@
 package com.firmys.gameservices.common.error;
 
-import com.firmys.gameservices.common.CommonEntity;
+import com.firmys.gameservices.generated.models.CommonEntity;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Optional;
@@ -23,6 +23,10 @@ public class GameServiceException extends RuntimeException implements Serializab
 
   public GameServiceException(Exception exception) {
     super(exception);
+  }
+
+  public GameServiceException(String errorStr) {
+    super(errorStr);
   }
 
   public GameServiceException(Exception exception, String... additionalDetails) {

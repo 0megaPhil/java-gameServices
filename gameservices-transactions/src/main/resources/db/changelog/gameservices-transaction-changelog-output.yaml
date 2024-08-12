@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1723316878531-1
+      author: pahnc (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: CONSTRAINT_5
+                  name: UUID
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: NAME
+                  type: VARCHAR(1000000000)
+              - column:
+                  name: FLAVOR
+                  type: VARCHAR(1000000000)
+              - column:
+                  name: PROMPT
+                  type: VARCHAR(1000000000)
+            tableName: CURRENCY
+  - changeSet:
+      id: 1723316878531-2
+      author: pahnc (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: CONSTRAINT_F
+                  name: UUID
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: INVENTORYID
+                  type: VARCHAR(1000000000)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: CURRENCY
+                  type: VARCHAR(1000000000)
+              - column:
+                  name: ITEM
+                  type: VARCHAR(1000000000)
+              - column:
+                  name: FLAVOR
+                  type: VARCHAR(1000000000)
+              - column:
+                  name: PROMPT
+                  type: VARCHAR(1000000000)
+            tableName: TRANSACTION
+

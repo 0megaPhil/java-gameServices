@@ -27,9 +27,10 @@ public class CommonProperties {
     private String port;
     private String username;
     private String password;
+    private String protocol;
 
     public String baseUri() {
-      return "https://" + host + ":" + port;
+      return protocol() + "://" + host + ":" + port;
     }
 
     public String id() {
@@ -38,6 +39,10 @@ public class CommonProperties {
 
     public String endpoint() {
       return baseUri() + "/" + id;
+    }
+
+    public String protocol() {
+      return Optional.ofNullable(protocol).orElse("https");
     }
   }
 }

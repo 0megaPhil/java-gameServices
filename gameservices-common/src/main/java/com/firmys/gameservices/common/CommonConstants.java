@@ -2,7 +2,7 @@ package com.firmys.gameservices.common;
 
 public class CommonConstants {
 
-  public static final String VERSION = "0.1.0-SNAPSHOT";
+  public static final String VERSION = "0.0.2-SNAPSHOT";
   public static final String GAME_SERVICES_GATEWAY = "GameServicesGateway";
   public static final String GATEWAY = "gateway";
   public static final String ITEM = "item";
@@ -14,6 +14,32 @@ public class CommonConstants {
   public static final String CHARACTER = "character";
   public static final String CHARACTER_SERVICE = "CharacterService";
   public static final String CHARACTER_PATH = "/" + CHARACTER;
+
+  public static final String SKILL = "skill";
+  public static final String SKILL_SERVICE = "SkillService";
+  public static final String SKILL_PATH = "/" + SKILL;
+
+  public static final String STAT = "stat";
+  public static final String STAT_SERVICE = "StatService";
+  public static final String STAT_PATH = "/" + STAT;
+
+  public static final String RACE = "race";
+  public static final String RACE_SERVICE = "RaceService";
+  public static final String RACE_PATH = "/" + RACE;
+
+  public static final String ATTRIBUTE = "attribute";
+  public static final String ATTRIBUTE_SERVICE = "AttributeService";
+  public static final String ATTRIBUTE_PATH = "/" + ATTRIBUTE;
+
+  public static final String EFFECT = "effect";
+  public static final String EFFECT_SERVICE = "EffectService";
+  public static final String EFFECT_PATH = "/" + EFFECT;
+
+  public static final String PROFESSION = "profession";
+  public static final String PROFESSION_SERVICE = "ProfessionService";
+  public static final String PROFESSION_PATH = "/" + PROFESSION;
+
+  public static final String FLAVOR = "text";
 
   public static final String INVENTORY = "inventory";
   public static final String INVENTORY_SERVICE = "InventoryService";
@@ -50,4 +76,9 @@ public class CommonConstants {
 
   public static final String PROFILE_SERVICE = "service";
   public static final String PROFILE_GATEWAY = "gateway";
+  public static final String PROFILE_NOT_GATEWAY = "!gateway";
+  public static final String PROFILE_TEST = "test";
+  public static final String PROFILE_NOT_TEST = "!test";
+
+  public static final String PACKAGE_GENERATED = "com.firmys.gameservices.generated";
 }
