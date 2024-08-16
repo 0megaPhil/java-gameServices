@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-  SpringSecurityConfiguration.class,
   ServiceClient.class,
+  WebClientConfig.class,
   ConversionConfig.class,
-  WebClientConfig.class
+  SpringSecurityConfiguration.class,
 })
 @ComponentScan(
     basePackages = {PACKAGE_GENERATED},

@@ -1,23 +1,23 @@
 CREATE TABLE IF NOT EXISTS Inventory
 (
-    uuid       UUID PRIMARY KEY,
-    items      TEXT ARRAY,
-    currencies TEXT ARRAY,
+    uuid       UUID PRIMARY KEY NOT NULL,
+    items      TEXT,
+    currencies TEXT,
     flavor     TEXT,
     prompt     TEXT,
-    created    TIMESTAMP,
-    updated    TIMESTAMP,
+    created    DATETIME,
+    updated    DATETIME,
     version    INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS Item
 (
-    uuid       UUID PRIMARY KEY,
-    name       TEXT NOT NULL,
-    dimensions TEXT ARRAY,
+    uuid       UUID PRIMARY KEY NOT NULL,
+    name       TEXT UNIQUE      NOT NULL,
+    dimensions TEXT,
     flavor     TEXT,
     prompt     TEXT,
-    created    TIMESTAMP,
-    updated    TIMESTAMP,
+    created    DATETIME,
+    updated    DATETIME,
     version    INTEGER
 );

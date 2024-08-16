@@ -1,4 +1,3 @@
-scalar UUID
 scalar DateTime
 
 type Query {
@@ -8,7 +7,7 @@ type Query {
 # CommonEntity inheritors are static and used to generated data model
 # This is to be used for more complex domain model exposures
 interface CommonEntity {
-    uuid: UUID
+    id: String
     prompt: String
     flavor: Flavor
     created: DateTime
@@ -37,7 +36,7 @@ input Filter {
 }
 
 type Flavor implements CommonObject {
-    targetId: UUID!
+    targetId: String!
     name: String!
     summary: String!
     objectType: String!
@@ -45,7 +44,7 @@ type Flavor implements CommonObject {
 }
 
 input FlavorInput {
-    targetId: UUID
+    targetId: String
     name: String
     summary: String
     objectType: String
@@ -79,5 +78,22 @@ input CharacteristicInput {
 type Error implements CommonObject {
     name: String
     message: String
-    status: Int
+    errorCode: Int
+    data: String
+}
+
+type ErrorResponse implements CommonEntity {
+    id: String
+    queryId: String
+    method: String
+    headers: String
+    path: String
+    uri: String
+    params: String
+    prompt: String
+    flavor: Flavor
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
 }

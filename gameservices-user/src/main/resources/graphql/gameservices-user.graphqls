@@ -2,14 +2,16 @@ extend type Query {
     createUser(input: UserInput): User
     updateUser(input: UserInput): User
     findUser(options: Options): [User]
-    getUser(uuid: UUID): User
-    flavorUser(uuid: UUID): User
+    getUser(id: String): User
+    flavorUser(id: String): User
+    deleteUser(id: String): Boolean
 }
 
 type User implements CommonEntity {
-    uuid: UUID!
+    id: String!
     firstName: String!
     lastName: String!
+    email: String!
     prompt: String
     flavor: Flavor
     created: DateTime
@@ -19,9 +21,10 @@ type User implements CommonEntity {
 }
 
 input UserInput {
-    uuid: UUID
+    id: String
     firstName: String!
     lastName: String!
+    email: String!
     flavor: FlavorInput
     prompt: String
 }

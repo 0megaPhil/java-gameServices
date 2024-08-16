@@ -55,6 +55,7 @@ public class WebClientConfig {
             .featuresToDisable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
             .featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .featuresToDisable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+            .featuresToEnable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
             .modules(mod -> mod.addAll(modules));
   }
 

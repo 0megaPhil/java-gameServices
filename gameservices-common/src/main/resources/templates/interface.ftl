@@ -9,8 +9,11 @@
         </#list>
     </#list>
 </#if>
-import java.util.UUID;
+import java.time.Instant;
+import java.sql.Timestamp;
 import java.time.OffsetDateTime;
+import org.bson.types.ObjectId;
+
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 <#if javaDoc?has_content>
     /**
@@ -59,14 +62,14 @@ public interface ${className} <#if className == "CommonEntity" || className == "
     }
 </#if>
 <#if className == "CommonEntity">
-    UUID uuid();
+    ObjectId id();
     Error error();
     String prompt();
     Flavor flavor();
     Integer version();
     OffsetDateTime created();
     OffsetDateTime updated();
-    CommonEntity withUuid(UUID uuid);
+    CommonEntity withId(ObjectId id);
     CommonEntity withError(Error error);
     CommonEntity withPrompt(String prompt);
     CommonEntity withFlavor(Flavor flavor);

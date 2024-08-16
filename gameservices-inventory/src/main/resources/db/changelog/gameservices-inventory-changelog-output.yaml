@@ -10,13 +10,13 @@ databaseChangeLog:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: CONSTRAINT_2
-                  name: UUID
-                  type: UUID
+                  name: String
+                  type: String
               - column:
                   constraints:
                     nullable: false
                   name: CHARACTERID
-                  type: UUID
+                  type: String
               - column:
                   name: FLAVOR
                   type: VARCHAR(1000000000)
@@ -35,8 +35,8 @@ databaseChangeLog:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: CONSTRAINT_22
-                  name: UUID
-                  type: UUID
+                  name: String
+                  type: String
               - column:
                   constraints:
                     nullable: false

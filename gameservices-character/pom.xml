@@ -75,6 +75,8 @@
         <cloud.service-script.path>${project.basedir}/src/main/resources/${cloud.service-script.name}
         </cloud.service-script.path>
         <jar.file-name>${project.artifactId}.jar</jar.file-name>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <build>
@@ -94,6 +96,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.liquibase</groupId>

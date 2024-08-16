@@ -1,6 +1,6 @@
 package com.firmys.gameservices.transaction.controllers;
 
-import static com.firmys.gameservices.common.CommonConstants.*;
+import static com.firmys.gameservices.common.CommonConstants.CURRENCY_PATH;
 
 import com.firmys.gameservices.common.CommonController;
 import com.firmys.gameservices.generated.models.Currency;

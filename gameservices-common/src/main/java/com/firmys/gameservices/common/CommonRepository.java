@@ -1,7 +1,8 @@
 package com.firmys.gameservices.common;
 
 import com.firmys.gameservices.generated.models.CommonEntity;
-import java.util.UUID;
-import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
-public interface CommonRepository<T extends CommonEntity> extends R2dbcRepository<T, UUID> {}
+public interface CommonRepository<T extends CommonEntity>
+    extends ReactiveMongoRepository<T, ObjectId> {}

@@ -1,14 +1,17 @@
 package com.firmys.gameservices.common;
 
-import com.firmys.gameservices.common.error.GameServiceException;
+import com.firmys.gameservices.common.error.ServiceException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 public class FunctionUtils {
@@ -43,17 +46,24 @@ public class FunctionUtils {
 
   public static <T> Set<T> safeSet(Collection<T> collection) {
     try {
-      return Optional.ofNullable(collection).map(Set::copyOf).orElseGet(HashSet::new);
+      return Optional.ofNullable(collection)
+          .map(set -> set.stream().filter(Objects::nonNull).collect(Collectors.toSet()))
+          .orElseGet(HashSet::new);
     } catch (Exception e) {
       return new HashSet<>();
     }
+  }
+
+  public static <T> Flux<T> safeFlux(Flux<T> flux) {
+    return Optional.ofNullable(flux).orElseGet(Flux::empty);
   }
 
   public static <T> T orThrow(Callable<T> callable) {
     try {
       return callable.call();
     } catch (Exception e) {
-      throw new GameServiceException(e);
+      log.error("{}", e.getClass().getSimpleName(), e);
+      throw new ServiceException(e);
     }
   }
 }

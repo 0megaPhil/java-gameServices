@@ -11,6 +11,11 @@
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,12 +56,14 @@
                 <artifactId>maven-dependency-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
-
-    <name>user</name>
 
 </project>

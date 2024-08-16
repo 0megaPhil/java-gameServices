@@ -2,18 +2,20 @@ extend type Query {
     createInventory(input: InventoryInput): Inventory
     updateInventory(input: InventoryInput): Inventory
     findInventory(options: Options): [Inventory]
-    getInventory(uuid: UUID): Inventory
-    flavorInventory(uuid: UUID): Inventory
+    getInventory(id: String): Inventory
+    flavorInventory(id: String): Inventory
+    deleteInventory(id: String): Boolean
 
     createItem(input: ItemInput): Item
     updateItem(input: ItemInput): Item
     findItem(options: Options): [Item]
-    getItem(uuid: UUID): Item
-    flavorItem(uuid: UUID): Item
+    getItem(id: String): Item
+    flavorItem(id: String): Item
+    deleteItem(id: String): Boolean
 }
 
 input InventoryInput {
-    uuid: UUID
+    id: String
     items: [InventoryItemInput]
     currencies: [InventoryCurrencyInput]
     flavor: FlavorInput
@@ -21,7 +23,7 @@ input InventoryInput {
 }
 
 type Inventory implements CommonEntity {
-    uuid: UUID!
+    id: String!
     items: [InventoryItem]
     currencies: [InventoryCurrency]
     prompt: String
@@ -43,7 +45,7 @@ input InventoryCurrencyInput {
 }
 
 input ItemInput {
-    uuid: UUID
+    id: String
     name: String!
     flavor: FlavorInput
     prompt: String
@@ -61,7 +63,7 @@ type InventoryCurrency implements CommonValue {
 }
 
 type Item implements CommonEntity {
-    uuid: UUID!
+    id: String!
     name: String!
     dimensions: [Dimension]
     prompt: String

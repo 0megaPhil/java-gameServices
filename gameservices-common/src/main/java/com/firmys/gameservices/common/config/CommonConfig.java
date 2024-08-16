@@ -2,35 +2,40 @@ package com.firmys.gameservices.common.config;
 
 import static com.firmys.gameservices.common.CommonConstants.PROFILE_NOT_TEST;
 import static com.firmys.gameservices.common.CommonConstants.PROFILE_SERVICE;
+import static java.time.ZoneOffset.UTC;
 
-import com.firmys.gameservices.common.*;
-import com.firmys.gameservices.common.error.GameDataExceptionController;
+import com.firmys.gameservices.common.CommonProperties;
+import com.firmys.gameservices.common.ServiceClient;
+import com.firmys.gameservices.common.error.ServiceExceptionController;
 import com.firmys.gameservices.generated.models.CommonEntity;
 import io.r2dbc.spi.ConnectionFactory;
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
-import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.r2dbc.mapping.event.BeforeConvertCallback;
+import org.springframework.data.mongodb.core.mapping.event.BeforeConvertCallback;
 import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
 import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Configuration
 @Import({
-  GameDataExceptionController.class,
+  ServiceExceptionController.class,
   ConversionConfig.class,
   WebClientConfig.class,
   ServiceClient.class,
+  DataConfig.class
 })
 @EnableConfigurationProperties(CommonProperties.class)
 public class CommonConfig {
 
-  @Bean
+  //  @Bean
   @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST})
   public ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
     ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
@@ -69,15 +74,35 @@ public class CommonConfig {
   @Bean
   @ConditionalOnMissingBean
   @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST})
-  public BeforeConvertCallback<CommonEntity> beforeConvertCallback() {
+  public org.springframework.data.r2dbc.mapping.event.BeforeConvertCallback<CommonEntity>
+      beforeConvertCallbackR2dbc() {
     return (d, table) -> {
-      if (d.uuid() == null) {
+      if (d.id() == null) {
         d =
-            d.withUuid(UUID.randomUUID())
-                .withCreated(Optional.ofNullable(d.created()).orElse(OffsetDateTime.now()))
-                .withUpdated(OffsetDateTime.now());
+            d.withId(ObjectId.get())
+                .withCreated(
+                    Optional.ofNullable(d.created())
+                        .orElse(ZonedDateTime.now(UTC).toOffsetDateTime()))
+                .withUpdated(ZonedDateTime.now(UTC).toOffsetDateTime());
       }
       return Mono.just(d);
+    };
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST})
+  public BeforeConvertCallback<CommonEntity> beforeConvertCallback() {
+    return (d, table) -> {
+      if (d.id() == null) {
+        d =
+            d.withId(ObjectId.get())
+                .withCreated(
+                    Optional.ofNullable(d.created())
+                        .orElse(ZonedDateTime.now(UTC).toOffsetDateTime()))
+                .withUpdated(ZonedDateTime.now(UTC).toOffsetDateTime());
+      }
+      return d;
     };
   }
 }
