@@ -8,7 +8,7 @@ extend type Query {
 }
 
 type User implements CommonEntity {
-    id: String!
+    id: String
     firstName: String!
     lastName: String!
     email: String!

@@ -76,7 +76,7 @@ public class CommonConstants {
   public static final String CONSUME = "consume";
   public static final String ADD_PATH = "/" + ADD;
   public static final String CONSUME_PATH = "/" + CONSUME;
-
+  public static final String PROFILE_POSTGRES = "profile";
   public static final String PROFILE_SERVICE = "service";
   public static final String PROFILE_DATA = "data";
   public static final String PROFILE_GATEWAY = "gateway";

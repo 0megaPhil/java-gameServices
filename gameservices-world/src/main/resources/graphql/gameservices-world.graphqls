@@ -15,7 +15,7 @@ extend type Query {
 }
 
 type World implements CommonEntity {
-    id: String!
+    id: String
     name: String!
     type: String!
     terrains: [Terrain]
@@ -31,7 +31,7 @@ type World implements CommonEntity {
 }
 
 input WorldInput {
-    id: String!
+    id: String
     name: String!
     type: String!
     terrains: [TerrainInput]
@@ -53,7 +53,7 @@ input TerrainEffectInput {
 }
 
 type Terrain implements CommonEntity {
-    id: String!
+    id: String
     name: String!
     type: String!
     effects: [TerrainEffect]
@@ -66,7 +66,7 @@ type Terrain implements CommonEntity {
 }
 
 input TerrainInput {
-    id: String!
+    id: String
     name: String!
     type: String!
     effects: [TerrainEffectInput]

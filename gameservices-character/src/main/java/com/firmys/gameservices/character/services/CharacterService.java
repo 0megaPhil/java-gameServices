@@ -3,10 +3,10 @@ package com.firmys.gameservices.character.services;
 import static com.firmys.gameservices.common.FunctionUtils.safeSet;
 
 import com.firmys.gameservices.character.data.CharacterRepository;
-import com.firmys.gameservices.common.CommonService;
-import com.firmys.gameservices.common.ServiceClient;
 import com.firmys.gameservices.generated.models.Character;
 import com.firmys.gameservices.generated.models.Inventory;
+import com.firmys.gameservices.service.GameService;
+import com.firmys.gameservices.service.GameServiceClient;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,8 +23,8 @@ import reactor.core.publisher.Mono;
 @Service
 @Builder(toBuilder = true)
 @Accessors(chain = true, fluent = true)
-public class CharacterService extends CommonService<Character> {
-  private final ServiceClient client;
+public class CharacterService extends GameService<Character> {
+  private final GameServiceClient client;
   private final CharacterRepository repository;
 
   private final StatService statService;
@@ -62,7 +62,9 @@ public class CharacterService extends CommonService<Character> {
                     return statService.find(value.stat().id()).map(value::withStat);
                   }
                   return statService
-                      .findOneLike(value.stat())
+                      .findAllLike(value.stat())
+                      .filter(obj -> obj.name().equals(value.stat().name()))
+                      .singleOrEmpty()
                       .map(value::withStat)
                       .switchIfEmpty(statService.create(value.stat()).map(value::withStat));
                 })
@@ -81,7 +83,9 @@ public class CharacterService extends CommonService<Character> {
                     return skillService.find(value.skill().id()).map(value::withSkill);
                   }
                   return skillService
-                      .findOneLike(value.skill())
+                      .findAllLike(value.skill())
+                      .filter(obj -> obj.name().equals(value.skill().name()))
+                      .singleOrEmpty()
                       .map(value::withSkill)
                       .switchIfEmpty(skillService.create(value.skill()).map(value::withSkill));
                 })
@@ -100,7 +104,9 @@ public class CharacterService extends CommonService<Character> {
                     return attributeService.find(value.attribute().id()).map(value::withAttribute);
                   }
                   return attributeService
-                      .findOneLike(value.attribute())
+                      .findAllLike(value.attribute())
+                      .filter(obj -> obj.name().equals(value.attribute().name()))
+                      .singleOrEmpty()
                       .map(value::withAttribute)
                       .switchIfEmpty(
                           attributeService.create(value.attribute()).map(value::withAttribute));
@@ -120,7 +126,9 @@ public class CharacterService extends CommonService<Character> {
                     return effectService.find(value.effect().id()).map(value::withEffect);
                   }
                   return effectService
-                      .findOneLike(value.effect())
+                      .findAllLike(value.effect())
+                      .filter(obj -> obj.name().equals(value.effect().name()))
+                      .singleOrEmpty()
                       .map(value::withEffect)
                       .switchIfEmpty(effectService.create(value.effect()).map(value::withEffect));
                 })
@@ -134,7 +142,9 @@ public class CharacterService extends CommonService<Character> {
         return raceService.find(object.race().id()).map(object::withRace);
       }
       return raceService
-          .findOneLike(object.race())
+          .findAllLike(object.race())
+          .filter(obj -> obj.name().equals(object.race().name()))
+          .singleOrEmpty()
           .map(object::withRace)
           .switchIfEmpty(raceService.create(object.race()).map(object::withRace));
     };

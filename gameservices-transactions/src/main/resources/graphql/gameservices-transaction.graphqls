@@ -24,7 +24,7 @@ input TransactionInput {
 }
 
 type Transaction implements CommonEntity {
-    id: String!
+    id: String
     inventoryId: String!
     currency: String
     item: String
@@ -44,7 +44,7 @@ input CurrencyInput {
 }
 
 type Currency implements CommonEntity {
-    id: String!
+    id: String
     name: String!
     prompt: String
     flavor: Flavor

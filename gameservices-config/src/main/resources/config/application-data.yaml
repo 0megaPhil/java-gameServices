@@ -1,8 +1,7 @@
 spring:
+  datasource:
+    driver-class-name: liquibase.ext.mongodb.database.MongoClientDriver
   data:
-    r2dbc:
-      repositories:
-        enabled: true
     mongodb:
       database: gameservices-${gameservices.current.id}sdb
       auto-index-creation: true

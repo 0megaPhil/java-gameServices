@@ -23,7 +23,7 @@ input InventoryInput {
 }
 
 type Inventory implements CommonEntity {
-    id: String!
+    id: String
     items: [InventoryItem]
     currencies: [InventoryCurrency]
     prompt: String
@@ -63,7 +63,7 @@ type InventoryCurrency implements CommonValue {
 }
 
 type Item implements CommonEntity {
-    id: String!
+    id: String
     name: String!
     dimensions: [Dimension]
     prompt: String

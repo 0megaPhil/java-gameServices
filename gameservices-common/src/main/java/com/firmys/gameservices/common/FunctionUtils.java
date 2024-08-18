@@ -1,6 +1,6 @@
 package com.firmys.gameservices.common;
 
-import com.firmys.gameservices.common.error.ServiceException;
+import com.firmys.gameservices.common.error.CommonException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -63,7 +63,7 @@ public class FunctionUtils {
       return callable.call();
     } catch (Exception e) {
       log.error("{}", e.getClass().getSimpleName(), e);
-      throw new ServiceException(e);
+      throw new CommonException(e);
     }
   }
 }

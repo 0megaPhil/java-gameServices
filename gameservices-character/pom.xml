@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
-            <artifactId>gameservices-common</artifactId>
+            <artifactId>gameservices-service</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

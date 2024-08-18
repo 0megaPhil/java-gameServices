@@ -4,11 +4,9 @@ import static com.firmys.gameservices.common.FunctionUtils.orVoid;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.firmys.gameservices.generated.models.Options;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.text.StringEscapeUtils;
@@ -26,6 +24,12 @@ public class JsonUtils {
   @SneakyThrows
   public <T> String toJson(T object) {
     return mapper.writeValueAsString(object);
+  }
+
+  @Nullable
+  @SneakyThrows
+  public <T> String toJsonOrVoid(T object) {
+    return orVoid(() -> mapper.writeValueAsString(object));
   }
 
   @SneakyThrows
@@ -58,17 +62,6 @@ public class JsonUtils {
   @SneakyThrows
   public <T> T fromJson(String jsonStr, TypeReference<T> objectType) {
     return mapper.readValue(jsonStr, objectType);
-  }
-
-  public Options options(@Nullable Map<String, String> queryParams) {
-    queryParams = Optional.ofNullable(queryParams).orElse(Map.of());
-    return Options.builder()
-        .sortBy(Optional.ofNullable(queryParams.get("sort")).orElse("id"))
-        .limit(
-            Optional.ofNullable(queryParams.get("limit"))
-                .map(lim -> orVoid(() -> Integer.valueOf(lim)))
-                .orElse(1000))
-        .build();
   }
 
   @PostConstruct

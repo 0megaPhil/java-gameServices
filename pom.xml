@@ -50,6 +50,16 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.firmys.gameservices</groupId>
+                <artifactId>gameservices-data</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.firmys.gameservices</groupId>
+                <artifactId>gameservices-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>assertj-core</artifactId>
                 <groupId>org.assertj</groupId>
                 <version>${assertj.version}</version>
@@ -60,19 +70,19 @@
                 <version>${java.faker.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.r2dbc</groupId>
-                <artifactId>r2dbc-postgresql</artifactId>
-                <version>0.8.13.RELEASE</version>
-            </dependency>
-            <dependency>
                 <groupId>org.mongodb</groupId>
                 <artifactId>mongodb-driver-reactivestreams</artifactId>
-                <version>5.1.3</version>
+                <version>${mongodb-driver-reactive.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.liquibase.ext</groupId>
+                <artifactId>liquibase-mongodb</artifactId>
+                <version>${liquibase-mongodb.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.flapdoodle.embed</groupId>
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
-                <version>4.16.2</version>
+                <version>${mongodb-embed.version}</version>
             </dependency>
             <dependency>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -111,6 +121,16 @@
                 <artifactId>unit-api</artifactId>
                 <version>${javax-measure.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.mongock</groupId>
+                <artifactId>mongock-springboot</artifactId>
+                <version>${mongock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mongock</groupId>
+                <artifactId>mongodb-springdata-v3-driver</artifactId>
+                <version>${mongock.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -125,6 +145,8 @@
         <module>gameservices-user</module>
         <module>gameservices-transactions</module>
         <module>gameservices-config</module>
+        <module>gameservices-data</module>
+        <module>gameservices-service</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -151,12 +173,23 @@
         <uom-version>2.1</uom-version>
         <graphql-extended-scalers.version>22.0</graphql-extended-scalers.version>
         <graphql-codegen.version>5.10.0</graphql-codegen.version>
+        <mongock.version>5.4.4</mongock.version>
         <unit-ri.version>1.0.3</unit-ri.version>
         <swagger-annotations.version>2.2.20</swagger-annotations.version>
         <netflix-graphql-dgs.version>6.2.1</netflix-graphql-dgs.version>
         <graphql-codegen-plugin.version>5.10.0</graphql-codegen-plugin.version>
         <dgs-codegen-plugin.version>1.3.0</dgs-codegen-plugin.version>
         <openapi-generator-plugin.version>7.7.0</openapi-generator-plugin.version>
+        <mongodb-embed.version>4.16.2</mongodb-embed.version>
+        <r2dbc-postgres.version>0.8.13.RELEASE</r2dbc-postgres.version>
+        <mongodb-driver-reactive.version>5.1.3</mongodb-driver-reactive.version>
+        <liquibase-mongodb.version>4.29.1</liquibase-mongodb.version>
+        <mongodb-driver-sync.version>5.1.3</mongodb-driver-sync.version>
+        <spring.data.mongodb.database>gameservices-${project.artifactId}</spring.data.mongodb.database>
+        <spring.data.mongodb.host>localhost</spring.data.mongodb.host>
+        <spring.data.mongodb.port>27017</spring.data.mongodb.port>
+        <spring.data.mongodb.username>root</spring.data.mongodb.username>
+        <spring.data.mongodb.password>pw</spring.data.mongodb.password>
     </properties>
 
     <version>0.0.2-SNAPSHOT</version>
@@ -217,13 +250,22 @@
                             <configuration>
                                 <artifactItems>
                                     <artifactItem>
-                                        <artifactId>gameservices-common</artifactId>
+                                        <artifactId>gameservices-service</artifactId>
                                         <groupId>com.firmys.gameservices</groupId>
                                         <version>${project.version}</version>
                                         <type>jar</type>
                                         <overWrite>true</overWrite>
                                         <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                                        <includes>keys/**, templates/**</includes>
+                                        <includes>keys/**</includes>
+                                    </artifactItem>
+                                    <artifactItem>
+                                        <artifactId>gameservices-data</artifactId>
+                                        <groupId>com.firmys.gameservices</groupId>
+                                        <version>${project.version}</version>
+                                        <type>jar</type>
+                                        <overWrite>true</overWrite>
+                                        <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                        <includes>templates/**</includes>
                                     </artifactItem>
                                 </artifactItems>
                             </configuration>
@@ -353,35 +395,14 @@
                     <groupId>org.liquibase</groupId>
                     <artifactId>liquibase-maven-plugin</artifactId>
                     <version>${liquibase.version}</version>
-                    <executions>
-                        <execution>
-                            <id>liquibase-update</id>
-                            <phase>install</phase>
-                            <goals>
-                                <goal>update</goal>
-                            </goals>
-                            <configuration>
-                                <url>jdbc:h2:file:./${project.artifactId}sdb</url>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>liquibase-sql</id>
-                            <phase>install</phase>
-                            <goals>
-                                <goal>updateSQL</goal>
-                            </goals>
-                            <configuration>
-                                <url>jdbc:h2:file:./${project.artifactId}sdb</url>
-                                <outputDefaultSchema>true</outputDefaultSchema>
-                            </configuration>
-                        </execution>
-                    </executions>
                     <configuration>
-                        <driver>org.h2.Driver</driver>
+                        <driver>liquibase.ext.mongodb.database.MongoClientDriver</driver>
                         <username/>
                         <password/>
                         <changeSetAuthor>MAVEN</changeSetAuthor>
-                        <url>jdbc:h2:file:./${project.artifactId}sdb</url>
+                        <url>
+                            mongodb://${spring.data.mongodb.username}:mongo${spring.data.mongodb.password}@${spring.data.mongodb.host}:${spring.data.mongodb.port}/${spring.data.mongodb.database}
+                        </url>
                         <outputChangeLogFile>
                             ${project.basedir}/src/main/resources/db/changelog/${project.artifactId}-changelog-output.yaml
                         </outputChangeLogFile>
@@ -390,9 +411,14 @@
                     </configuration>
                     <dependencies>
                         <dependency>
-                            <groupId>com.h2database</groupId>
-                            <artifactId>h2</artifactId>
-                            <version>${h2.version}</version>
+                            <groupId>org.liquibase.ext</groupId>
+                            <artifactId>liquibase-mongodb</artifactId>
+                            <version>${liquibase-mongodb.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.mongodb</groupId>
+                            <artifactId>mongodb-driver-sync</artifactId>
+                            <version>${mongodb-driver-sync.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -407,37 +433,4 @@
             </resource>
         </resources>
     </build>
-
-    <profiles>
-        <profile>
-            <id>initialize</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.liquibase</groupId>
-                            <artifactId>liquibase-maven-plugin</artifactId>
-                            <version>${liquibase.version}</version>
-                            <executions>
-                                <execution>
-                                    <id>liquibase</id>
-                                    <phase>initialize</phase>
-                                    <goals>
-                                        <goal>generateChangeLog</goal>
-                                    </goals>
-                                    <configuration>
-                                        <url>jdbc:h2:file:./${project.artifactId}sdb</url>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                            <configuration>
-                                <changeLogFile>src/main/resources/db/changelog/${project.artifactId}s.yaml
-                                </changeLogFile>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-    </profiles>
 </project>
