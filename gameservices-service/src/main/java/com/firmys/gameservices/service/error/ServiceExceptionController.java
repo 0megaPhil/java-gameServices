@@ -1,6 +1,6 @@
 package com.firmys.gameservices.service.error;
 
-import static com.firmys.gameservices.common.JsonUtils.JSON;
+import static com.firmys.gameservices.service.error.ErrorUtils.webError;
 
 import com.firmys.gameservices.generated.models.ErrorResponse;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -24,16 +24,6 @@ public class ServiceExceptionController {
    */
   @ExceptionHandler(Exception.class)
   public Mono<ErrorResponse> generalException(Exception exception, ServerHttpRequest request) {
-    ServiceException serviceException = new ServiceException(exception);
-    return Mono.just(
-        ErrorResponse.builder()
-            .queryId(request.getId())
-            .method(request.getMethod().name())
-            .headers(JSON.toJson(request.getHeaders()))
-            .path(request.getPath().toString())
-            .uri(request.getURI().getPath())
-            .params(JSON.toJson(request.getQueryParams()))
-            .error(serviceException.getServiceError())
-            .build());
+    return Mono.just(ErrorResponse.builder().error(webError().apply(exception, request)).build());
   }
 }

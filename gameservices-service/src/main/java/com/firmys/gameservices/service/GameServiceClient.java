@@ -4,10 +4,9 @@ import com.firmys.gameservices.common.CommonConstants;
 import com.firmys.gameservices.common.JsonUtils;
 import com.firmys.gameservices.common.Services;
 import com.firmys.gameservices.generated.models.CommonEntity;
-import com.firmys.gameservices.generated.models.Error;
 import com.firmys.gameservices.generated.models.Flavor;
 import com.firmys.gameservices.generated.models.Options;
-import com.firmys.gameservices.service.error.ServiceException;
+import com.firmys.gameservices.service.error.ErrorUtils;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.Builder;
 import org.bson.types.ObjectId;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -52,14 +50,15 @@ public class GameServiceClient {
             uriBuilder ->
                 uriBuilder.queryParam(CommonConstants.LIMIT, validOptions(options).limit()).build())
         .retrieve()
-        .onStatus(
-            HttpStatusCode::isError,
-            response -> {
-              return response
-                  .bodyToMono(String.class)
-                  .flatMap(
-                      str -> Mono.error(new ServiceException(Error.builder().data(str).build())));
-            })
+        //        .onStatus(
+        //            HttpStatusCode::isError,
+        //            response -> {
+        //              return response
+        //                  .bodyToMono(String.class)
+        //                  .flatMap(
+        //                      str -> Mono.error(new
+        // ServiceException(Error.builder().data(str).build())));
+        //            })
         .bodyToFlux(entityClass);
   }
 
@@ -120,18 +119,13 @@ public class GameServiceClient {
             .post()
             .body(BodyInserters.fromValue(object))
             .retrieve()
-            .onStatus(
-                HttpStatusCode::isError,
-                response -> {
-                  return response
-                      .bodyToMono(String.class)
-                      .flatMap(
-                          str ->
-                              Mono.error(
-                                  new ServiceException(
-                                      Error.builder().data(object.toJson()).build())));
-                })
-            .bodyToMono(object.getClass());
+            .bodyToMono(object.getClass())
+            .flatMap(
+                res ->
+                    Optional.of(res)
+                        .filter(r -> r.error() == null)
+                        .map(Mono::just)
+                        .orElseGet(() -> Mono.error(ErrorUtils.toException(res.error()))));
   }
 
   private Options validOptions(Options options) {

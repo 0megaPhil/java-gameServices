@@ -137,17 +137,13 @@ public class CharacterService extends GameService<Character> {
   }
 
   private Function<Character, Mono<Character>> resolveRace() {
-    return object -> {
-      if (object.race().id() != null) {
-        return raceService.find(object.race().id()).map(object::withRace);
-      }
-      return raceService
-          .findAllLike(object.race())
-          .filter(obj -> obj.name().equals(object.race().name()))
-          .singleOrEmpty()
-          .map(object::withRace)
-          .switchIfEmpty(raceService.create(object.race()).map(object::withRace));
-    };
+    return object ->
+        raceService
+            .findAllLike(object.race())
+            .filter(obj -> obj.name().equals(object.race().name()))
+            .singleOrEmpty()
+            .map(object::withRace)
+            .switchIfEmpty(raceService.create(object.race()).map(object::withRace));
   }
 
   private Function<Character, Mono<Character>> resolveInventory() {

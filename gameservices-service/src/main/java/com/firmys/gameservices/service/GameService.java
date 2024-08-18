@@ -1,10 +1,16 @@
 package com.firmys.gameservices.service;
 
 import static com.firmys.gameservices.common.FunctionUtils.orVoid;
+import static com.firmys.gameservices.generated.models.Operations.CREATE_ONE;
+import static com.firmys.gameservices.generated.models.Operations.DELETE_BY_ID;
+import static com.firmys.gameservices.generated.models.Operations.FIND_ALL_LIKE;
+import static com.firmys.gameservices.generated.models.Operations.FIND_BY_ID;
+import static com.firmys.gameservices.generated.models.Operations.FIND_ONE_LIKE;
+import static com.firmys.gameservices.service.error.ErrorUtils.mongoDbError;
+import static com.firmys.gameservices.service.error.ErrorUtils.toException;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
 
 import com.firmys.gameservices.common.FunctionUtils;
-import com.firmys.gameservices.common.JsonUtils;
 import com.firmys.gameservices.data.CommonRepository;
 import com.firmys.gameservices.generated.models.CommonEntity;
 import com.firmys.gameservices.generated.models.Error;
@@ -55,13 +61,12 @@ public abstract class GameService<E extends CommonEntity> {
   }
 
   private Flux<E> findByOptionsChain(Options options) {
-    String operation = "FIND_BY_OPTIONS";
     return repository()
         .findAll(Sort.by(options.sortBy()))
         .take(options.limit())
-        .doOnNext(o -> log.info("{} {}", operation, o))
+        .doOnNext(o -> log.info("{} {}", FIND_ONE_LIKE.name(), o))
         .doOnError(th -> log.error(th.getMessage(), th))
-        .onErrorMap(th -> exception(th, orVoid(() -> JsonUtils.JSON.fromJson("{}", entityType()))))
+        .onErrorMap(th -> toException(mongoDbError(entityType(), options).apply(th, FIND_ONE_LIKE)))
         .map(obj -> obj);
   }
 
@@ -77,8 +82,8 @@ public abstract class GameService<E extends CommonEntity> {
     return repository()
         .findAll(nameExample(exampleObj))
         .doOnNext(obj -> log.info("Found multiple including {}", exampleObj.toJson()))
-        .doOnError(th -> log.error(new ServiceException(th).getServiceError().toJson()))
-        .onErrorMap(th -> exception(th, exampleObj));
+        .onErrorMap(
+            th -> toException(mongoDbError(entityType(), exampleObj).apply(th, FIND_ALL_LIKE)));
   }
 
   public Mono<E> ensureValues(Mono<E> character) {
@@ -111,38 +116,30 @@ public abstract class GameService<E extends CommonEntity> {
             .build());
   }
 
-  private ServiceException exception(Throwable throwable, Object data) {
-    return new ServiceException(
-        Error.builder()
-            .title(throwable.getClass().getSimpleName())
-            .message(JsonUtils.JSON.toJson(throwable))
-            .objectType(orVoid(() -> data.getClass().getTypeName()))
-            .data(orVoid(() -> String.valueOf(data)))
-            .errorCode(500)
-            .build());
-  }
-
   private Function<Mono<E>, Mono<E>> saveOneChain(
       String operation, Predicate<E> predicate, String message) {
     return mono ->
         mono.handle(errorConsumer(predicate, operation, message, 400))
             .flatMap(
                 obj ->
-                    repository().save(prompt().apply((E) obj)).onErrorMap(th -> exception(th, obj)))
+                    repository()
+                        .save(prompt().apply((E) obj))
+                        .onErrorMap(
+                            th ->
+                                toException(mongoDbError(entityType(), obj).apply(th, CREATE_ONE))))
             .doOnNext(o -> log.info("{} {}", operation, o))
             .doOnError(th -> log.error(th.getMessage(), th));
   }
 
   private Function<ObjectId, Mono<E>> findByIdChain() {
-    String operation = "FIND_BY_ID";
     return id ->
         repository()
             .findById(id)
-            .handle(errorConsumer(Objects::nonNull, operation, "null id not allowed", 400))
-            .doOnNext(o -> log.info("{} {}", operation, o))
+            .handle(errorConsumer(Objects::nonNull, FIND_BY_ID.name(), "null id not allowed", 400))
+            .doOnNext(o -> log.info("{} {}", FIND_BY_ID.name(), o))
             .doOnError(th -> log.error(th.getMessage(), th))
             .switchIfEmpty(Mono.error(exception("FIND", "not found", 400, String.valueOf(id))))
-            .onErrorMap(th -> exception(th, JsonUtils.JSON.fromJson("{}", entityType())))
+            .onErrorMap(th -> toException(mongoDbError(entityType(), id).apply(th, FIND_BY_ID)))
             .map(obj -> (E) obj);
   }
 
@@ -163,12 +160,11 @@ public abstract class GameService<E extends CommonEntity> {
   }
 
   private Function<ObjectId, Mono<Void>> deleteByIdChain() {
-    String operation = "DELETE_BY_ID";
     return id ->
         repository()
             .deleteById(id)
             .doOnError(th -> log.error(th.getMessage(), th))
-            .onErrorMap(th -> exception(operation, th.getMessage(), 400, id));
+            .onErrorMap(th -> toException(mongoDbError(entityType(), id).apply(th, DELETE_BY_ID)));
   }
 
   // TODO - Remove after implementation

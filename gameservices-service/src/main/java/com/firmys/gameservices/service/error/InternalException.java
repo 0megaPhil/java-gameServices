@@ -1,23 +1,22 @@
 package com.firmys.gameservices.service.error;
 
-import com.firmys.gameservices.common.error.CommonException;
 import com.firmys.gameservices.generated.models.Error;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public class ServiceException extends CommonException {
+public class InternalException extends ServiceException {
 
   private final Error serviceError;
 
-  public ServiceException(Error serviceError) {
-    super(serviceError.toJson());
+  public InternalException(Error serviceError) {
+    super(serviceError);
     this.serviceError = serviceError;
   }
 
-  public static ServiceException create(Error serviceError) {
-    return new ServiceException(serviceError);
+  public static InternalException create(Error serviceError) {
+    return new InternalException(serviceError);
   }
 
   @Override

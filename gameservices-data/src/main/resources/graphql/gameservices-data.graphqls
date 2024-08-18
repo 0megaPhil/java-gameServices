@@ -72,10 +72,37 @@ input CharacteristicInput {
 
 type Error implements CommonObject {
     title: String
+    type: ErrorTypes
+    path: String
+    headers: String
+    params: String
     objectType: String
     message: String
     errorCode: Int
     data: String
+}
+
+enum ErrorTypes {
+    MONGODB
+    GRAPHQL
+    WEB
+    FLAVOR
+    INTERNAL
+    OTHER
+}
+
+enum Operations {
+    CREATE_ONE
+    CREATE_MANY
+    UPDATE_ONE
+    UPDATE_MANY
+    FIND_BY_ID
+    FIND_BY_IDS
+    FIND_ONE_LIKE
+    FIND_ALL_LIKE
+    DELETE_ONE
+    DELETE_BY_ID
+    DELETE_BY_IDS
 }
 
 type ErrorResponse implements CommonEntity {

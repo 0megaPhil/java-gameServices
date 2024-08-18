@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public class CommonException extends RuntimeException implements Serializable {
+public abstract class CommonException extends RuntimeException implements Serializable {
 
   public CommonException(String message) {
     super(message);
