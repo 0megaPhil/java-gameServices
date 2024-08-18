@@ -45,7 +45,7 @@ public class CommonConstants {
   public static final String INVENTORY_SERVICE = "InventoryService";
   public static final String INVENTORY_PATH = "/" + INVENTORY;
 
-  public static final String ID = "Id";
+  public static final String ID = "id";
 
   public static final String CURRENCY = "currency";
   public static final String CURRENCY_PATH = "/" + CURRENCY;
@@ -62,9 +62,12 @@ public class CommonConstants {
   public static final String USERS_SERVICE = "UsersService";
   public static final String USER_PATH = "/" + USER;
 
-  public static final String UUID = "uuid";
-  public static final String PATH_UUID = "/" + "{" + CommonConstants.UUID + "}";
+  public static final String PATH_ID = "/" + "{" + CommonConstants.ID + "}";
   public static final String LIMIT = "limit";
+
+  public static final String LIKE = "like";
+  public static final String NAME = "name";
+  public static final String OPTIONS = "options";
 
   public static final String URL = "url";
   public static final String URI = "uri";
@@ -73,8 +76,9 @@ public class CommonConstants {
   public static final String CONSUME = "consume";
   public static final String ADD_PATH = "/" + ADD;
   public static final String CONSUME_PATH = "/" + CONSUME;
-
+  public static final String PROFILE_POSTGRES = "profile";
   public static final String PROFILE_SERVICE = "service";
+  public static final String PROFILE_DATA = "data";
   public static final String PROFILE_GATEWAY = "gateway";
   public static final String PROFILE_NOT_GATEWAY = "!gateway";
   public static final String PROFILE_TEST = "test";

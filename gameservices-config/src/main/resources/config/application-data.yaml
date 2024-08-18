@@ -1,15 +1,12 @@
 spring:
+  datasource:
+    driver-class-name: liquibase.ext.mongodb.database.MongoClientDriver
   data:
-    r2dbc:
-      repositories:
-        enabled: true
-  r2dbc:
-    url: r2dbc:h2:file:///./gameservices-${gameservices.current.id}sdb
-    name: ${gameservices.current.id}s
-  liquibase:
-    url: jdbc:h2:file:.///gameservices-${gameservices.current.id}sdb
-    enabled: true
-    change-log: classpath:db/changelog/gameservices-${gameservices.current.id}s.yaml
-  jpa:
-    hibernate:
-      ddl-auto: update
+    mongodb:
+      database: gameservices-${gameservices.current.id}sdb
+      auto-index-creation: true
+      host: "${MONGODB_HOST:localhost}"
+      port: "${MONGODB_PORT:27017}"
+      username: "${MONGODB_USERNAME:root}"
+      password: "${MONGODB_PASSWORD:pw}"
+      uri: mongodb://${spring.data.mongodb.username}:mongo${spring.data.mongodb.password}@${spring.data.mongodb.host}:${spring.data.mongodb.port}

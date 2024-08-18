@@ -2,9 +2,9 @@ package com.firmys.gameservices.inventory.services;
 
 import static com.firmys.gameservices.common.FunctionUtils.safeSet;
 
-import com.firmys.gameservices.common.CommonService;
 import com.firmys.gameservices.generated.models.Inventory;
 import com.firmys.gameservices.inventory.repositories.InventoryRepository;
+import com.firmys.gameservices.service.GameService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Service
 @Builder(toBuilder = true)
 @Accessors(chain = true, fluent = true)
-public class InventoryService extends CommonService<Inventory> {
+public class InventoryService extends GameService<Inventory> {
   private final InventoryRepository repository;
 
   private final Class<Inventory> entityType = Inventory.class;

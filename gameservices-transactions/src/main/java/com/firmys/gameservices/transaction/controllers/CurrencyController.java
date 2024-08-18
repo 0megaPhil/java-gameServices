@@ -1,9 +1,9 @@
 package com.firmys.gameservices.transaction.controllers;
 
-import static com.firmys.gameservices.common.CommonConstants.*;
+import static com.firmys.gameservices.common.CommonConstants.CURRENCY_PATH;
 
-import com.firmys.gameservices.common.CommonController;
 import com.firmys.gameservices.generated.models.Currency;
+import com.firmys.gameservices.service.ServiceController;
 import com.firmys.gameservices.transaction.services.CurrencyService;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Builder(toBuilder = true)
 @RequestMapping(CURRENCY_PATH)
 @Accessors(chain = true, fluent = true)
-public class CurrencyController extends CommonController<Currency> {
+public class CurrencyController extends ServiceController<Currency> {
 
   private final CurrencyService service;
   private final Class<Currency> entityClass = Currency.class;

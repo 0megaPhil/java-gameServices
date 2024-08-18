@@ -2,8 +2,8 @@ package com.firmys.gameservices.transaction.controllers;
 
 import static com.firmys.gameservices.common.CommonConstants.*;
 
-import com.firmys.gameservices.common.CommonController;
 import com.firmys.gameservices.generated.models.Transaction;
+import com.firmys.gameservices.service.ServiceController;
 import com.firmys.gameservices.transaction.services.TransactionService;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Builder(toBuilder = true)
 @RequestMapping(TRANSACTION_PATH)
 @Accessors(chain = true, fluent = true)
-public class TransactionController extends CommonController<Transaction> {
+public class TransactionController extends ServiceController<Transaction> {
 
   private final TransactionService service;
   private final Class<Transaction> entityClass = Transaction.class;

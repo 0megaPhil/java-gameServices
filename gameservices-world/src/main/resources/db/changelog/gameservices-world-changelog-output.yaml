@@ -10,8 +10,8 @@ databaseChangeLog:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: CONSTRAINT_D
-                  name: UUID
-                  type: UUID
+                  name: String
+                  type: String
               - column:
                   constraints:
                     nullable: false
@@ -35,11 +35,11 @@ databaseChangeLog:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: CONSTRAINT_4
-                  name: UUID
-                  type: UUID
+                  name: String
+                  type: String
               - column:
                   name: TERRAINID
-                  type: UUID
+                  type: String
               - column:
                   name: FLAVOR
                   type: VARCHAR(1000000000)

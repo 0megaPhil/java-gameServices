@@ -2,42 +2,48 @@ extend type Query {
     createCharacter(input: CharacterInput): Character
     updateCharacter(input: CharacterInput): Character
     findCharacter(options: Options): [Character]
-    getCharacter(uuid: UUID): Character
-    flavorCharacter(uuid: UUID): Character
+    getCharacter(id: String): Character
+    flavorCharacter(id: String): Character
+    deleteCharacter(id: String): Boolean
 
     createSkill(input: SkillInput): Skill
     updateSkill(input: SkillInput): Skill
     findSkill(options: Options): [Skill]
-    getSkill(uuid: UUID): Skill
-    flavorSkill(uuid: UUID): Skill
+    getSkill(id: String): Skill
+    flavorSkill(id: String): Skill
+    deleteSkill(id: String): Boolean
 
     createStat(input: StatInput): Stat
     updateStat(input: StatInput): Stat
     findStat(options: Options): [Stat]
-    getStat(uuid: UUID): Stat
-    flavorStat(uuid: UUID): Stat
+    getStat(id: String): Stat
+    flavorStat(id: String): Stat
+    deleteStat(id: String): Boolean
 
     createRace(input: RaceInput): Race
     updateRace(input: RaceInput): Race
     findRace(options: Options): [Race]
-    getRace(uuid: UUID): Race
-    flavorRace(uuid: UUID): Race
+    getRace(id: String): Race
+    flavorRace(id: String): Race
+    deleteRace(id: String): Boolean
 
     createCreature(input: CreatureInput): Creature
     updateCreature(input: CreatureInput): Creature
     findCreature(options: Options): [Creature]
-    getCreature(uuid: UUID): Creature
-    flavorCreature(uuid: UUID): Creature
+    getCreature(id: String): Creature
+    flavorCreature(id: String): Creature
+    deleteCreature(id: String): Boolean
 
     createProfession(input: ProfessionInput): Profession
     updateProfession(input: ProfessionInput): Profession
     findProfession(options: Options): [Profession]
-    getProfession(uuid: UUID): Profession
-    flavorProfession(uuid: UUID): Profession
+    getProfession(id: String): Profession
+    flavorProfession(id: String): Profession
+    deleteProfession(id: String): Boolean
 }
 
 type Profession implements CommonEntity {
-    uuid: UUID!
+    id: String
     name: String!
     type: Professions
     stats: [CharacterStat]
@@ -52,7 +58,7 @@ type Profession implements CommonEntity {
 }
 
 input ProfessionInput {
-    uuid: UUID
+    id: String
     name: String!
     type: Professions!
     stats: [CharacterStatInput]
@@ -63,7 +69,7 @@ input ProfessionInput {
 }
 
 type Race implements CommonEntity {
-    uuid: UUID!
+    id: String
     name: String!
     type: Species!
     prompt: String
@@ -75,7 +81,7 @@ type Race implements CommonEntity {
 }
 
 input RaceInput {
-    uuid: UUID
+    id: String
     name: String!
     type: Species!
     flavor: FlavorInput
@@ -83,7 +89,7 @@ input RaceInput {
 }
 
 type Skill implements CommonEntity {
-    uuid: UUID!
+    id: String
     type: Skills!
     name: String
     prompt: String
@@ -95,7 +101,7 @@ type Skill implements CommonEntity {
 }
 
 input SkillInput {
-    uuid: UUID
+    id: String
     type: Skills!
     name: String
     flavor: FlavorInput
@@ -103,7 +109,7 @@ input SkillInput {
 }
 
 type Stat implements CommonEntity {
-    uuid: UUID!
+    id: String
     type: Stats!
     name: String
     prompt: String
@@ -115,7 +121,7 @@ type Stat implements CommonEntity {
 }
 
 input StatInput {
-    uuid: UUID
+    id: String
     type: Stats!
     name: String
     flavor: FlavorInput
@@ -163,7 +169,7 @@ input CharacterAttributeInput {
 }
 
 type Character implements CommonEntity {
-    uuid: UUID!
+    id: String
     name: String
     sex: Sexes
     race: Race
@@ -184,7 +190,7 @@ type Character implements CommonEntity {
 }
 
 input CharacterInput {
-    uuid: UUID
+    id: String
     name: String
     sex: Sexes
     race: RaceInput
@@ -201,7 +207,7 @@ input CharacterInput {
 }
 
 type Creature implements CommonEntity {
-    uuid: UUID!
+    id: String
     name: String!
     type: Species!
     sex: Sexes
@@ -221,7 +227,7 @@ type Creature implements CommonEntity {
 }
 
 input CreatureInput {
-    uuid: UUID
+    id: String
     name: String!
     type: Species!
     sex: Sexes
@@ -237,7 +243,7 @@ input CreatureInput {
 }
 
 type Effect implements CommonEntity{
-    uuid: UUID!
+    id: String
     type: Effects!
     name: String
     prompt: String
@@ -249,7 +255,7 @@ type Effect implements CommonEntity{
 }
 
 input EffectInput {
-    uuid: UUID
+    id: String
     type: Effects!
     name: String
     prompt: String
@@ -257,7 +263,7 @@ input EffectInput {
 }
 
 type Attribute implements CommonEntity{
-    uuid: UUID!
+    id: String
     type: Attributes!
     name: String
     prompt: String
@@ -269,7 +275,7 @@ type Attribute implements CommonEntity{
 }
 
 input AttributeInput {
-    uuid: UUID
+    id: String
     type: Attributes!
     name: String
     prompt: String

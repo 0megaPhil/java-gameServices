@@ -2,18 +2,20 @@ extend type Query {
     createTransaction(input: TransactionInput): Transaction
     updateTransaction(input: TransactionInput): Transaction
     findTransaction(options: Options): [Transaction]
-    getTransaction(uuid: UUID): Transaction
-    flavorTransaction(uuid: UUID): Transaction
+    getTransaction(id: String): Transaction
+    flavorTransaction(id: String): Transaction
+    deleteTransaction(id: String): Boolean
 
     createCurrency(input: CurrencyInput): Currency
     updateCurrency(input: CurrencyInput): Currency
     findCurrency(options: Options): [Currency]
-    getCurrency(uuid: UUID): Currency
-    flavorCurrency(uuid: UUID): Currency
+    getCurrency(id: String): Currency
+    flavorCurrency(id: String): Currency
+    deleteCurrency(id: String): Boolean
 }
 
 input TransactionInput {
-    uuid: UUID
+    id: String
     inventoryId: String
     currency: String!
     item: String
@@ -22,7 +24,7 @@ input TransactionInput {
 }
 
 type Transaction implements CommonEntity {
-    uuid: UUID!
+    id: String
     inventoryId: String!
     currency: String
     item: String
@@ -35,14 +37,14 @@ type Transaction implements CommonEntity {
 }
 
 input CurrencyInput {
-    uuid: UUID
+    id: String
     name: String!
     flavor: FlavorInput
     prompt: String
 }
 
 type Currency implements CommonEntity {
-    uuid: UUID!
+    id: String
     name: String!
     prompt: String
     flavor: Flavor

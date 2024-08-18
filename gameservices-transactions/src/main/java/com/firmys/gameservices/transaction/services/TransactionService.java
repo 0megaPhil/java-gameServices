@@ -1,7 +1,7 @@
 package com.firmys.gameservices.transaction.services;
 
-import com.firmys.gameservices.common.CommonService;
 import com.firmys.gameservices.generated.models.Transaction;
+import com.firmys.gameservices.service.GameService;
 import com.firmys.gameservices.transaction.repositories.TransactionRepository;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Builder(toBuilder = true)
 @Accessors(chain = true, fluent = true)
-public class TransactionService extends CommonService<Transaction> {
+public class TransactionService extends GameService<Transaction> {
   private final TransactionRepository repository;
   private final Class<Transaction> entityType = Transaction.class;
 }

@@ -44,7 +44,9 @@ public class SpringSecurityConfiguration {
         "/swagger-ui/**",
         "/graphql*",
         "/graphql*/**",
-        "/graphiql*/**"
+        "/graphiql*/**",
+        "/h2-console*/**",
+        "/h2-console*"
       };
 
   private CorsConfigurationSource createCorsConfigSource() {

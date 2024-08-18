@@ -10,8 +10,8 @@ databaseChangeLog:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: CONSTRAINT_5
-                  name: UUID
-                  type: UUID
+                  name: String
+                  type: String
               - column:
                   constraints:
                     nullable: false
@@ -35,8 +35,8 @@ databaseChangeLog:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: CONSTRAINT_F
-                  name: UUID
-                  type: UUID
+                  name: String
+                  type: String
               - column:
                   constraints:
                     nullable: false

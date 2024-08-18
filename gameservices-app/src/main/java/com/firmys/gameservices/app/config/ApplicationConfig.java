@@ -3,11 +3,12 @@ package com.firmys.gameservices.app.config;
 import static com.firmys.gameservices.common.CommonConstants.PACKAGE_GENERATED;
 
 import com.firmys.gameservices.common.CommonProperties;
-import com.firmys.gameservices.common.CommonQueryService;
-import com.firmys.gameservices.common.ServiceClient;
-import com.firmys.gameservices.common.config.ConversionConfig;
-import com.firmys.gameservices.common.config.WebClientConfig;
+import com.firmys.gameservices.common.config.WebConfig;
 import com.firmys.gameservices.common.security.SpringSecurityConfiguration;
+import com.firmys.gameservices.service.GameQueryService;
+import com.firmys.gameservices.service.GameServiceClient;
+import com.firmys.gameservices.service.config.ConversionConfig;
+import com.firmys.gameservices.service.error.GraphQLExceptionController;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +16,14 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({
-  SpringSecurityConfiguration.class,
-  ServiceClient.class,
+  GameServiceClient.class,
+  WebConfig.class,
   ConversionConfig.class,
-  WebClientConfig.class
+  SpringSecurityConfiguration.class,
+  GraphQLExceptionController.class
 })
 @ComponentScan(
     basePackages = {PACKAGE_GENERATED},
-    basePackageClasses = CommonQueryService.class)
+    basePackageClasses = GameQueryService.class)
 @EnableConfigurationProperties(CommonProperties.class)
 public class ApplicationConfig {}

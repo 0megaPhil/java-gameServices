@@ -81,6 +81,10 @@ gameservices:
   gateway: *gateway
 
 spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
   application:
     name: ${gameservices.current.name}
   main:

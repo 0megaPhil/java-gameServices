@@ -2,19 +2,22 @@ extend type Query {
     createWorld(input: WorldInput): World
     updateWorld(input: WorldInput): World
     findWorld(options: Options): [World]
-    getWorld(uuid: UUID): World
-    flavorWorld(uuid: UUID): World
+    getWorld(id: String): World
+    flavorWorld(id: String): World
+    deleteWorld(id: String): Boolean
 
     createTerrain(input: TerrainInput): Terrain
     updateTerrain(input: TerrainInput): Terrain
     findTerrain(options: Options): [Terrain]
-    getTerrain(uuid: UUID): Terrain
-    flavorTerrain(uuid: UUID): Terrain
+    getTerrain(id: String): Terrain
+    flavorTerrain(id: String): Terrain
+    deleteTerrain(id: String): Boolean
 }
 
 type World implements CommonEntity {
-    uuid: UUID!
-    type: String
+    id: String
+    name: String!
+    type: String!
     terrains: [Terrain]
     races: [Race]
     techLevel: TechLevels
@@ -28,9 +31,9 @@ type World implements CommonEntity {
 }
 
 input WorldInput {
-    uuid: UUID!
-    type: String
+    id: String
     name: String!
+    type: String!
     terrains: [TerrainInput]
     races: [RaceInput]
     techLevel: TechLevels
@@ -50,7 +53,8 @@ input TerrainEffectInput {
 }
 
 type Terrain implements CommonEntity {
-    uuid: UUID!
+    id: String
+    name: String!
     type: String!
     effects: [TerrainEffect]
     prompt: String
@@ -62,7 +66,8 @@ type Terrain implements CommonEntity {
 }
 
 input TerrainInput {
-    uuid: UUID
+    id: String
+    name: String!
     type: String!
     effects: [TerrainEffectInput]
     flavor: FlavorInput
