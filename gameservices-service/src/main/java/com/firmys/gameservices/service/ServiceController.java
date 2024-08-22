@@ -21,7 +21,7 @@ public abstract class ServiceController<E extends CommonEntity> {
 
   @GetMapping(CommonConstants.PATH_ID)
   public Mono<E> get(@PathVariable ObjectId id) {
-    return service().find(id);
+    return service().get(id);
   }
 
   @GetMapping
@@ -30,26 +30,29 @@ public abstract class ServiceController<E extends CommonEntity> {
         .filter(p -> p.get(CommonConstants.ID) != null || p.get(CommonConstants.NAME) != null)
         .map(p -> FunctionUtils.orVoid(() -> JsonUtils.JSON.convert(p, service().entityType())))
         .map(obj -> service().findAllLike(obj))
-        .orElseGet(() -> service().find(ServiceUtils.options(params)));
+        .orElseGet(() -> service().find(ServiceUtils.options(params)))
+        .map(ob -> ob);
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   public Mono<E> create(@RequestBody E object) {
     return service()
         .create(object)
-        .doOnError(th -> log.error("{}", th.getClass().getSimpleName(), th));
+        .doOnError(th -> log.error("{}: {}", th.getClass().getSimpleName(), th.getMessage()));
   }
 
   @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
   public Mono<E> update(@RequestBody E object) {
     return service()
         .update(object)
-        .doOnError(th -> log.error("{}", th.getClass().getSimpleName(), th));
+        .doOnError(th -> log.error("{}: {}", th.getClass().getSimpleName(), th.getMessage()));
   }
 
   @DeleteMapping(CommonConstants.PATH_ID)
-  public Mono<Void> delete(@PathVariable ObjectId id) {
-    return service().delete(id).doOnError(th -> log.error("{}", th.getClass().getSimpleName(), th));
+  public Mono<Boolean> delete(@PathVariable ObjectId id) {
+    return service()
+        .delete(id)
+        .doOnError(th -> log.error("{}: {}", th.getClass().getSimpleName(), th.getMessage()));
   }
 
   // TODO - Remove after implementation

@@ -11,6 +11,7 @@ import java.util.Map;
     import java.util.Objects;
 </#if>
 import java.util.Set;
+import org.bson.types.ObjectId;
 
 <#if javaDoc?has_content>
     /**
@@ -58,7 +59,11 @@ private final Set
             <#if field.deprecated?has_content>
                 @${field.deprecated.annotation}
             </#if>
-            public void set${field.name?cap_first}(${field.type} ${field.name}) {
+            <#if field.name?contains("id")>
+                public void set${field.name?cap_first}(ObjectId ${field.name}) {
+            <#else>
+                public void set${field.name?cap_first}(${field.type?remove_ending("Input")} ${field.name}) {
+            </#if>
             this.input.put("${field.originalName}", ${field.name});
             <#if field.serializeUsingObjectMapper>
                 this.useObjectMapperForInputSerialization.add("${field.originalName}");

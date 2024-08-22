@@ -10,10 +10,19 @@ public class CommonConstants {
   public static final String TRANSACTION = "transaction";
   public static final String TRANSACTION_PATH = "/" + TRANSACTION;
   public static final String TRANSACTION_SERVICES = "TransactionService";
+  public static final String DENIZEN_SERVICE = "DenizenService";
 
-  public static final String CHARACTER = "character";
-  public static final String CHARACTER_SERVICE = "CharacterService";
-  public static final String CHARACTER_PATH = "/" + CHARACTER;
+  public static final String PLAYER = "player";
+  public static final String PLAYER_SERVICE = "PlayerService";
+  public static final String PLAYER_PATH = "/" + PLAYER;
+
+  public static final String NPC = "npc";
+  public static final String NPC_SERVICE = "NPCService";
+  public static final String NPC_PATH = "/" + NPC;
+
+  public static final String CREATURE = "creature";
+  public static final String CREATURE_SERVICE = "CreatureService";
+  public static final String CREATURE_PATH = "/" + CREATURE;
 
   public static final String SKILL = "skill";
   public static final String SKILL_SERVICE = "SkillService";
@@ -39,7 +48,7 @@ public class CommonConstants {
   public static final String PROFESSION_SERVICE = "ProfessionService";
   public static final String PROFESSION_PATH = "/" + PROFESSION;
 
-  public static final String FLAVOR = "text";
+  public static final String FLAVOR = "flavor";
 
   public static final String INVENTORY = "inventory";
   public static final String INVENTORY_SERVICE = "InventoryService";
@@ -53,6 +62,9 @@ public class CommonConstants {
   public static final String WORLD = "world";
   public static final String WORLD_SERVICE = "WorldService";
   public static final String WORLD_PATH = "/" + WORLD;
+
+  public static final String TERRAIN = "terrain";
+  public static final String TERRAIN_PATH = "/" + TERRAIN;
 
   public static final String CONFIG = "config";
   public static final String CONFIG_SERVICE = "ConfigService";
@@ -78,6 +90,7 @@ public class CommonConstants {
   public static final String CONSUME_PATH = "/" + CONSUME;
   public static final String PROFILE_POSTGRES = "profile";
   public static final String PROFILE_SERVICE = "service";
+  public static final String PROFILE_NOT_SERVICE = "!service";
   public static final String PROFILE_DATA = "data";
   public static final String PROFILE_GATEWAY = "gateway";
   public static final String PROFILE_NOT_GATEWAY = "!gateway";

@@ -1,15 +1,19 @@
 extend type Query {
-    createInventory(input: InventoryInput): Inventory
-    updateInventory(input: InventoryInput): Inventory
     findInventory(options: Options): [Inventory]
     getInventory(id: String): Inventory
+
+    findItem(options: Options): [Item]
+    getItem(id: String): Item
+}
+
+extend type Mutation {
+    createInventory(input: InventoryInput): Inventory
+    updateInventory(input: InventoryInput): Inventory
     flavorInventory(id: String): Inventory
     deleteInventory(id: String): Boolean
 
     createItem(input: ItemInput): Item
     updateItem(input: ItemInput): Item
-    findItem(options: Options): [Item]
-    getItem(id: String): Item
     flavorItem(id: String): Item
     deleteItem(id: String): Boolean
 }

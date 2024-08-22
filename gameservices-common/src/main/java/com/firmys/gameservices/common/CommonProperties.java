@@ -41,6 +41,10 @@ public class CommonProperties {
       return baseUri() + "/" + id;
     }
 
+    public String graphQl() {
+      return baseUri() + "/graphql";
+    }
+
     public String protocol() {
       return Optional.ofNullable(protocol).orElse("https");
     }

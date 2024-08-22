@@ -23,7 +23,7 @@ public class SpringSecurityConfiguration {
   private static final String[] permittedUrl =
       new String[] {
         "/inventor*/**",
-        "/character*/**",
+        "/player*/**",
         "/world**",
         "/item*/**",
         "/currenc*/**",

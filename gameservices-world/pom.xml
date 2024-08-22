@@ -3,6 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <artifactId>gameservices-world</artifactId>
+    <name>world</name>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -20,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
-            <artifactId>gameservices-character</artifactId>
+            <artifactId>gameservices-denizen</artifactId>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

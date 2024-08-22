@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
-            <artifactId>gameservices-character</artifactId>
+            <artifactId>gameservices-denizen</artifactId>
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>

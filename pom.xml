@@ -35,7 +35,7 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>gameservices-character</artifactId>
+                <artifactId>gameservices-denizen</artifactId>
                 <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
@@ -138,7 +138,7 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>gameservices-world</module>
-        <module>gameservices-character</module>
+        <module>gameservices-denizen</module>
         <module>gameservices-inventory</module>
         <module>gameservices-app</module>
         <module>gameservices-common</module>
@@ -333,8 +333,9 @@
                             <includePattern>.*\.graphqls?</includePattern>
                         </graphqlSchemas>
                         <outputDir>${project.build.directory}/generated-sources</outputDir>
-                        <packageName>com.firmys.gameservices.generated</packageName>
+                        <packageName>com.firmys.gameservices.${name}</packageName>
                         <modelPackageName>com.firmys.gameservices.generated.models</modelPackageName>
+                        <apiPackageName>com.firmys.gameservices.${name}.services</apiPackageName>
                         <generateNoArgsConstructorOnly>true</generateNoArgsConstructorOnly>
                         <modelValidationAnnotation>@jakarta.annotation.Nonnull</modelValidationAnnotation>
                         <customTemplatesRoot>${project.build.outputDirectory}/templates</customTemplatesRoot>
@@ -345,14 +346,17 @@
                             <INTERFACE>
                                 interface.ftl
                             </INTERFACE>
+                            <REQUEST>
+                                request.ftl
+                            </REQUEST>
+                            <RESPONSE>
+                                response.ftl
+                            </RESPONSE>
                             <OPERATIONS>
                                 operations.ftl
                             </OPERATIONS>
                         </customTemplates>
                         <customTypesMapping>
-                            <CHARACTER>
-                                com.firmys.gameservices.generated.models.Character
-                            </CHARACTER>
                             <Float>
                                 java.lang.Double
                             </Float>
@@ -360,6 +364,7 @@
                         <addGeneratedAnnotation>false</addGeneratedAnnotation>
                         <generateBuilder>false</generateBuilder>
                         <generateModelsWithPublicFields>false</generateModelsWithPublicFields>
+                        <generateClient>false</generateClient>
                         <generateApis>true</generateApis>
                     </configuration>
                 </plugin>

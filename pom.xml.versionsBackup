@@ -28,7 +28,7 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <artifactId>gameservices-character</artifactId>
+                <artifactId>gameservices-denizen</artifactId>
                 <groupId>com.firmys.gameservices</groupId>
                 <version>${project.version}</version>
             </dependency>
@@ -96,7 +96,7 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>gameservices-world</module>
-        <module>gameservices-characters</module>
+        <module>gameservices-denizens</module>
         <module>gameservices-inventory</module>
         <module>gameservices-app</module>
         <module>gameservices-common</module>
@@ -204,7 +204,7 @@
                                         <includes>keys/**, templates/**, META-INF/**</includes>
                                     </artifactItem>
                                     <artifactItem>
-                                        <artifactId>gameservices-character</artifactId>
+                                        <artifactId>gameservices-denizen</artifactId>
                                         <groupId>com.firmys.gameservices</groupId>
                                         <version>${project.version}</version>
                                         <type>jar</type>

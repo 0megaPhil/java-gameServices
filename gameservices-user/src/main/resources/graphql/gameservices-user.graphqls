@@ -1,8 +1,11 @@
 extend type Query {
-    createUser(input: UserInput): User
-    updateUser(input: UserInput): User
     findUser(options: Options): [User]
     getUser(id: String): User
+}
+
+extend type Mutation {
+    createUser(input: UserInput): User
+    updateUser(input: UserInput): User
     flavorUser(id: String): User
     deleteUser(id: String): Boolean
 }

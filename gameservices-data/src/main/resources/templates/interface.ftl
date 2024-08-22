@@ -74,6 +74,7 @@ public interface ${className} <#if className == "CommonEntity" || className == "
     CommonEntity withError(Error error);
     CommonEntity withPrompt(String prompt);
     CommonEntity withFlavor(Flavor flavor);
+    CommonEntity withVersion(Integer version);
     CommonEntity withCreated(OffsetDateTime dateTime);
     CommonEntity withUpdated(OffsetDateTime dateTime);
 </#if>

@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>gameservices-data</artifactId>
+    <name>data</name>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
