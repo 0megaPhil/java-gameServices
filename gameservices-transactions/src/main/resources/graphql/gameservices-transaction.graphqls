@@ -23,7 +23,8 @@ input TransactionInput {
     inventoryId: String
     currency: String!
     item: String
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -33,7 +34,8 @@ type Transaction implements CommonEntity {
     currency: String
     item: String
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -43,7 +45,8 @@ type Transaction implements CommonEntity {
 input CurrencyInput {
     id: String
     name: String!
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -51,7 +54,8 @@ type Currency implements CommonEntity {
     id: String
     name: String!
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int

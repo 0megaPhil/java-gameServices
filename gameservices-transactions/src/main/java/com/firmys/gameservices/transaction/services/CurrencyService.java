@@ -2,6 +2,7 @@ package com.firmys.gameservices.transaction.services;
 
 import com.firmys.gameservices.generated.models.Currency;
 import com.firmys.gameservices.service.GameService;
+import com.firmys.gameservices.service.GameServiceClient;
 import com.firmys.gameservices.transaction.repositories.CurrencyRepository;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,5 +15,6 @@ import org.springframework.stereotype.Service;
 @Accessors(chain = true, fluent = true)
 public class CurrencyService extends GameService<Currency> {
   private final CurrencyRepository repository;
+  private final GameServiceClient gameServiceClient;
   private final Class<Currency> entityType = Currency.class;
 }

@@ -19,7 +19,10 @@ public class ConversionConfig {
   @Bean
   public RuntimeWiringConfigurer runtimeWiringConfigurer() {
     return wiringBuilder ->
-        wiringBuilder.scalar(ExtendedScalars.Json).scalar(ExtendedScalars.DateTime);
+        wiringBuilder
+            .scalar(ExtendedScalars.Json)
+            .scalar(ExtendedScalars.DateTime)
+            .scalar(ExtendedScalars.Object);
   }
 
   @Bean

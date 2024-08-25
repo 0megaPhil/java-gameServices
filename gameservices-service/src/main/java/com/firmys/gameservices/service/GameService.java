@@ -50,6 +50,8 @@ public abstract class GameService<E extends CommonEntity> {
     return Example.of(exampleObj, matcher);
   }
 
+  public abstract GameServiceClient gameServiceClient();
+
   public abstract CommonRepository<E> repository();
 
   public abstract Class<E> entityType();
@@ -127,15 +129,29 @@ public abstract class GameService<E extends CommonEntity> {
       String operation, Predicate<E> predicate, String message) {
     return mono ->
         mono.handle(errorConsumer(predicate, operation, message, 400))
-            .flatMap(
-                obj ->
-                    repository()
-                        .save(prompt().apply((E) obj))
-                        .onErrorMap(
-                            th ->
-                                toException(mongoDbError(entityType(), obj).apply(th, CREATE_ONE))))
+            .flatMap(obj -> saveOrHandle((E) obj))
+            .doOnNext(this::updateFlavor)
             .doOnNext(o -> log.info("{} {}", operation, o))
             .doOnError(th -> log.error("{} {}", th.getClass().getSimpleName(), th.getMessage()));
+  }
+
+  private Mono<E> saveOrHandle(E obj) {
+    return repository()
+        .save(prompt().apply(obj))
+        .onErrorMap(th -> toException(mongoDbError(entityType(), obj).apply(th, CREATE_ONE)));
+  }
+
+  private void updateFlavor(E object) {
+    Mono.just(object)
+        .filter(o -> o.id() != null)
+        .filter(o -> o.error() == null)
+        .flatMap(o -> gameServiceClient().flavor(o.id(), entityType()))
+        .filter(o -> o.characteristics() != null)
+        .filter(o -> o.error() == null)
+        .flatMap(o -> repository().save(o))
+        .doOnError(th -> log.error("{} {}", th.getClass().getSimpleName(), th.getMessage()))
+        .subscribeOn(Schedulers.parallel())
+        .subscribe(o -> log.info("Flavor Updated: {}", o.toJson()));
   }
 
   private Function<ObjectId, Mono<E>> findByIdChain() {

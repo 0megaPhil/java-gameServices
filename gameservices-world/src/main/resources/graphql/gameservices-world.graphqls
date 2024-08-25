@@ -27,7 +27,8 @@ type World implements CommonEntity {
     techLevel: TechLevels
     magicLevel: MagicLevels
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -42,7 +43,8 @@ input WorldInput {
     races: [RaceInput]
     techLevel: TechLevels
     magicLevel: MagicLevels
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -62,7 +64,8 @@ type Terrain implements CommonEntity {
     type: Terrains!
     effects: [TerrainEffect]
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -74,7 +77,8 @@ input TerrainInput {
     name: String!
     type: Terrains!
     effects: [TerrainEffectInput]
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 

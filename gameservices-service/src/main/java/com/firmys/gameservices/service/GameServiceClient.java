@@ -78,22 +78,26 @@ public class GameServiceClient {
   }
 
   public <E extends CommonEntity> Mono<E> flavor(ObjectId id, Class<E> entityClass) {
-    return get(id, entityClass)
-        .flatMap(
-            object ->
-                restClients
-                    .get(Services.FLAVOR)
-                    .post()
-                    .uri(
-                        uriBuilder ->
-                            uriBuilder
-                                .path("/" + entityClass.getSimpleName().toLowerCase())
-                                .build())
-                    .body(Mono.just(object), object.getClass())
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .map(str -> JSON.fromJson(str, Flavor.class))
-                    .map(flavor -> (E) object.withFlavor(flavor)));
+    return get(id, entityClass).flatMap(this::flavor);
+  }
+
+  public <E extends CommonEntity> Mono<E> flavor(E object) {
+    return restClients
+        .get(Services.FLAVOR)
+        .post()
+        .uri(
+            uriBuilder ->
+                uriBuilder.path("/" + object.getClass().getSimpleName().toLowerCase()).build())
+        .body(Mono.just(object), object.getClass())
+        .retrieve()
+        .bodyToMono(String.class)
+        .map(str -> JSON.fromJson(str, Flavor.class))
+        .map(
+            flavor ->
+                (E)
+                    object
+                        .withCharacteristics(flavor.characteristics())
+                        .withSummary(flavor.summary()));
   }
 
   public <E extends CommonEntity> Mono<E> update(E object) {

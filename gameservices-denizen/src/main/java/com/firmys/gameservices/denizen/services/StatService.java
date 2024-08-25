@@ -18,6 +18,5 @@ import org.springframework.stereotype.Service;
 public class StatService extends GameService<Stat> {
   private final StatRepository repository;
   private final GameServiceClient gameServiceClient;
-
   private final Class<Stat> entityType = Stat.class;
 }

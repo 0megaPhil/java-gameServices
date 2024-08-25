@@ -58,7 +58,8 @@ type Profession implements CommonEntity {
     skills: [PlayerSkill]
     attributes: [PlayerAttribute]
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -72,7 +73,8 @@ input ProfessionInput {
     stats: [PlayerStatInput]
     skills: [PlayerSkillInput]
     attributes: [PlayerAttributeInput]
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -81,7 +83,8 @@ type Race implements CommonEntity {
     name: String!
     type: Species!
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -92,7 +95,8 @@ input RaceInput {
     id: String
     name: String!
     type: Species!
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -101,7 +105,8 @@ type Skill implements CommonEntity {
     type: Skills!
     name: String
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -112,7 +117,8 @@ input SkillInput {
     id: String
     type: Skills!
     name: String
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -121,7 +127,8 @@ type Stat implements CommonEntity {
     type: Stats!
     name: String
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -132,7 +139,8 @@ input StatInput {
     id: String
     type: Stats!
     name: String
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -189,9 +197,11 @@ type Player implements CommonEntity {
     stats: [PlayerStat]
     attributes: [PlayerAttribute]
     features: [Feature]
+    histories: [History]
     effects: [PlayerEffect]
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -211,8 +221,10 @@ input PlayerInput {
     stats: [PlayerStatInput]
     attributes: [PlayerAttributeInput]
     features: [FeatureInput]
+    histories: [HistoryInput]
     effects: [PlayerEffectInput]
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -229,9 +241,11 @@ type NPC implements CommonEntity {
     stats: [PlayerStat]
     attributes: [PlayerAttribute]
     features: [Feature]
+    histories: [History]
     effects: [PlayerEffect]
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -248,11 +262,13 @@ input NPCInput {
     inventory: InventoryInput
     dimensions: [DimensionInput]
     features: [FeatureInput]
+    histories: [HistoryInput]
     skills: [PlayerSkillInput]
     stats: [PlayerStatInput]
     attributes: [PlayerAttributeInput]
     effects: [PlayerEffectInput]
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -269,16 +285,50 @@ type Creature implements CommonEntity {
     attributes: [PlayerAttribute]
     effects: [PlayerEffect]
     features: [Feature]
+    histories: [History]
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
     error: Error
 }
 
-type Feature implements CommonValue {
-    value: Float
+type History implements CommonObject {
+    targetId: String
+    type: Histories
+    title: String!
+    description: String
+}
+
+input HistoryInput {
+    targetId: String
+    type: Histories!
+    title: String!
+    description: String
+}
+
+enum Histories {
+    BACKGROUND
+    UPBRINGING
+    PAST
+    EVENT
+    JOURNEY
+    LORE
+    STORY
+    CULTURE
+    EXPERIENCE
+    TRAUMA
+    FEAR
+    RIVAL
+    REGRET
+    RECORD
+    OTHER
+}
+
+type Feature implements CommonObject {
+    targetId: String
     title: String!
     type: Features
     description: String
@@ -301,10 +351,11 @@ enum Features {
     ARMS
     FINGERS
     TOES
+    OTHER
 }
 
 input FeatureInput {
-    value: Float
+    targetId: String
     type: Features
     title: String!
     description: String
@@ -322,8 +373,10 @@ input CreatureInput {
     stats: [PlayerStatInput]
     attributes: [PlayerAttributeInput]
     features: [FeatureInput]
+    histories: [HistoryInput]
     effects: [PlayerEffectInput]
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -332,7 +385,8 @@ type Effect implements CommonEntity{
     type: Effects!
     name: String
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -352,7 +406,8 @@ type Attribute implements CommonEntity{
     type: Attributes!
     name: String
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int

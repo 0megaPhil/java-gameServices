@@ -24,7 +24,7 @@ import reactor.core.publisher.Mono;
 @Builder(toBuilder = true)
 @Accessors(chain = true, fluent = true)
 public class NPCService extends GameService<NPC> {
-  private final GameServiceClient client;
+  private final GameServiceClient gameServiceClient;
   private final NPCRepository repository;
 
   private final StatService statService;
@@ -152,6 +152,10 @@ public class NPCService extends GameService<NPC> {
             .filter(obj -> obj.inventory() != null)
             .filter(obj -> obj.inventory().id() != null)
             .map(Mono::just)
-            .orElseGet(() -> client.create(Inventory.builder().build()).map(object::withInventory));
+            .orElseGet(
+                () ->
+                    gameServiceClient
+                        .create(Inventory.builder().build())
+                        .map(object::withInventory));
   }
 }
