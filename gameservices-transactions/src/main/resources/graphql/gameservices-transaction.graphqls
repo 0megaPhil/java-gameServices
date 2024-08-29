@@ -21,8 +21,8 @@ extend type Mutation {
 input TransactionInput {
     id: String
     inventoryId: String
-    currency: String!
-    item: String
+    currency: CurrencyInput!
+    itemIds: [String]
     characteristics: [CharacteristicInput]
     summary: String
     prompt: String
@@ -31,8 +31,8 @@ input TransactionInput {
 type Transaction implements CommonEntity {
     id: String
     inventoryId: String!
-    currency: String
-    item: String
+    currency: Currency
+    itemIds: [String]
     prompt: String
     characteristics: [Characteristic]
     summary: String
@@ -45,19 +45,42 @@ type Transaction implements CommonEntity {
 input CurrencyInput {
     id: String
     name: String!
+    type: Currencies
+    baseCurrency: CurrencyInput
     characteristics: [CharacteristicInput]
     summary: String
     prompt: String
+    baseMultiplier: Int = 1
 }
 
 type Currency implements CommonEntity {
     id: String
     name: String!
+    type: Currencies
+    baseCurrency: Currency
     prompt: String
     characteristics: [Characteristic]
     summary: String
     created: DateTime
     updated: DateTime
     version: Int
+    baseMultiplier: Int
     error: Error
+}
+
+enum Currencies {
+    TIN
+    COPPER
+    DOLLAR
+    SILVER
+    GOLD
+    PLATINUM
+    PAPER
+    SCRIPT
+    IOU
+    CHECK
+    LEAD
+    GEM
+    MARKER
+    OTHER
 }

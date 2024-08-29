@@ -48,21 +48,11 @@ input WorldInput {
     prompt: String
 }
 
-type TerrainEffect implements CommonValue{
-    effect: Effect!
-    value: Float!
-}
-
-input TerrainEffectInput {
-    effect: EffectInput!
-    value: Float!
-}
-
 type Terrain implements CommonEntity {
     id: String
     name: String!
     type: Terrains!
-    effects: [TerrainEffect]
+    effects: [EffectEntry]
     prompt: String
     characteristics: [Characteristic]
     summary: String
@@ -76,7 +66,7 @@ input TerrainInput {
     id: String
     name: String!
     type: Terrains!
-    effects: [TerrainEffectInput]
+    effects: [EffectEntryInput]
     characteristics: [CharacteristicInput]
     summary: String
     prompt: String

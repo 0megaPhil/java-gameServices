@@ -3,13 +3,20 @@ package com.firmys.gameservices.denizen.services;
 import static com.firmys.gameservices.common.FunctionUtils.safeSet;
 
 import com.firmys.gameservices.denizen.data.PlayerRepository;
+import com.firmys.gameservices.generated.models.Dimension;
+import com.firmys.gameservices.generated.models.Distribution;
+import com.firmys.gameservices.generated.models.Distributions;
 import com.firmys.gameservices.generated.models.Inventory;
+import com.firmys.gameservices.generated.models.Magnitude;
 import com.firmys.gameservices.generated.models.Player;
+import com.firmys.gameservices.generated.models.Race;
+import com.firmys.gameservices.generated.models.StatEntry;
 import com.firmys.gameservices.service.GameService;
 import com.firmys.gameservices.service.GameServiceClient;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,12 +55,59 @@ public class PlayerService extends GameService<Player> {
 
   public Mono<Player> ensureValues(Mono<Player> object) {
     return object
+        .flatMap(obj -> resolveRace().apply(obj))
+        .flatMap(obj -> resolveDimensions().apply(obj))
         .flatMap(obj -> resolveStats().apply(obj))
         .flatMap(obj -> resolveSkills().apply(obj))
         .flatMap(obj -> resolveEffects().apply(obj))
         .flatMap(obj -> resolveAttributes().apply(obj))
-        .flatMap(obj -> resolveRace().apply(obj))
         .flatMap(obj -> resolveInventory().apply(obj));
+  }
+
+  private Function<Player, Mono<Player>> resolveDimensions() {
+    return obj ->
+        Flux.fromIterable(obj.dimensions())
+            .flatMap(dim -> applyRaceDimensionDist().apply(obj.race(), dim))
+            .collectList()
+            .map(list -> obj.withDimensions(new HashSet<>(list)));
+  }
+
+  private BiFunction<Race, StatEntry, Mono<StatEntry>> applyStatPercentile() {
+    return (race, entry) ->
+        raceService
+            .findAllLike(race)
+            .flatMap(r -> Flux.fromStream(safeSet(r.distributions()).stream()))
+            .filter(dist -> dist.type().equals(Distributions.STAT))
+            .map(dist -> entry.withMagnitude(distributionPercentile(entry.value(), dist)))
+            .singleOrEmpty()
+            .switchIfEmpty(Mono.just(entry));
+  }
+
+  private Magnitude distributionPercentile(Double value, Distribution distribution) {
+    if (value >= distribution.veryAboveAverage()) {
+      return Magnitude.VERY_ABOVE_AVERAGE;
+    } else if (value >= distribution.aboveAverage()) {
+      return Magnitude.ABOVE_AVERAGE;
+    } else if (value >= distribution.average()) {
+      return Magnitude.AVERAGE;
+    } else if (value >= distribution.belowAverage()) {
+      return Magnitude.BELOW_AVERAGE;
+    } else if (value >= distribution.veryBelowAverage()) {
+      return Magnitude.VERY_BELOW_AVERAGE;
+    } else {
+      return Magnitude.LOWEST_POSSIBLE;
+    }
+  }
+
+  private BiFunction<Race, Dimension, Mono<Dimension>> applyRaceDimensionDist() {
+    return (race, dimension) ->
+        raceService
+            .findAllLike(race)
+            .flatMap(r -> Flux.fromStream(safeSet(r.distributions()).stream()))
+            .filter(dist -> dimension.title().equalsIgnoreCase(dist.title()))
+            .map(dist -> dimension.withMagnitude(distributionPercentile(dimension.value(), dist)))
+            .singleOrEmpty()
+            .switchIfEmpty(Mono.just(dimension));
   }
 
   private Function<Player, Mono<Player>> resolveStats() {
@@ -73,6 +127,7 @@ public class PlayerService extends GameService<Player> {
                       .map(value::withStat)
                       .switchIfEmpty(statService.create(value.stat()).map(value::withStat));
                 })
+            .flatMap(stat -> applyStatPercentile().apply(object.race(), stat))
             .collectList()
             .map(list -> object.withStats(new HashSet<>(list)));
   }

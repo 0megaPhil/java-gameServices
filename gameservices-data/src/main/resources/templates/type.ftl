@@ -59,11 +59,16 @@ public record ${className}(<#if fields?has_content>
         && field.type != "String"
         && field.type != "Integer"
         && field.name != "value"
+        && field.name != "percentile"
         && field.type != "Float"
         && field.name != "created"
         && field.name != "updated"
         && field.name != "type"
-        && field.name != "sex">
+        && field.name != "sex"
+        && field.name != "likelihood"
+        && field.type != "Magnitude"
+        && field.type != "Rarity"
+        && !field.type?contains("Double")>
             @Reference
         </#if>
         <#if !field.type?contains("List")>
@@ -94,7 +99,7 @@ public record ${className}(<#if fields?has_content>
 public ${className} {
 <#list fields as field>
     <#if field.defaultValue?has_content>
-        ${field.name} = Optional.ofNullable(${field.name}).orElse(${field.defaultValue});
+        ${field.name} = Optional.ofNullable(${field.name}).orElse(${field.defaultValue}<#if field.type?contains("Double")>D</#if>);
     </#if>
 </#list>
 }

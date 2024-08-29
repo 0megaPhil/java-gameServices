@@ -1,0 +1,476 @@
+scalar DateTime
+scalar Object
+
+# CommonEntity inheritors are static and used to generated data model
+# This is to be used for more complex domain model exposures
+interface CommonEntity {
+    id: String
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+interface CommonObject {
+    targetId: String
+}
+
+interface CommonValue {
+    value: Float
+}
+
+interface CommonDistribution {
+    veryBelowAverage: Float
+    belowAverage: Float
+    average: Float
+    aboveAverage: Float
+    veryAboveAverage: Float
+}
+
+input Options {
+    filters: [Filter]
+    sortBy: String
+    limit: Int!
+}
+
+input Filter {
+    byField: String!
+    forValue: String!
+}
+
+type Flavor implements CommonObject {
+    targetId: String!
+    summary: String!
+    objectType: String!
+    characteristics: [Characteristic]!
+}
+
+input FlavorInput {
+    targetId: String
+    title: String
+    summary: String
+    objectType: String
+    characteristics: [CharacteristicInput]
+}
+
+type Dimension implements CommonValue {
+    title: String!
+    unitType: String!
+    value: Float
+    magnitude: Magnitude
+}
+
+input DimensionInput {
+    title: String!
+    unitType: String!
+    value: Float
+    magnitude: Magnitude
+}
+
+type Distribution implements CommonObject {
+    targetId: String
+    title: String!
+    type: Distributions!
+    veryBelowAverage: Float
+    belowAverage: Float
+    average: Float
+    aboveAverage: Float
+    veryAboveAverage: Float
+}
+
+input DistributionInput {
+    targetId: String
+    title: String!
+    type: Distributions!
+    veryBelowAverage: Float
+    belowAverage: Float
+    average: Float
+    aboveAverage: Float
+    veryAboveAverage: Float
+}
+
+enum Distributions {
+    PHYSICAL
+    MENTAL
+    STAT
+    SKILL
+    PERCENTILE
+    EFFECT
+    SOCIAL
+    OTHER
+}
+
+type Characteristic implements CommonObject {
+    targetId: String
+    title: String!
+    description: String
+}
+
+input CharacteristicInput {
+    targetId: String
+    title: String!
+    description: String
+}
+
+type Error implements CommonObject {
+    targetId: String
+    title: String
+    type: ErrorTypes
+    path: String
+    headers: String
+    params: String
+    objectType: String
+    message: String
+    errorCode: Int
+    data: String
+}
+
+enum ErrorTypes {
+    MONGODB
+    GRAPHQL
+    WEB
+    FLAVOR
+    INTERNAL
+    OTHER
+}
+
+enum Operations {
+    CREATE_ONE
+    CREATE_MANY
+    UPDATE_ONE
+    UPDATE_MANY
+    FIND_BY_ID
+    FIND_BY_IDS
+    FIND_ONE_LIKE
+    FIND_ALL_LIKE
+    DELETE_ONE
+    DELETE_BY_ID
+    DELETE_BY_IDS
+}
+
+type ErrorResponse implements CommonEntity {
+    id: String
+    queryId: String
+    method: String
+    headers: String
+    path: String
+    uri: String
+    params: String
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+type Feature implements CommonObject {
+    targetId: String
+    rarity: Rarity
+    title: String!
+    type: Features
+    description: String
+}
+
+enum Features {
+    HAIR
+    EYE
+    NOSE
+    POSTURE
+    PHYSIQUE
+    MOUTH
+    SKIN
+    NAILS
+    CHIN
+    BOSOM
+    BUTTOCKS
+    LEGS
+    HANDS
+    ARMS
+    FINGERS
+    TOES
+    OTHER
+}
+
+input FeatureInput {
+    targetId: String
+    type: Features
+    title: String!
+    description: String
+    rarity: Rarity = COMMON
+}
+
+type History implements CommonObject {
+    targetId: String
+    type: Histories
+    title: String!
+    description: String
+}
+
+input HistoryInput {
+    targetId: String
+    type: Histories!
+    title: String!
+    description: String
+}
+
+enum Histories {
+    BACKGROUND
+    UPBRINGING
+    PAST
+    EVENT
+    JOURNEY
+    LORE
+    STORY
+    CULTURE
+    EXPERIENCE
+    TRAUMA
+    FEAR
+    RIVAL
+    REGRET
+    RECORD
+    OTHER
+}
+
+type Effect implements CommonEntity{
+    id: String
+    type: Effects!
+    name: String
+    prompt: String
+    minimum: Int
+    maximum: Int
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input EffectInput {
+    id: String
+    type: Effects!
+    name: String
+    prompt: String
+    minimum: Int = 0
+    maximum: Int = 100
+    characteristics: [CharacteristicInput]
+    summary: String
+}
+
+type Attribute implements CommonEntity {
+    id: String
+    type: Attributes!
+    name: String
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input AttributeInput {
+    id: String
+    type: Attributes!
+    name: String
+    prompt: String
+    characteristics: [CharacteristicInput]
+    summary: String
+}
+
+enum Effects {
+    ATTRIBUTE,
+    STAT,
+    SKILL,
+    CHARACTERISTIC
+    DIMENSION,
+    STATUS,
+    OTHER
+}
+
+enum Attributes {
+    HEALTH,
+    MANA,
+    SANITY,
+    ENERGY,
+    OTHER
+}
+
+enum Stats {
+    PHYSICAL,
+    MENTAL,
+    SOCIAL
+}
+
+enum Skills {
+    COMBAT,
+    UTILITY,
+    SOCIAL,
+    MOVEMENT,
+    INTERNAL,
+    CREATIVE,
+    OTHER
+}
+
+type Stat implements CommonEntity {
+    id: String
+    type: Stats!
+    name: String
+    prompt: String
+    minimum: Int
+    maximum: Int
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input StatInput {
+    id: String
+    type: Stats!
+    name: String
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+    minimum: Int = 1
+    maximum: Int = 20
+}
+
+type Skill implements CommonEntity {
+    id: String
+    type: Skills!
+    name: String
+    prompt: String
+    minimum: Int
+    maximum: Int
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input SkillInput {
+    id: String
+    type: Skills!
+    name: String
+    minimum: Int = 0
+    maximum: Int = 100
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+}
+
+type Profession implements CommonEntity {
+    id: String
+    name: String!
+    type: Professions
+    stats: [StatEntry]
+    skills: [SkillEntry]
+    attributes: [AttributeEntry]
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input ProfessionInput {
+    id: String
+    name: String!
+    type: Professions!
+    stats: [StatEntryInput]
+    skills: [SkillEntryInput]
+    attributes: [AttributeEntryInput]
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+}
+
+enum Professions {
+    COMBAT
+    MILITARY
+    UTILITY
+    POLITICAL
+    RELIGIOUS
+    OTHER
+}
+
+type SkillEntry implements CommonValue {
+    skill: Skill!
+    value: Float
+    magnitude: Magnitude
+}
+
+input SkillEntryInput {
+    skill: SkillInput!
+    value: Float
+    magnitude: Magnitude
+}
+
+type StatEntry implements CommonValue {
+    stat: Stat!
+    value: Float!
+    magnitude: Magnitude
+}
+
+input StatEntryInput {
+    stat: StatInput!
+    value: Float!
+    magnitude: Magnitude
+}
+
+type EffectEntry implements CommonValue {
+    effect: Effect!
+    value: Float!
+    magnitude: Magnitude
+}
+
+input EffectEntryInput {
+    effect: EffectInput!
+    value: Float!
+    magnitude: Magnitude
+}
+
+type AttributeEntry implements CommonValue {
+    attribute: Attribute
+    value: Float!
+}
+
+input AttributeEntryInput {
+    attribute: AttributeInput
+    value: Float!
+}
+
+enum Magnitude {
+    LOWEST_POSSIBLE
+    VERY_BELOW_AVERAGE
+    BELOW_AVERAGE
+    AVERAGE
+    ABOVE_AVERAGE
+    VERY_ABOVE_AVERAGE
+    HIGHEST_POSSIBLE
+}
+
+enum Rarity {
+    VERY_COMMON
+    COMMON
+    UNCOMMON
+    RARE
+    VERY_RARE
+    PRICELESS
+    UNIQUE
+    ABOVE_AVERAGE
+    OTHER
+}

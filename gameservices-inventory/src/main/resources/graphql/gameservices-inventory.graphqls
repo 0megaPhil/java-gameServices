@@ -20,8 +20,8 @@ extend type Mutation {
 
 input InventoryInput {
     id: String
-    items: [InventoryItemInput]
-    currencies: [InventoryCurrencyInput]
+    items: [ItemEntryInput]
+    currencies: [CurrencyEntryInput]
     characteristics: [CharacteristicInput]
     summary: String
     prompt: String
@@ -29,8 +29,8 @@ input InventoryInput {
 
 type Inventory implements CommonEntity {
     id: String
-    items: [InventoryItem]
-    currencies: [InventoryCurrency]
+    items: [ItemEntry]
+    currencies: [CurrencyEntry]
     prompt: String
     characteristics: [Characteristic]
     summary: String
@@ -40,44 +40,82 @@ type Inventory implements CommonEntity {
     error: Error
 }
 
-input InventoryItemInput {
-    item: ItemInput!
-    value: Float!
+type ItemEntry implements CommonValue {
+    item: Item!
+    value: Float
 }
 
-input InventoryCurrencyInput {
+input ItemEntryInput {
+    item: ItemInput!
+    value: Float = 0
+}
+
+input CurrencyEntryInput {
     currency: CurrencyInput!
+    value: Float = 0
+}
+
+type CurrencyEntry implements CommonValue {
+    currency: Currency!
     value: Float!
 }
 
 input ItemInput {
     id: String
     name: String!
+    type: Items
+    professions: [ProfessionInput]
     characteristics: [CharacteristicInput]
     summary: String
+    rarity: Rarity
+    values: [ItemEntryInput]
+    salable: Boolean = true
     prompt: String
     dimensions: [DimensionInput]
-}
-
-type InventoryItem implements CommonValue {
-    item: Item!
-    value: Float!
-}
-
-type InventoryCurrency implements CommonValue {
-    currency: Currency!
-    value: Float!
+    attributes: [AttributeEntryInput]
+    effects: [EffectEntryInput]
+    requiredSkills: [SkillEntryInput]
+    requiredStats: [StatEntryInput]
+    features: [FeatureInput]
+    histories: [HistoryInput]
 }
 
 type Item implements CommonEntity {
     id: String
     name: String!
+    type: Items
     dimensions: [Dimension]
+    professions: [Profession]
     prompt: String
+    rarity: Rarity
     characteristics: [Characteristic]
+    values: [ItemEntry]
+    salable: Boolean
     summary: String
+    attributes: [AttributeEntry]
+    effects: [EffectEntry]
+    requiredSkills: [SkillEntry]
+    requiredStats: [StatEntry]
+    features: [Feature]
+    histories: [History]
     created: DateTime
     updated: DateTime
     version: Int
     error: Error
+}
+
+enum Items {
+    WEAPON
+    ARMOR
+    TOOL
+    UTILITY
+    GARBAGE
+    JUNK
+    VALUABLE
+    JEWELRY
+    GEM
+    SCRAP
+    FUNGIBLE
+    MISC
+    OTHER
 }
