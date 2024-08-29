@@ -1,15 +1,19 @@
 extend type Query {
-    createInventory(input: InventoryInput): Inventory
-    updateInventory(input: InventoryInput): Inventory
     findInventory(options: Options): [Inventory]
     getInventory(id: String): Inventory
+
+    findItem(options: Options): [Item]
+    getItem(id: String): Item
+}
+
+extend type Mutation {
+    createInventory(input: InventoryInput): Inventory
+    updateInventory(input: InventoryInput): Inventory
     flavorInventory(id: String): Inventory
     deleteInventory(id: String): Boolean
 
     createItem(input: ItemInput): Item
     updateItem(input: ItemInput): Item
-    findItem(options: Options): [Item]
-    getItem(id: String): Item
     flavorItem(id: String): Item
     deleteItem(id: String): Boolean
 }
@@ -18,7 +22,8 @@ input InventoryInput {
     id: String
     items: [InventoryItemInput]
     currencies: [InventoryCurrencyInput]
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -27,7 +32,8 @@ type Inventory implements CommonEntity {
     items: [InventoryItem]
     currencies: [InventoryCurrency]
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -47,7 +53,8 @@ input InventoryCurrencyInput {
 input ItemInput {
     id: String
     name: String!
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
     dimensions: [DimensionInput]
 }
@@ -67,7 +74,8 @@ type Item implements CommonEntity {
     name: String!
     dimensions: [Dimension]
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int

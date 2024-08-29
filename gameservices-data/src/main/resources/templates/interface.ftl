@@ -9,11 +9,13 @@
         </#list>
     </#list>
 </#if>
+import java.util.Set;
 import java.time.Instant;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
+import com.firmys.gameservices.generated.models.Characteristic;
 
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 <#if javaDoc?has_content>
@@ -63,20 +65,40 @@ public interface ${className} <#if className == "CommonEntity" || className == "
     }
 </#if>
 <#if className == "CommonEntity">
-    ObjectId id();
-    Error error();
-    String prompt();
-    Flavor flavor();
-    Integer version();
-    OffsetDateTime created();
-    OffsetDateTime updated();
+ObjectId id();
+
+Error error();
+
+String prompt();
+
+String summary();
+
+Integer version();
+
+OffsetDateTime created();
+
+OffsetDateTime updated();
+
+Set
+<Characteristic> characteristics();
+
     CommonEntity withId(ObjectId id);
+
     CommonEntity withError(Error error);
+
     CommonEntity withPrompt(String prompt);
-    CommonEntity withFlavor(Flavor flavor);
+
+    CommonEntity withSummary(String summary);
+
+    CommonEntity withVersion(Integer version);
+
     CommonEntity withCreated(OffsetDateTime dateTime);
+
     CommonEntity withUpdated(OffsetDateTime dateTime);
-</#if>
+
+    CommonEntity withCharacteristics(Set
+    <Characteristic> characteristics);
+        </#if>
 
 
-}
+        }

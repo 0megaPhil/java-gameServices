@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
-            <artifactId>gameservices-character</artifactId>
+            <artifactId>gameservices-denizen</artifactId>
         </dependency>
         <dependency>
             <groupId>com.firmys.gameservices</groupId>
@@ -111,7 +111,7 @@
                                     <includes>META-INF/**</includes>
                                 </artifactItem>
                                 <artifactItem>
-                                    <artifactId>gameservices-character</artifactId>
+                                    <artifactId>gameservices-denizen</artifactId>
                                     <groupId>com.firmys.gameservices</groupId>
                                     <version>${project.version}</version>
                                     <type>jar</type>

@@ -1,8 +1,11 @@
 package com.firmys.gameservices.common.config;
 
+import static io.netty.handler.ssl.util.InsecureTrustManagerFactory.INSTANCE;
 import static reactor.netty.http.client.HttpClient.*;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -11,7 +14,6 @@ import com.firmys.gameservices.common.CommonProperties.Service;
 import com.firmys.gameservices.common.Services;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
@@ -49,13 +51,17 @@ public class WebConfig {
 
   @Bean
   public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(
-      List<SimpleModule> modules) {
+      List<SimpleModule> modules,
+      List<JsonSerializer<?>> serializers,
+      List<JsonDeserializer<?>> deserializers) {
     return jacksonObjectMapperBuilder ->
         jacksonObjectMapperBuilder
             .featuresToDisable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
             .featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .featuresToDisable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
             .featuresToEnable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
+            .serializers(serializers.toArray(JsonSerializer[]::new))
+            .deserializers(deserializers.toArray(JsonDeserializer[]::new))
             .modules(mod -> mod.addAll(modules));
   }
 
@@ -87,7 +93,7 @@ public class WebConfig {
   }
 
   @Bean
-  public Map<Services, WebClient> serviceClients(
+  public Map<Services, WebClient> restClients(
       WebClient.Builder webClientBuilder, CommonProperties properties) {
     return properties.getServices().entrySet().stream()
         .collect(
@@ -96,8 +102,17 @@ public class WebConfig {
   }
 
   @Bean
+  public Map<Services, WebClient> graphQlClients(
+      WebClient.Builder webClientBuilder, CommonProperties properties) {
+    return properties.getServices().entrySet().stream()
+        .collect(
+            Collectors.toMap(
+                Map.Entry::getKey, s -> webClientBuilder.baseUrl(s.getValue().graphQl()).build()));
+  }
+
+  @Bean
   @SneakyThrows
   public SslContext sslContext() {
-    return SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+    return SslContextBuilder.forClient().trustManager(INSTANCE).build();
   }
 }

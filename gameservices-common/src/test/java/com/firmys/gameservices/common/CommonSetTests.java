@@ -26,7 +26,7 @@ public class CommonSetTests {
     //    Assertions.assertThat(writable).isNotNull();
     //    Assertions.assertThat(writable).contains(Characteristic.class.getName());
     //
-    //    Set<Characteristic> parsed = ConversionUtils.readSet(writable);
+    //    Set<Playeristic> parsed = ConversionUtils.readSet(writable);
     //    Assertions.assertThat(parsed).isNotNull();
     //    Assertions.assertThat(parsed.size()).isEqualTo(objects.size());
     //    Assertions.assertThat(parsed).containsAll(objects);

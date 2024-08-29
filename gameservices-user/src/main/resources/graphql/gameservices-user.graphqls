@@ -1,8 +1,11 @@
 extend type Query {
-    createUser(input: UserInput): User
-    updateUser(input: UserInput): User
     findUser(options: Options): [User]
     getUser(id: String): User
+}
+
+extend type Mutation {
+    createUser(input: UserInput): User
+    updateUser(input: UserInput): User
     flavorUser(id: String): User
     deleteUser(id: String): Boolean
 }
@@ -13,7 +16,8 @@ type User implements CommonEntity {
     lastName: String!
     email: String!
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -25,6 +29,7 @@ input UserInput {
     firstName: String!
     lastName: String!
     email: String!
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }

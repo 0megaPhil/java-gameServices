@@ -1,15 +1,19 @@
 extend type Query {
-    createTransaction(input: TransactionInput): Transaction
-    updateTransaction(input: TransactionInput): Transaction
     findTransaction(options: Options): [Transaction]
     getTransaction(id: String): Transaction
+
+    findCurrency(options: Options): [Currency]
+    getCurrency(id: String): Currency
+}
+
+extend type Mutation {
+    createTransaction(input: TransactionInput): Transaction
+    updateTransaction(input: TransactionInput): Transaction
     flavorTransaction(id: String): Transaction
     deleteTransaction(id: String): Boolean
 
     createCurrency(input: CurrencyInput): Currency
     updateCurrency(input: CurrencyInput): Currency
-    findCurrency(options: Options): [Currency]
-    getCurrency(id: String): Currency
     flavorCurrency(id: String): Currency
     deleteCurrency(id: String): Boolean
 }
@@ -19,7 +23,8 @@ input TransactionInput {
     inventoryId: String
     currency: String!
     item: String
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -29,7 +34,8 @@ type Transaction implements CommonEntity {
     currency: String
     item: String
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -39,7 +45,8 @@ type Transaction implements CommonEntity {
 input CurrencyInput {
     id: String
     name: String!
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -47,7 +54,8 @@ type Currency implements CommonEntity {
     id: String
     name: String!
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int

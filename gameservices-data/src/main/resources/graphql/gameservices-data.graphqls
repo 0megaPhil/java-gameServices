@@ -1,11 +1,13 @@
 scalar DateTime
+scalar Object
 
 # CommonEntity inheritors are static and used to generated data model
 # This is to be used for more complex domain model exposures
 interface CommonEntity {
     id: String
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -13,7 +15,7 @@ interface CommonEntity {
 }
 
 interface CommonObject {
-    objectType: String
+    targetId: String
 }
 
 interface CommonValue {
@@ -50,27 +52,34 @@ type Dimension implements CommonValue {
     value: Float!
     title: String!
     unitType: String!
+    minimum: Int
+    average: Int
+    maximum: Int
 }
 
 input DimensionInput {
     value: Float!
     title: String!
     unitType: String!
+    minimum: Int
+    average: Int
+    maximum: Int
 }
 
-type Characteristic implements CommonValue {
-    value: Float!
+type Characteristic implements CommonObject {
+    targetId: String
     title: String!
     description: String
 }
 
 input CharacteristicInput {
-    value: Float!
+    targetId: String
     title: String!
     description: String
 }
 
 type Error implements CommonObject {
+    targetId: String
     title: String
     type: ErrorTypes
     path: String
@@ -114,7 +123,8 @@ type ErrorResponse implements CommonEntity {
     uri: String
     params: String
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int

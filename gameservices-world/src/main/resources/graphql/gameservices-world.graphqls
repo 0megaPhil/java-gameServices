@@ -1,15 +1,19 @@
 extend type Query {
-    createWorld(input: WorldInput): World
-    updateWorld(input: WorldInput): World
     findWorld(options: Options): [World]
     getWorld(id: String): World
+
+    findTerrain(options: Options): [Terrain]
+    getTerrain(id: String): Terrain
+}
+
+extend type Mutation {
+    createWorld(input: WorldInput): World
+    updateWorld(input: WorldInput): World
     flavorWorld(id: String): World
     deleteWorld(id: String): Boolean
 
     createTerrain(input: TerrainInput): Terrain
     updateTerrain(input: TerrainInput): Terrain
-    findTerrain(options: Options): [Terrain]
-    getTerrain(id: String): Terrain
     flavorTerrain(id: String): Terrain
     deleteTerrain(id: String): Boolean
 }
@@ -17,13 +21,14 @@ extend type Query {
 type World implements CommonEntity {
     id: String
     name: String!
-    type: String!
+    type: Worlds!
     terrains: [Terrain]
     races: [Race]
     techLevel: TechLevels
     magicLevel: MagicLevels
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -33,12 +38,13 @@ type World implements CommonEntity {
 input WorldInput {
     id: String
     name: String!
-    type: String!
+    type: Worlds!
     terrains: [TerrainInput]
     races: [RaceInput]
     techLevel: TechLevels
     magicLevel: MagicLevels
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 
@@ -55,10 +61,11 @@ input TerrainEffectInput {
 type Terrain implements CommonEntity {
     id: String
     name: String!
-    type: String!
+    type: Terrains!
     effects: [TerrainEffect]
     prompt: String
-    flavor: Flavor
+    characteristics: [Characteristic]
+    summary: String
     created: DateTime
     updated: DateTime
     version: Int
@@ -68,9 +75,10 @@ type Terrain implements CommonEntity {
 input TerrainInput {
     id: String
     name: String!
-    type: String!
+    type: Terrains!
     effects: [TerrainEffectInput]
-    flavor: FlavorInput
+    characteristics: [CharacteristicInput]
+    summary: String
     prompt: String
 }
 

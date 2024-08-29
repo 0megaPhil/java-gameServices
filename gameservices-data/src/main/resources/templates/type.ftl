@@ -10,10 +10,14 @@
         </#list>
     </#list>
 </#if>
+import com.firmys.gameservices.data.conversion.DataJsonConverters;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.OffsetDateTime;
 import java.util.Set;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.With;
@@ -49,26 +53,17 @@ public record ${className}(<#if fields?has_content>
             @Singular
             ${field.type?replace("java.util.List<", "Set<")} ${field.name}<#if field_has_next>,</#if>
         </#if>
-        <#if !field.type?contains("List") && field.name != "name"
-        && field.name != "id" && field.type != "String"
-        && field.type != "Integer" && field.name != "value"
-        && field.type != "Float" && field.name != "created"
+        <#if !field.type?contains("List")
+        && field.name != "name"
+        && field.name != "id"
+        && field.type != "String"
+        && field.type != "Integer"
+        && field.name != "value"
+        && field.type != "Float"
+        && field.name != "created"
         && field.name != "updated"
-        && field.type != "ErrorTypes"
-        && field.type != "Sexes"
-        && field.type != "Effects"
-        && field.type != "Races"
-        && field.type != "Attributes"
-        && field.type != "Stats"
-        && field.type != "Skills"
-        && field.type != "Species"
-        && field.type != "Professions"
-        && field.type != "Operations"
-        && field.type != "Events"
-        && field.type != "Terrains"
-        && field.type != "TechLevels"
-        && field.type != "MagicLevels"
-        && field.type != "Worlds">
+        && field.name != "type"
+        && field.name != "sex">
             @Reference
         </#if>
         <#if !field.type?contains("List")>
@@ -80,6 +75,8 @@ public record ${className}(<#if fields?has_content>
                 @Version
                 ${field.type} ${field.name}<#if field_has_next>,</#if>
             <#elseif field.name == "id">
+                @JsonSerialize(using = DataJsonConverters.IdJsonSerializer.class)
+                @JsonDeserialize(using = DataJsonConverters.IdJsonDeserializer.class)
                 @Id
                 ObjectId ${field.name}<#if field_has_next>,</#if>
             <#else>
@@ -93,5 +90,13 @@ public record ${className}(<#if fields?has_content>
 <#if !implements?has_content>
     implements CommonObject
 </#if> {
+
+public ${className} {
+<#list fields as field>
+    <#if field.defaultValue?has_content>
+        ${field.name} = Optional.ofNullable(${field.name}).orElse(${field.defaultValue});
+    </#if>
+</#list>
+}
 
 }

@@ -6,6 +6,7 @@ import static com.firmys.gameservices.generated.models.Operations.DELETE_BY_ID;
 import static com.firmys.gameservices.generated.models.Operations.FIND_ALL_LIKE;
 import static com.firmys.gameservices.generated.models.Operations.FIND_BY_ID;
 import static com.firmys.gameservices.generated.models.Operations.FIND_ONE_LIKE;
+import static com.firmys.gameservices.generated.models.Operations.UPDATE_ONE;
 import static com.firmys.gameservices.service.error.ErrorUtils.mongoDbError;
 import static com.firmys.gameservices.service.error.ErrorUtils.toException;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
@@ -14,6 +15,7 @@ import com.firmys.gameservices.common.FunctionUtils;
 import com.firmys.gameservices.data.CommonRepository;
 import com.firmys.gameservices.generated.models.CommonEntity;
 import com.firmys.gameservices.generated.models.Error;
+import com.firmys.gameservices.generated.models.Operations;
 import com.firmys.gameservices.generated.models.Options;
 import com.firmys.gameservices.service.error.ServiceException;
 import java.util.Objects;
@@ -48,11 +50,18 @@ public abstract class GameService<E extends CommonEntity> {
     return Example.of(exampleObj, matcher);
   }
 
+  public abstract GameServiceClient gameServiceClient();
+
   public abstract CommonRepository<E> repository();
 
   public abstract Class<E> entityType();
 
-  public Mono<E> find(ObjectId id) {
+  // TODO: Finish call to FlavorService
+  public Mono<E> flavor(ObjectId id) {
+    return Mono.defer(() -> repository().findById(id));
+  }
+
+  public Mono<E> get(ObjectId id) {
     return findByIdChain().apply(id);
   }
 
@@ -86,8 +95,8 @@ public abstract class GameService<E extends CommonEntity> {
             th -> toException(mongoDbError(entityType(), exampleObj).apply(th, FIND_ALL_LIKE)));
   }
 
-  public Mono<E> ensureValues(Mono<E> character) {
-    return character;
+  public Mono<E> ensureValues(Mono<E> object) {
+    return object;
   }
 
   public Mono<E> create(Mono<E> object) {
@@ -120,15 +129,29 @@ public abstract class GameService<E extends CommonEntity> {
       String operation, Predicate<E> predicate, String message) {
     return mono ->
         mono.handle(errorConsumer(predicate, operation, message, 400))
-            .flatMap(
-                obj ->
-                    repository()
-                        .save(prompt().apply((E) obj))
-                        .onErrorMap(
-                            th ->
-                                toException(mongoDbError(entityType(), obj).apply(th, CREATE_ONE))))
+            .flatMap(obj -> saveOrHandle((E) obj))
+            .doOnNext(this::updateFlavor)
             .doOnNext(o -> log.info("{} {}", operation, o))
-            .doOnError(th -> log.error(th.getMessage(), th));
+            .doOnError(th -> log.error("{} {}", th.getClass().getSimpleName(), th.getMessage()));
+  }
+
+  private Mono<E> saveOrHandle(E obj) {
+    return repository()
+        .save(prompt().apply(obj))
+        .onErrorMap(th -> toException(mongoDbError(entityType(), obj).apply(th, CREATE_ONE)));
+  }
+
+  private void updateFlavor(E object) {
+    Mono.just(object)
+        .filter(o -> o.id() != null)
+        .filter(o -> o.error() == null)
+        .flatMap(o -> gameServiceClient().flavor(o.id(), entityType()))
+        .filter(o -> o.characteristics() != null)
+        .filter(o -> o.error() == null)
+        .flatMap(o -> repository().save(o))
+        .doOnError(th -> log.error("{} {}", th.getClass().getSimpleName(), th.getMessage()))
+        .subscribeOn(Schedulers.parallel())
+        .subscribe(o -> log.info("Flavor Updated: {}", o.toJson()));
   }
 
   private Function<ObjectId, Mono<E>> findByIdChain() {
@@ -152,11 +175,34 @@ public abstract class GameService<E extends CommonEntity> {
   }
 
   public Mono<E> update(Mono<E> object) {
-    return saveOneChain("UPDATE", o -> o.id() != null, "id should not be null").apply(object);
+    return saveOneChain(Operations.UPDATE_ONE.name(), o -> o.id() != null, "id should not be null")
+        .apply(
+            object
+                .filter(obj -> obj.id() != null)
+                .switchIfEmpty(
+                    object
+                        .flatMap(
+                            obj ->
+                                ensureValues(
+                                    findAllLike(obj)
+                                        .singleOrEmpty()
+                                        .map(
+                                            found ->
+                                                (E)
+                                                    obj.withId(found.id())
+                                                        .withVersion(found.version()))))
+                        .switchIfEmpty(
+                            Mono.error(
+                                toException(
+                                    mongoDbError(entityType(), object)
+                                        .apply(
+                                            new RuntimeException(
+                                                "no Id provided, and no LIKE found"),
+                                            UPDATE_ONE))))));
   }
 
-  public Mono<Void> delete(ObjectId id) {
-    return deleteByIdChain().apply(id);
+  public Mono<Boolean> delete(ObjectId id) {
+    return deleteByIdChain().apply(id).then(Mono.just(true)).onErrorReturn(false);
   }
 
   private Function<ObjectId, Mono<Void>> deleteByIdChain() {
@@ -184,15 +230,16 @@ public abstract class GameService<E extends CommonEntity> {
 
   @SuppressWarnings("unchecked")
   public Function<E, E> prompt() {
-    return obj ->
-        (E)
-            obj.withPrompt(
-                Optional.ofNullable(obj.prompt())
-                    .orElseGet(
-                        () ->
-                            "Describe "
-                                + obj.getClass().getSimpleName()
-                                + " based on these details "
-                                + obj.toJson()));
+    return obj -> (E) obj.withPrompt(promptBuilder().toString());
+  }
+
+  public StringBuilder promptBuilder() {
+    return new StringBuilder()
+        .append("Create and interesting description for ")
+        .append(entityType().getSimpleName())
+        .append(" and return it as a json object using the following json format ")
+        .append("{ \"title\": String, \"description\": String } \n")
+        .append(
+            "Also observe the following instructions, if any, when generating this description\n");
   }
 }

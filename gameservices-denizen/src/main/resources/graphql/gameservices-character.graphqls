@@ -1,0 +1,510 @@
+extend type Query {
+    findPlayer(options: Options): [Player]
+    getPlayer(id: String): Player
+
+    findSkill(options: Options): [Skill]
+    getSkill(id: String): Skill
+
+    findStat(options: Options): [Stat]
+    getStat(id: String): Stat
+
+    findRace(options: Options): [Race]
+    getRace(id: String): Race
+
+    findCreature(options: Options): [Creature]
+    getCreature(id: String): Creature
+
+    findProfession(options: Options): [Profession]
+    getProfession(id: String): Profession
+}
+
+extend type Mutation {
+    createPlayer(input: PlayerInput): Player
+    updatePlayer(input: PlayerInput): Player
+    flavorPlayer(id: String): Player
+    deletePlayer(id: String): Boolean
+
+    createSkill(input: SkillInput): Skill
+    updateSkill(input: SkillInput): Skill
+    flavorSkill(id: String): Skill
+    deleteSkill(id: String): Boolean
+
+    createStat(input: StatInput): Stat
+    updateStat(input: StatInput): Stat
+    flavorStat(id: String): Stat
+    deleteStat(id: String): Boolean
+
+    createRace(input: RaceInput): Race
+    updateRace(input: RaceInput): Race
+    flavorRace(id: String): Race
+    deleteRace(id: String): Boolean
+
+    createCreature(input: CreatureInput): Creature
+    updateCreature(input: CreatureInput): Creature
+    flavorCreature(id: String): Creature
+    deleteCreature(id: String): Boolean
+
+    createProfession(input: ProfessionInput): Profession
+    updateProfession(input: ProfessionInput): Profession
+    flavorProfession(id: String): Profession
+    deleteProfession(id: String): Boolean
+}
+
+type Profession implements CommonEntity {
+    id: String
+    name: String!
+    type: Professions
+    stats: [PlayerStat]
+    skills: [PlayerSkill]
+    attributes: [PlayerAttribute]
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input ProfessionInput {
+    id: String
+    name: String!
+    type: Professions!
+    stats: [PlayerStatInput]
+    skills: [PlayerSkillInput]
+    attributes: [PlayerAttributeInput]
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+}
+
+type Race implements CommonEntity {
+    id: String
+    name: String!
+    type: Species!
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input RaceInput {
+    id: String
+    name: String!
+    type: Species!
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+}
+
+type Skill implements CommonEntity {
+    id: String
+    type: Skills!
+    name: String
+    prompt: String
+    minimum: Int
+    average: Int
+    maximum: Int
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input SkillInput {
+    id: String
+    type: Skills!
+    name: String
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+    minimum: Int = 0
+    average: Int = 50
+    maximum: Int = 1000
+}
+
+type Stat implements CommonEntity {
+    id: String
+    type: Stats!
+    name: String
+    prompt: String
+    minimum: Int
+    average: Int
+    maximum: Int
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input StatInput {
+    id: String
+    type: Stats!
+    name: String
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+    minimum: Int = 1
+    average: Int = 10
+    maximum: Int = 20
+}
+
+type PlayerSkill implements CommonValue {
+    skill: Skill!
+    value: Float!
+}
+
+input PlayerSkillInput {
+    skill: SkillInput!
+    value: Float!
+}
+
+type PlayerStat implements CommonValue {
+    stat: Stat!
+    value: Float!
+}
+
+input PlayerStatInput {
+    stat: StatInput!
+    value: Float!
+}
+
+type PlayerEffect implements CommonValue {
+    effect: Effect!
+    value: Float!
+}
+
+input PlayerEffectInput {
+    effect: EffectInput!
+    value: Float!
+}
+
+type PlayerAttribute implements CommonValue {
+    attribute: Attribute
+    value: Float!
+}
+
+input PlayerAttributeInput {
+    attribute: AttributeInput
+    value: Float!
+}
+
+type Player implements CommonEntity {
+    id: String
+    name: String
+    sex: Sexes
+    race: Race
+    user: User
+    profession: Profession
+    inventory: Inventory
+    dimensions: [Dimension]
+    skills: [PlayerSkill]
+    stats: [PlayerStat]
+    attributes: [PlayerAttribute]
+    features: [Feature]
+    histories: [History]
+    effects: [PlayerEffect]
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input PlayerInput {
+    id: String
+    name: String
+    sex: Sexes
+    race: RaceInput
+    user: UserInput
+    profession: ProfessionInput
+    inventory: InventoryInput
+    dimensions: [DimensionInput]
+    skills: [PlayerSkillInput]
+    stats: [PlayerStatInput]
+    attributes: [PlayerAttributeInput]
+    features: [FeatureInput]
+    histories: [HistoryInput]
+    effects: [PlayerEffectInput]
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+}
+
+type NPC implements CommonEntity {
+    id: String
+    name: String
+    sex: Sexes
+    race: Race
+    user: User
+    profession: Profession
+    inventory: Inventory
+    dimensions: [Dimension]
+    skills: [PlayerSkill]
+    stats: [PlayerStat]
+    attributes: [PlayerAttribute]
+    features: [Feature]
+    histories: [History]
+    effects: [PlayerEffect]
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input NPCInput {
+    id: String
+    name: String
+    sex: Sexes
+    race: RaceInput
+    user: UserInput
+    profession: ProfessionInput
+    inventory: InventoryInput
+    dimensions: [DimensionInput]
+    features: [FeatureInput]
+    histories: [HistoryInput]
+    skills: [PlayerSkillInput]
+    stats: [PlayerStatInput]
+    attributes: [PlayerAttributeInput]
+    effects: [PlayerEffectInput]
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+}
+
+type Creature implements CommonEntity {
+    id: String
+    name: String!
+    type: Species!
+    sex: Sexes
+    inventory: Inventory
+    profession: Profession
+    dimensions: [Dimension]
+    skills: [PlayerSkill]
+    stats: [PlayerStat]
+    attributes: [PlayerAttribute]
+    effects: [PlayerEffect]
+    features: [Feature]
+    histories: [History]
+    prompt: String
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+type History implements CommonObject {
+    targetId: String
+    type: Histories
+    title: String!
+    description: String
+}
+
+input HistoryInput {
+    targetId: String
+    type: Histories!
+    title: String!
+    description: String
+}
+
+enum Histories {
+    BACKGROUND
+    UPBRINGING
+    PAST
+    EVENT
+    JOURNEY
+    LORE
+    STORY
+    CULTURE
+    EXPERIENCE
+    TRAUMA
+    FEAR
+    RIVAL
+    REGRET
+    RECORD
+    OTHER
+}
+
+type Feature implements CommonObject {
+    targetId: String
+    title: String!
+    type: Features
+    description: String
+}
+
+enum Features {
+    HAIR
+    EYE
+    NOSE
+    POSTURE
+    PHYSIQUE
+    MOUTH
+    SKIN
+    NAILS
+    CHIN
+    BOSOM
+    BUTTOCKS
+    LEGS
+    HANDS
+    ARMS
+    FINGERS
+    TOES
+    OTHER
+}
+
+input FeatureInput {
+    targetId: String
+    type: Features
+    title: String!
+    description: String
+}
+
+input CreatureInput {
+    id: String
+    name: String!
+    type: Species!
+    sex: Sexes
+    inventory: InventoryInput
+    profession: ProfessionInput
+    dimensions: [DimensionInput]
+    skills: [PlayerSkillInput]
+    stats: [PlayerStatInput]
+    attributes: [PlayerAttributeInput]
+    features: [FeatureInput]
+    histories: [HistoryInput]
+    effects: [PlayerEffectInput]
+    characteristics: [CharacteristicInput]
+    summary: String
+    prompt: String
+}
+
+type Effect implements CommonEntity{
+    id: String
+    type: Effects!
+    name: String
+    prompt: String
+    minimum: Int
+    average: Int
+    maximum: Int
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input EffectInput {
+    id: String
+    type: Effects!
+    name: String
+    prompt: String
+    minimum: Int = 0
+    average: Int = 50
+    maximum: Int = 100
+    flavor: FlavorInput
+}
+
+type Attribute implements CommonEntity{
+    id: String
+    type: Attributes!
+    name: String
+    prompt: String
+    minimum: Int
+    maximum: Int
+    characteristics: [Characteristic]
+    summary: String
+    created: DateTime
+    updated: DateTime
+    version: Int
+    error: Error
+}
+
+input AttributeInput {
+    id: String
+    type: Attributes!
+    name: String
+    prompt: String
+    minimum: Int = 1
+    maximum: Int = 2147483647
+    flavor: FlavorInput
+}
+
+enum Sexes {
+    MALE,
+    FEMALE,
+    HERMAPHRODITIC,
+    ASEXUAL,
+    OTHER
+}
+
+enum Effects {
+    ATTRIBUTE,
+    STAT,
+    SKILL,
+    CHARACTERISTIC
+    DIMENSION,
+    STATUS,
+    OTHER
+}
+
+enum Attributes {
+    HEALTH,
+    MANA,
+    SANITY,
+    ENERGY,
+    OTHER
+}
+
+enum Stats {
+    PHYSICAL,
+    MENTAL,
+    SOCIAL
+}
+
+enum Skills {
+    COMBAT,
+    UTILITY,
+    SOCIAL,
+    MOVEMENT,
+    INTERNAL,
+    CREATIVE,
+    OTHER
+}
+
+enum Species {
+    HOMINID
+    META_HOMINID
+    HOMINID_DEUM
+    REPTILIAN
+    XENOBIOTIC
+    AVIAN
+    ANIMALIA
+    ICHTHYS
+    PLANTAE
+    FUNGI
+    OTHER
+}
+
+enum Professions {
+    COMBAT
+    MILITARY
+    UTILITY
+    POLITICAL
+    RELIGIOUS
+    OTHER
+}

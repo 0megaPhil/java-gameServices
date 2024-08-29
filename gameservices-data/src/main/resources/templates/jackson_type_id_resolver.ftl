@@ -45,12 +45,12 @@ return JsonTypeInfo.Id.NAME;
 }
 
 @Override
-public String idFromValue(Object obj) {
+public ObjectId idFromValue(Object obj) {
 return idFromValueAndType(obj, obj.getClass());
 }
 
 @Override
-public String idFromValueAndType(Object obj, Class<?> subType) {
+public ObjectId idFromValueAndType(Object obj, Class<?> subType) {
 return subType.getSimpleName();
 }
 }

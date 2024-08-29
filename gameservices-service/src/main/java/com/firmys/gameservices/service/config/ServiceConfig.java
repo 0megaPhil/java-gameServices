@@ -1,5 +1,6 @@
 package com.firmys.gameservices.service.config;
 
+import static com.firmys.gameservices.common.CommonConstants.PROFILE_NOT_GATEWAY;
 import static com.firmys.gameservices.common.CommonConstants.PROFILE_NOT_TEST;
 import static com.firmys.gameservices.common.CommonConstants.PROFILE_SERVICE;
 import static java.time.ZoneOffset.UTC;
@@ -19,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.mongodb.core.mapping.event.BeforeConvertCallback;
+import org.springframework.data.mongodb.core.mapping.event.BeforeSaveCallback;
 
 @Configuration
 @Import({
@@ -59,18 +60,17 @@ public class ServiceConfig {
 
   @Bean
   @ConditionalOnMissingBean
-  @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST})
-  public BeforeConvertCallback<CommonEntity> beforeConvertCallback() {
-    return (d, table) -> {
-      if (d.id() == null) {
+  @Profile({PROFILE_SERVICE, PROFILE_NOT_TEST, PROFILE_NOT_GATEWAY})
+  public BeforeSaveCallback<CommonEntity> beforeSaveCallback() {
+    return (d, table, str) -> {
+      if (d.id() == null && d.created() == null) {
         d =
             d.withId(ObjectId.get())
                 .withCreated(
                     Optional.ofNullable(d.created())
-                        .orElse(ZonedDateTime.now(UTC).toOffsetDateTime()))
-                .withUpdated(ZonedDateTime.now(UTC).toOffsetDateTime());
+                        .orElse(ZonedDateTime.now(UTC).toOffsetDateTime()));
       }
-      return d;
+      return d.withUpdated(ZonedDateTime.now(UTC).toOffsetDateTime());
     };
   }
 }
