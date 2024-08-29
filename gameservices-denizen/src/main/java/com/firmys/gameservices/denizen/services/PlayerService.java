@@ -36,6 +36,11 @@ public class PlayerService extends GameService<Player> {
 
   private final Class<Player> entityType = Player.class;
 
+  @Override
+  public Function<Player, Player> prompt() {
+    return super.prompt();
+  }
+
   @Transactional
   public Mono<Player> create(Player object) {
     return create(Mono.just(object));

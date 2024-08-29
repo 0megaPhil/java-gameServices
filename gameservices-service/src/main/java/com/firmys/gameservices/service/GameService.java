@@ -230,15 +230,16 @@ public abstract class GameService<E extends CommonEntity> {
 
   @SuppressWarnings("unchecked")
   public Function<E, E> prompt() {
-    return obj ->
-        (E)
-            obj.withPrompt(
-                Optional.ofNullable(obj.prompt())
-                    .orElseGet(
-                        () ->
-                            "Describe "
-                                + obj.getClass().getSimpleName()
-                                + " based on these details "
-                                + obj.toJson()));
+    return obj -> (E) obj.withPrompt(promptBuilder().toString());
+  }
+
+  public StringBuilder promptBuilder() {
+    return new StringBuilder()
+        .append("Create and interesting description for ")
+        .append(entityType().getSimpleName())
+        .append(" and return it as a json object using the following json format ")
+        .append("{ \"title\": String, \"description\": String } \n")
+        .append(
+            "Also observe the following instructions, if any, when generating this description\n");
   }
 }

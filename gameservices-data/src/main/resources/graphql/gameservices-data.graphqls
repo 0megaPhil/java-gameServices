@@ -52,12 +52,18 @@ type Dimension implements CommonValue {
     value: Float!
     title: String!
     unitType: String!
+    minimum: Int
+    average: Int
+    maximum: Int
 }
 
 input DimensionInput {
     value: Float!
     title: String!
     unitType: String!
+    minimum: Int
+    average: Int
+    maximum: Int
 }
 
 type Characteristic implements CommonObject {

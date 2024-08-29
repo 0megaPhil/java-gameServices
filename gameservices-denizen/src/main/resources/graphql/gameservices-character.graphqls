@@ -105,6 +105,9 @@ type Skill implements CommonEntity {
     type: Skills!
     name: String
     prompt: String
+    minimum: Int
+    average: Int
+    maximum: Int
     characteristics: [Characteristic]
     summary: String
     created: DateTime
@@ -120,6 +123,9 @@ input SkillInput {
     characteristics: [CharacteristicInput]
     summary: String
     prompt: String
+    minimum: Int = 0
+    average: Int = 50
+    maximum: Int = 1000
 }
 
 type Stat implements CommonEntity {
@@ -127,6 +133,9 @@ type Stat implements CommonEntity {
     type: Stats!
     name: String
     prompt: String
+    minimum: Int
+    average: Int
+    maximum: Int
     characteristics: [Characteristic]
     summary: String
     created: DateTime
@@ -142,6 +151,9 @@ input StatInput {
     characteristics: [CharacteristicInput]
     summary: String
     prompt: String
+    minimum: Int = 1
+    average: Int = 10
+    maximum: Int = 20
 }
 
 type PlayerSkill implements CommonValue {
@@ -385,6 +397,9 @@ type Effect implements CommonEntity{
     type: Effects!
     name: String
     prompt: String
+    minimum: Int
+    average: Int
+    maximum: Int
     characteristics: [Characteristic]
     summary: String
     created: DateTime
@@ -398,6 +413,9 @@ input EffectInput {
     type: Effects!
     name: String
     prompt: String
+    minimum: Int = 0
+    average: Int = 50
+    maximum: Int = 100
     flavor: FlavorInput
 }
 
@@ -406,6 +424,8 @@ type Attribute implements CommonEntity{
     type: Attributes!
     name: String
     prompt: String
+    minimum: Int
+    maximum: Int
     characteristics: [Characteristic]
     summary: String
     created: DateTime
@@ -419,6 +439,8 @@ input AttributeInput {
     type: Attributes!
     name: String
     prompt: String
+    minimum: Int = 1
+    maximum: Int = 2147483647
     flavor: FlavorInput
 }
 

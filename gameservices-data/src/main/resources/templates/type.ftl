@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.OffsetDateTime;
 import java.util.Set;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.With;
@@ -89,5 +90,13 @@ public record ${className}(<#if fields?has_content>
 <#if !implements?has_content>
     implements CommonObject
 </#if> {
+
+public ${className} {
+<#list fields as field>
+    <#if field.defaultValue?has_content>
+        ${field.name} = Optional.ofNullable(${field.name}).orElse(${field.defaultValue});
+    </#if>
+</#list>
+}
 
 }
