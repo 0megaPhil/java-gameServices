@@ -28,10 +28,10 @@ spring:
           uri: https://${gameservices.services.INVENTORY.host}:${gameservices.services.INVENTORY.port}
           predicates:
             - Path="/${gameservices.services.INVENTORY.id}/**"
-        - id: ${gameservices.services.PLAYER.name}
-          uri: https://${gameservices.services.PLAYER.host}:${gameservices.services.PLAYER.port}
+        - id: ${gameservices.services.DENIZEN.name}
+          uri: https://${gameservices.services.DENIZEN.host}:${gameservices.services.DENIZEN.port}
           predicates:
-            - Path=/${gameservices.services.PLAYER.id}/**
+            - Path=/${gameservices.services.DENIZEN.id}/**
         - id: ${gameservices.services.ITEM.name}
           uri: https://${gameservices.services.ITEM.host}:${gameservices.services.ITEM.port}
           predicates:

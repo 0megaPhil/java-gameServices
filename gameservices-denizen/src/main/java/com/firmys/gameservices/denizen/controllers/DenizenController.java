@@ -1,9 +1,9 @@
 package com.firmys.gameservices.denizen.controllers;
 
-import static com.firmys.gameservices.common.CommonConstants.PLAYER_PATH;
+import static com.firmys.gameservices.common.CommonConstants.DENIZEN_PATH;
 
-import com.firmys.gameservices.denizen.services.PlayerService;
-import com.firmys.gameservices.generated.models.Player;
+import com.firmys.gameservices.denizen.services.DenizenService;
+import com.firmys.gameservices.generated.models.Denizen;
 import com.firmys.gameservices.service.ServiceController;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,14 +15,14 @@ import reactor.core.publisher.Mono;
 @Getter
 @RestController
 @Builder(toBuilder = true)
-@RequestMapping(PLAYER_PATH)
+@RequestMapping(DENIZEN_PATH)
 @Accessors(chain = true, fluent = true)
-public class PlayerController extends ServiceController<Player> {
+public class DenizenController extends ServiceController<Denizen> {
 
-  private final PlayerService service;
+  private final DenizenService service;
 
   @Override
-  public Mono<Player> create(Player object) {
+  public Mono<Denizen> create(Denizen object) {
     return service.create(object);
   }
 }

@@ -21,13 +21,12 @@ extend type Mutation {
 type World implements CommonEntity {
     id: String
     name: String!
-    type: Worlds!
+    type: Entities
     terrains: [Terrain]
-    races: [Race]
+    entries: [AttributeEntry]
     techLevel: TechLevels
     magicLevel: MagicLevels
-    prompt: String
-    characteristics: [Characteristic]
+    features: [Feature]
     summary: String
     created: DateTime
     updated: DateTime
@@ -38,23 +37,21 @@ type World implements CommonEntity {
 input WorldInput {
     id: String
     name: String!
-    type: Worlds!
+    type: Entities
     terrains: [TerrainInput]
-    races: [RaceInput]
+    entries: [AttributeEntryInput] = []
     techLevel: TechLevels
     magicLevel: MagicLevels
-    characteristics: [CharacteristicInput]
+    features: [FeatureInput] = []
     summary: String
-    prompt: String
 }
 
 type Terrain implements CommonEntity {
     id: String
     name: String!
-    type: Terrains!
-    effects: [EffectEntry]
-    prompt: String
-    characteristics: [Characteristic]
+    type: Entities
+    entries: [AttributeEntry]
+    features: [Feature]
     summary: String
     created: DateTime
     updated: DateTime
@@ -65,11 +62,10 @@ type Terrain implements CommonEntity {
 input TerrainInput {
     id: String
     name: String!
-    type: Terrains!
-    effects: [EffectEntryInput]
-    characteristics: [CharacteristicInput]
+    type: Entities
+    entries: [AttributeEntryInput] = []
+    features: [FeatureInput] = []
     summary: String
-    prompt: String
 }
 
 enum Events {
@@ -80,26 +76,6 @@ enum Events {
     CHARACTER
     ECONOMIC
     POLITICAL
-}
-
-enum Terrains {
-    DESERT
-    FORREST
-    PLAINS
-    TUNDRA
-    OCEAN
-    SEA
-    LAKE
-    MOUNTAINS
-    DUNGEON
-    URBAN
-    LABYRINTH
-    INDOORS
-    VOID
-    RIVER
-    SKY
-    LUNAR
-    AQUATIC
 }
 
 enum TechLevels {
@@ -121,18 +97,4 @@ enum MagicLevels {
     MODERATE_MAGIC
     HIGH_MAGIC
     INHERENT_MAGIC
-}
-
-enum Worlds {
-    TERRAN
-    AQUATIC
-    JUNGLE
-    FOREST
-    ICE
-    SNOW
-    LAVA
-    DESERT
-    FLOATING
-    HOLLOW
-    MAGICAL
 }

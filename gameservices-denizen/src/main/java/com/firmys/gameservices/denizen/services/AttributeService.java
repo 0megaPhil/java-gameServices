@@ -2,6 +2,7 @@ package com.firmys.gameservices.denizen.services;
 
 import com.firmys.gameservices.denizen.data.AttributeRepository;
 import com.firmys.gameservices.generated.models.Attribute;
+import com.firmys.gameservices.generated.models.AttributeEntry;
 import com.firmys.gameservices.service.GameService;
 import com.firmys.gameservices.service.GameServiceClient;
 import java.util.function.Function;
@@ -9,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Getter
 @Service
@@ -20,20 +22,25 @@ public class AttributeService extends GameService<Attribute> {
   private final Class<Attribute> entityType = Attribute.class;
 
   @Override
-  public Function<Attribute, Attribute> prompt() {
-    return object ->
-        object.withPrompt(
-            promptBuilder()
-                .append("<additional_instructions>\n")
-                .append("The ")
-                .append(entityType.getSimpleName())
-                .append(" type is ")
-                .append(object.type())
-                .append("and the ")
-                .append(entityType.getSimpleName())
-                .append(" name is ")
-                .append(object.name())
-                .append("\n</additional_instructions>")
-                .toString());
+  public Mono<Attribute> create(Attribute object) {
+    return create(Mono.just(object));
+  }
+
+  @Override
+  public Mono<Attribute> create(Mono<Attribute> object) {
+    return super.create(object);
+  }
+
+  public Function<AttributeEntry, Mono<AttributeEntry>> resolveEntry() {
+    return entry ->
+        findAllLike(entry.attribute())
+            .take(1)
+            .singleOrEmpty()
+            .switchIfEmpty(create(entry.attribute()))
+            .map(
+                attr ->
+                    entry
+                        .withContext(attributeContext(entry.value(), entry.attribute()))
+                        .withAttribute(attr));
   }
 }

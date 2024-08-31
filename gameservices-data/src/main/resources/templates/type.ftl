@@ -66,8 +66,9 @@ public record ${className}(<#if fields?has_content>
         && field.name != "type"
         && field.name != "sex"
         && field.name != "likelihood"
-        && field.type != "Magnitude"
+        && field.type != "Entities"
         && field.type != "Rarity"
+        && field.type != "Contexts"
         && !field.type?contains("Double")>
             @Reference
         </#if>
@@ -99,7 +100,7 @@ public record ${className}(<#if fields?has_content>
 public ${className} {
 <#list fields as field>
     <#if field.defaultValue?has_content>
-        ${field.name} = Optional.ofNullable(${field.name}).orElse(${field.defaultValue}<#if field.type?contains("Double")>D</#if>);
+        ${field.name} = Optional.ofNullable(${field.name}).orElse(<#if field.defaultValue?contains("emptyList")>java.util.Collections.emptySet()<#else>${field.defaultValue}</#if><#if field.type?contains("Double")>D</#if>);
     </#if>
 </#list>
 }

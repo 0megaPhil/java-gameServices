@@ -15,7 +15,9 @@ import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
-import com.firmys.gameservices.generated.models.Characteristic;
+import com.firmys.gameservices.generated.models.Feature;
+import com.firmys.gameservices.generated.models.Entities;
+import com.firmys.gameservices.generated.models.AttributeEntry;
 
 import static com.firmys.gameservices.common.JsonUtils.JSON;
 <#if javaDoc?has_content>
@@ -69,9 +71,9 @@ ObjectId id();
 
 Error error();
 
-String prompt();
-
 String summary();
+
+Entities type();
 
 Integer version();
 
@@ -80,25 +82,31 @@ OffsetDateTime created();
 OffsetDateTime updated();
 
 Set
-<Characteristic> characteristics();
+<Feature> features();
 
-    CommonEntity withId(ObjectId id);
+    Set
+    <AttributeEntry> entries();
 
-    CommonEntity withError(Error error);
+        CommonEntity withId(ObjectId id);
 
-    CommonEntity withPrompt(String prompt);
+        CommonEntity withError(Error error);
 
-    CommonEntity withSummary(String summary);
+        CommonEntity withType(Entities type);
 
-    CommonEntity withVersion(Integer version);
+        CommonEntity withSummary(String summary);
 
-    CommonEntity withCreated(OffsetDateTime dateTime);
+        CommonEntity withVersion(Integer version);
 
-    CommonEntity withUpdated(OffsetDateTime dateTime);
+        CommonEntity withCreated(OffsetDateTime dateTime);
 
-    CommonEntity withCharacteristics(Set
-    <Characteristic> characteristics);
-        </#if>
+        CommonEntity withUpdated(OffsetDateTime dateTime);
+
+        CommonEntity withFeatures(Set
+        <Feature> features);
+
+            CommonEntity withEntries(Set
+            <AttributeEntry> entries);
+                </#if>
 
 
-        }
+                }

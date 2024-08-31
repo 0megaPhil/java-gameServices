@@ -5,13 +5,9 @@ import lombok.Getter;
 
 @Getter
 public enum Services {
-  PLAYER(CommonConstants.PLAYER),
-  NPC(CommonConstants.NPC),
-  CREATURE(CommonConstants.CREATURE),
-  SKILL(CommonConstants.SKILL),
-  STAT(CommonConstants.STAT),
-  RACE(CommonConstants.RACE),
-  PROFESSION(CommonConstants.RACE),
+  DENIZEN(CommonConstants.DENIZEN),
+  ATTRIBUTE(CommonConstants.ATTRIBUTE),
+  PROFESSION(CommonConstants.PROFESSION),
   FLAVOR(CommonConstants.FLAVOR),
   INVENTORY(CommonConstants.INVENTORY),
   ITEM(CommonConstants.ITEM),

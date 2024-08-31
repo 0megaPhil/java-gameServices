@@ -11,9 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @OpenAPIDefinition(
     info = @Info(title = DENIZEN_SERVICE, version = VERSION, description = DENIZEN_SERVICE))
-public class DenizenService {
+public class DenizenApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(DenizenService.class, args);
+    SpringApplication.run(DenizenApplication.class, args);
   }
 }

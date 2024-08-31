@@ -37,6 +37,9 @@ public class JsonUtils {
     Map<String, Object> map = mapper.convertValue(object, new TypeReference<>() {});
     // Map to MultiValueMap
     LinkedMultiValueMap<String, String> linkedMultiValueMap = new LinkedMultiValueMap<>();
+    if (map == null) {
+      return linkedMultiValueMap;
+    }
     map.entrySet().stream()
         .filter(entry -> String.class.isAssignableFrom(entry.getValue().getClass()))
         .forEach(en -> linkedMultiValueMap.add(en.getKey(), String.valueOf(en.getValue())));

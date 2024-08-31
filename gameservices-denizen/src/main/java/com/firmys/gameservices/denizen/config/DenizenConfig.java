@@ -6,4 +6,4 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import(ServiceConfig.class)
-public class PlayerConfig {}
+public class DenizenConfig {}

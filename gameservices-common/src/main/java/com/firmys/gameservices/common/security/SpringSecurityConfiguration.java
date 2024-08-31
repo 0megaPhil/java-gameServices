@@ -30,6 +30,8 @@ public class SpringSecurityConfiguration {
         "/skill*/**",
         "/race*/**",
         "/stat*/**",
+        "/denizen*/**",
+        "/attribute*/**",
         "/transaction*/**",
         "*api-docs",
         "/swagger-resources",

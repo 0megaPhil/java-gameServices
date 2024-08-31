@@ -92,12 +92,7 @@ public class GameServiceClient {
         .retrieve()
         .bodyToMono(String.class)
         .map(str -> JSON.fromJson(str, Flavor.class))
-        .map(
-            flavor ->
-                (E)
-                    object
-                        .withCharacteristics(flavor.characteristics())
-                        .withSummary(flavor.summary()));
+        .map(flavor -> (E) object.withFeatures(flavor.features()).withSummary(flavor.summary()));
   }
 
   public <E extends CommonEntity> Mono<E> update(E object) {

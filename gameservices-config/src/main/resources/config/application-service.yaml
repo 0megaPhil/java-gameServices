@@ -8,36 +8,16 @@ server:
   port: ${gameservices.current.port}
 gameservices:
   services:
-    PLAYER:
-      id: player
-      name: PlayerService
-      host: ${SERVICES_PLAYER_HOST:localhost}
-      port: ${SERVICES_PLAYER_PORT:8444}
-    NPC:
-      id: npc
-      name: NPCService
-      host: ${SERVICES_PLAYER_HOST:localhost}
-      port: ${SERVICES_PLAYER_PORT:8444}
-    CREATURE:
-      id: creature
-      name: CreatureService
-      host: ${SERVICES_PLAYER_HOST:localhost}
-      port: ${SERVICES_PLAYER_PORT:8444}
-    SKILL:
-      id: skill
-      name: SkillService
-      host: ${SERVICES_PLAYER_HOST:localhost}
-      port: ${SERVICES_PLAYER_PORT:8444}
-    STAT:
-      id: stat
-      name: StatService
-      host: ${SERVICES_PLAYER_HOST:localhost}
-      port: ${SERVICES_PLAYER_PORT:8444}
-    RACE:
-      id: race
-      name: RaceService
-      host: ${SERVICES_PLAYER_HOST:localhost}
-      port: ${SERVICES_PLAYER_PORT:8444}
+    DENIZEN:
+      id: denizen
+      name: DenizenService
+      host: ${SERVICES_DENIZEN_HOST:localhost}
+      port: ${SERVICES_DENIZEN_PORT:8444}
+    ATTRIBUTE:
+      id: attribute
+      name: AttributeService
+      host: ${SERVICES_DENIZEN_HOST:localhost}
+      port: ${SERVICES_DENIZEN_PORT:8444}
     INVENTORY:
       id: inventory
       name: InventoryService

@@ -10,39 +10,14 @@ public class CommonConstants {
   public static final String TRANSACTION = "transaction";
   public static final String TRANSACTION_PATH = "/" + TRANSACTION;
   public static final String TRANSACTION_SERVICES = "TransactionService";
+
+  public static final String DENIZEN = "denizen";
   public static final String DENIZEN_SERVICE = "DenizenService";
-
-  public static final String PLAYER = "player";
-  public static final String PLAYER_SERVICE = "PlayerService";
-  public static final String PLAYER_PATH = "/" + PLAYER;
-
-  public static final String NPC = "npc";
-  public static final String NPC_SERVICE = "NPCService";
-  public static final String NPC_PATH = "/" + NPC;
-
-  public static final String CREATURE = "creature";
-  public static final String CREATURE_SERVICE = "CreatureService";
-  public static final String CREATURE_PATH = "/" + CREATURE;
-
-  public static final String SKILL = "skill";
-  public static final String SKILL_SERVICE = "SkillService";
-  public static final String SKILL_PATH = "/" + SKILL;
-
-  public static final String STAT = "stat";
-  public static final String STAT_SERVICE = "StatService";
-  public static final String STAT_PATH = "/" + STAT;
-
-  public static final String RACE = "race";
-  public static final String RACE_SERVICE = "RaceService";
-  public static final String RACE_PATH = "/" + RACE;
+  public static final String DENIZEN_PATH = "/" + DENIZEN;
 
   public static final String ATTRIBUTE = "attribute";
   public static final String ATTRIBUTE_SERVICE = "AttributeService";
   public static final String ATTRIBUTE_PATH = "/" + ATTRIBUTE;
-
-  public static final String EFFECT = "effect";
-  public static final String EFFECT_SERVICE = "EffectService";
-  public static final String EFFECT_PATH = "/" + EFFECT;
 
   public static final String PROFESSION = "profession";
   public static final String PROFESSION_SERVICE = "ProfessionService";

@@ -20,19 +20,21 @@ extend type Mutation {
 
 input InventoryInput {
     id: String
-    items: [ItemEntryInput]
-    currencies: [CurrencyEntryInput]
-    characteristics: [CharacteristicInput]
+    type: Entities = INVENTORY
+    items: [ItemEntryInput] = []
+    currencies: [CurrencyEntryInput] = []
+    features: [FeatureInput] = []
+    entries: [AttributeEntryInput] = []
     summary: String
-    prompt: String
 }
 
 type Inventory implements CommonEntity {
     id: String
+    type: Entities
     items: [ItemEntry]
     currencies: [CurrencyEntry]
-    prompt: String
-    characteristics: [Characteristic]
+    features: [Feature]
+    entries: [AttributeEntry]
     summary: String
     created: DateTime
     updated: DateTime
@@ -63,59 +65,31 @@ type CurrencyEntry implements CommonValue {
 input ItemInput {
     id: String
     name: String!
-    type: Items
-    professions: [ProfessionInput]
-    characteristics: [CharacteristicInput]
+    type: Entities
+    professions: [ProfessionInput] = []
     summary: String
     rarity: Rarity
     values: [ItemEntryInput]
     salable: Boolean = true
-    prompt: String
-    dimensions: [DimensionInput]
-    attributes: [AttributeEntryInput]
-    effects: [EffectEntryInput]
-    requiredSkills: [SkillEntryInput]
-    requiredStats: [StatEntryInput]
-    features: [FeatureInput]
-    histories: [HistoryInput]
+    requiredEntries: [AttributeEntryInput] = []
+    features: [FeatureInput] = []
+    entries: [AttributeEntryInput] = []
 }
 
 type Item implements CommonEntity {
     id: String
     name: String!
-    type: Items
-    dimensions: [Dimension]
+    type: Entities
     professions: [Profession]
-    prompt: String
+    summary: String
     rarity: Rarity
-    characteristics: [Characteristic]
     values: [ItemEntry]
     salable: Boolean
-    summary: String
-    attributes: [AttributeEntry]
-    effects: [EffectEntry]
-    requiredSkills: [SkillEntry]
-    requiredStats: [StatEntry]
+    requiredEntries: [AttributeEntry]
+    entries: [AttributeEntry]
     features: [Feature]
-    histories: [History]
     created: DateTime
     updated: DateTime
     version: Int
     error: Error
-}
-
-enum Items {
-    WEAPON
-    ARMOR
-    TOOL
-    UTILITY
-    GARBAGE
-    JUNK
-    VALUABLE
-    JEWELRY
-    GEM
-    SCRAP
-    FUNGIBLE
-    MISC
-    OTHER
 }

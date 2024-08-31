@@ -20,21 +20,23 @@ extend type Mutation {
 
 input TransactionInput {
     id: String
+    type: Entities
     inventoryId: String
     currency: CurrencyInput!
     itemIds: [String]
-    characteristics: [CharacteristicInput]
+    features: [FeatureInput] = []
+    entries: [AttributeEntryInput] = []
     summary: String
-    prompt: String
 }
 
 type Transaction implements CommonEntity {
     id: String
+    type: Entities
     inventoryId: String!
     currency: Currency
     itemIds: [String]
-    prompt: String
-    characteristics: [Characteristic]
+    features: [Feature]
+    entries: [AttributeEntry]
     summary: String
     created: DateTime
     updated: DateTime
@@ -45,42 +47,25 @@ type Transaction implements CommonEntity {
 input CurrencyInput {
     id: String
     name: String!
-    type: Currencies
+    type: Entities = CURRENCY
     baseCurrency: CurrencyInput
-    characteristics: [CharacteristicInput]
+    features: [FeatureInput] = []
+    entries: [AttributeEntryInput] = []
     summary: String
-    prompt: String
     baseMultiplier: Int = 1
 }
 
 type Currency implements CommonEntity {
     id: String
     name: String!
-    type: Currencies
+    type: Entities
     baseCurrency: Currency
-    prompt: String
-    characteristics: [Characteristic]
+    features: [Feature]
+    entries: [AttributeEntry]
     summary: String
     created: DateTime
     updated: DateTime
     version: Int
     baseMultiplier: Int
     error: Error
-}
-
-enum Currencies {
-    TIN
-    COPPER
-    DOLLAR
-    SILVER
-    GOLD
-    PLATINUM
-    PAPER
-    SCRIPT
-    IOU
-    CHECK
-    LEAD
-    GEM
-    MARKER
-    OTHER
 }

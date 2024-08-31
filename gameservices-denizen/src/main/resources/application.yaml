@@ -1,5 +1,5 @@
 gameservices:
-  type: PLAYER
+  type: DENIZEN
   current:
     id: ${gameservices.services.${gameservices.type}.id}
     name: ${gameservices.services.${gameservices.type}.name}

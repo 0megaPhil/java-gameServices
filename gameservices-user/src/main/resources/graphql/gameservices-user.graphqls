@@ -12,11 +12,12 @@ extend type Mutation {
 
 type User implements CommonEntity {
     id: String
+    type: Entities
     firstName: String!
     lastName: String!
     email: String!
-    prompt: String
-    characteristics: [Characteristic]
+    features: [Feature]
+    entries: [AttributeEntry]
     summary: String
     created: DateTime
     updated: DateTime
@@ -26,10 +27,11 @@ type User implements CommonEntity {
 
 input UserInput {
     id: String
+    type: Entities = USER
     firstName: String!
     lastName: String!
     email: String!
-    characteristics: [CharacteristicInput]
+    features: [FeatureInput] = []
+    entries: [AttributeEntryInput] = []
     summary: String
-    prompt: String
 }

@@ -1,6 +1,7 @@
 package com.firmys.gameservices.service;
 
 import static com.firmys.gameservices.common.FunctionUtils.orVoid;
+import static com.firmys.gameservices.common.FunctionUtils.safeSet;
 import static com.firmys.gameservices.generated.models.Operations.CREATE_ONE;
 import static com.firmys.gameservices.generated.models.Operations.DELETE_BY_ID;
 import static com.firmys.gameservices.generated.models.Operations.FIND_ALL_LIKE;
@@ -13,16 +14,22 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 
 import com.firmys.gameservices.common.FunctionUtils;
 import com.firmys.gameservices.data.CommonRepository;
+import com.firmys.gameservices.generated.models.Attribute;
+import com.firmys.gameservices.generated.models.AttributeEntry;
 import com.firmys.gameservices.generated.models.CommonEntity;
+import com.firmys.gameservices.generated.models.Contexts;
+import com.firmys.gameservices.generated.models.Entities;
 import com.firmys.gameservices.generated.models.Error;
 import com.firmys.gameservices.generated.models.Operations;
 import com.firmys.gameservices.generated.models.Options;
 import com.firmys.gameservices.service.error.ServiceException;
+import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Example;
@@ -47,6 +54,15 @@ public abstract class GameService<E extends CommonEntity> {
   public static <E1 extends CommonEntity> Example<E1> nameExample(E1 exampleObj) {
     ExampleMatcher matcher =
         ExampleMatcher.matchingAny().withIgnoreNullValues().withMatcher("name", exact());
+    return Example.of(exampleObj, matcher);
+  }
+
+  public static <E1 extends CommonEntity> Example<E1> nameTypeExample(E1 exampleObj) {
+    ExampleMatcher matcher =
+        ExampleMatcher.matchingAll()
+            .withIgnoreNullValues()
+            .withMatcher("name", exact())
+            .withMatcher("type", exact());
     return Example.of(exampleObj, matcher);
   }
 
@@ -89,7 +105,7 @@ public abstract class GameService<E extends CommonEntity> {
 
   public Flux<E> findAllLike(E exampleObj) {
     return repository()
-        .findAll(nameExample(exampleObj))
+        .findAll(nameTypeExample(exampleObj))
         .doOnNext(obj -> log.info("Found multiple including {}", exampleObj.toJson()))
         .onErrorMap(
             th -> toException(mongoDbError(entityType(), exampleObj).apply(th, FIND_ALL_LIKE)));
@@ -146,10 +162,11 @@ public abstract class GameService<E extends CommonEntity> {
         .filter(o -> o.id() != null)
         .filter(o -> o.error() == null)
         .flatMap(o -> gameServiceClient().flavor(o.id(), entityType()))
-        .filter(o -> o.characteristics() != null)
+        .filter(o -> o.features() != null)
         .filter(o -> o.error() == null)
         .flatMap(o -> repository().save(o))
         .doOnError(th -> log.error("{} {}", th.getClass().getSimpleName(), th.getMessage()))
+        .onErrorComplete()
         .subscribeOn(Schedulers.parallel())
         .subscribe(o -> log.info("Flavor Updated: {}", o.toJson()));
   }
@@ -230,16 +247,62 @@ public abstract class GameService<E extends CommonEntity> {
 
   @SuppressWarnings("unchecked")
   public Function<E, E> prompt() {
-    return obj -> (E) obj.withPrompt(promptBuilder().toString());
+    return obj ->
+        (E)
+            obj.withEntries(
+                safeSet(obj.entries()).stream()
+                    .map(entry -> entry.withPrompt(attributePrompt(entry, obj.type())))
+                    .collect(Collectors.toSet()));
   }
 
-  public StringBuilder promptBuilder() {
-    return new StringBuilder()
-        .append("Create and interesting description for ")
-        .append(entityType().getSimpleName())
-        .append(" and return it as a json object using the following json format ")
-        .append("{ \"title\": String, \"description\": String } \n")
-        .append(
-            "Also observe the following instructions, if any, when generating this description\n");
+  public String attributePrompt(AttributeEntry entry, Entities type) {
+    return MessageFormat.format(
+        "Create an interesting description for {0}, "
+            + "using an entry of type {1} with name of {2}. \n"
+            + "{3}"
+            + "{4}"
+            + "{5}"
+            + "{6}",
+        Optional.ofNullable(type).map(Enum::name).orElse(entityType().getSimpleName()),
+        entry.attribute().type(),
+        entry.attribute().name(),
+        Optional.ofNullable(entry.text())
+            .filter(txt -> !"null".equals(txt))
+            .map(txt -> "This Attribute has descriptive text of " + txt + ". \n")
+            .orElse(""),
+        Optional.ofNullable(entry.text())
+            .filter(txt -> !"null".equals(txt))
+            .map(txt -> "This Attribute has a value of " + txt + ". \n")
+            .orElse(""),
+        Optional.ofNullable(entry.attribute().unitType())
+            .filter(txt -> !"null".equals(txt))
+            .map(txt -> "This Attribute uses a UnitType of " + txt + ". \n")
+            .orElse(""),
+        Optional.ofNullable(entry.context())
+            .filter(ctx -> !ctx.equals(Contexts.OTHER))
+            .map(ctx -> "Keep in mind that this Attribute is considered " + ctx.name())
+            .orElse(""));
+  }
+
+  public Contexts attributeContext(Double value, Attribute attribute) {
+    if (attribute == null) {
+      return Contexts.OTHER;
+    } else if (attribute.highest() != null && value >= attribute.highest()) {
+      return Contexts.HIGHEST_POSSIBLE;
+    } else if (attribute.higher() != null && value >= attribute.higher()) {
+      return Contexts.VERY_ABOVE_AVERAGE;
+    } else if (attribute.high() != null && value >= attribute.high()) {
+      return Contexts.ABOVE_AVERAGE;
+    } else if (attribute.average() != null && value >= attribute.average()) {
+      return Contexts.AVERAGE;
+    } else if (attribute.low() != null && value >= attribute.low()) {
+      return Contexts.BELOW_AVERAGE;
+    } else if (attribute.lower() != null && value >= attribute.lower()) {
+      return Contexts.VERY_BELOW_AVERAGE;
+    } else if (attribute.lowest() != null && value <= attribute.lowest()) {
+      return Contexts.LOWEST_POSSIBLE;
+    } else {
+      return Contexts.OTHER;
+    }
   }
 }
