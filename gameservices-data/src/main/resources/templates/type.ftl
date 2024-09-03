@@ -67,6 +67,7 @@ public record ${className}(<#if fields?has_content>
         && field.name != "sex"
         && field.name != "likelihood"
         && field.type != "Entities"
+        && field.type != "Flavors"
         && field.type != "Rarity"
         && field.type != "Contexts"
         && !field.type?contains("Double")>

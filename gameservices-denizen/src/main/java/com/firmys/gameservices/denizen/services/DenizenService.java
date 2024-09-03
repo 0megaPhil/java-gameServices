@@ -1,10 +1,12 @@
 package com.firmys.gameservices.denizen.services;
 
 import static com.firmys.gameservices.common.FunctionUtils.safeSet;
+import static com.firmys.gameservices.common.JsonUtils.JSON;
 
 import com.firmys.gameservices.denizen.data.DenizenRepository;
 import com.firmys.gameservices.generated.models.Denizen;
 import com.firmys.gameservices.generated.models.Inventory;
+import com.firmys.gameservices.generated.models.InventoryInput;
 import com.firmys.gameservices.service.GameService;
 import com.firmys.gameservices.service.GameServiceClient;
 import java.util.Optional;
@@ -30,11 +32,6 @@ public class DenizenService extends GameService<Denizen> {
 
   private final Class<Denizen> entityType = Denizen.class;
 
-  @Override
-  public Function<Denizen, Denizen> prompt() {
-    return super.prompt();
-  }
-
   @Transactional
   public Mono<Denizen> create(Denizen object) {
     return create(Mono.just(object));
@@ -48,7 +45,7 @@ public class DenizenService extends GameService<Denizen> {
 
   public Function<Denizen, Mono<Denizen>> resolveAttributes() {
     return denizen ->
-        Flux.fromIterable(denizen.entries())
+        Flux.fromIterable(safeSet(denizen.entries()))
             .flatMap(entry -> attributeService.resolveEntry().apply(entry))
             .collectList()
             .map(entries -> denizen.withEntries(safeSet(entries)));
@@ -63,7 +60,10 @@ public class DenizenService extends GameService<Denizen> {
             .orElseGet(
                 () ->
                     gameServiceClient
-                        .create(Inventory.builder().build())
+                        .create(
+                            JSON.fromJson(
+                                InventoryInput.builder().targetId(object.name()).build().toJson(),
+                                Inventory.class))
                         .map(object::withInventory));
   }
 }

@@ -2,6 +2,14 @@
     package ${package};
 
 </#if>
+<#function snakeToCamel(s)>
+    <#return s?lower_case
+    ?replace('_([a-z])', " $1", 'r')?capitalize
+    ?replace(" ([A-Z])", "$1" ,'r')
+    ?uncap_first
+    >
+</#function>
+import com.fasterxml.jackson.annotation.JsonAlias;
 <#if javaDoc?has_content>
     /**
     <#list javaDoc as javaDocLine>
@@ -32,6 +40,7 @@ public enum ${className}<#if implements?has_content> implements <#list implement
         <#if field.deprecated?has_content>
             @${field.deprecated.annotation}
         </#if>
+        @JsonAlias({"${field.graphqlName?lower_case}", "${snakeToCamel(field.graphqlName?lower_case)}"})
         ${field.javaName}("${field.graphqlName}")<#if field_has_next>,<#else>;</#if>
     </#list>
 </#if>

@@ -21,7 +21,7 @@ extend type Mutation {
 type World implements CommonEntity {
     id: String
     name: String!
-    type: Entities
+    type: Flavors
     terrains: [Terrain]
     entries: [AttributeEntry]
     techLevel: TechLevels
@@ -37,7 +37,7 @@ type World implements CommonEntity {
 input WorldInput {
     id: String
     name: String!
-    type: Entities
+    type: Flavors
     terrains: [TerrainInput]
     entries: [AttributeEntryInput] = []
     techLevel: TechLevels
@@ -49,7 +49,7 @@ input WorldInput {
 type Terrain implements CommonEntity {
     id: String
     name: String!
-    type: Entities
+    type: Flavors
     entries: [AttributeEntry]
     features: [Feature]
     summary: String
@@ -62,7 +62,7 @@ type Terrain implements CommonEntity {
 input TerrainInput {
     id: String
     name: String!
-    type: Entities
+    type: Flavors
     entries: [AttributeEntryInput] = []
     features: [FeatureInput] = []
     summary: String

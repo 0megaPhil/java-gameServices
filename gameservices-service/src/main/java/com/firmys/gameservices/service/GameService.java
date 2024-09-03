@@ -18,8 +18,8 @@ import com.firmys.gameservices.generated.models.Attribute;
 import com.firmys.gameservices.generated.models.AttributeEntry;
 import com.firmys.gameservices.generated.models.CommonEntity;
 import com.firmys.gameservices.generated.models.Contexts;
-import com.firmys.gameservices.generated.models.Entities;
 import com.firmys.gameservices.generated.models.Error;
+import com.firmys.gameservices.generated.models.Flavors;
 import com.firmys.gameservices.generated.models.Operations;
 import com.firmys.gameservices.generated.models.Options;
 import com.firmys.gameservices.service.error.ServiceException;
@@ -50,12 +50,6 @@ import reactor.core.scheduler.Schedulers;
 @Slf4j
 @SuppressWarnings("unchecked")
 public abstract class GameService<E extends CommonEntity> {
-
-  public static <E1 extends CommonEntity> Example<E1> nameExample(E1 exampleObj) {
-    ExampleMatcher matcher =
-        ExampleMatcher.matchingAny().withIgnoreNullValues().withMatcher("name", exact());
-    return Example.of(exampleObj, matcher);
-  }
 
   public static <E1 extends CommonEntity> Example<E1> nameTypeExample(E1 exampleObj) {
     ExampleMatcher matcher =
@@ -153,14 +147,18 @@ public abstract class GameService<E extends CommonEntity> {
 
   private Mono<E> saveOrHandle(E obj) {
     return repository()
-        .save(prompt().apply(obj))
+        .save(prompts(obj, obj.type()))
         .onErrorMap(th -> toException(mongoDbError(entityType(), obj).apply(th, CREATE_ONE)));
   }
 
   private void updateFlavor(E object) {
     Mono.just(object)
         .filter(o -> o.id() != null)
-        .filter(o -> o.error() == null)
+        .filter(
+            o ->
+                o.error() == null
+                    && o.entries() != null
+                    && (!o.entries().isEmpty() || Attribute.class.isAssignableFrom(o.getClass())))
         .flatMap(o -> gameServiceClient().flavor(o.id(), entityType()))
         .filter(o -> o.features() != null)
         .filter(o -> o.error() == null)
@@ -245,43 +243,58 @@ public abstract class GameService<E extends CommonEntity> {
         .then();
   }
 
-  @SuppressWarnings("unchecked")
-  public Function<E, E> prompt() {
-    return obj ->
-        (E)
-            obj.withEntries(
-                safeSet(obj.entries()).stream()
-                    .map(entry -> entry.withPrompt(attributePrompt(entry, obj.type())))
-                    .collect(Collectors.toSet()));
+  public E prompts(E entity, Flavors type) {
+    return (E)
+        entity.withEntries(
+            safeSet(entity.entries()).stream()
+                .map(entry -> entry.withPrompt(attributeEntryPrompt(entry, type)))
+                .collect(Collectors.toSet()));
   }
 
-  public String attributePrompt(AttributeEntry entry, Entities type) {
+  public String attributeEntryPrompt(AttributeEntry entry, Flavors type) {
     return MessageFormat.format(
-        "Create an interesting description for {0}, "
-            + "using an entry of type {1} with name of {2}. \n"
+        "Create an interesting description for {2} of type {1}, "
+            + "{0}"
             + "{3}"
             + "{4}"
             + "{5}"
-            + "{6}",
-        Optional.ofNullable(type).map(Enum::name).orElse(entityType().getSimpleName()),
+            + "{6}"
+            + "{7}"
+            + "Do not include the prompt as part of the description",
+        Optional.ofNullable(type)
+            .map(Enum::name)
+            .map(t -> "specifically for a " + t + ". \n")
+            .orElse(""),
         entry.attribute().type(),
         entry.attribute().name(),
         Optional.ofNullable(entry.text())
             .filter(txt -> !"null".equals(txt))
             .map(txt -> "This Attribute has descriptive text of " + txt + ". \n")
             .orElse(""),
-        Optional.ofNullable(entry.text())
-            .filter(txt -> !"null".equals(txt))
-            .map(txt -> "This Attribute has a value of " + txt + ". \n")
+        Optional.ofNullable(entry.value())
+            .map(val -> "This Attribute has a value of " + val + ". \n")
             .orElse(""),
         Optional.ofNullable(entry.attribute().unitType())
-            .filter(txt -> !"null".equals(txt))
-            .map(txt -> "This Attribute uses a UnitType of " + txt + ". \n")
+            .filter(unit -> !"null".equals(unit))
+            .map(unit -> "This Attribute uses a UnitType of " + unit + ". \n")
             .orElse(""),
         Optional.ofNullable(entry.context())
             .filter(ctx -> !ctx.equals(Contexts.OTHER))
-            .map(ctx -> "Keep in mind that this Attribute is considered " + ctx.name())
-            .orElse(""));
+            .map(ctx -> "In comparison to others Attribute would be considered " + ctx.name() + ".")
+            .orElse(""),
+        promptFormat());
+  }
+
+  public String promptFormat() {
+    return "\n [INSTRUCTIONS] Return this description as a json object with the following json format: \n"
+        + """
+          {
+              "title": String,
+              "description": String
+          }
+        """
+        + "\n The title should be related to the content of description.\n"
+        + "Prefix the generated json with <json> and suffix the generated json with </json>";
   }
 
   public Contexts attributeContext(Double value, Attribute attribute) {

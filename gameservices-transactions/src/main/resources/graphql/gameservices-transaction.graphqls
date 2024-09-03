@@ -20,7 +20,7 @@ extend type Mutation {
 
 input TransactionInput {
     id: String
-    type: Entities
+    type: Flavors
     inventoryId: String
     currency: CurrencyInput!
     itemIds: [String]
@@ -31,7 +31,7 @@ input TransactionInput {
 
 type Transaction implements CommonEntity {
     id: String
-    type: Entities
+    type: Flavors
     inventoryId: String!
     currency: Currency
     itemIds: [String]
@@ -47,7 +47,7 @@ type Transaction implements CommonEntity {
 input CurrencyInput {
     id: String
     name: String!
-    type: Entities = CURRENCY
+    type: Flavors = CURRENCY
     baseCurrency: CurrencyInput
     features: [FeatureInput] = []
     entries: [AttributeEntryInput] = []
@@ -58,7 +58,7 @@ input CurrencyInput {
 type Currency implements CommonEntity {
     id: String
     name: String!
-    type: Entities
+    type: Flavors
     baseCurrency: Currency
     features: [Feature]
     entries: [AttributeEntry]

@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Builder
 @Component
 @Import(JsonUtils.class)
@@ -91,6 +93,7 @@ public class GameServiceClient {
         .body(Mono.just(object), object.getClass())
         .retrieve()
         .bodyToMono(String.class)
+        .doOnNext(str -> log.info("Flavor Response: {}", str))
         .map(str -> JSON.fromJson(str, Flavor.class))
         .map(flavor -> (E) object.withFeatures(flavor.features()).withSummary(flavor.summary()));
   }

@@ -355,6 +355,9 @@
                             <OPERATIONS>
                                 operations.ftl
                             </OPERATIONS>
+                            <ENUM>
+                                enum.ftl
+                            </ENUM>
                         </customTemplates>
                         <customTypesMapping>
                             <Float>

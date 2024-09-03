@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import com.firmys.gameservices.generated.models.Feature;
-import com.firmys.gameservices.generated.models.Entities;
+import com.firmys.gameservices.generated.models.Flavors;
 import com.firmys.gameservices.generated.models.AttributeEntry;
 
 import static com.firmys.gameservices.common.JsonUtils.JSON;
@@ -73,7 +73,7 @@ Error error();
 
 String summary();
 
-Entities type();
+Flavors type();
 
 Integer version();
 
@@ -91,7 +91,7 @@ Set
 
         CommonEntity withError(Error error);
 
-        CommonEntity withType(Entities type);
+        CommonEntity withType(Flavors type);
 
         CommonEntity withSummary(String summary);
 

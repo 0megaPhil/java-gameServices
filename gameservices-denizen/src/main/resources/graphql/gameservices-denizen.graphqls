@@ -37,7 +37,7 @@ enum Sexes {
 type Denizen implements CommonEntity {
     id: String
     name: String
-    type: Entities
+    type: Flavors
     user: User
     profession: Profession
     inventory: Inventory
@@ -54,7 +54,7 @@ input DenizenInput {
     id: String
     name: String
     user: UserInput
-    type: Entities = PLAYER
+    type: Flavors = PLAYER
     profession: ProfessionInput
     inventory: InventoryInput
     entries: [AttributeEntryInput] = []

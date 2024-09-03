@@ -5,7 +5,7 @@ scalar Object
 # This is to be used for more complex domain model exposures
 interface CommonEntity {
     id: String
-    type: Entities
+    type: Flavors
     entries: [AttributeEntry]
     features: [Feature]
     summary: String
@@ -15,8 +15,17 @@ interface CommonEntity {
     error: Error
 }
 
-enum Entities {
+enum Flavors {
     PLAYER
+    DESCRIPTION
+    SUMMARY
+    GEOGRAPHIC
+    TOPOLOGICAL
+    ALIGNMENT
+    ESOTERIC
+    EMOTIONAL
+    IMPLICIT
+    EXPLICIT
     NPC
     MONSTER
     BAG
@@ -180,17 +189,16 @@ input Filter {
 }
 
 type Flavor implements CommonObject {
-    targetId: String!
-    summary: String!
-    objectType: String!
-    features: [Feature]!
+    targetId: String
+    summary: String
+    type: Flavors
+    features: [Feature]
 }
 
 input FlavorInput {
     targetId: String
-    title: String
     summary: String
-    objectType: String
+    type: Flavors
     features: [FeatureInput] = []
 }
 
@@ -232,7 +240,7 @@ enum Operations {
 
 type ErrorResponse implements CommonEntity {
     id: String
-    type: Entities
+    type: Flavors
     queryId: String
     method: String
     headers: String
@@ -250,35 +258,16 @@ type ErrorResponse implements CommonEntity {
 
 type Feature implements CommonObject {
     targetId: String
-    rarity: Rarity
-    context: Contexts
+    type: Flavors
     title: String!
-    type: Features
     description: String
-}
-
-enum Features {
-    DESCRIPTION
-    SUMMARY
-    PHYSICAL
-    MENTAL
-    POLITICAL
-    GEOGRAPHIC
-    TOPOLOGICAL
-    MAGICAL
-    ALIGNMENT
-    ECONOMIC
-    SOCIAL
-    ESOTERIC
-    EMOTIONAL
-    IMPLICIT
-    EXPLICIT
-    OTHER
+    context: Contexts
+    rarity: Rarity
 }
 
 input FeatureInput {
     targetId: String
-    type: Features
+    type: Flavors
     title: String!
     description: String
     context: Contexts = OTHER
@@ -287,11 +276,12 @@ input FeatureInput {
 
 type Attribute implements CommonEntity {
     id: String
-    type: Entities
+    type: Flavors
     name: String
     entryLimit: Int
     entries: [AttributeEntry]
     features: [Feature]
+    prompt: String
     rarity: Rarity
     unitType: String
     summary: String
@@ -310,11 +300,12 @@ type Attribute implements CommonEntity {
 
 input AttributeInput {
     id: String
-    type: Entities
+    type: Flavors
     name: String
     entryLimit: Int = 1
     entries: [AttributeEntryInput] = null
     features: [FeatureInput] = []
+    prompt: String
     rarity: Rarity
     unitType: String
     summary: String
@@ -330,7 +321,7 @@ input AttributeInput {
 type Profession implements CommonEntity {
     id: String
     name: String!
-    type: Entities
+    type: Flavors
     requiredEntries: [AttributeEntry]
     value: Float
     context: Contexts
@@ -346,7 +337,7 @@ type Profession implements CommonEntity {
 input ProfessionInput {
     id: String
     name: String!
-    type: Entities = PROFESSION
+    type: Flavors = PROFESSION
     requiredEntries: [AttributeEntryInput] = []
     context: Contexts = OTHER
     value: Float

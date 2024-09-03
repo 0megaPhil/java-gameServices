@@ -20,7 +20,8 @@ extend type Mutation {
 
 input InventoryInput {
     id: String
-    type: Entities = INVENTORY
+    type: Flavors = BACKPACK
+    targetId: String
     items: [ItemEntryInput] = []
     currencies: [CurrencyEntryInput] = []
     features: [FeatureInput] = []
@@ -30,7 +31,8 @@ input InventoryInput {
 
 type Inventory implements CommonEntity {
     id: String
-    type: Entities
+    type: Flavors
+    targetId: String
     items: [ItemEntry]
     currencies: [CurrencyEntry]
     features: [Feature]
@@ -65,7 +67,7 @@ type CurrencyEntry implements CommonValue {
 input ItemInput {
     id: String
     name: String!
-    type: Entities
+    type: Flavors
     professions: [ProfessionInput] = []
     summary: String
     rarity: Rarity
@@ -79,7 +81,7 @@ input ItemInput {
 type Item implements CommonEntity {
     id: String
     name: String!
-    type: Entities
+    type: Flavors
     professions: [Profession]
     summary: String
     rarity: Rarity
